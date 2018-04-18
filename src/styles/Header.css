@@ -1,0 +1,19 @@
+.header {
+  z-index:1;
+  /*background-image: linear-gradient(rgb(0, 97, 129) 0px, rgb(48, 151, 183) 100%);*/
+  background-image: linear-gradient(rgb(0, 97, 129) 0px, rgb(0, 97, 129) 100%);
+  background-color: white;
+  border: none;
+}
+
+.navbar-inverse .navbar-brand{
+  color: white;
+}
+
+.nav .navbar-nav .navbar-right{
+  color:white;
+}
+.fa-bars {
+  color: white;
+  font-size: 1.5em;
+}

@@ -1,0 +1,21 @@
+.bodySidebar {
+  padding: 16px;
+  height: 100%;
+  width: 100%;
+  backgroundColor: white;
+}
+
+.divider {
+  margin: 8px 0;
+  z-index:5;
+  height: 1px;
+  background-color: rgb(117, 117, 117);
+}
+
+.link-body-sidebar {
+  display: block;
+  padding: 16px 0;
+  background-color: white;
+  text-decoration: none;
+  width: 100%;
+}

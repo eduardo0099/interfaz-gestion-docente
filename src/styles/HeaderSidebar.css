@@ -1,0 +1,9 @@
+.header-sidebar {
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  color: white;
+  background: rgb(0, 97, 129);
+  padding: 16px;
+  font-size: 1.5em;
+  height: 100%;
+  width:100%;
+}
