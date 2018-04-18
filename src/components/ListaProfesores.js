@@ -16,7 +16,7 @@ class ListaProfesores extends React.Component {
     axios.get('http://localhost:8080/tests')
       .then(response =>{
         this.setState({
-          profesores: response
+          profesores: response.data
         });
       })
       .catch(error =>{
@@ -27,8 +27,11 @@ class ListaProfesores extends React.Component {
   render() {
     return (
       <div>
-        <p>Profesor 1</p>
-        <p>Profesor 2</p>
+        {this.state.profesores.map((item,i)=>{
+          console.log(item);
+          return <p key={i}>{item.idCliente+" - "+item.nombCliente+" - "+item.fechaVenta
+          +" - "+item.idProducto+" - "+item.nombProd+" - "+item.precioUni+" - "+item.subTotal}</p>
+        })}
       </div>
     );
   }

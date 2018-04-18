@@ -1,5 +1,5 @@
 import React from 'react';
-import {NavLink} from 'react-router-dom';
+import {NavLink,Link} from 'react-router-dom';
 import './../styles/BodySidebar.css';
 
 const BodySidebar = (props) => {
@@ -7,8 +7,8 @@ const BodySidebar = (props) => {
 
   return (
     <div className="bodySidebar">
-      <NavLink exact to="/" className="link-body-sidebar">Inicio</NavLink>
-      <NavLink to="/profesores" className="link-body-sidebar">Profesores</NavLink>
+      <Link to="/" className="link-body-sidebar">Inicio</Link>
+      <Link to="/profesores" className="link-body-sidebar">Profesores</Link>
       {divider}
       <a href="#" className="link-body-sidebar">Modulo</a>
       <a href="#" className="link-body-sidebar">Modulo</a>

@@ -7,18 +7,18 @@ class Header extends React.Component {
 
   //<a href="#" onClick={this.props.handleMenu}>React-Bootstrap</a>
   //<a href="#" className="fas fa-bars"></a>
+
   render() {
     return (
       <Navbar className="header" inverse collapseOnSelect fixedTop>
         <Navbar.Header>
           <Nav>
             <NavItem eventKey={1} onClick={this.props.handleMenu}>
-              <i className="fas fa-bars"></i>
+              <i className="fas fa-bars"/>
             </NavItem>
             <Navbar.Brand>
               <a href="#">Elpis</a>
             </Navbar.Brand>
-            <Navbar.Toggle />
           </Nav>
         </Navbar.Header>
         <Navbar.Collapse>
