@@ -10,7 +10,7 @@ npm start
 ```
 
 **Versión de node:**
-9.8.0
+9.10.1
 
 **Versión de npm:**
 5.8.0
