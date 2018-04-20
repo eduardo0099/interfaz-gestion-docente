@@ -7,8 +7,8 @@ const BodySidebar = (props) => {
 
   return (
     <div className="bodySidebar">
-      <Link to="/" className="link-body-sidebar">Inicio</Link>
-      <Link to="/profesores" className="link-body-sidebar">Profesores</Link>
+      <Link to="/" onClick={() => props.handleMenu(false)} className="link-body-sidebar">Inicio</Link>
+      <Link to="/profesores" onClick={() => props.handleMenu(false)}  className="link-body-sidebar">Profesores</Link>
       {divider}
       <a href="#" className="link-body-sidebar">Modulo</a>
       <a href="#" className="link-body-sidebar">Modulo</a>

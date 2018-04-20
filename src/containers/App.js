@@ -20,17 +20,28 @@ class App extends Component {
     this.onSetOpen = this.onSetOpen.bind(this);
   }
 
+  escFunction = event => {
+    if (event.keyCode === 27) {
+      this.setState({open: false});
+    }
+  };
+
   onSetOpen(open) {
     this.setState({open: open});
   }
 
   menuButtonClick = e => {
     e.preventDefault();
+    console.log("se cambia el open");
     this.onSetOpen(!this.state.open);
   };
 
+  componentDidMount(){
+    document.addEventListener("keydown", this.escFunction, false);
+  }
+
   render() {
-    let sidebarContent = <SidebarContent />;
+    let sidebarContent = <SidebarContent handleMenu={this.onSetOpen}/>;
 
     const sidebarProps = {
       sidebar: sidebarContent,
@@ -44,8 +55,8 @@ class App extends Component {
         <Sidebar {...sidebarProps}>
           <Header handleMenu={this.menuButtonClick}/>
           <div className="content">
-            <Route exact path="/" component={Home} />
-            <Route exact path="/Profesores" render={ () => <ListaProfesores/> }/>
+            <Route exact path="/" render={ () => <Home/>} />
+            <Route exact path="/Profesores" render={ () => <ListaProfesores /> }/>
           </div>
         </Sidebar>
       </BrowserRouter>

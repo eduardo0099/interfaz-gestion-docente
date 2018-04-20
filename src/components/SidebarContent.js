@@ -7,7 +7,7 @@ const SidebarContent = (props) => {
   return (
     <div>
       <HeaderSidebar/>
-      <BodySidebar/>
+      <BodySidebar handleMenu={props.handleMenu}/>
     </div>
   );
 };
