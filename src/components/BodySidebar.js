@@ -10,7 +10,7 @@ const BodySidebar = (props) => {
       <Link to="/" onClick={() => props.handleMenu(false)} className="link-body-sidebar">Inicio</Link>
       <Link to="/profesores" onClick={() => props.handleMenu(false)}  className="link-body-sidebar">Profesores</Link>
       {divider}
-      <a href="#" className="link-body-sidebar">Modulo</a>
+      <Link to="/curso" onClick={() => props.handleMenu(false)} className="link-body-sidebar">Curso</Link>
       <a href="#" className="link-body-sidebar">Modulo</a>
       <a href="#" className="link-body-sidebar">Modulo</a>
       {divider}
