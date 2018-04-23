@@ -7,6 +7,7 @@ import '../styles/App.css';
 import Home from "../components/Home";
 import {BrowserRouter, Route} from 'react-router-dom';
 import ListaProfesores from "../components/ListaProfesores";
+import ListaEncuestas from "../components/ListaEncuestas";
 
 class App extends Component {
 
@@ -57,6 +58,7 @@ class App extends Component {
           <div className="content">
             <Route exact path="/" render={ () => <Home/>} />
             <Route exact path="/Profesores" render={ () => <ListaProfesores /> }/>
+            <Route exact path="/Encuestas" render={()=><ListaEncuestas />}/>
           </div>
         </Sidebar>
       </BrowserRouter>
