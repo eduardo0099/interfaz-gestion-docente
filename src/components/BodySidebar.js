@@ -9,6 +9,7 @@ const BodySidebar = (props) => {
     <div className="bodySidebar">
       <Link to="/" onClick={() => props.handleMenu(false)} className="link-body-sidebar">Inicio</Link>
       <Link to="/profesores" onClick={() => props.handleMenu(false)}  className="link-body-sidebar">Profesores</Link>
+        <Link to="/encuestas" onClick={() => props.handleMenu(false)}  className="link-body-sidebar">Encuestas</Link>
       {divider}
       <a href="#" className="link-body-sidebar">Modulo</a>
       <a href="#" className="link-body-sidebar">Modulo</a>
