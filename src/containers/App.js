@@ -7,6 +7,9 @@ import '../styles/App.css';
 import Home from "../components/Home";
 import {BrowserRouter, Route} from 'react-router-dom';
 import ListaProfesores from "../components/ListaProfesores";
+import PerfilProfesor from  "../components/PerfilProfesor";
+
+//var PerfilProfesor = require(PerfilProfesor);
 
 class App extends Component {
 
@@ -55,8 +58,9 @@ class App extends Component {
         <Sidebar {...sidebarProps}>
           <Header handleMenu={this.menuButtonClick}/>
           <div className="content">
-            <Route exact path="/" render={ () => <Home/>} />
-            <Route exact path="/Profesores" render={ () => <ListaProfesores /> }/>
+             <Route exact path="/" render={ () => <Home/>} />
+             <Route exact path="/Profesores" render={ () => <ListaProfesores /> }/>
+             <Route path="/Profesores/PerfilProfesor" render={ () => <PerfilProfesor /> }/>
           </div>
         </Sidebar>
       </BrowserRouter>
