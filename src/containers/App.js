@@ -8,6 +8,7 @@ import Home from "../components/Home";
 import {BrowserRouter, Route} from 'react-router-dom';
 import ListaProfesores from "../components/ListaProfesores";
 import ListaEncuestas from "../components/ListaEncuestas";
+import CargaDatos from '../components/CargaDatos';
 
 class App extends Component {
 
@@ -59,6 +60,7 @@ class App extends Component {
             <Route exact path="/" render={ () => <Home/>} />
             <Route exact path="/Profesores" render={ () => <ListaProfesores /> }/>
             <Route exact path="/Encuestas" render={()=><ListaEncuestas />}/>
+            <Route exact path="/carga" render={ () => <CargaDatos /> }/>
           </div>
         </Sidebar>
       </BrowserRouter>

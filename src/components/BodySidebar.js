@@ -15,7 +15,7 @@ const BodySidebar = (props) => {
       <a href="#" className="link-body-sidebar">Modulo</a>
       <a href="#" className="link-body-sidebar">Modulo</a>
       {divider}
-      <a href="#" className="link-body-sidebar">Modulo</a>
+      <Link to="/carga" onClick={() => props.handleMenu(false)}  className="link-body-sidebar">Carga Datos</Link>
       <a href="#" className="link-body-sidebar">Modulo</a>
       <a href="#" className="link-body-sidebar">Modulo</a>
       {divider}
