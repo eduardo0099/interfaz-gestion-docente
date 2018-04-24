@@ -25,19 +25,23 @@ class ListaEncuestas extends React.Component{
                     <option value = "2017-1">2017-1</option>
                     <option value = "2016-2">2016-2</option>
                 </select>
+                
                 <h4>Resultado de encuestas</h4>
-                <table border="2">
+                <table striped bordered condensed hover class="table">
+                    <thead>
                     <tr>
-                        <td>Ciclo</td>
-                        <td>Curso</td>
-                        <td>Horario</td>
-                        <td>Porcentaje de participacion</td>
-                        <td>Puntaje</td>
-                        <td>Comentario</td>
+                        <th scope="col">Ciclo</th>
+                        <th scope="col">Curso</th>
+                        <th scope="col">Horario</th>
+                        <th scope="col">Porcentaje de participacion</th>
+                        <th scope="col">Puntaje</th>
+                        <th scope="col">Porcentaje</th>
                     </tr>
+                    </thead>
+                    <tbody>
 
+                    </tbody>
                 </table>
-
             </div>
         );
 
