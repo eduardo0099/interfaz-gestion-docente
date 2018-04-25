@@ -10,14 +10,15 @@ class PerfilProfesor extends React.Component {
 
     constructor(props){
         super(props);
+        //console.log(this.props.location.search);
 
         this.state = {
-            codigo: '12345678',
-            tipo: '',
-            nombre: '',
-            telefono: '',
-            correo: '',
-            seccion: '',
+            codigo: this.props.match.params.codigo,
+            tipo: props.tipo,
+            nombre: props.nombre + ' ' + props.apellidoP + ' ' + props.apellidoM,
+            telefono: props.telefono,
+            correo: props.correo,
+            seccion: props.seccion,
             imagen: null,
         };
 
@@ -53,13 +54,10 @@ class PerfilProfesor extends React.Component {
         var telefono = this.state.telefono;
         var correo = this.state.correo;
         var seccion = this.state.seccion;
-        var detalleDocente = require("react-table").default;
         const imgUrl = require('../resources/images/'+ codigo + '.PNG');
         return(
-                
             <Row className="show-grid">
                 <Col md={3}>
-
                 </Col>
                 <Col md={6}>
                     <Panel bsStyle="primary">
@@ -90,12 +88,8 @@ class PerfilProfesor extends React.Component {
                     </Panel>
                 </Col>
                 <Col md={3}>
-
                 </Col>
-
-
             </Row>
-
 
         );
 

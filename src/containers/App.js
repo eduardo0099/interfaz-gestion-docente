@@ -60,7 +60,8 @@ class App extends Component {
           <div className="content">
              <Route exact path="/" render={ () => <Home/>} />
              <Route exact path="/Profesores" render={ () => <ListaProfesores /> }/>
-             <Route path="/Profesores/PerfilProfesor" render={ () => <PerfilProfesor /> }/>
+              <Route path="/Profesores/PerfilProfesor/:codigo" component={PerfilProfesor}/>
+
           </div>
         </Sidebar>
       </BrowserRouter>
