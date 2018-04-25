@@ -1,47 +1,71 @@
 import React from 'react';
-import axios from 'axios';
+import ReactTable from 'react-table';
+import 'react-table/react-table.css';
 
 class ListaEncuestas extends React.Component{
-    constructor(){
-        super();
+
+    constructor(props){
+        super(props);
 
         this.state={
-            encuestas : []
+            Datos:[{'ciclo':"2017-2",
+                    "nombreCurso":"Fundamentos Programacion",
+                    "horario":"761",
+                    "participacion":"10",
+                    "puntaje":"24.6",
+                    "porcentaje":"23%"
+                    }],
+            NombreDocente:"Alenjandro Bello",
+            Ciclos:[{"id":"1","descripcion":"Todos"},{"id":"1","descripcion":"2017-2"},
+                    {"id":"2","descripcion":"2017-1"}]
         }
     }
 
+    updateTable(){
+        var cicloNuevo=this.refs.selectorCiclos.value;/*Se obtiene el valor del ciclo seleccionado*/
+
+    }
 
     render(){
+        const columnas = [
+            {
+                Header: 'Ciclo',
+                accessor: 'ciclo'
+            }, {
+                Header: 'Curso',
+                accessor: 'nombreCurso'
+            }, {
+                Header: 'Horario',
+                accessor: 'horario'
+            }, {
+                Header: 'Porcentaje de participacion',
+                accessor: 'participacion'
+            },{
+                Header: 'Puntaje',
+                accessor:'puntaje'
+            },{
+                Header: 'Porcentaje',
+                accessor: 'porcentaje'
+            }
+        ]
+
+        var nombre = this.state.NombreDocente;
+
+        var MakeItem = function(X) {/*Genera el combobox*/
+            return <option>{X.descripcion}</option>;
+        };
+
         return (
             <div>
                 <h1>Encuestas</h1>
-                <h2>Nombre</h2>
-
-                <hr />
-                Ciclo:
-                <select id="slct1" name="slct1">
-                    <option value = "Todos">Todos</option>
-                    <option value = "2017-2">2017-2</option>
-                    <option value = "2017-1">2017-1</option>
-                    <option value = "2016-2">2016-2</option>
-                </select>
-                
+                <h2>{nombre}</h2>
+                <h3>Ciclo:
+                    <select ref="selectorCiclos" onChange = {(e)=>{this.updateTable();}} >
+                        {this.state.Ciclos.map(MakeItem)}
+                    </select>
+                </h3>
                 <h4>Resultado de encuestas</h4>
-                <table striped bordered condensed hover class="table">
-                    <thead>
-                    <tr>
-                        <th scope="col">Ciclo</th>
-                        <th scope="col">Curso</th>
-                        <th scope="col">Horario</th>
-                        <th scope="col">Porcentaje de participacion</th>
-                        <th scope="col">Puntaje</th>
-                        <th scope="col">Porcentaje</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    </tbody>
-                </table>
+                <ReactTable data={this.state.Datos} columns={columnas}/>
             </div>
         );
 
