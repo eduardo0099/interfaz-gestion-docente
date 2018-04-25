@@ -13,10 +13,10 @@ class ListaProfesores extends React.Component {
   }
 
   componentDidMount(){
-    axios.get('http://localhost:8080/listaDocentes')
+    axios.get('http://localhost:8080/docente/listaDocente')
       .then(response =>{
         this.setState({
-          profesores: response.data.profesores
+          profesores: response.data
         });
       })
       .catch(error =>{
@@ -29,7 +29,7 @@ class ListaProfesores extends React.Component {
       <div>
         {this.state.profesores.map((item,i)=>{
           //return <p key={i}>{item.codigo+" - "+item.nombres+" "+item.apellidoP+" "+item.apellidoM}</p>
-          return <Link to={`/perfilDocente/${item.codigo}`} >{item.codigo+" - "+item.nombres+" "+item.apellidoP+" "+item.apellidoM}</Link>
+          return <p key={i}><Link to={`/profesores/${item.id}`} >{item.id+" - "+item.nombre}</Link></p>
         })}
       </div>
     );
