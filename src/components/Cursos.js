@@ -92,10 +92,6 @@ export class Cursos extends React.Component {
 
         return(
             <div>
-
-                <script>
-                    document.write(this.state.profesor);
-                </script>
                 <p></p>
                 <select ref="selectorCiclos" onChange={ (e) => { this.updateTable(); }}>{this.state.ciclos.map(MakeItem)}</select>
                 <p></p>
