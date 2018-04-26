@@ -8,25 +8,10 @@ const BodySidebar = (props) => {
   return (
     <div className="bodySidebar">
       <Link to="/" onClick={() => props.handleMenu(false)} className="link-body-sidebar">Inicio</Link>
+      {divider}
       <Link to="/profesores" onClick={() => props.handleMenu(false)}  className="link-body-sidebar">Profesores</Link>
       {divider}
-      <Link to="/cursos" onClick={() => props.handleMenu(false)} className="link-body-sidebar">Cursos</Link>
-      <a href="#" className="link-body-sidebar">Modulo</a>
-      <a href="#" className="link-body-sidebar">Modulo</a>
-      {divider}
       <Link to="/carga" onClick={() => props.handleMenu(false)}  className="link-body-sidebar">Carga Datos</Link>
-      <a href="#" className="link-body-sidebar">Modulo</a>
-      <a href="#" className="link-body-sidebar">Modulo</a>
-      {divider}
-      <a href="#" className="link-body-sidebar">Modulo</a>
-      <a href="#" className="link-body-sidebar">Modulo</a>
-      <a href="#" className="link-body-sidebar">Modulo</a>
-      {divider}
-      <a href="#" className="link-body-sidebar">Modulo</a>
-      <a href="#" className="link-body-sidebar">Modulo</a>
-      <a href="#" className="link-body-sidebar">Modulo</a>
-      {divider}
-      <a href="#" className="link-body-sidebar">Modulo</a>
     </div>
   );
 };

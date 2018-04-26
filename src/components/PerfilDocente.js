@@ -11,6 +11,7 @@ class PerfilDocente extends Component {
     console.log("codigo lee",props.match.params.codigo);
     this.state ={
       codigo : props.match.params.codigo,
+      global: {},
     };
 
   }
@@ -23,32 +24,36 @@ class PerfilDocente extends Component {
       }
     })
       .then(function (response) {
-        console.log(response);
+        this.setState({
+          global: response.data
+        });
       })
       .catch(function (error) {
         console.log(error);
       });
-
   }
 
   propsDetalleDocente = {
-    codigo: 1,
-    tipo: "valTipo",
-    nombre: "valNombre",
-    apellidoP: "valApellidoP",
-    apellidoM: "valApellidoM",
-    telefono: 5555555,
-    correo: "val@correo.com",
-    seccion: "valSeccion",
+    codigo: global.codigo,
+    nombre: global.nombres,
+    apellidoP: global.apellidoP,
+    apellidoM: global.apellidoM,
+    telefono: global.telefono,
+    correo: global.correo,
+    seccion: global.seccion,
     url: undefined,
-    departamento:"valDpto",
+    departamento:global.departamento,
   };
 
   render(){
     return(
       <div>
         <Route exact path="/profesores/:codigo/" render={() => <DetalleDocente {...this.propsDetalleDocente} />} />
-        <Route exact path="/profesores/:codigo/cursos" render={ () => <Cursos ciclos={[ {id:1,descripcion:"2018-1"} ]}/> }/>
+        <Route exact path="/profesores/:codigo/cursos" render={ () => <Cursos
+          ciclos={[ {id:1,descripcion:"2018-1"} ]}
+          datos={global.cursos}
+          codigoDocente={this.state.codigo}
+        /> }/>
       </div>
     );
   }
