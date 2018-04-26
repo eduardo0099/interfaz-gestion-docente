@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route} from 'react-router-dom';
 import DetalleDocente from './DetalleDocente';
 import axios from "axios/index";
+import Cursos from "../components/Cursos";
 
 class PerfilDocente extends Component {
 
@@ -45,7 +46,10 @@ class PerfilDocente extends Component {
 
   render(){
     return(
-      <Route exact path="/profesores/:codigo/" render={() => <DetalleDocente {...this.propsDetalleDocente} />} />
+      <div>
+        <Route exact path="/profesores/:codigo/" render={() => <DetalleDocente {...this.propsDetalleDocente} />} />
+        <Route exact path="/profesores/:codigo/cursos" render={ () => <Cursos ciclos={[ {id:1,descripcion:"2018-1"} ]}/> }/>
+      </div>
     );
   }
 }

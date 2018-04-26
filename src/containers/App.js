@@ -10,6 +10,7 @@ import ListaProfesores from "../components/ListaProfesores";
 import CargaDatos from '../components/CargaDatos';
 import PerfilDocente from "../components/PerfilDocente";
 
+
 class App extends Component {
 
   constructor(props) {
@@ -61,6 +62,7 @@ class App extends Component {
             <Route exact path="/profesores" render={ () => <ListaProfesores /> }/>
             <Route path="/profesores/:codigo" component={PerfilDocente} />
             <Route exact path="/carga" render={ () => <CargaDatos /> }/>
+
           </div>
         </Sidebar>
       </BrowserRouter>
