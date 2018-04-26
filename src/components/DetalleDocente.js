@@ -2,6 +2,7 @@ import React from 'react';
 import {Panel,Image, Col, Grid, Row,Button} from 'react-bootstrap';
 import foto from '../resources/images/1.PNG';
 import fotoAnonima from '../resources/images/anonimo.png';
+import {Link} from 'react-router-dom';
 
 class DetalleDocente extends React.Component {
 
@@ -30,7 +31,7 @@ class DetalleDocente extends React.Component {
         <Row className="show-grid">
           <Col md={1}/>
           <Col md={2}>
-            <Button bsStyle="primary">Cursos Dictados</Button>
+            <Link to={`/profesores/${this.state.codigo}/cursos`} >Cursos</Link>
           </Col>
           <Col md={2}>
             <Button bsStyle="primary">Horas Descarga</Button>
