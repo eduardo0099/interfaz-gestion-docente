@@ -1,0 +1,10 @@
+.back-bar {
+    padding-bottom: 30px;
+    padding-top: 20px;
+}
+
+.professor-name {
+    font-weight: bold;
+    padding-left: 20px;
+    text-transform: uppercase;
+}

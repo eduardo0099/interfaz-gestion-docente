@@ -13,8 +13,13 @@
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.1.4",
     "react-sidebar": "^2.3.2",
+<<<<<<< HEAD
     "react-table": "^6.8.2",
     "redux": "^3.7.2"
+=======
+    "redux": "^3.7.2",
+    "react-table": "^6.8.2"
+>>>>>>> 8d68d660a1a202384bbbbff666f1f9a83c738b5f
   },
   "scripts": {
     "start": "react-scripts start",

@@ -19,11 +19,21 @@ class ListaEncuestas extends React.Component{
             Ciclos:[{"id":"1","descripcion":"Todos"},{"id":"1","descripcion":"2017-2"},
                     {"id":"2","descripcion":"2017-1"}]
         }
+        /*this.state={
+
+            Datos: props.datos,
+            NombreDocente:props.nombreDocente,
+            Ciclos:props.ciclo}*/
     }
 
-    updateTable(){
-        var cicloNuevo=this.refs.selectorCiclos.value;/*Se obtiene el valor del ciclo seleccionado*/
 
+    updateTable(){
+        let cicloNuevo=this.refs.selectorCiclos.value;
+        /*for(let i=0;i<this.state.Datos.length;i++){
+            if(cicloNuevo === this.state.Datos[0].ciclo){
+                <td></td>
+            }
+        }*/
     }
 
     render(){
@@ -49,9 +59,9 @@ class ListaEncuestas extends React.Component{
             }
         ]
 
-        var nombre = this.state.NombreDocente;
+        let nombre = this.state.NombreDocente;
 
-        var MakeItem = function(X) {/*Genera el combobox*/
+        let MakeItem = function(X) {/*Genera el combobox*/
             return <option>{X.descripcion}</option>;
         };
 
