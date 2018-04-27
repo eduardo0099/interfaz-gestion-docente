@@ -1,23 +1,8 @@
 import React from 'react';
-import axios from "axios/index";
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 
 export class Cursos extends React.Component {
-
-  constructor(props) {
-    super(props)
-    this.state = {
-      datos: props.cursos,
-      ciclos:props.ciclos,
-      codigoDocente:props.codigo
-    }
-  }
-
-
-  updateTable(){
-  }
-
 
   render () {
     const columnas = [
@@ -34,18 +19,17 @@ export class Cursos extends React.Component {
         Header: 'Horas Semanales',
         accessor: 'cursos.horas'
       }
-    ]
+    ];
 
-    var MakeItem = function(X) {
-      return <option>{X.descripcion}</option>;
-    };
 
     return(
       <div>
-        <p></p>
-        <select ref="selectorCiclos" onChange={ (e) => { this.updateTable(); }}>{this.state.ciclos.map(MakeItem)}</select>
-        <p></p>
-        <ReactTable data={this.state.datos} columns={columnas}/>
+        <select ref="selectorCiclos">
+          {this.props.ciclos.map((item,i)=>{
+            return <option key={i}>{item.descripcion}</option>
+          })}
+        </select>
+        <ReactTable data={this.props.cursos} columns={columnas}/>
       </div>
     )
   }
