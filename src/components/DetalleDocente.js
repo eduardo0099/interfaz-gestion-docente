@@ -42,20 +42,23 @@ class DetalleDocente extends Component {
           <Grid>
             <Row className="show-grid">
               <Col md={1}/>
-              <Col md={2}>
+              <Col md={1}>
                 <Link to={`${this.props.match.url}/cursos`} >Cursos</Link>
               </Col>
-              <Col md={2}>
-                <Button bsStyle="primary">Horas Descarga</Button>
+              <Col md={1}>
+                <Button bsStyle="primary">Descarga</Button>
               </Col>
-              <Col md={2}>
+              <Col md={1}>
                 <Button bsStyle="primary">Encuestas</Button>
               </Col>
-              <Col md={2}>
+              <Col md={1}>
                 <Button bsStyle="primary">Actividades</Button>
               </Col>
               <Col md={2}>
                 <Button bsStyle="primary">Investigaciones</Button>
+              </Col>
+              <Col md={2}>
+                  <Button bsStyle="primary">Solicitudes Economicas</Button>
               </Col>
               <Col md={1}/>
             </Row>
