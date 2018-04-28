@@ -7,7 +7,6 @@ import '../styles/App.css';
 import Home from "../components/Home";
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import ListaProfesores from "../components/ListaProfesores";
-import ListaEncuestas from "../components/ListaEncuestas";
 import CargaDatos from '../components/CargaDatos';
 
 
@@ -60,7 +59,7 @@ class App extends Component {
           <div className="content">
             <Switch>
               <Route exact path="/" render={ () => <Home/>} />
-              <Route path="/Profesores" component={ListaProfesores}/>
+              <Route path="/profesores" component={ListaProfesores}/>
               <Route path="/carga" render={ () => <CargaDatos /> }/>
               <Route render={()=><div>La pagina que busca, no existe</div>} />
             </Switch>
