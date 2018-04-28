@@ -5,6 +5,7 @@ import fotoAnonima from '../resources/images/anonimo.png';
 import {Route,Link} from 'react-router-dom';
 import axios from "axios/index";
 import Cursos from "./Cursos";
+import ListasEncuestas from "./ListaEncuestas";
 
 class DetalleDocente extends Component {
 
@@ -16,6 +17,7 @@ class DetalleDocente extends Component {
     }
 
   }
+
 
   componentDidMount(){
     axios.get('http://200.16.7.151:8080/docente/docente', {
@@ -49,7 +51,7 @@ class DetalleDocente extends Component {
                 <Button bsStyle="primary">Horas Descarga</Button>
               </Col>
               <Col md={2}>
-                <Button bsStyle="primary">Encuestas</Button>
+                  <Link to={`${this.props.match.url}/encuestas`} >Encuestas</Link>
               </Col>
               <Col md={2}>
                 <Button bsStyle="primary">Actividades</Button>
@@ -99,9 +101,16 @@ class DetalleDocente extends Component {
         <Route path={`${this.props.match.path}/cursos`} render={()=>
           <Cursos cursos={this.state.info.cursos}
                   ciclos={[{descripcion:"2018-1"}]}
-
           />
         }/>
+          <Route path={`${this.props.match.path}/encuestas`} render={()=>
+              <ListasEncuestas encuestas={this.state.info.encuestas}
+                                listaCiclos={[{"id":"1","descripcion":"Todos"},{"id":"1","descripcion":"2017-2"},
+                                    {"id":"2","descripcion":"2017-1"}]}
+                               cicloActual={this.state.info.ciclo}
+                               nombreDocente={this.state.info.nombres + " " + this.state.info.apellidoP }
+              />
+          }/>
       </div>
     );
 
