@@ -1,11 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {Grid,Row,Table,Button, Glyphicon,Col} from 'react-bootstrap';
+import {Grid, Row, Table, Button, Glyphicon, Col, SplitButton, MenuItem} from 'react-bootstrap';
+
+
 class ListaEncuestas extends React.Component{
-
-
-
-
 
     render(){
 
@@ -24,7 +22,13 @@ class ListaEncuestas extends React.Component{
                     </Row>
                     <Row>
                         <Col md={12}>
-                            <p>Aqui va el combobox</p>
+                            <p>Ciclo:
+                                <SplitButton title={this.props.cicloActual} pullRight id="split-button-pull-right">
+                                        {this.props.listaCiclos.map((item)=>{
+                                            return <MenuItem >{item.descripcion}</MenuItem>
+                                        })}
+                                </SplitButton>
+                            </p>
                         </Col>
                     </Row>
                     <Row>

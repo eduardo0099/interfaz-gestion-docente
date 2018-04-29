@@ -6,6 +6,8 @@ import {Route,Link} from 'react-router-dom';
 import axios from "axios/index";
 import Cursos from "./Cursos";
 import ListasEncuestas from "./ListaEncuestas";
+import SolicitudesEconomicas from "./SolicitudesEconomicas"
+
 
 class DetalleDocente extends Component {
 
@@ -54,11 +56,14 @@ class DetalleDocente extends Component {
                   <Link to={`${this.props.match.url}/encuestas`} >Encuestas</Link>
               </Col>
               <Col md={2}>
-                <Button bsStyle="primary">Actividades</Button>
+                <Button bsStyle="primary">Plan de Proyecto</Button>
               </Col>
               <Col md={2}>
                 <Button bsStyle="primary">Investigaciones</Button>
               </Col>
+                <Col md={2}>
+                    <Link to={`${this.props.match.url}/solicitudesEconomicas`} >Solicitudes Economicas</Link>
+                </Col>
               <Col md={1}/>
             </Row>
             <Row className="show-grid" >
@@ -105,10 +110,19 @@ class DetalleDocente extends Component {
         }/>
           <Route path={`${this.props.match.path}/encuestas`} render={()=>
               <ListasEncuestas encuestas={this.state.info.encuestas}
-                                listaCiclos={[{"id":"1","descripcion":"Todos"},{"id":"1","descripcion":"2017-2"},
+                                listaCiclos={[{"id":"1","descripcion":"2017-2"},
                                     {"id":"2","descripcion":"2017-1"}]}
                                cicloActual={this.state.info.ciclo}
                                nombreDocente={this.state.info.nombres + " " + this.state.info.apellidoP }
+              />
+          }/>
+          <Route path={`${this.props.match.path}/solicitudesEconomicas`} render={()=>
+              <SolicitudesEconomicas  nombreDocente={this.state.info.nombres + " " + this.state.info.apellidoP }
+                                      cicloActual={[{descripcion:"2018-1"}]}
+                                      listaCiclos={[{"id":"1","descripcion":"2017-2"},
+                                          {"id":"2","descripcion":"2017-1"}]}
+                                      solicitud={[{"motivo":"Investigacion","monto":"3000.00"
+                                                  ,"fechaRegistro":"23/02/18","estado":"Aceptado"}]}
               />
           }/>
       </div>
