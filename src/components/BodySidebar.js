@@ -1,5 +1,5 @@
 import React from 'react';
-import {NavLink,Link} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import './../styles/BodySidebar.css';
 
 const BodySidebar = (props) => {
