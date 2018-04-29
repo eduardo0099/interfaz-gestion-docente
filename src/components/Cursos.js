@@ -42,7 +42,7 @@ export class Cursos extends React.Component {
                 console.log("Error obteniendo los datos de los ciclos");
             });
 
-        axios.get('http://localhost:8080/tests')
+        axios.get('http://localhost:8080/docente/docente')
             .then(response =>{
                 this.setState({
                     datos: response.data.cursos
@@ -70,6 +70,7 @@ export class Cursos extends React.Component {
 
 
     render () {
+        this.componentDidMount();
         const columnas = [
             {
                 Header: 'Nombre',
