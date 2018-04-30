@@ -15,11 +15,6 @@ class RegistroDocente extends Component{
     }
   }
 
-  obtenerTipoFile= nombreFile => {
-    let t = document.getElementsByTagName( 'select' );
-    return t[0].value;
-  };
-
   configPapa = {
     delimiter: "",  // auto-detect
     newline: "",  // auto-detect
@@ -42,9 +37,14 @@ class RegistroDocente extends Component{
     withCredentials: undefined
   };
 
-  agregarFila = () =>{
-    this.setState({cantidadFilas: this.cantidadFilas +1 });
+  registroCorrecto = () =>{
+    alert("Docente registrado correctamente");
   };
+
+  registroFallido = () =>{
+    alert("Hay un dato inválido en el registro. \nPor favor, verifique sus datos");
+  };
+
   render() {
     return (
       <div className="container">
@@ -68,9 +68,9 @@ class RegistroDocente extends Component{
           <br></br>
         </div>
         <div class="centro">
-          <Button bsStyle="primary" onClick={this.agregarFila}>REGISTRAR DOCENTE</Button>
+          <Button bsStyle="primary" onClick={this.registroCorrecto}>REGISTRAR DOCENTE</Button>
           <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
-          <Button bsStyle="warning" onClick={this.cargarDatos}>CANCELAR REGISTRO</Button>
+          <Button bsStyle="warning" onClick={this.registroFallido}>CANCELAR REGISTRO</Button>
         </div>
       </div>
     );
