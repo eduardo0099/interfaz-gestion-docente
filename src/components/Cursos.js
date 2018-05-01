@@ -4,6 +4,8 @@ import 'react-table/react-table.css';
 import axios from "axios/index";
 
 export class Cursos extends React.Component {
+    constructor(props){
+        super(props);
         this.state = {
             cursos: [{
                 "nombre": "Chistemas Operativos",
@@ -38,7 +40,6 @@ export class Cursos extends React.Component {
             .catch(error =>{
                 console.log("Error obteniendo los datos de los ciclos");
             });
-
 
         axios.get('http://localhost:8080/tests')
             .then(response =>{
