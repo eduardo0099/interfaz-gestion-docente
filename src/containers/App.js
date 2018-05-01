@@ -2,15 +2,17 @@ import React, { Component } from 'react';
 import Sidebar from 'react-sidebar';
 import Header from './../components/Header';
 import SidebarContent from './../components/SidebarContent';
-import '../styles/Sidebar.css';
-import '../styles/App.css';
 import Home from "../components/Home";
 import {BrowserRouter, Route} from 'react-router-dom';
 import ListaProfesores from "../components/ListaProfesores";
 import CargaDatos from '../components/CargaDatos';
 import PerfilDocente from "../components/PerfilDocente";
-
+import RegistroDocente from "../components/RegistroDocente";
+import ProfesorPerfilAyudaEconomica from "../components/ProfesorPerfilAyudaEconomica";
 import 'react-select/dist/react-select.css';
+import '../styles/Phobos.css';
+import '../styles/Sidebar.css';
+import '../styles/App.css';
 
 class App extends Component {
 
@@ -61,9 +63,10 @@ class App extends Component {
           <div className="content">
             <Route exact path="/" render={ () => <Home/>} />
             <Route exact path="/profesores" render={ () => <ListaProfesores/> }/>
+            <Route exact path="/ayudaeconomica" render={ () => <ProfesorPerfilAyudaEconomica/> }/>
             <Route path="/profesores/:codigo" component={PerfilDocente} />
             <Route exact path="/carga" render={ () => <CargaDatos /> }/>
-
+            <Route exact path="/docentes/registro" render={ () => <RegistroDocente /> }/>
           </div>
         </Sidebar>
       </BrowserRouter>

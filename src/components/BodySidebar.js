@@ -11,7 +11,7 @@ const BodySidebar = (props) => {
       {divider}
       <Link to="/profesores" onClick={() => props.handleMenu(false)}  className="link-body-sidebar">Profesores</Link>
       {divider}
-      <Link to="/carga" onClick={() => props.handleMenu(false)}  className="link-body-sidebar">Carga Datos</Link>
+      <Link to="/carga" onClick={() => props.handleMenu(false)}  className="link-body-sidebar">Carga de datos</Link>
     </div>
   );
 };
