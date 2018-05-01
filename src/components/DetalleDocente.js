@@ -6,6 +6,7 @@ import {Route,Link} from 'react-router-dom';
 import axios from "axios/index";
 import Cursos from "./Cursos";
 import ListasEncuestas from "./ListaEncuestas";
+import ListaInvestigaciones from "./ListaInvestigaciones"
 
 class DetalleDocente extends Component {
 
@@ -37,7 +38,7 @@ class DetalleDocente extends Component {
   }
 
   render() {
-    console.log("path",this.state.info.cursos);
+      console.log(this.props);
     return(
       <div>
         <Route exact path={`${this.props.match.path}`} render={() =>
@@ -57,7 +58,7 @@ class DetalleDocente extends Component {
                 <Button bsStyle="primary">Actividades</Button>
               </Col>
               <Col md={2}>
-                <Button bsStyle="primary">Investigaciones</Button>
+                <Link to={`${this.props.match.url}/investigaciones`}>Investigaciones</Link>
               </Col>
               <Col md={1}/>
             </Row>
@@ -111,7 +112,12 @@ class DetalleDocente extends Component {
                                nombreDocente={this.state.info.nombres + " " + this.state.info.apellidoP }
               />
           }/>
+          <Route path={`${this.props.match.path}/investigaciones`} render={props =>(
+              <ListaInvestigaciones investigaciones={this.state.info.investigaciones}
+              />
+          )}/>
       </div>
+
     );
 
   }

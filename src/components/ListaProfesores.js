@@ -26,6 +26,7 @@ class ListaProfesores extends Component {
   }
 
   render() {
+      console.log(this.props);
     return (
       <div>
         <Route exact path={`${this.props.match.path}`} render={() =>
