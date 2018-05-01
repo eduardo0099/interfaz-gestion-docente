@@ -14,17 +14,25 @@ class DetalleDocente extends Component {
     super(props);
 
     this.state = {
-      info: []
+      info: {
+        "codigo": "",
+        "nombres": "",
+        "apellidoP": "",
+        "apellidoM": "",
+        "telefono": "",
+        "seccion": "",
+        "departamento": "",
+        "correo": ""
+      }
     }
 
   }
 
 
   componentDidMount(){
-    axios.get('http://200.16.7.151:8080/docente/docente', {
+    axios.get('http://demo1279441.mockable.io/docente/general', {
       params: {
-        codigo: this.props.match.params.codigo,
-        ciclo: "2018-1",
+        codigo: this.props.match.params.codigo
       }
     })
       .then(response => {
@@ -39,6 +47,7 @@ class DetalleDocente extends Component {
 
   render() {
       console.log(this.props);
+
     return(
       <div>
         <Route exact path={`${this.props.match.path}`} render={() =>
@@ -100,6 +109,7 @@ class DetalleDocente extends Component {
           </Grid>
         } />
         <Route path={`${this.props.match.path}/cursos`} component={Cursos}/>
+
           <Route path={`${this.props.match.path}/encuestas`} render={()=>
               <ListasEncuestas encuestas={this.state.info.encuestas}
                                 listaCiclos={[{"id":"1","descripcion":"Todos"},{"id":"1","descripcion":"2017-2"},
@@ -109,6 +119,7 @@ class DetalleDocente extends Component {
               />
           }/>
           <Route path={`${this.props.match.path}/investigaciones`} component={ListaInvestigaciones}/>
+
       </div>
 
     );
