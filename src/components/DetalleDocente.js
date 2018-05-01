@@ -99,11 +99,7 @@ class DetalleDocente extends Component {
             </Row>
           </Grid>
         } />
-        <Route path={`${this.props.match.path}/cursos`} render={()=>
-          <Cursos cursos={this.state.info.cursos}
-                  ciclos={[{descripcion:"2018-1"}]}
-          />
-        }/>
+        <Route path={`${this.props.match.path}/cursos`} component={Cursos}/>
           <Route path={`${this.props.match.path}/encuestas`} render={()=>
               <ListasEncuestas encuestas={this.state.info.encuestas}
                                 listaCiclos={[{"id":"1","descripcion":"Todos"},{"id":"1","descripcion":"2017-2"},
@@ -112,10 +108,7 @@ class DetalleDocente extends Component {
                                nombreDocente={this.state.info.nombres + " " + this.state.info.apellidoP }
               />
           }/>
-          <Route path={`${this.props.match.path}/investigaciones`} render={props =>(
-              <ListaInvestigaciones investigaciones={this.state.info.investigaciones}
-              />
-          )}/>
+          <Route path={`${this.props.match.path}/investigaciones`} component={ListaInvestigaciones}/>
       </div>
 
     );
