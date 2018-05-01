@@ -13,7 +13,7 @@ class ListaProfesores extends React.Component {
   }
 
   componentDidMount(){
-    axios.get('http://localhost:8080/docente/listaDocente')
+    axios.get('http://200.16.7.151:8080/docente/listaDocente')
       .then(response =>{
         this.setState({
           profesores: response.data

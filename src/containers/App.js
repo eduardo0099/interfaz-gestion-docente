@@ -9,7 +9,6 @@ import {BrowserRouter, Route} from 'react-router-dom';
 import ListaProfesores from "../components/ListaProfesores";
 import CargaDatos from '../components/CargaDatos';
 import PerfilDocente from "../components/PerfilDocente";
-import AyudaEconomica from "../components/AyudaEconomica/AyudaEconomica";
 
 import 'react-select/dist/react-select.css';
 
@@ -61,7 +60,7 @@ class App extends Component {
           <Header handleMenu={this.menuButtonClick}/>
           <div className="content">
             <Route exact path="/" render={ () => <Home/>} />
-            <Route exact path="/profesores" render={ () => <AyudaEconomica/> }/>
+            <Route exact path="/profesores" render={ () => <ListaProfesores/> }/>
             <Route path="/profesores/:codigo" component={PerfilDocente} />
             <Route exact path="/carga" render={ () => <CargaDatos /> }/>
 
