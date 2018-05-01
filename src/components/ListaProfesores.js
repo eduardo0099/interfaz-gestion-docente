@@ -1,15 +1,16 @@
-import React from 'react';
-import axios from 'axios';
-import {Link} from 'react-router-dom';
-class ListaProfesores extends React.Component {
+import React, {Component} from 'react';
+import {Route,Link} from 'react-router-dom';
+import DetalleDocente from "./DetalleDocente";
+import axios from "axios/index";
 
-  constructor(){
-    super();
+class ListaProfesores extends Component {
 
-    this.state = {
+  constructor(props){
+    super(props);
+
+    this.state ={
       profesores: []
     }
-
   }
 
   componentDidMount(){
@@ -20,17 +21,21 @@ class ListaProfesores extends React.Component {
         });
       })
       .catch(error =>{
-        console.log("Error obteniendo los datos de los profesores");
+        console.log("Error obteniendo la lista de los profesores",error);
       });
   }
 
   render() {
     return (
       <div>
-        {this.state.profesores.map((item,i)=>{
-          //return <p key={i}>{item.codigo+" - "+item.nombres+" "+item.apellidoP+" "+item.apellidoM}</p>
-          return <p key={i}><Link to={`/profesores/${item.id}`} >{item.id+" - "+item.nombre}</Link></p>
-        })}
+        <Route exact path={`${this.props.match.path}`} render={() =>
+          <div>
+            {this.state.profesores.map((item,i)=>{
+              return <p key={i}><Link to={`${this.props.match.url}/${item.id}`} >{item.id+" - "+item.nombre}</Link></p>
+            })}
+          </div>
+        }/>
+        <Route path={`${this.props.match.path}/:codigo`} component={DetalleDocente} />
       </div>
     );
   }
