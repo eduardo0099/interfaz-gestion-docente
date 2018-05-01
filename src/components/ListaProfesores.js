@@ -14,7 +14,7 @@ class ListaProfesores extends Component {
   }
 
   componentDidMount(){
-    axios.get('http://200.16.7.151:8080/general/listaDocente')
+    axios.get('http://localhost:8080/general/listaDocente')
       .then(response =>{
         this.setState({
           profesores: response.data.docentes

@@ -4,6 +4,7 @@ import 'react-table/react-table.css';
 import {Grid,Row,Table,Button, Glyphicon,Col} from 'react-bootstrap';
 import {HashRouter ,BrowserRouter,Router,Route,Link} from 'react-router-dom';
 import RegistroInvestigacion from "./RegistroInvestigacion"
+import ModificarInvestigacion from "./ModificarInvestigacion"
 import axios from "axios/index";
 import './../styles/ListaInvestigaciones.css';
 import BootstrapTable from 'react-bootstrap-table-next';
@@ -42,6 +43,17 @@ export class ListaInvestigaciones extends React.Component {
         if(this.state.selectedId!=-1){
             if (window.confirm('Seguro que deseas eliminar esta investigacion?')) {
                 // Save it!
+                axios.delete('http://localhost:8080/docente/investigacion/eliminar', {
+                    data:{
+                    id:this.state.selectedId
+                    }
+                })
+                    .then(function (response) {
+                        alert("Investigación eliminada");
+                    })
+                    .catch(function (error) {
+                        alert("Error: No se pudo eliminar la investigación");
+                    })
             } else {
                 // Do nothing!
             }
@@ -49,6 +61,14 @@ export class ListaInvestigaciones extends React.Component {
             alert(`Seleccionar una investigación!`);
         }
     }
+
+    modificar = () =>{
+        if(this.state.selectedId==-1){
+            alert(`Seleccionar una investigación!`);
+        }
+    }
+
+
 
     render () {
 
@@ -85,6 +105,13 @@ export class ListaInvestigaciones extends React.Component {
             console.log("Row index is: " + x.rowIndex);
         }
 
+        let myComponent;
+        if(this.state.selectedId !== -1) {
+            myComponent = <Link to={`${this.props.match.url}/${this.state.selectedId}/ModificarInvestigacion`}>Modificar</Link>
+        } else {
+            myComponent = <label onClick={this.modificar}>Modificar</label>
+        }
+
         return(
             <div>
                 <Route exact path={`${this.props.match.path}`} render={() =>
@@ -97,11 +124,13 @@ export class ListaInvestigaciones extends React.Component {
                         <Col md={2}>
                             <Link to={`${this.props.match.url}/RegistroInvestigacion`}>Registrar</Link>
                             <Button onClick={this.eliminar}>Eliminar</Button>
+                            {myComponent}
                         </Col>
                     </Grid>
                 }/>
 
                 <Route path={`${this.props.match.path}/RegistroInvestigacion`} render={()=> <RegistroInvestigacion/>}/>
+                <Route path={`${this.props.match.path}/:idInvestigacion/ModificarInvestigacion`} component={ModificarInvestigacion}/>
 
             </div>
         )

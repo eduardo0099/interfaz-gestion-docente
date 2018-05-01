@@ -21,7 +21,7 @@ class DetalleDocente extends Component {
 
 
   componentDidMount(){
-    axios.get('http://200.16.7.151:8080/docente/docente', {
+    axios.get('http://localhost:8080/docente/docente', {
       params: {
         codigo: this.props.match.params.codigo,
         ciclo: "2018-1",
