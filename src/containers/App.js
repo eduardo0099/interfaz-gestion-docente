@@ -5,11 +5,10 @@ import SidebarContent from './../components/SidebarContent';
 import '../styles/Sidebar.css';
 import '../styles/App.css';
 import Home from "../components/Home";
-import {BrowserRouter, Route} from 'react-router-dom';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import ListaProfesores from "../components/ListaProfesores";
-import PerfilProfesor from  "../components/PerfilProfesor";
+import CargaDatos from '../components/CargaDatos';
 
-//var PerfilProfesor = require(PerfilProfesor);
 
 class App extends Component {
 
@@ -58,10 +57,12 @@ class App extends Component {
         <Sidebar {...sidebarProps}>
           <Header handleMenu={this.menuButtonClick}/>
           <div className="content">
-             <Route exact path="/" render={ () => <Home/>} />
-             <Route exact path="/Profesores" render={ () => <ListaProfesores /> }/>
-              <Route path="/Profesores/PerfilProfesor/:codigo" component={PerfilProfesor}/>
-
+            <Switch>
+              <Route exact path="/" render={ () => <Home/>} />
+              <Route path="/profesores" component={ListaProfesores}/>
+              <Route path="/carga" render={ () => <CargaDatos /> }/>
+              <Route render={()=><div>La pagina que busca, no existe</div>} />
+            </Switch>
           </div>
         </Sidebar>
       </BrowserRouter>

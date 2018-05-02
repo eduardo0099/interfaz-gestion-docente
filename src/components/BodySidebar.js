@@ -1,5 +1,5 @@
 import React from 'react';
-import {NavLink,Link} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import './../styles/BodySidebar.css';
 
 const BodySidebar = (props) => {
@@ -8,25 +8,10 @@ const BodySidebar = (props) => {
   return (
     <div className="bodySidebar">
       <Link to="/" onClick={() => props.handleMenu(false)} className="link-body-sidebar">Inicio</Link>
+      {divider}
       <Link to="/profesores" onClick={() => props.handleMenu(false)}  className="link-body-sidebar">Profesores</Link>
       {divider}
-      <a href="#" className="link-body-sidebar">Modulo</a>
-      <a href="#" className="link-body-sidebar">Modulo</a>
-      <a href="#" className="link-body-sidebar">Modulo</a>
-      {divider}
-      <a href="#" className="link-body-sidebar">Modulo</a>
-      <a href="#" className="link-body-sidebar">Modulo</a>
-      <a href="#" className="link-body-sidebar">Modulo</a>
-      {divider}
-      <a href="#" className="link-body-sidebar">Modulo</a>
-      <a href="#" className="link-body-sidebar">Modulo</a>
-      <a href="#" className="link-body-sidebar">Modulo</a>
-      {divider}
-      <a href="#" className="link-body-sidebar">Modulo</a>
-      <a href="#" className="link-body-sidebar">Modulo</a>
-      <a href="#" className="link-body-sidebar">Modulo</a>
-      {divider}
-      <a href="#" className="link-body-sidebar">Modulo</a>
+      <Link to="/carga" onClick={() => props.handleMenu(false)}  className="link-body-sidebar">Carga Datos</Link>
     </div>
   );
 };
