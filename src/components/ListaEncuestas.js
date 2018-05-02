@@ -126,7 +126,7 @@ class ListaEncuestas extends React.Component{
           profesor={this.state.nombreProfesor}
           ciclo={this.state.listaEncuesta[this.state.comentarioSeleccionado].ciclo}
           curso={this.state.listaEncuesta[this.state.comentarioSeleccionado].curso}
-          codigo={"INF999"}
+          codigo={this.state.listaEncuesta[this.state.comentarioSeleccionado].codigo}
           participacion={this.state.listaEncuesta[this.state.comentarioSeleccionado].porcentaje}
           puntaje={this.state.listaEncuesta[this.state.comentarioSeleccionado].puntaje}
           encuestas={this.state.listaEncuesta[this.state.comentarioSeleccionado].comentarios}
