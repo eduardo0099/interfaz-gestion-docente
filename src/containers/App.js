@@ -8,7 +8,6 @@ import '../styles/Phobos.css';
 import Home from "../components/Home";
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import ListaProfesores from "../components/ListaProfesores";
-import DetalleDocente from "../components/DetalleDocente";
 import CargaDatos from '../components/CargaDatos';
 
 

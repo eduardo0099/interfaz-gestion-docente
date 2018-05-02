@@ -3,7 +3,7 @@ import {Route} from 'react-router-dom';
 import DetalleDocente from "./DetalleDocente";
 import BaseContainer from "./BaseContainer";
 import axios from "axios/index";
-import {DropdownButton, Glyphicon, Dropdown, MenuItem, Col, Grid, Row, Button} from 'react-bootstrap';
+import { Glyphicon, Dropdown, MenuItem} from 'react-bootstrap';
 
 class ListaProfesores extends Component {
 
