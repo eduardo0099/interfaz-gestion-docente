@@ -10,12 +10,12 @@ class ListaEncuestas extends React.Component{
 
     super(props);
     this.state= {
-      listaEncuesta: []
+      encuestas: []
     }
   }
 
   componentDidMount(){
-    axios.get('http://demo1279441.mockable.io/encuestas/listas', {
+    axios.get('http://200.16.7.151:8080/docente/docente/encDocente', {
       params: {
         codigo: this.props.match.params.codigo,
         ciclo: this.state.cicloSeleccionado,
@@ -23,7 +23,7 @@ class ListaEncuestas extends React.Component{
     })
       .then(response => {
         this.setState({
-          listaEncuesta: response.data.encuestas
+          encuestas: response.data.encuestas
         });
       })
       .catch(error => {
@@ -66,7 +66,7 @@ class ListaEncuestas extends React.Component{
                   </thead>
                   <tbody>
 
-                  {this.state.listaEncuesta.map((item,i) => {
+                  {this.state.encuestas.map((item,i) => {
                     return <tr key={i}>
                       <td>{item.curso}</td>
                       <td>{item.horario}</td>

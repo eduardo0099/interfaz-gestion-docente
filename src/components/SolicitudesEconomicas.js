@@ -9,15 +9,7 @@ class SolicitudesEconomicas extends React.Component{
 
         super(props);
         this.state = {
-            ayudas: {
-                "id": "",
-                "titulo": "",
-                "motivo": "",
-                "fecha_solicitud": "",
-                "monto_otorgado": "",
-                "estado": ""
-            }
-
+            ayudas: []
         }
     }
 
@@ -29,7 +21,7 @@ class SolicitudesEconomicas extends React.Component{
         })
             .then(response => {
                 this.setState({
-                    info: response.data
+                    ayudas: response.data.docente.ayudas
                 });
             })
             .catch(error => {
@@ -42,7 +34,7 @@ class SolicitudesEconomicas extends React.Component{
                 <Grid>
                     <Row className="back-bar">
                         <Col md={12}>
-                            <Button><Glyphicon glyph="arrow-left"></Glyphicon></Button> <span className="professor-name"> { this.props.codigo } </span>
+                            <Button><Glyphicon glyph="arrow-left"></Glyphicon></Button> <span className="professor-name"> Regresar a perfil docente </span>
                         </Col>
                     </Row>
                     <Row>
@@ -59,15 +51,23 @@ class SolicitudesEconomicas extends React.Component{
                             <Table striped bordered condensed hover>
                                 <thead>
                                 <tr>
+                                    <th>Titulo</th>
                                     <th>Motivo</th>
-                                    <th>Monto</th>
                                     <th>Fecha de Registro</th>
+                                    <th>Monto</th>
                                     <th>Estado</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-
-
+                                    {this.state.ayudas.map((item,i) => {
+                                        return <tr key={i}>
+                                            <td>{item.titulo}</td>
+                                            <td>{item.motivo}</td>
+                                            <td>{item.fecha_solicitud}</td>
+                                            <td>{item.monto_otorgado}</td>
+                                            <td>{item.estado}</td>
+                                        </tr>
+                                    })}
                                 </tbody>
                             </Table>
                         </Col>
