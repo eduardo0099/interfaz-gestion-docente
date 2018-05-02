@@ -9,7 +9,14 @@ class SolicitudesEconomicas extends React.Component{
 
         super(props);
         this.state = {
-            ayudas: []
+            ayudas: [
+                {id: "",
+                titulo: "",
+                motivo: "",
+                fecha_solicitud: "",
+                monto_otorgado: "",
+                estado: ""}
+            ]
         }
     }
 
@@ -21,7 +28,7 @@ class SolicitudesEconomicas extends React.Component{
         })
             .then(response => {
                 this.setState({
-                    ayudas: response.data.docente.ayudas
+                    ayudas: response.data.ayudas
                 });
             })
             .catch(error => {
@@ -34,7 +41,7 @@ class SolicitudesEconomicas extends React.Component{
                 <Grid>
                     <Row className="back-bar">
                         <Col md={12}>
-                            <Button><Glyphicon glyph="arrow-left"></Glyphicon></Button> <span className="professor-name"> Regresar a perfil docente </span>
+                            <Button onClick={this.props.history.goBack}><Glyphicon glyph="arrow-left"></Glyphicon></Button> <span className="professor-name"> Regresar a perfil docente </span>
                         </Col>
                     </Row>
                     <Row>
