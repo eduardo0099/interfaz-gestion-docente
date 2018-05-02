@@ -86,9 +86,10 @@ class DetalleDocente extends Component {
                     <Row className="show-grid">
                       <Col md={8}>
                         <h4>Codigo: {this.state.info.codigo}</h4>
-                        <h4>Docente: {`${this.state.info.nombres} ${this.state.info.apellidoP} ${this.state.info.apellidoM}`}</h4>
+                        <h4>Docente: {`${this.state.info.nombres} ${this.state.info.apellido_paterno} ${this.state.info.apellido_materno}`}</h4>
+                        <h4>Tipo: {`${this.state.info.descripcion}`}</h4>
                         <h4>Telefono: {this.state.info.telefono}</h4>
-                        <h4>Correo: {this.state.info.correo}</h4>
+                        <h4>Correo: {this.state.info.correo_pucp}</h4>
                         <h4>Departamento: {this.state.info.departamento}</h4>
                         <h4>Seccion: {this.state.info.seccion}</h4>
                       </Col>
