@@ -4,83 +4,123 @@ import 'react-table/react-table.css';
 import axios from "axios/index";
 
 export class Cursos extends React.Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            cursos: [{
-                "nombre": "Chistemas Operativos",
-                "creditos": 6,
-                "horario": "0666",
-                "horas": 5
-            },
-                {
-                    "nombre": "funda",
-                    "creditos": 32,
-                    "horario": "0069",
-                    "horas": 56
-                }
-            ],
-            ciclos:[{
-                "id":"1",
-                "descripcion":"2018-1"},
-                {"id":"2",
-                    "descripcion":"2017-2"}
-            ],
-            codigoDocente:18846666
+  
+  constructor(props){
+    super(props);
+    this.state = {
+      infoCursos: [
+        {
+          "tipo": "pregrado",
+          "listaCursos": []
+        },
+        {
+          "tipo": "posgrado",
+          "listaCursos": []
+        },
+        {
+          "tipo": "otros",
+          "listaCursos": []
         }
+      ],
+      ciclos: [],
+      cicloSeleccionado: ""
     }
 
-    componentDidMount(){
-        axios.get('http://localhost:8080/docente/listaCiclos')
-            .then(response =>{
-                this.setState({
-                    ciclos: response.data
-                });
-            })
-            .catch(error =>{
-                console.log("Error obteniendo los datos de los ciclos");
-            });
+  componentDidMount(){
 
-        axios.get('http://localhost:8080/tests')
-            .then(response =>{
-                this.setState({
-                    cursos: response.data.cursos
-                });
-            })
-            .catch(error =>{
-                console.log("Error obteniendo los datos de los Cursos");
-            });
+    axios.all([
+      axios.get('http://200.16.7.151:8080/general/cicloActual'),
+      axios.get('http://200.16.7.151:8080/general/listaCiclos'),
+    ]).then(axios.spread((respCicloAct,resplistaCiclos)=>{
+      this.setState({
+        cicloSeleccionado: respCicloAct.data.cicloActual,
+        ciclos: resplistaCiclos.data.ciclos
+      });
+      return axios.get('http://200.16.7.151:8080/docente/docente/curDocente', {
+        params: {
+          codigo: this.props.match.params.codigo,
+          ciclo: this.state.cicloSeleccionado,
+        }
+      });
+    })).then((respcursos) => {
+      this.setState({
+        infoCursos: respcursos.data.cursos
+      })
+      }
+    ).catch(error => {
+      console.log(`Error al obtener datos de la pantalla cursos`,error);
+    });
+
+  }
+
+  cambioCiclo = (event) =>{
+    let nuevoCiclo = event.target.value;
+    axios.get('http://200.16.7.151:8080/docente/docente/curDocente', {
+      params: {
+        codigo: this.props.match.params.codigo,
+        ciclo: nuevoCiclo,
+      }
+    })
+      .then((respcursos) => {
+          this.setState({
+            infoCursos: respcursos.data.cursos,
+            cicloSeleccionado: nuevoCiclo
+          })
+        })
+      .catch(error => {
+        console.log(`Error al obtener datos de la pantalla cursos`,error);
+      });
+  };
+
+  render () {
+    let listaCursos = [];
+    let tipoCursos= ["pregrado", "postgrado", "otros"];
+    for(let i=0;i<this.state.infoCursos.length;i++){
+      for(let j= 0; j<this.state.infoCursos[i].listaCursos.length; j++){
+        listaCursos.push({
+          codigo: this.state.infoCursos[i].listaCursos[j].codigo,
+          nombre: this.state.infoCursos[i].listaCursos[j].nombre,
+          horario: this.state.infoCursos[i].listaCursos[j].horario,
+          unidad: this.state.infoCursos[i].listaCursos[j].unidad,
+          horas: this.state.infoCursos[i].listaCursos[j].horas,
+          creditos: this.state.infoCursos[i].listaCursos[j].creditos,
+          tipo: tipoCursos[i],
+        })
+      }
     }
+    const columnas = [
+      {
+        Header: 'Codigo',
+        accessor: 'codigo'
+      },
+      {
+        Header: 'Nombre',
+        accessor: 'nombre'
+      },
+      {
+        Header: 'Creditos',
+        accessor: 'creditos'
+      }, {
+        Header: 'Horario',
+        accessor: 'horario'
+      }, {
+        Header: 'Horas Semanales',
+        accessor: 'horas'
+      }
+    ];
 
-    render () {
-        const columnas = [
-            {
-                Header: 'Nombre',
-                accessor: 'nombre'
-            }, {
-                Header: 'Creditos',
-                accessor: 'creditos'
-            }, {
-                Header: 'Horario',
-                accessor: 'horario'
-            }, {
-                Header: 'Horas Semanales',
-                accessor: 'horas'
-            }
-        ];
 
-        return(
-            <div>
-                <select ref="selectorCiclos">
-                    {this.state.ciclos.map((item,i)=>{
-                        return <option key={i}>{item.descripcion}</option>
-                    })}
-                </select>
-                <ReactTable data={this.state.cursos} columns={columnas}/>
-
-            </div>
-        )
-    }
+    return(
+      <div>
+        <select ref="selectorCiclos" onChange={this.cambioCiclo}>
+          {this.state.ciclos.map((item,i)=>{
+            return <option key={i} value={item.descripcion}>{item.descripcion}</option>
+          })}
+        </select>
+        <ReactTable data={listaCursos} columns={columnas}/>
+      </div>
+    )
+  }
 }
 
 export default Cursos;
