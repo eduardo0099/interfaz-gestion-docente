@@ -13,17 +13,17 @@ class ListaProfesores extends Component {
     }
   }
 
-  componentDidMount(){
-    axios.get('http://200.16.7.151:8080/docente/listaDocente')
-      .then(response =>{
-        this.setState({
-          profesores: response.data
-        });
-      })
-      .catch(error =>{
-        console.log("Error obteniendo la lista de los profesores",error);
-      });
-  }
+    componentDidMount(){
+        axios.get('http://200.16.7.151:8080/general/listaDocente')
+            .then(response =>{
+                this.setState({
+                    profesores: response.data.docentes
+                });
+            })
+            .catch(error =>{
+                console.log("Error obteniendo la lista de los profesores",error);
+            });
+    }
 
   render() {
     return (
@@ -31,11 +31,12 @@ class ListaProfesores extends Component {
         <Route exact path={`${this.props.match.path}`} render={() =>
           <div>
             {this.state.profesores.map((item,i)=>{
-              return <p key={i}><Link to={`${this.props.match.url}/${item.id}`} >{item.id+" - "+item.nombre}</Link></p>
+              return <p key={i}><Link to={`${this.props.match.url}/${item.codigo}`} >{item.codigo+" - "+item.nombre}</Link></p>
             })}
           </div>
         }/>
-        <Route path={`${this.props.match.path}/:codigo`} component={DetalleDocente} />
+        <Route path={`${this.props.match.path}/:codigo`} component={DetalleDocente}  />
+
       </div>
     );
   }

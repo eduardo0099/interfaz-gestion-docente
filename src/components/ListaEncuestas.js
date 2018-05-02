@@ -31,7 +31,6 @@ class ListaEncuestas extends React.Component{
       });
   }
 
-class ListaEncuestas extends React.Component{
 
   render(){
     return (

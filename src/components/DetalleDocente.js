@@ -11,27 +11,26 @@ import SolicitudesEconomicas from "./SolicitudesEconomicas"
 
 class DetalleDocente extends Component {
 
-  constructor(props){
-    super(props);
+  constructor(props) {
+      super(props);
 
-    this.state = {
-      info: {
-        "codigo": "",
-        "nombres": "",
-        "apellidoP": "",
-        "apellidoM": "",
-        "telefono": "",
-        "seccion": "",
-        "departamento": "",
-        "correo": ""
+      this.state = {
+          info: {
+              "codigo": "",
+              "nombres": "",
+              "apellidoP": "",
+              "apellidoM": "",
+              "telefono": "",
+              "seccion": "",
+              "departamento": "",
+              "correo": ""
+          }
       }
-    }
-
   }
 
 
   componentDidMount(){
-    axios.get('http://demo1279441.mockable.io/docente/general', {
+    axios.get('http://200.16.7.151:8080/docente/docente/general', {
       params: {
         codigo: this.props.match.params.codigo
       }
@@ -113,6 +112,7 @@ class DetalleDocente extends Component {
 
         <Route path={`${this.props.match.path}/cursos`} component={Cursos}/>
           <Route path={`${this.props.match.path}/encuestas`} component={ListasEncuestas}/>
+        <Route path={`${this.props.match.path}/solicitudesEconomicas`} component={SolicitudesEconomicas}/>
       </div>
     );
 
