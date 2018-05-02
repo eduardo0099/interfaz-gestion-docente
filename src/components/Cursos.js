@@ -4,6 +4,7 @@ import 'react-table/react-table.css';
 import axios from "axios/index";
 
 export class Cursos extends React.Component {
+  
   constructor(props){
     super(props);
     this.state = {
@@ -24,7 +25,6 @@ export class Cursos extends React.Component {
       ciclos: [],
       cicloSeleccionado: ""
     }
-  }
 
   componentDidMount(){
 
@@ -122,4 +122,5 @@ export class Cursos extends React.Component {
     )
   }
 }
+
 export default Cursos;

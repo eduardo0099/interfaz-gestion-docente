@@ -16,7 +16,7 @@ class ListaProfesores extends Component {
       profesores: []
     }
   }
-  
+
   componentDidMount() {
     axios.get('http://200.16.7.151:8080/general/listaDocente')
       .then(response => {
@@ -31,6 +31,7 @@ class ListaProfesores extends Component {
   }
 
   render() {
+      console.log(this.state);
     return (
       <BaseContainer>
         <Route exact path={`${this.props.match.path}`} render={() =>
