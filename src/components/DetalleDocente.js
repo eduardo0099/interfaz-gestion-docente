@@ -6,30 +6,31 @@ import {Route,Link} from 'react-router-dom';
 import axios from "axios/index";
 import Cursos from "./Cursos";
 import ListasEncuestas from "./ListaEncuestas";
+import SolicitudesEconomicas from "./SolicitudesEconomicas"
+
 
 class DetalleDocente extends Component {
 
-  constructor(props){
-    super(props);
+  constructor(props) {
+      super(props);
 
-    this.state = {
-      info: {
-        "codigo": "",
-        "nombres": "",
-        "apellidoP": "",
-        "apellidoM": "",
-        "telefono": "",
-        "seccion": "",
-        "departamento": "",
-        "correo": ""
+      this.state = {
+          info: {
+              "codigo": "",
+              "nombres": "",
+              "apellidoP": "",
+              "apellidoM": "",
+              "telefono": "",
+              "seccion": "",
+              "departamento": "",
+              "correo": ""
+          }
       }
-    }
-
   }
 
 
   componentDidMount(){
-    axios.get('http://demo1279441.mockable.io/docente/general', {
+    axios.get('http://200.16.7.151:8080/docente/docente/general', {
       params: {
         codigo: this.props.match.params.codigo
       }
@@ -61,11 +62,14 @@ class DetalleDocente extends Component {
                   <Link to={`${this.props.match.url}/encuestas`} >Encuestas</Link>
               </Col>
               <Col md={2}>
-                <Button bsStyle="primary">Actividades</Button>
+                <Button bsStyle="primary">Plan de Proyecto</Button>
               </Col>
               <Col md={2}>
                 <Button bsStyle="primary">Investigaciones</Button>
               </Col>
+                <Col md={2}>
+                    <Link to={`${this.props.match.url}/solicitudesEconomicas`} >Solicitudes Economicas</Link>
+                </Col>
               <Col md={1}/>
             </Row>
             <Row className="show-grid" >
@@ -105,8 +109,10 @@ class DetalleDocente extends Component {
             </Row>
           </Grid>
         } />
+
         <Route path={`${this.props.match.path}/cursos`} component={Cursos}/>
           <Route path={`${this.props.match.path}/encuestas`} component={ListasEncuestas}/>
+        <Route path={`${this.props.match.path}/solicitudesEconomicas`} component={SolicitudesEconomicas}/>
       </div>
     );
 

@@ -29,7 +29,7 @@ export class Cursos extends React.Component {
 
 
   componentDidMount(){
-    axios.get('http://200.16.7.151:8080/docente/docente', {
+    axios.get('http://200.16.7.151:8080/docente/curDocente', {
       params: {
         codigo: this.props.match.params.codigo,
         ciclo: this.state.cicloSeleccionado,

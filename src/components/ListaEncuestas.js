@@ -31,8 +31,8 @@ class ListaEncuestas extends React.Component{
       });
   }
 
-  render(){
 
+  render(){
     return (
       <div>
         <Route exact path={`${this.props.match.path}`} render={() =>
@@ -75,7 +75,6 @@ class ListaEncuestas extends React.Component{
                       <td><Link to={`${this.props.match.url}/${item.id}`} >Ver Comentarios</Link></td>
                     </tr>
                   })}
-
                   </tbody>
                 </Table>
               </Col>

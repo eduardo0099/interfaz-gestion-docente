@@ -16,7 +16,7 @@ class ListaProfesores extends Component {
       profesores: []
     }
   }
-
+  
   componentDidMount() {
     axios.get('http://200.16.7.151:8080/general/listaDocente')
       .then(response => {
