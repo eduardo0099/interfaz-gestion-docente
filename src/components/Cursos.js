@@ -6,7 +6,7 @@ import axios from "axios/index";
 export class Cursos extends React.Component {
   constructor(props){
     super(props);
-    this.state={
+    this.state = {
       infoCursos: [
         {
           "tipo": "pregrado",
@@ -20,8 +20,7 @@ export class Cursos extends React.Component {
           "tipo": "otros",
           "listaCursos": []
         }
-      ]
-      ,
+      ],
       ciclos: [{id:1, descripcion:"2017-1"},{id:1, descripcion:"2017-2"},{id:1, descripcion:"2018-1"},{id:1, descripcion:"2018-2"}],
       cicloSeleccionado: "2018-1"
     }
@@ -29,7 +28,7 @@ export class Cursos extends React.Component {
 
 
   componentDidMount(){
-    axios.get('http://200.16.7.151:8080/docente/curDocente', {
+    axios.get('http://200.16.7.151:8080/docente/docente/curDocente', {
       params: {
         codigo: this.props.match.params.codigo,
         ciclo: this.state.cicloSeleccionado,
@@ -47,7 +46,7 @@ export class Cursos extends React.Component {
 
 
   render () {
-
+    console.log(this.state.infoCursos);
     let listaCursos = [];
     let tipoCursos= ["pregrado", "postgrado", "otros"];
     for(let i=0;i<this.state.infoCursos.length;i++){

@@ -31,7 +31,6 @@ class ListaProfesores extends Component {
   }
 
   render() {
-    console.log(this.props.match.path);
     return (
       <BaseContainer>
         <Route exact path={`${this.props.match.path}`} render={() =>
