@@ -7,7 +7,7 @@ import axios from "axios/index";
 import Cursos from "./Cursos";
 import ListasEncuestas from "./ListaEncuestas";
 import SolicitudesEconomicas from "./SolicitudesEconomicas"
-
+import DescargaHoras from "./DescargaHoras"
 
 class DetalleDocente extends Component {
 
@@ -56,7 +56,7 @@ class DetalleDocente extends Component {
                 <Link to={`${this.props.match.url}/cursos`} >Cursos</Link>
               </Col>
               <Col md={2}>
-                <Button bsStyle="primary">Horas Descarga</Button>
+                  <Link to={`${this.props.match.url}/descargaHoras`} >Descarga Horas</Link>
               </Col>
               <Col md={2}>
                   <Link to={`${this.props.match.url}/encuestas`} >Encuestas</Link>
@@ -114,6 +114,7 @@ class DetalleDocente extends Component {
         <Route path={`${this.props.match.path}/cursos`} component={Cursos}/>
           <Route path={`${this.props.match.path}/encuestas`} component={ListasEncuestas}/>
         <Route path={`${this.props.match.path}/solicitudesEconomicas`} component={SolicitudesEconomicas}/>
+          <Route path={`${this.props.match.path}/descargaHoras`} component={DescargaHoras}/>
       </div>
     );
 
