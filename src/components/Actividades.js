@@ -2,20 +2,40 @@ import React from 'react';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import axios from "axios/index";
+import BootstrapTable from 'react-bootstrap-table-next';
+import RegistroActividad from "./RegistroActividad"
+import {HashRouter ,BrowserRouter,Router,Route,Link} from 'react-router-dom';
+import {Grid,Row,Table,Button, Glyphicon,Col} from 'react-bootstrap';
 
 export class Actividades extends React.Component {
 
-    componentDidMount(){
+    constructor(props) {
+        super(props);
+        this.state = {
+            actividades: [
+                {
+                    titulo:"aaa",
+                    tipo:"congreso",
+                    fecha_inicio:"",
+                    fecha_fin:"",
+                    estado:"",
+                }
+            ],
+            ciclos: [
+                {
+                    id:1,
+                    descripcion:"2018-1"
+                }
+            ],
+            cicloSeleccionado: ""
+        }
+    }
 
-        axios.get('http://200.16.7.151:8080/docente/docente/actDocente?codigo='+this.props.match.params.codigo+'&ciclo=2018-1', {
-            params: {
-                codigo: this.props.match.params.codigo,
-                ciclo: "2018-1",
-            }
-        })
+    componentDidMount(){
+        axios.get('http://200.16.7.151:8080/docente/docente/actDocente?codigo='+this.props.match.params.codigo+'&ciclo=2018-1')
             .then(response => {
                 this.setState({
-                    info: response.data
+                    actividades: response.data.actividades
                 });
             })
             .catch(error => {
@@ -24,33 +44,42 @@ export class Actividades extends React.Component {
     }
 
     render () {
+        console.log(this.state);
+
         const columnas = [
             {
-                Header: 'Nombre de la Actividad',
-                accessor: 'titulo'
+                text: 'Nombre de la Actividad',
+                dataField: 'titulo'
             }, {
-                Header: 'Tipo',
-                accessor: 'tipo'
+                text: 'Tipo',
+                dataField: 'tipo'
             }, {
-                Header: 'Fecha Inicio',
-                accessor: 'fecha_inicio'
+                text: 'Fecha Inicio',
+                dataField: 'fecha_inicio'
             }, {
-                Header: 'Fecha Fin',
-                accesor: 'fecha_fin',
+                text: 'Fecha Fin',
+                dataField: 'fecha_fin',
             }, {
-                Header: 'Estado',
-                accedor: 'estado',
+                text: 'Estado',
+                dataField: 'estado',
             }
         ];
 
         return(
             <div>
-                <select ref="selectorTipo">
-                    {this.props.tipo.map((item,i)=>{
-                        return <option key={i}>{item.descripcion}</option>
-                    })}
-                </select>
-                <ReactTable data={this.props.actividades} columns={columnas}/>
+                <Route exact path={`${this.props.match.path}`} render={() =>
+                    <Grid>
+                        <select ref="selectorTipo">
+                            {this.state.ciclos.map((item,i)=>{
+                                return <option key={i}>{item.descripcion}</option>
+                            })}
+                        </select>
+                        <BootstrapTable keyField='id' data={ this.state.actividades } columns={ columnas }/>
+                        <Link to={`${this.props.match.url}/registroActividad`}>Registrar</Link>
+                    </Grid>
+                }/>
+                <Route path={`${this.props.match.path}/registroActividad`} render={()=> <RegistroActividad/>}/>
+
             </div>
         )
     }

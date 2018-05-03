@@ -2,29 +2,31 @@ import React from 'react';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import axios from "axios/index";
+import BootstrapTable from 'react-bootstrap-table-next';
 
 export class Cursos extends React.Component {
   
-  constructor(props){
-    super(props);
-    this.state = {
-      infoCursos: [
-        {
-          "tipo": "pregrado",
-          "listaCursos": []
-        },
-        {
-          "tipo": "posgrado",
-          "listaCursos": []
-        },
-        {
-          "tipo": "otros",
-          "listaCursos": []
-        }
-      ],
-      ciclos: [],
-      cicloSeleccionado: ""
-    }
+  constructor(props) {
+      super(props);
+      this.state = {
+          infoCursos: [
+              {
+                  "tipo": "pregrado",
+                  "listaCursos": []
+              },
+              {
+                  "tipo": "posgrado",
+                  "listaCursos": []
+              },
+              {
+                  "tipo": "otros",
+                  "listaCursos": []
+              }
+          ],
+          ciclos: [],
+          cicloSeleccionado: ""
+      }
+  }
 
   componentDidMount(){
 
@@ -90,22 +92,22 @@ export class Cursos extends React.Component {
     }
     const columnas = [
       {
-        Header: 'Codigo',
-        accessor: 'codigo'
+          text: 'Codigo',
+          dataField: 'codigo'
       },
       {
-        Header: 'Nombre',
-        accessor: 'nombre'
+          text: 'Nombre',
+          dataField: 'nombre'
       },
       {
-        Header: 'Creditos',
-        accessor: 'creditos'
+          text: 'Creditos',
+          dataField: 'creditos'
       }, {
-        Header: 'Horario',
-        accessor: 'horario'
+            text: 'Horario',
+            dataField: 'horario'
       }, {
-        Header: 'Horas Semanales',
-        accessor: 'horas'
+            text: 'Horas Semanales',
+            dataField: 'horas'
       }
     ];
 
@@ -117,10 +119,11 @@ export class Cursos extends React.Component {
             return <option key={i} value={item.descripcion}>{item.descripcion}</option>
           })}
         </select>
-        <ReactTable data={listaCursos} columns={columnas}/>
+          <BootstrapTable keyField='id' data={ listaCursos } columns={ columnas }/>
       </div>
     )
   }
 }
+
 
 export default Cursos;

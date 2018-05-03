@@ -18,7 +18,7 @@ class ModificarInvestigacion extends Component{
         var fechaIni=document.getElementsByName("fechaIni")[0].value;
         var fechaFin=document.getElementsByName("fechaFin")[0].value;
 
-        axios.put('http://localhost:8080/docente/investigacion/actualizar', {
+        axios.put('http://200.16.7.151:8080/docente/investigacion/actualizar', {
             id:this.props.match.params.idInvestigacion,
             titulo: titulo,
             autor: [autor],

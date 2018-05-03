@@ -8,6 +8,7 @@ import Cursos from "./Cursos";
 import ListasEncuestas from "./ListaEncuestas";
 import ListaInvestigaciones from "./ListaInvestigaciones"
 import SolicitudesEconomicas from "./SolicitudesEconomicas"
+import Actividades from "./Actividades"
 
 class DetalleDocente extends Component {
 
@@ -64,13 +65,13 @@ class DetalleDocente extends Component {
                   <Link to={`${this.props.match.url}/encuestas`} >Encuestas</Link>
               </Col>
               <Col md={2}>
-                <Button bsStyle="primary">Plan de Proyecto</Button>
-              </Col>
-              <Col md={2}>
                 <Link to={`${this.props.match.url}/investigaciones`}>Investigaciones</Link>
               </Col>
                 <Col md={2}>
                     <Link to={`${this.props.match.url}/solicitudesEconomicas`} >Solicitudes Economicas</Link>
+                </Col>
+                <Col md={2}>
+                    <Link to={`${this.props.match.url}/Actividades`} >Plan de proyecto</Link>
                 </Col>
               <Col md={1}/>
             </Row>
@@ -117,6 +118,7 @@ class DetalleDocente extends Component {
         <Route path={`${this.props.match.path}/investigaciones`} component={ListaInvestigaciones}/>
         <Route path={`${this.props.match.path}/encuestas`} component={ListasEncuestas}/>
         <Route path={`${this.props.match.path}/solicitudesEconomicas`} component={SolicitudesEconomicas}/>
+          <Route path={`${this.props.match.path}/actividades`} component={Actividades}/>
       </div>
 
     );

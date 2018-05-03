@@ -20,7 +20,7 @@ class RegistroInvestigación extends Component{
         var fechaIni=document.getElementsByName("fechaIni")[0].value;
         var fechaFin=document.getElementsByName("fechaFin")[0].value;
 
-        axios.post('http://localhost:8080/docente/investigacion/registrar', {
+        axios.post('http://200.16.7.151:8080/docente/investigacion/registrar', {
             titulo: titulo,
             autor: [autor],
             resumen: resumen,

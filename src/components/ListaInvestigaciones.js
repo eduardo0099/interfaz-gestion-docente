@@ -28,7 +28,7 @@ export class ListaInvestigaciones extends React.Component {
     }
 
     componentDidMount(){
-        axios.get('http://localhost:8080/docente/docente/invDocente?codigo=20112728&ciclo=2018-1')
+        axios.get('http://200.16.7.151:8080/docente/docente/invDocente?codigo='+this.props.match.params.codigo+'&ciclo=2018-1')
             .then(response =>{
                 this.setState({
                     investigaciones: response.data.investigaciones
@@ -43,7 +43,7 @@ export class ListaInvestigaciones extends React.Component {
         if(this.state.selectedId!=-1){
             if (window.confirm('Seguro que deseas eliminar esta investigacion?')) {
                 // Save it!
-                axios.delete('http://localhost:8080/docente/investigacion/eliminar', {
+                axios.delete('http://200.16.7.151:8080/docente/investigacion/eliminar', {
                     data:{
                     id:this.state.selectedId
                     }
