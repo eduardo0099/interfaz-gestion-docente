@@ -3,7 +3,7 @@ import {Route} from 'react-router-dom';
 import DetalleDocente from "./DetalleDocente";
 import BaseContainer from "./BaseContainer";
 import axios from "axios/index";
-import {DropdownButton, Glyphicon, Dropdown, MenuItem, Col, Grid, Row, Button} from 'react-bootstrap';
+import { Glyphicon, Dropdown, MenuItem} from 'react-bootstrap';
 
 class ListaProfesores extends Component {
 
@@ -16,7 +16,7 @@ class ListaProfesores extends Component {
       profesores: []
     }
   }
-  
+
   componentDidMount() {
     axios.get('http://200.16.7.151:8080/general/listaDocente')
       .then(response => {
@@ -31,6 +31,7 @@ class ListaProfesores extends Component {
   }
 
   render() {
+      console.log(this.state);
     return (
       <BaseContainer>
         <Route exact path={`${this.props.match.path}`} render={() =>
