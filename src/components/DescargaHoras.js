@@ -55,6 +55,7 @@ class DescargaHoras extends React.Component{
                                 <th>Nombre del curso</th>
                                 <th>Horario</th>
                                 <th>Horas Descarga</th>
+                                <th> </th>
                             </tr>
                             </thead>
                             <tbody>
@@ -63,15 +64,11 @@ class DescargaHoras extends React.Component{
                                     <td>{item.nombre}</td>
                                     <td>{item.codigo}</td>
                                     <td>{item.hDescargaTotal}</td>
+                                    <td><Button onClick={() => item.semana(i)}>Detalle</Button></td>
                                 </tr>
                             })}
                             </tbody>
                         </Table>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col md={12}>
-                        <Button bsStyle="info">Detalles</Button>
                     </Col>
                 </Row>
 

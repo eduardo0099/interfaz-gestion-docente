@@ -16,25 +16,38 @@ class SolicitudesEconomicas extends React.Component{
                 fecha_solicitud: "",
                 monto_otorgado: "",
                 estado: ""}
-            ]
+            ],
+            cicloSelect: "",
+            listaCiclos: [],
         }
     }
 
     componentDidMount(){
-        axios.get('http://200.16.7.151:8080/docente/ayudaEconomica/lista', {
-            params: {
-                codigo: this.props.match.params.codigo,
-                ciclo: "2018-1"
-            }
-        })
-            .then(response => {
-                this.setState({
-                    ayudas: response.data.ayudas
-                });
-            })
-            .catch(error => {
-                console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`,error);
+        let cicloSeleccionado = "";
+        let listaCi = [];
+        axios.all([
+            axios.get('http://200.16.7.151:8080/general/cicloActual'),
+            axios.get('http://200.16.7.151:8080/general/listaCiclos'),
+        ]).then(axios.spread((respCicloAct,resplistaCiclos)=>{
+            cicloSeleccionado = respCicloAct.data.cicloActual;
+            listaCi = resplistaCiclos.data.ciclos;
+            return axios.get('http://200.16.7.151:8080/docente/ayudaEconomica/lista', {
+                params: {
+                    codigo: this.props.match.params.codigo,
+                    ciclo: cicloSeleccionado,
+                }
             });
+        })).then((response) => {
+                this.setState({
+                    ayudas: response.data.ayudas,
+                    cicloSelect: cicloSeleccionado,
+                    listaCiclos: listaCi,
+                })
+            }
+        ).catch(error => {
+            console.log(`Error al obtener datos de la pantalla solicitudes economicas`,error);
+        });
+
     }
 
 
@@ -43,14 +56,14 @@ class SolicitudesEconomicas extends React.Component{
             <Grid>
                 <Row className="back-bar">
                     <Col md={12}>
-                        <Button onClick={this.props.history.goBack}><Glyphicon glyph="arrow-left"></Glyphicon></Button>
+                        <Button onClick={this.props.history.goBack}><Glyphicon glyph="arrow-left"/></Button>
                         <span
                             className="professor-name"> Regresar a perfil docente </span>
                     </Col>
                 </Row>
                 <Row>
                     <Col md={6}>
-                        <p>Ciclo:
+                        <p>Ciclo: {this.state.cicloSelect}
                         </p>
                     </Col>
                     <Col md={6}>

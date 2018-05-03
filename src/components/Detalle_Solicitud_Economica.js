@@ -8,6 +8,10 @@ class Detalle_Solicitud_Economica extends React.Component{
         super(props);
         this.state = {}
     }
+
+    render(){
+
+    }
 }
 
 export default Detalle_Solicitud_Economica;
