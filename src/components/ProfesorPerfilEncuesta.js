@@ -1,13 +1,9 @@
 import React from 'react';
-import axios from 'axios';
-import {Table, Grid, Row, Col, Button, Glyphicon, Image, ListGroup, ListGroupItem, Panel} from 'react-bootstrap';
+import { Grid, Row, Col, Button, Glyphicon, ListGroup, ListGroupItem, Panel} from 'react-bootstrap';
 import './../styles/ProfesorPerfilEncuesta.css';
 
 class ProfesorPerfilEncuesta extends React.Component {
 
-  constructor(props){
-    super(props);
-  }
 
   render() {
     return (
@@ -15,7 +11,7 @@ class ProfesorPerfilEncuesta extends React.Component {
           <Grid>
              <Row className="back-bar">
                  <Col md={12}>
-                     <Button><Glyphicon glyph="arrow-left"></Glyphicon></Button> <span className="professor-name"> { this.state.horarioProfesor.profesor } </span>
+                     <Button onClick={this.props.volverLista}><Glyphicon glyph="arrow-left"/></Button> <span className="professor-name"> { this.props.profesor } </span>
                  </Col>
              </Row>
              <Row>
@@ -36,7 +32,7 @@ class ProfesorPerfilEncuesta extends React.Component {
                 <Col md={6}>
                     <Panel>
                         <Panel.Body>
-                            <img src="./../resources/piechart.png"/>
+                            <img src="./../resources/piechart.png" alt="grafico de los comentarios"/>
                         </Panel.Body>
                     </Panel>
                 </Col>
@@ -49,7 +45,7 @@ class ProfesorPerfilEncuesta extends React.Component {
                          </Panel.Heading>
                          <ListGroup>
                              { this.props.encuestas.map( encuesta => {
-                                 return ( <ListGroupItem> { encuesta } </ListGroupItem> ) 
+                                 return ( <ListGroupItem> { encuesta.comentario } </ListGroupItem> )
                              })}
                          </ListGroup>
                      </Panel>

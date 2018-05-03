@@ -2,51 +2,79 @@ import React from 'react';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import axios from "axios/index";
+import BootstrapTable from 'react-bootstrap-table-next';
 
 export class Cursos extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      infoCursos: [
-        {
-          "tipo": "pregrado",
-          "listaCursos": []
-        },
-        {
-          "tipo": "posgrado",
-          "listaCursos": []
-        },
-        {
-          "tipo": "otros",
-          "listaCursos": []
-        }
-      ],
-      ciclos: [{id:1, descripcion:"2017-1"},{id:1, descripcion:"2017-2"},{id:1, descripcion:"2018-1"},{id:1, descripcion:"2018-2"}],
-      cicloSeleccionado: "2018-1"
-    }
+  
+  constructor(props) {
+      super(props);
+      this.state = {
+          infoCursos: [
+              {
+                  "tipo": "pregrado",
+                  "listaCursos": []
+              },
+              {
+                  "tipo": "posgrado",
+                  "listaCursos": []
+              },
+              {
+                  "tipo": "otros",
+                  "listaCursos": []
+              }
+          ],
+          ciclos: [],
+          cicloSeleccionado: ""
+      }
   }
 
-
   componentDidMount(){
+
+    axios.all([
+      axios.get('http://200.16.7.151:8080/general/cicloActual'),
+      axios.get('http://200.16.7.151:8080/general/listaCiclos'),
+    ]).then(axios.spread((respCicloAct,resplistaCiclos)=>{
+      this.setState({
+        cicloSeleccionado: respCicloAct.data.cicloActual,
+        ciclos: resplistaCiclos.data.ciclos
+      });
+      return axios.get('http://200.16.7.151:8080/docente/docente/curDocente', {
+        params: {
+          codigo: this.props.match.params.codigo,
+          ciclo: this.state.cicloSeleccionado,
+        }
+      });
+    })).then((respcursos) => {
+      this.setState({
+        infoCursos: respcursos.data.cursos
+      })
+      }
+    ).catch(error => {
+      console.log(`Error al obtener datos de la pantalla cursos`,error);
+    });
+
+  }
+
+  cambioCiclo = (event) =>{
+    let nuevoCiclo = event.target.value;
     axios.get('http://200.16.7.151:8080/docente/docente/curDocente', {
       params: {
         codigo: this.props.match.params.codigo,
-        ciclo: this.state.cicloSeleccionado,
+        ciclo: nuevoCiclo,
       }
     })
-      .then(response => {
-        this.setState({
-          infoCursos: response.data.cursos
-        });
-      })
+      .then((respcursos) => {
+          this.setState({
+            infoCursos: respcursos.data.cursos,
+            cicloSeleccionado: nuevoCiclo
+          })
+        })
       .catch(error => {
-        console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`,error);
+        console.log(`Error al obtener datos de la pantalla cursos`,error);
       });
-  }
-
+  };
 
   render () {
-    console.log(this.state.infoCursos);
     let listaCursos = [];
     let tipoCursos= ["pregrado", "postgrado", "otros"];
     for(let i=0;i<this.state.infoCursos.length;i++){
@@ -64,36 +92,38 @@ export class Cursos extends React.Component {
     }
     const columnas = [
       {
-        Header: 'Codigo',
-        accessor: 'codigo'
+          text: 'Codigo',
+          dataField: 'codigo'
       },
       {
-        Header: 'Nombre',
-        accessor: 'nombre'
+          text: 'Nombre',
+          dataField: 'nombre'
       },
       {
-        Header: 'Creditos',
-        accessor: 'creditos'
+          text: 'Creditos',
+          dataField: 'creditos'
       }, {
-        Header: 'Horario',
-        accessor: 'horario'
+            text: 'Horario',
+            dataField: 'horario'
       }, {
-        Header: 'Horas Semanales',
-        accessor: 'horas'
+            text: 'Horas Semanales',
+            dataField: 'horas'
       }
     ];
 
 
     return(
       <div>
-        <select ref="selectorCiclos">
+        <select ref="selectorCiclos" onChange={this.cambioCiclo}>
           {this.state.ciclos.map((item,i)=>{
-            return <option key={i}>{item.descripcion}</option>
+            return <option key={i} value={item.descripcion}>{item.descripcion}</option>
           })}
         </select>
-        <ReactTable data={listaCursos} columns={columnas}/>
+          <BootstrapTable keyField='id' data={ listaCursos } columns={ columnas }/>
       </div>
     )
   }
 }
+
+
 export default Cursos;

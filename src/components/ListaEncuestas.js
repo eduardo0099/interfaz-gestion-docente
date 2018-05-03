@@ -1,5 +1,5 @@
 import React from 'react';
-import {Route, Link } from 'react-router-dom';
+import {Route } from 'react-router-dom';
 import {Grid,Row,Table,Button, Glyphicon,Col} from 'react-bootstrap';
 import axios from "axios/index";
 import ProfesorPerfilEncuesta from "./ProfesorPerfilEncuesta";
@@ -15,6 +15,7 @@ class ListaEncuestas extends React.Component{
       cicloSeleccionado: "2018-1",
       verComentarios: false,
       comentarioSeleccionado: -1,
+      nombreProfesor: "",
     }
   }
 
@@ -33,12 +34,33 @@ class ListaEncuestas extends React.Component{
       .catch(error => {
         console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`,error);
       });
+
+    axios.get('http://200.16.7.151:8080/docente/docente/general', {
+      params: {
+        codigo: this.props.match.params.codigo
+      }
+    })
+      .then(response => {
+        this.setState({
+          nombreProfesor:`${response.data.nombres} ${response.data.apellido_paterno} ${response.data.apellido_materno}`
+        });
+      })
+      .catch(error => {
+        console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`,error);
+      });
   }
 
   mostarComentarios = (index) =>{
     this.setState({
+      comentarioSeleccionado: index,
       verComentarios:true,
-      comentarioSeleccionado: index
+    });
+  };
+
+  regresarListaEncuesta =() =>{
+    this.setState({
+      comentarioSeleccionado: -1,
+      verComentarios:false,
     });
   };
 
@@ -85,7 +107,7 @@ class ListaEncuestas extends React.Component{
                         <td>{item.horario}</td>
                         <td>{item.porcentaje}</td>
                         <td>{item.puntaje}</td>
-                        <td><Button onClick={this.mostarComentarios(i)}>Ver Comentarios</Button></td>
+                        <td><Button onClick={() => this.mostarComentarios(i)}>Ver Comentarios</Button></td>
                       </tr>
                     })}
                     </tbody>
@@ -100,13 +122,14 @@ class ListaEncuestas extends React.Component{
     }else{
       return(
         <ProfesorPerfilEncuesta
-          profesor={"NOMBRE PROFESOR"}
-          ciclo={this.state.listaEncuesta[this.state.cicloSeleccionado].ciclo}
-          curso={this.state.listaEncuesta[this.state.cicloSeleccionado].curso}
-          codigo={"INF999"}
-          participacion={this.state.listaEncuesta[this.state.cicloSeleccionado].porcentaje}
-          puntaje={this.state.listaEncuesta[this.state.cicloSeleccionado].puntaje}
-          encuestas={['Pta que buen profe', 'TOdo bien con este pata', 'xd', 'Un comentario bastante largo ahora solo para proba xddddddddddddddddddd', 'demasiado bueno este profesor deberian darle un premio h3h']}
+          volverLista={this.regresarListaEncuesta}
+          profesor={this.state.nombreProfesor}
+          ciclo={this.state.listaEncuesta[this.state.comentarioSeleccionado].ciclo}
+          curso={this.state.listaEncuesta[this.state.comentarioSeleccionado].curso}
+          codigo={this.state.listaEncuesta[this.state.comentarioSeleccionado].codigo}
+          participacion={this.state.listaEncuesta[this.state.comentarioSeleccionado].porcentaje}
+          puntaje={this.state.listaEncuesta[this.state.comentarioSeleccionado].puntaje}
+          encuestas={this.state.listaEncuesta[this.state.comentarioSeleccionado].comentarios}
         />
       );
     }

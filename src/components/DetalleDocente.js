@@ -6,8 +6,13 @@ import {Route,Link} from 'react-router-dom';
 import axios from "axios/index";
 import Cursos from "./Cursos";
 import ListasEncuestas from "./ListaEncuestas";
+import ListaInvestigaciones from "./ListaInvestigaciones"
 import SolicitudesEconomicas from "./SolicitudesEconomicas"
+<<<<<<< HEAD
 import DescargaHoras from "./DescargaHoras"
+=======
+import Actividades from "./Actividades"
+>>>>>>> b80886606c10ee6b37169df6b1820800bdb4be42
 
 class DetalleDocente extends Component {
 
@@ -32,7 +37,8 @@ class DetalleDocente extends Component {
   componentDidMount(){
     axios.get('http://200.16.7.151:8080/docente/docente/general', {
       params: {
-        codigo: this.props.match.params.codigo
+        codigo: this.props.match.params.codigo,
+        ciclo: "2018-1",
       }
     })
       .then(response => {
@@ -46,6 +52,7 @@ class DetalleDocente extends Component {
   }
 
   render() {
+      console.log(this.props);
     return(
       <div>
         <Route exact path={`${this.props.match.path}`} render={() =>
@@ -62,13 +69,13 @@ class DetalleDocente extends Component {
                   <Link to={`${this.props.match.url}/encuestas`} >Encuestas</Link>
               </Col>
               <Col md={2}>
-                <Button bsStyle="primary">Plan de Proyecto</Button>
-              </Col>
-              <Col md={2}>
-                <Button bsStyle="primary">Investigaciones</Button>
+                <Link to={`${this.props.match.url}/investigaciones`}>Investigaciones</Link>
               </Col>
                 <Col md={2}>
                     <Link to={`${this.props.match.url}/solicitudesEconomicas`} >Solicitudes Economicas</Link>
+                </Col>
+                <Col md={2}>
+                    <Link to={`${this.props.match.url}/Actividades`} >Plan de proyecto</Link>
                 </Col>
               <Col md={1}/>
             </Row>
@@ -112,10 +119,16 @@ class DetalleDocente extends Component {
         } />
 
         <Route path={`${this.props.match.path}/cursos`} component={Cursos}/>
-          <Route path={`${this.props.match.path}/encuestas`} component={ListasEncuestas}/>
+        <Route path={`${this.props.match.path}/investigaciones`} component={ListaInvestigaciones}/>
+        <Route path={`${this.props.match.path}/encuestas`} component={ListasEncuestas}/>
         <Route path={`${this.props.match.path}/solicitudesEconomicas`} component={SolicitudesEconomicas}/>
+<<<<<<< HEAD
           <Route path={`${this.props.match.path}/descargaHoras`} component={DescargaHoras}/>
+=======
+          <Route path={`${this.props.match.path}/actividades`} component={Actividades}/>
+>>>>>>> b80886606c10ee6b37169df6b1820800bdb4be42
       </div>
+
     );
 
   }
