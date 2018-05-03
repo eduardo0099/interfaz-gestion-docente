@@ -17,7 +17,7 @@ class Header extends React.Component {
               <i className="fas fa-bars"/>
             </NavItem>
             <Navbar.Brand>
-              <a href="#">Elpis</a>
+              <a href="/">Elpis</a>
             </Navbar.Brand>
           </Nav>
         </Navbar.Header>
