@@ -3,25 +3,19 @@ import {Grid, Row, Table, Button, Glyphicon, Col, SplitButton, MenuItem} from 'r
 import axios from "axios/index";
 
 
-class SolicitudesEconomicas extends React.Component{
-
-    constructor(props) {
-
+class DescargaHoras extends React.Component{
+    constructor(props){
         super(props);
         this.state = {
-            ayudas: [
-                {id: "",
-                titulo: "",
-                motivo: "",
-                fecha_solicitud: "",
-                monto_otorgado: "",
-                estado: ""}
-            ]
+            descargas:[{"nombre":"",
+                        "codigo":"",
+                        "hDescargaTotal":"",
+                        "semana":[]}]
         }
     }
 
     componentDidMount(){
-        axios.get('http://200.16.7.151:8080/docente/ayudaEconomica/lista', {
+        axios.get('http://200.16.7.151:8080/docente/docente/horaDescDocente', {
             params: {
                 codigo: this.props.match.params.codigo,
                 ciclo: "2018-1"
@@ -29,14 +23,13 @@ class SolicitudesEconomicas extends React.Component{
         })
             .then(response => {
                 this.setState({
-                    ayudas: response.data.ayudas
+                    descargas: response.data.descargas
                 });
             })
             .catch(error => {
                 console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`,error);
             });
     }
-
 
     render(){
         return <div>
@@ -49,12 +42,8 @@ class SolicitudesEconomicas extends React.Component{
                     </Col>
                 </Row>
                 <Row>
-                    <Col md={6}>
+                    <Col md={12}>
                         <p>Ciclo:
-                        </p>
-                    </Col>
-                    <Col md={6}>
-                        <p>Monto Total(solicitudes aprovadas):
                         </p>
                     </Col>
                 </Row>
@@ -63,21 +52,17 @@ class SolicitudesEconomicas extends React.Component{
                         <Table striped bordered condensed hover>
                             <thead>
                             <tr>
-                                <th>Titulo</th>
-                                <th>Motivo</th>
-                                <th>Fecha de Registro</th>
-                                <th>Monto</th>
-                                <th>Estado</th>
+                                <th>Nombre del curso</th>
+                                <th>Horario</th>
+                                <th>Horas Descarga</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {this.state.ayudas.map((item, i) => {
+                            {this.state.descargas.map((item, i) => {
                                 return <tr key={i}>
-                                    <td>{item.titulo}</td>
-                                    <td>{item.motivo}</td>
-                                    <td>{item.fecha_solicitud}</td>
-                                    <td>{item.monto_otorgado}</td>
-                                    <td>{item.estado}</td>
+                                    <td>{item.nombre}</td>
+                                    <td>{item.codigo}</td>
+                                    <td>{item.hDescargaTotal}</td>
                                 </tr>
                             })}
                             </tbody>
@@ -93,6 +78,7 @@ class SolicitudesEconomicas extends React.Component{
             </Grid>
         </div>;
     }
+
 }
 
-export default SolicitudesEconomicas;
+export default DescargaHoras;

@@ -28,7 +28,7 @@ class ListaEncuestas extends React.Component{
     })
       .then(response => {
         this.setState({
-          listaEncuesta: response.data.encuestas
+          encuestas: response.data.encuestas
         });
       })
       .catch(error => {
