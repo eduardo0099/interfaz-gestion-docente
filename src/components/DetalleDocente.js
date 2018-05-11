@@ -8,11 +8,8 @@ import Cursos from "./Cursos";
 import ListasEncuestas from "./ListaEncuestas";
 import ListaInvestigaciones from "./ListaInvestigaciones"
 import SolicitudesEconomicas from "./SolicitudesEconomicas"
-<<<<<<< HEAD
 import DescargaHoras from "./DescargaHoras"
-=======
 import Actividades from "./Actividades"
->>>>>>> b80886606c10ee6b37169df6b1820800bdb4be42
 
 class DetalleDocente extends Component {
 
@@ -122,11 +119,8 @@ class DetalleDocente extends Component {
         <Route path={`${this.props.match.path}/investigaciones`} component={ListaInvestigaciones}/>
         <Route path={`${this.props.match.path}/encuestas`} component={ListasEncuestas}/>
         <Route path={`${this.props.match.path}/solicitudesEconomicas`} component={SolicitudesEconomicas}/>
-<<<<<<< HEAD
           <Route path={`${this.props.match.path}/descargaHoras`} component={DescargaHoras}/>
-=======
           <Route path={`${this.props.match.path}/actividades`} component={Actividades}/>
->>>>>>> b80886606c10ee6b37169df6b1820800bdb4be42
       </div>
 
     );

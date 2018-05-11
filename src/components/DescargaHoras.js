@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {Grid, Row, Table, Button, Glyphicon, Col, SplitButton, MenuItem} from 'react-bootstrap';
 import axios from "axios/index";
+import Detalle_DescargaHoras from "./Detalle_DescargaHoras";
+import {Route,Link} from 'react-router-dom';
 
 
 class DescargaHoras extends React.Component{
@@ -64,7 +66,7 @@ class DescargaHoras extends React.Component{
                                     <td>{item.nombre}</td>
                                     <td>{item.codigo}</td>
                                     <td>{item.hDescargaTotal}</td>
-                                    <td><Button onClick={() => item.semana(i)}>Detalle</Button></td>
+                                    <td><Link to={`${this.props.match.url}/detalle_DescargaHoras`} >Detalle</Link></td>
                                 </tr>
                             })}
                             </tbody>
@@ -73,6 +75,9 @@ class DescargaHoras extends React.Component{
                 </Row>
 
             </Grid>
+            <Route path={`${this.props.match.path}/Detalle_DescargaHoras`} render={ () =>
+                <Detalle_DescargaHoras semana = {[this.state.descargas.semana]}
+            />}/>
         </div>;
     }
 
