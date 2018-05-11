@@ -119,8 +119,8 @@ class DetalleDocente extends Component {
         <Route path={`${this.props.match.path}/investigaciones`} component={ListaInvestigaciones}/>
         <Route path={`${this.props.match.path}/encuestas`} component={ListasEncuestas}/>
         <Route path={`${this.props.match.path}/solicitudesEconomicas`} component={SolicitudesEconomicas}/>
-          <Route path={`${this.props.match.path}/descargaHoras`} component={DescargaHoras}/>
-          <Route path={`${this.props.match.path}/actividades`} component={Actividades}/>
+        <Route path={`${this.props.match.path}/descargaHoras`} component={DescargaHoras}/>
+        <Route path={`${this.props.match.path}/actividades`} component={Actividades}/>
       </div>
 
     );

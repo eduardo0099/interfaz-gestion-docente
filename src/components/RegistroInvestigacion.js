@@ -71,7 +71,7 @@ class RegistroInvestigación extends Component{
                         </label>
                         <p> </p>
                         <input type="submit" value="Registrar" onClick={this.performPostRequest}/>
-                        <input type="submit" value="Cancelar" />
+						<Button href={'/profesores/'+this.props.match.params.codigo+'/investigaciones'}>Cancelar</Button>
                 </Table>
             </div>
 

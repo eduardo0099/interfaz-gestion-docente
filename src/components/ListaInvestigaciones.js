@@ -129,7 +129,7 @@ export class ListaInvestigaciones extends React.Component {
                     </Grid>
                 }/>
 
-                <Route path={`${this.props.match.path}/RegistroInvestigacion`} render={()=> <RegistroInvestigacion/>}/>
+                <Route path={`${this.props.match.path}/RegistroInvestigacion`} component={RegistroInvestigacion}/>
                 <Route path={`${this.props.match.path}/:idInvestigacion/ModificarInvestigacion`} component={ModificarInvestigacion}/>
 
             </div>
