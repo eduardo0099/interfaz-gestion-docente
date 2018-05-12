@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import {Grid, Row, Table, Button, Glyphicon, Col, SplitButton, MenuItem} from 'react-bootstrap';
+import {Grid, Row, Button, Glyphicon, Col} from 'react-bootstrap';
 import axios from "axios/index";
 import Detalle_DescargaHoras from "./Detalle_DescargaHoras";
 import {Route,Link} from 'react-router-dom';
-
+import BootstrapTable from 'react-bootstrap-table-next';
 
 class DescargaHoras extends React.Component{
     constructor(props){
@@ -12,20 +12,33 @@ class DescargaHoras extends React.Component{
             descargas:[{"nombre":"",
                         "codigo":"",
                         "hDescargaTotal":"",
-                        "semana":[]}]
+                        "semana":[]}],
+            listaCiclos:[],
+            cicloSelect:"",
         }
     }
 
     componentDidMount(){
-        axios.get('http://200.16.7.151:8080/docente/docente/horaDescDocente', {
-            params: {
-                codigo: this.props.match.params.codigo,
-                ciclo: "2018-1"
-            }
-        })
+        let cicloSeleccionado = "";
+        let listaCi = [];
+        axios.all([
+            axios.get('http://200.16.7.151:8080/general/cicloActual'),
+            axios.get('http://200.16.7.151:8080/general/listaCiclos'),
+        ]).then(axios.spread((respCicloAct,resplistaCiclos)=>{
+            cicloSeleccionado = respCicloAct.data.cicloActual;
+            listaCi = resplistaCiclos.data.ciclos;
+            return axios.get('http://200.16.7.151:8080/docente/docente/horaDescDocente', {
+                params: {
+                    codigo: this.props.match.params.codigo,
+                    ciclo: "2018-1"
+                }
+            });
+        }))
             .then(response => {
                 this.setState({
-                    descargas: response.data.descargas
+                    descargas: response.data.descargas,
+                    cicloSelect: cicloSeleccionado,
+                    listaCiclos: listaCi,
                 });
             })
             .catch(error => {
@@ -34,6 +47,11 @@ class DescargaHoras extends React.Component{
     }
 
     render(){
+        const columnas=[
+            {text:'Nombre del curso',dataField:'nombre'},
+            {text:'Codigo',dataField:'codigo'},
+            {text:'Horas Descarga',dataField:'hDescargaTotal'}
+        ];
         return <div>
             <Grid>
                 <Row className="back-bar">
@@ -43,34 +61,21 @@ class DescargaHoras extends React.Component{
                             className="professor-name"> Regresar a perfil docente </span>
                     </Col>
                 </Row>
+                <Row><h1>Descarga de Horas</h1></Row>
                 <Row>
                     <Col md={12}>
-                        <p>Ciclo:
+                        <p>Ciclo :
+                            <select ref="selectorCiclos" onChange={this.cambioCiclo}>
+                                {this.state.listaCiclos.map((item,i)=>{
+                                    return <option key={i} value={item.descripcion}>{item.descripcion}</option>
+                                })}
+                            </select>
                         </p>
                     </Col>
                 </Row>
                 <Row>
                     <Col md={12}>
-                        <Table striped bordered condensed hover>
-                            <thead>
-                            <tr>
-                                <th>Nombre del curso</th>
-                                <th>Horario</th>
-                                <th>Horas Descarga</th>
-                                <th> </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {this.state.descargas.map((item, i) => {
-                                return <tr key={i}>
-                                    <td>{item.nombre}</td>
-                                    <td>{item.codigo}</td>
-                                    <td>{item.hDescargaTotal}</td>
-                                    <td><Link to={`${this.props.match.url}/detalle_DescargaHoras`} >Detalle</Link></td>
-                                </tr>
-                            })}
-                            </tbody>
-                        </Table>
+                        <BootstrapTable keyField='id' data={ this.state.descargas } columns={ columnas }/>
                     </Col>
                 </Row>
 
