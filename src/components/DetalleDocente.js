@@ -56,23 +56,23 @@ class DetalleDocente extends Component {
           <Grid>
             <Row className="show-grid">
               <Col md={1}/>
-              <Col md={2}>
-                <Link to={`${this.props.match.url}/cursos`} >Cursos</Link>
+              <Col md={1}>
+                <Button href={`${this.props.match.url}/cursos`} >Cursos</Button>
               </Col>
               <Col md={2}>
-                  <Link to={`${this.props.match.url}/descargaHoras`} >Descarga Horas</Link>
+                  <Button href={`${this.props.match.url}/descargaHoras`} >Descarga de Horas</Button>
               </Col>
-              <Col md={2}>
-                  <Link to={`${this.props.match.url}/encuestas`} >Encuestas</Link>
+              <Col md={1}>
+                  <Button href={`${this.props.match.url}/encuestas`} >Encuestas</Button>
               </Col>
-              <Col md={2}>
-                <Link to={`${this.props.match.url}/investigaciones`}>Investigaciones</Link>
+              <Col md={1}>
+                <Button href={`${this.props.match.url}/investigaciones`}>Investigaciones</Button>
               </Col>
                 <Col md={2}>
-                    <Link to={`${this.props.match.url}/solicitudesEconomicas`} >Solicitudes Economicas</Link>
+                    <Button href={`${this.props.match.url}/solicitudesEconomicas`} >Solicitudes Económicas</Button>
                 </Col>
-                <Col md={2}>
-                    <Link to={`${this.props.match.url}/Actividades`} >Plan de proyecto</Link>
+                <Col md={1}>
+                    <Button href={`${this.props.match.url}/Actividades`} >Plan de Proyecto</Button>
                 </Col>
               <Col md={1}/>
             </Row>
@@ -84,13 +84,12 @@ class DetalleDocente extends Component {
               <Col md={10}>
                 <Panel bsStyle="primary">
                   <Panel.Heading>
-                    <Panel.Title componentClass="h3">Detalle Docente</Panel.Title>
+                    <Panel.Title componentClass="h3">{`${this.state.info.apellido_paterno} ${this.state.info.apellido_materno}, ${this.state.info.nombres}`}</Panel.Title>
                   </Panel.Heading>
                   <Panel.Body>
                     <Row className="show-grid">
                       <Col md={8}>
                         <h4>Codigo: {this.state.info.codigo}</h4>
-                        <h4>Docente: {`${this.state.info.nombres} ${this.state.info.apellido_paterno} ${this.state.info.apellido_materno}`}</h4>
                         <h4>Tipo: {`${this.state.info.descripcion}`}</h4>
                         <h4>Telefono: {this.state.info.telefono}</h4>
                         <h4>Correo: {this.state.info.correo_pucp}</h4>
