@@ -4,12 +4,12 @@ import Header from './../components/Header';
 import SidebarContent from './../components/SidebarContent';
 import '../styles/Sidebar.css';
 import '../styles/App.css';
+import '../styles/Phobos.css';
 import Home from "../components/Home";
-import {BrowserRouter, Route} from 'react-router-dom';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import ListaProfesores from "../components/ListaProfesores";
 import CargaDatos from '../components/CargaDatos';
-import PerfilDocente from "../components/PerfilDocente";
-import RegistroDocente from "../components/RegistroDocente";
+
 
 class App extends Component {
 
@@ -58,11 +58,12 @@ class App extends Component {
         <Sidebar {...sidebarProps}>
           <Header handleMenu={this.menuButtonClick}/>
           <div className="content">
-            <Route exact path="/" render={ () => <Home/>} />
-            <Route exact path="/profesores" render={ () => <ListaProfesores /> }/>
-            <Route path="/profesores/:codigo" component={PerfilDocente} />
-            <Route exact path="/carga" render={ () => <CargaDatos /> }/>
-            <Route exact path="/docentes/registro" render={ () => <RegistroDocente /> }/>
+            <Switch>
+              <Route exact path="/" render={ () => <Home/>} />
+              <Route path="/profesores" component={ListaProfesores}/>
+              <Route path="/carga" render={ () => <CargaDatos /> }/>
+              <Route render={()=><div>La pagina que busca, no existe</div>} />
+            </Switch>
           </div>
         </Sidebar>
       </BrowserRouter>
