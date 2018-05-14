@@ -10,6 +10,7 @@ import ListaInvestigaciones from "./ListaInvestigaciones"
 import SolicitudesEconomicas from "./SolicitudesEconomicas"
 import DescargaHoras from "./DescargaHoras"
 import Actividades from "./Actividades"
+import "../styles/BotonStyle.css";
 
 class DetalleDocente extends Component {
 
@@ -57,23 +58,23 @@ class DetalleDocente extends Component {
             <Row className="show-grid">
               <Col md={1}/>
               <Col md={1}>
-                <Button href={`${this.props.match.url}/cursos`} >Cursos</Button>
+                <Button class="btn btn-primary" href={`${this.props.match.url}/cursos`} >Cursos</Button>
               </Col>
               <Col md={2}>
-                  <Button href={`${this.props.match.url}/descargaHoras`} >Descarga de Horas</Button>
+                <Button href={`${this.props.match.url}/descargaHoras`} >Descarga de Horas</Button>
               </Col>
               <Col md={1}>
-                  <Button href={`${this.props.match.url}/encuestas`} >Encuestas</Button>
+                <Button href={`${this.props.match.url}/encuestas`} >Encuestas</Button>
               </Col>
               <Col md={1}>
                 <Button href={`${this.props.match.url}/investigaciones`}>Investigaciones</Button>
               </Col>
-                <Col md={2}>
-                    <Button href={`${this.props.match.url}/solicitudesEconomicas`} >Solicitudes Económicas</Button>
-                </Col>
-                <Col md={1}>
-                    <Button href={`${this.props.match.url}/Actividades`} >Plan de Proyecto</Button>
-                </Col>
+              <Col md={2}>
+                <Button href={`${this.props.match.url}/solicitudesEconomicas`} >Solicitudes Económicas</Button>
+              </Col>
+              <Col md={1}>
+                <Button href={`${this.props.match.url}/Actividades`} >Plan de Proyecto</Button>
+              </Col>
               <Col md={1}/>
             </Row>
             <Row className="show-grid" >
