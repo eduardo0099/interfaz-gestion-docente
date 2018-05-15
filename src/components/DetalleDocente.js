@@ -11,6 +11,7 @@ import SolicitudesEconomicas from "./SolicitudesEconomicas"
 import DescargaHoras from "./DescargaHoras"
 import Actividades from "./Actividades"
 import "../styles/BotonStyle.css";
+import "../styles/HeaderPanel.css";
 
 class DetalleDocente extends Component {
 
@@ -49,6 +50,16 @@ class DetalleDocente extends Component {
       });
   }
 
+  obtenerTipo() {
+    let id = `${this.state.info.descripcion}`;
+    if(id == "TPA"){
+      return "Tiempo Parcial por Asignaturas (TPA)";
+    }
+    else{
+      return "Tiempo Completo (TC)";
+    }
+  }
+
   render() {
       console.log(this.props);
     return(
@@ -57,10 +68,10 @@ class DetalleDocente extends Component {
           <Grid>
             <Row className="show-grid">
               <Col md={2}>
-                <Button class="btn btn-primary btn-block" href={`${this.props.match.url}/cursos`} >Cursos</Button>
+                <Button type="button" class="btn btn-primary btn-cons" href={`${this.props.match.url}/cursos`} >Cursos</Button>
               </Col>
               <Col md={2}>
-                <Button class="btn btn-primary btn-block" href={`${this.props.match.url}/descargaHoras`} >Descarga de Horas</Button>
+                <Button href={`${this.props.match.url}/descargaHoras`} >Descarga de Horas</Button>
               </Col>
               <Col md={2}>
                 <Button href={`${this.props.match.url}/encuestas`} >Encuestas</Button>
@@ -76,7 +87,7 @@ class DetalleDocente extends Component {
               </Col>
             </Row>
             <Row className="show-grid" >
-              <Col md={12}></Col>
+              <Col md={12}><br></br></Col>
             </Row>
             <Row className="show-grid">
               <Col md={12}>
@@ -86,15 +97,24 @@ class DetalleDocente extends Component {
                   </Panel.Heading>
                   <Panel.Body>
                     <Row className="show-grid">
-                      <Col md={8}>
-                        <h4>Código: {this.state.info.codigo}</h4>
-                        <h4>Tipo: {`${this.state.info.descripcion}`}</h4>
-                        <h4>Teléfono: {this.state.info.telefono}</h4>
-                        <h4>Correo: {this.state.info.correo_pucp}</h4>
-                        <h4>Departamento: {this.state.info.departamento}</h4>
-                        <h4>Sección: {this.state.info.seccion}</h4>
+                      <Col md={4}>
+                        <h4><br></br></h4>
+                        <h4>Código</h4>
+                        <h4-subtitle>{this.state.info.codigo}</h4-subtitle>
+                        <h4>Contacto</h4>
+                        <h4-subtitle> Télefono: {this.state.info.telefono}<br></br></h4-subtitle>
+                        <h4-subtitle> Dirección Electrónica: {this.state.info.correo_pucp}</h4-subtitle>
                       </Col>
                       <Col md={4}>
+                        <h4><br></br></h4>
+                        <h4>Tipo</h4>
+                        <h4-subtitle>{this.obtenerTipo()}</h4-subtitle>
+                        <h4>Departamento/Sección</h4>
+                        <h4-subtitle>Departamento de {this.state.info.departamento}<br></br></h4-subtitle>
+                        <h4-subtitle>Sección de {this.state.info.seccion}</h4-subtitle>
+                      </Col>
+                      <Col md={1}></Col>
+                      <Col md={3}>
                         <Image
                           className='avatar'
                           src={this.state.codigo === 1? foto : fotoAnonima }
