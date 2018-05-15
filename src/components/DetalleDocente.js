@@ -56,7 +56,7 @@ class DetalleDocente extends Component {
           <Grid>
             <Row className="show-grid">
               <Col md={1}/>
-              <Col md={2}>
+              <Col md={1}>
                 <Link to={`${this.props.match.url}/cursos`} >Cursos</Link>
               </Col>
               <Col md={2}>
