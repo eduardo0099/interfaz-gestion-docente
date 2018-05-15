@@ -60,6 +60,11 @@ class DetalleDocente extends Component {
     }
   }
 
+  obtenerMailTo() {
+    let correo = this.state.info.correo_pucp;
+    return("mailto:"+correo);
+  }
+
   render() {
       console.log(this.props);
     return(
@@ -104,6 +109,7 @@ class DetalleDocente extends Component {
                         <h4>Contacto</h4>
                         <h4-subtitle> Télefono: {this.state.info.telefono}<br></br></h4-subtitle>
                         <h4-subtitle> Dirección Electrónica: {this.state.info.correo_pucp}</h4-subtitle>
+                        <Button href={this.obtenerMailTo()} >Enviar mensaje</Button>
                       </Col>
                       <Col md={4}>
                         <h4><br></br></h4>
