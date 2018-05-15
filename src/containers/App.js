@@ -4,6 +4,7 @@ import Header from './../components/Header';
 import SidebarContent from './../components/SidebarContent';
 import '../styles/Sidebar.css';
 import '../styles/App.css';
+import '../styles/Phobos.css';
 import Home from "../components/Home";
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import ListaProfesores from "../components/ListaProfesores";

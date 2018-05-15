@@ -5,20 +5,34 @@ import fotoAnonima from '../resources/images/anonimo.png';
 import {Route,Link} from 'react-router-dom';
 import axios from "axios/index";
 import Cursos from "./Cursos";
+import ListasEncuestas from "./ListaEncuestas";
+import ListaInvestigaciones from "./ListaInvestigaciones"
+import SolicitudesEconomicas from "./SolicitudesEconomicas"
+import DescargaHoras from "./DescargaHoras"
+import Actividades from "./Actividades"
 
 class DetalleDocente extends Component {
 
-  constructor(props){
-    super(props);
+  constructor(props) {
+      super(props);
 
-    this.state = {
-      info: []
-    }
-
+      this.state = {
+          info: {
+              "codigo": "",
+              "nombres": "",
+              "apellidoP": "",
+              "apellidoM": "",
+              "telefono": "",
+              "seccion": "",
+              "departamento": "",
+              "correo": ""
+          }
+      }
   }
 
+
   componentDidMount(){
-    axios.get('http://200.16.7.151:8080/docente/docente', {
+    axios.get('http://200.16.7.151:8080/docente/docente/general', {
       params: {
         codigo: this.props.match.params.codigo,
         ciclo: "2018-1",
@@ -35,7 +49,7 @@ class DetalleDocente extends Component {
   }
 
   render() {
-    console.log("path",this.state.info.cursos);
+      console.log(this.props);
     return(
       <div>
         <Route exact path={`${this.props.match.path}`} render={() =>
@@ -45,21 +59,21 @@ class DetalleDocente extends Component {
               <Col md={1}>
                 <Link to={`${this.props.match.url}/cursos`} >Cursos</Link>
               </Col>
-              <Col md={1}>
-                <Button bsStyle="primary">Descarga</Button>
-              </Col>
-              <Col md={1}>
-                <Button bsStyle="primary">Encuestas</Button>
-              </Col>
-              <Col md={1}>
-                <Button bsStyle="primary">Actividades</Button>
+              <Col md={2}>
+                  <Link to={`${this.props.match.url}/descargaHoras`} >Descarga Horas</Link>
               </Col>
               <Col md={2}>
-                <Button bsStyle="primary">Investigaciones</Button>
+                  <Link to={`${this.props.match.url}/encuestas`} >Encuestas</Link>
               </Col>
               <Col md={2}>
-                  <Button bsStyle="primary">Solicitudes Economicas</Button>
+                <Link to={`${this.props.match.url}/investigaciones`}>Investigaciones</Link>
               </Col>
+                <Col md={2}>
+                    <Link to={`${this.props.match.url}/solicitudesEconomicas`} >Solicitudes Economicas</Link>
+                </Col>
+                <Col md={2}>
+                    <Link to={`${this.props.match.url}/Actividades`} >Plan de proyecto</Link>
+                </Col>
               <Col md={1}/>
             </Row>
             <Row className="show-grid" >
@@ -76,9 +90,10 @@ class DetalleDocente extends Component {
                     <Row className="show-grid">
                       <Col md={8}>
                         <h4>Codigo: {this.state.info.codigo}</h4>
-                        <h4>Docente: {`${this.state.info.nombres} ${this.state.info.apellidoP} ${this.state.info.apellidoM}`}</h4>
+                        <h4>Docente: {`${this.state.info.nombres} ${this.state.info.apellido_paterno} ${this.state.info.apellido_materno}`}</h4>
+                        <h4>Tipo: {`${this.state.info.descripcion}`}</h4>
                         <h4>Telefono: {this.state.info.telefono}</h4>
-                        <h4>Correo: {this.state.info.correo}</h4>
+                        <h4>Correo: {this.state.info.correo_pucp}</h4>
                         <h4>Departamento: {this.state.info.departamento}</h4>
                         <h4>Seccion: {this.state.info.seccion}</h4>
                       </Col>
@@ -99,13 +114,15 @@ class DetalleDocente extends Component {
             </Row>
           </Grid>
         } />
-        <Route path={`${this.props.match.path}/cursos`} render={()=>
-          <Cursos cursos={this.state.info.cursos}
-                  ciclos={[{descripcion:"2018-1"}]}
 
-          />
-        }/>
+        <Route path={`${this.props.match.path}/cursos`} component={Cursos}/>
+        <Route path={`${this.props.match.path}/investigaciones`} component={ListaInvestigaciones}/>
+        <Route path={`${this.props.match.path}/encuestas`} component={ListasEncuestas}/>
+        <Route path={`${this.props.match.path}/solicitudesEconomicas`} component={SolicitudesEconomicas}/>
+        <Route path={`${this.props.match.path}/descargaHoras`} component={DescargaHoras}/>
+        <Route path={`${this.props.match.path}/actividades`} component={Actividades}/>
       </div>
+
     );
 
   }
