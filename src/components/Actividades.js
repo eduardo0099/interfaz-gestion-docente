@@ -1,16 +1,13 @@
-import React from 'react';
-import ReactTable from 'react-table';
+import React, { Component } from 'react';
 import 'react-table/react-table.css';
 import axios from "axios/index";
+import '../styles/Actividades.css';
+import {Grid,Button, Col} from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
-import RegistroActividad from "./RegistroActividad"
-import ModificarActividad from "./ModificarActividad";
-import {HashRouter ,BrowserRouter,Router,Route,Link} from 'react-router-dom';
-import {Grid,Row,Table,Button, Glyphicon,Col} from 'react-bootstrap';
-import './../styles/ListaActividades.css';
+import {Route} from 'react-router-dom';
+import SkyLight from 'react-skylight';
 
 export class Actividades extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -65,20 +62,14 @@ export class Actividades extends React.Component {
         }
     }
 
-    modificar = () =>{
-        if(this.state.selectedId==-1){
-            alert(`Seleccionar una actividad!`);
-        }
-    }
-
-    render () {
+    render(){
         console.log(this.state);
 
         const columns = [
             {
-               dataField: 'id',
-               text: 'ID',
-               hidden: true
+                dataField: 'id',
+                text: 'ID',
+                hidden: true
             }, {
                 text: 'Nombre de la Actividad',
                 dataField: 'titulo'
@@ -115,16 +106,16 @@ export class Actividades extends React.Component {
         function myFunction(x) {
             console.log("Row index is: " + x.rowIndex);
         }
-
         let myComponent;
         if(this.state.selectedId !== -1) {
-            myComponent = <Link to={`${this.props.match.url}/${this.state.selectedId}/ModificarActividad`}>Modificar</Link>
+            //myComponent = <Link to={`${this.props.match.url}/${this.state.selectedId}/ModificarActividad`}>Modificar</Link>
         } else {
             myComponent = <label onClick={this.modificar}>Modificar</label>
         }
 
-        return(
+        return (
             <div>
+                <h2>Actividades</h2>
                 <Route exact path={`${this.props.match.path}`} render={() =>
                     <Grid>
                         <Col md={12}>
@@ -134,17 +125,39 @@ export class Actividades extends React.Component {
 
                             </Col>
                             <Col md={2}>
-                                <Link to={`${this.props.match.url}/RegistroActividad`}>Registrar</Link>
+                                <div className="col-md-2">
+                                    <button className="btn btn-primary"
+                                            onClick={() => this.refs.simpleDialog.show()}>Nueva Actividad</button>
+                                </div>
                                 <Button onClick={this.eliminar}>Eliminar</Button>
                                 {myComponent}
                             </Col>
                         </Col>
                     </Grid>
                 }/>
-                <Route path={`${this.props.match.path}/RegistroActividad`} component={RegistroActividad}/>
-                <Route path={`${this.props.match.path}/:idActividad/ModificarActividad`} component={ModificarActividad}/>
+
+                <SkyLight hideOnOverlayClicked ref="simpleDialog">
+                    <div className="panel panel-default">
+                        <div className="panel-heading">Registrar Nueva Actividad</div>
+                        <div className="panel-body">
+                            <input type="text" placeholder="Título" className="form-control"
+                                   name="titulo" onChange={this.handleChange}/>
+                            <select className="form-control">
+                                <option>Congreso</option>
+                                <option>Taller</option>
+                                <option>Visita</option>
+                                <option>Capacitacion</option>
+                            </select>
+
+                            <input type="text" placeholder="Fecha Inicio" className="form-control"
+                                   name="" onChange={this.handleChange}/>
+                            <button className="btn btn-primary" onClick={this.handleSubmit}>Guardar</button>
+                        </div>
+                    </div>
+                </SkyLight>
+
             </div>
-        )
+        );
     }
 }
 
