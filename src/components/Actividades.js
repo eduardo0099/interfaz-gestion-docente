@@ -6,6 +6,7 @@ import {Grid,Button, Col} from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import {Route} from 'react-router-dom';
 import SkyLight from 'react-skylight';
+import DatePicker from 'react-date-picker'
 
 export class Actividades extends React.Component {
     constructor(props) {
@@ -23,7 +24,9 @@ export class Actividades extends React.Component {
                 }
             ],
             ciclos:[],
-            cicloSeleccionado: ""
+            cicloSeleccionado: "",
+            dateInit: new Date(),
+            dateFin: new Date(),
         }
     }
 
@@ -37,6 +40,12 @@ export class Actividades extends React.Component {
             .catch(error => {
                 console.log(`Error al obtener datos de la actividad ${this.props.match.params.codigo}`,error);
             })
+    }
+
+    guardar = () =>{
+        var titulo=document.getElementsByName("titulo")[0].value;
+        var fechaIni=document.getElementsByName("fechaIni")[0].value;
+        var fechaFin=document.getElementsByName("fechaFin")[0].value;
     }
 
     eliminar = () =>{
@@ -61,6 +70,7 @@ export class Actividades extends React.Component {
             alert(`Seleccionar una actividad!`);
         }
     }
+    onChange = date => this.setState({ date })
 
     render(){
         console.log(this.state);
@@ -140,18 +150,29 @@ export class Actividades extends React.Component {
                     <div className="panel panel-default">
                         <div className="panel-heading">Registrar Nueva Actividad</div>
                         <div className="panel-body">
-                            <input type="text" placeholder="Título" className="form-control"
-                                   name="titulo" onChange={this.handleChange}/>
-                            <select className="form-control">
-                                <option>Congreso</option>
-                                <option>Taller</option>
-                                <option>Visita</option>
-                                <option>Capacitacion</option>
-                            </select>
-
-                            <input type="text" placeholder="Fecha Inicio" className="form-control"
-                                   name="" onChange={this.handleChange}/>
-                            <button className="btn btn-primary" onClick={this.handleSubmit}>Guardar</button>
+                            <label>
+                                Título:
+                                <input type="text" placeholder="Título" className="form-control"
+                                       name="titulo" onChange={this.handleChange}/>
+                            </label>
+                            <p> </p>
+                            <label>
+                                <select className="form-control">
+                                    <option>Congreso</option>
+                                    <option>Taller</option>
+                                    <option>Visita</option>
+                                    <option>Capacitacion</option>
+                                </select>
+                            </label>
+                            <p> </p>
+                            <label>
+                                <DatePicker onChange={this.onChange} value={this.state.dateInit}/>
+                            </label>
+                            <p> </p>
+                            <label>
+                                <DatePicker onChange={this.onChange} value={this.state.dateFin}/>
+                            </label>
+                            <button className="btn btn-primary" onClick={this.guardar}>Guardar</button>
                         </div>
                     </div>
                 </SkyLight>
