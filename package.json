@@ -4,11 +4,13 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
+    "moment": "^2.22.1",
     "papaparse": "^4.4.0",
     "prop-types": "^15.6.1",
     "react": "^16.3.1",
     "react-bootstrap": "^0.32.1",
     "react-bootstrap-table-next": "^0.1.8",
+    "react-datepicker": "^1.4.1",
     "react-dom": "^16.3.1",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",
@@ -16,7 +18,9 @@
     "react-select": "^1.2.1",
     "react-sidebar": "^2.3.2",
     "react-table": "^6.8.2",
-    "redux": "^3.7.2"
+    "react-validation": "^3.0.7",
+    "redux": "^3.7.2",
+    "validator": "^10.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
