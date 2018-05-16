@@ -88,7 +88,7 @@ class DetalleDocente extends Component {
                 <Button href={`${this.props.match.url}/solicitudesEconomicas`} >Solicitudes</Button>
               </Col>
               <Col md={2}>
-                <Button href={`${this.props.match.url}/Actividades`} >Plan de Proyecto</Button>
+                <Button href={`${this.props.match.url}/Actividades`} >Plan de Trabajo</Button>
               </Col>
             </Row>
             <Row className="show-grid" >
