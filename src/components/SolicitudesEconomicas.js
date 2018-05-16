@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {Grid, Row, Table, Button, Glyphicon, Col, SplitButton, MenuItem} from 'react-bootstrap';
+import {Grid, Row, Button, Glyphicon, Col} from 'react-bootstrap';
 import axios from "axios/index";
-
+import BootstrapTable from 'react-bootstrap-table-next';
 
 class SolicitudesEconomicas extends React.Component{
 
@@ -16,41 +16,67 @@ class SolicitudesEconomicas extends React.Component{
                 fecha_solicitud: "",
                 monto_otorgado: "",
                 estado: ""}
-            ]
+            ],
+            cicloSelect: "",
+            listaCiclos: [],
         }
     }
 
     componentDidMount(){
-        axios.get('http://200.16.7.151:8080/docente/ayudaEconomica/lista', {
-            params: {
-                codigo: this.props.match.params.codigo,
-                ciclo: "2018-1"
-            }
-        })
-            .then(response => {
-                this.setState({
-                    ayudas: response.data.ayudas
-                });
-            })
-            .catch(error => {
-                console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`,error);
+        let cicloSeleccionado = "";
+        let listaCi = [];
+        axios.all([
+            axios.get('http://200.16.7.151:8080/general/cicloActual'),
+            axios.get('http://200.16.7.151:8080/general/listaCiclos'),
+        ]).then(axios.spread((respCicloAct,resplistaCiclos)=>{
+            cicloSeleccionado = respCicloAct.data.cicloActual;
+            listaCi = resplistaCiclos.data.ciclos;
+            return axios.get('http://200.16.7.151:8080/docente/ayudaEconomica/lista', {
+                params: {
+                    codigo: this.props.match.params.codigo,
+                    ciclo: cicloSeleccionado,
+                }
             });
+        })).then((response) => {
+                this.setState({
+                    ayudas: response.data.ayudas,
+                    cicloSelect: cicloSeleccionado,
+                    listaCiclos: listaCi,
+                })
+            }
+        ).catch(error => {
+            console.log(`Error al obtener datos de la pantalla solicitudes economicas`,error);
+        });
+
     }
 
 
     render(){
+        const columnas = [
+            {text:'Titulo',dataField:'titulo'},
+            {text:'Motivo',dataField:'motivo'},
+            {text:'Fecha de Registro',dataField:'fecha_solicitud'},
+            {text:'Monto',dataField:'monto_otorgado'},
+            {text:'Estado',dataField:'estado'}
+        ];
         return <div>
             <Grid>
                 <Row className="back-bar">
                     <Col md={12}>
-                        <Button onClick={this.props.history.goBack}><Glyphicon glyph="arrow-left"></Glyphicon></Button>
+                        <Button onClick={this.props.history.goBack}><Glyphicon glyph="arrow-left"/></Button>
                         <span
                             className="professor-name"> Regresar a perfil docente </span>
                     </Col>
                 </Row>
+                <Row><h1>Solicitudes Economicas</h1></Row>
                 <Row>
                     <Col md={6}>
-                        <p>Ciclo:
+                        <p>Ciclo :
+                            <select ref="selectorCiclos" onChange={this.cambioCiclo}>
+                                {this.state.listaCiclos.map((item,i)=>{
+                                    return <option key={i} value={item.descripcion}>{item.descripcion}</option>
+                                })}
+                            </select>
                         </p>
                     </Col>
                     <Col md={6}>
@@ -60,32 +86,13 @@ class SolicitudesEconomicas extends React.Component{
                 </Row>
                 <Row>
                     <Col md={12}>
-                        <Table striped bordered condensed hover>
-                            <thead>
-                            <tr>
-                                <th>Titulo</th>
-                                <th>Motivo</th>
-                                <th>Fecha de Registro</th>
-                                <th>Monto</th>
-                                <th>Estado</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {this.state.ayudas.map((item, i) => {
-                                return <tr key={i}>
-                                    <td>{item.titulo}</td>
-                                    <td>{item.motivo}</td>
-                                    <td>{item.fecha_solicitud}</td>
-                                    <td>{item.monto_otorgado}</td>
-                                    <td>{item.estado}</td>
-                                </tr>
-                            })}
-                            </tbody>
-                        </Table>
+                        <BootstrapTable keyField='id' data={ this.state.ayudas } columns={ columnas }/>
                     </Col>
                 </Row>
                 <Row>
-                    <Col md={12}>
+                    <Col md={10}>
+                    </Col>
+                    <Col md={2}>
                         <Button bsStyle="info">Detalles</Button>
                     </Col>
                 </Row>
