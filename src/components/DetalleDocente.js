@@ -109,7 +109,7 @@ class DetalleDocente extends Component {
                         <h4-subtitle>{this.state.info.codigo}</h4-subtitle>
                         <h4>Contacto</h4>
                         <h4-subtitle> Teléfono: {this.state.info.telefono}<br></br></h4-subtitle>
-                        <h4-subtitle> Dirección Electrónica: {this.state.info.correo_pucp}</h4-subtitle>
+                        <h4-subtitle> Correo: {this.state.info.correo_pucp}</h4-subtitle>
                         <Button href={this.obtenerMailTo()} >Enviar mensaje</Button>
                       </Col>
                       <Col md={4}>
