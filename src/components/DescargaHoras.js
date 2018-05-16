@@ -47,7 +47,6 @@ class DescargaHoras extends React.Component{
     }
 
     render(){
-        console.log(this.props);
         const columnas=[
             {text:'Nombre del curso',dataField:'nombre'},
             {text:'Codigo',dataField:'codigo'},
@@ -62,47 +61,48 @@ class DescargaHoras extends React.Component{
         };
 
         return(
-            <div>
-                <Grid>
-                    <Row className="back-bar">
-                        <Col md={12}>
-                            <Button onClick={this.props.history.goBack}><Glyphicon glyph="arrow-left"></Glyphicon></Button>
-                            <span
-                                className="professor-name"> Regresar a perfil docente </span>
-                        </Col>
-                    </Row>
-                    <Row><h1>Descarga de Horas</h1></Row>
-                    <Row>
-                        <Col md={12}>
-                            <p>Ciclo :
-                                <select ref="selectorCiclos" onChange={this.state.cicloSelect}>
-                                    {this.state.listaCiclos.map((item,i)=>{
-                                        return <option key={i} value={item.descripcion}>{item.descripcion}</option>
-                                    })}
-                                </select>
-                            </p>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col md={12}>
-                            <BootstrapTable
-                                keyField='id'
-                                data={ this.state.descargas }
-                                columns={ columnas }
-                                selectRow={selectRow}/>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col md={10}>
-                        </Col>
-                        <Col md={2}>
-                            <Link to={`${this.props.match.url}/Detalle_DescargaHoras`}>Detalle</Link>
-                        </Col>
-                    </Row>
-                </Grid>
-                <Route path={`${this.props.match.path}/Detalle_DescargaHoras`} component={Detalle_DescargaHoras}/>
-            </div>
-        )
+                <div>
+                    <Grid>
+                        <Row className="back-bar">
+                            <Col md={12}>
+                                <Button onClick={this.props.history.goBack}><Glyphicon
+                                    glyph="arrow-left"></Glyphicon></Button>
+                                <span
+                                    className="professor-name"> Regresar a perfil docente </span>
+                            </Col>
+                        </Row>
+                        <Row><h1>Descarga de Horas</h1></Row>
+                        <Row>
+                            <Col md={12}>
+                                <p>Ciclo :
+                                    <select ref="selectorCiclos" onChange={this.state.cicloSelect}>
+                                        {this.state.listaCiclos.map((item, i) => {
+                                            return <option key={i} value={item.descripcion}>{item.descripcion}</option>
+                                        })}
+                                    </select>
+                                </p>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col md={12}>
+                                <BootstrapTable
+                                    keyField='id'
+                                    data={this.state.descargas}
+                                    columns={columnas}
+                                    selectRow={selectRow}/>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col md={10}>
+                            </Col>
+                            <Col md={2}>
+                                <Link to={`${this.props.match.url}/Detalle_DescargaHoras`}>Detalle</Link>
+                            </Col>
+                        </Row>
+                    </Grid>
+                    <Route path={`${this.props.match.path}/Detalle_DescargaHoras`} component={Detalle_DescargaHoras}/>
+                </div>
+        );
     }
 }
 
