@@ -1,0 +1,17 @@
+.btn {
+    padding: 10px 0px;
+    border: 0 0;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0px;
+    text-transform: uppercase;
+    height: 32px;
+    width: 165px;
+}
+.btn:focus, .btn:active:focus, .btn.active:focus {
+    outline: 0 none;
+}
+
+.btn2 {
+    background-color: #33a6cc;
+}
