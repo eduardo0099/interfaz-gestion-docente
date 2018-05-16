@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
-import {Grid,Row,Table,Button, Glyphicon,Col} from 'react-bootstrap';
+import {Grid,Row,Table,Button, Glyphicon,Col,PageHeader} from 'react-bootstrap';
 import {HashRouter ,BrowserRouter,Router,Route,Link} from 'react-router-dom';
 import RegistroInvestigacion from "./RegistroInvestigacion"
 import ModificarInvestigacion from "./ModificarInvestigacion"
@@ -107,9 +107,9 @@ export class ListaInvestigaciones extends React.Component {
 
         let myComponent;
         if(this.state.selectedId !== -1) {
-            myComponent = <Link to={`${this.props.match.url}/${this.state.selectedId}/ModificarInvestigacion`}>Modificar</Link>
+            myComponent = <Button href={`${this.props.match.url}/${this.state.selectedId}/ModificarInvestigacion`}>Modificar</Button>
         } else {
-            myComponent = <label onClick={this.modificar}>Modificar</label>
+            myComponent = <Button disabled={true}>Modificar</Button>
         }
 
         return(
@@ -117,13 +117,20 @@ export class ListaInvestigaciones extends React.Component {
                 <Route exact path={`${this.props.match.path}`} render={() =>
                     <Grid>
                         <Col md={12}>
+                        <PageHeader>
+                            Investigaciones
+                        </PageHeader>
+                        </Col>
+                        <Col md={12}>
                             <BootstrapTable keyField='id' data={ this.state.investigaciones } columns={ columns }
-                                            selectRow={ selectRow } rowEvents={ rowEvents } />
+                                            rowEvents={ rowEvents }  selectRow={ selectRow }/>
 
                         </Col>
-                        <Col md={2}>
-                            <Link to={`${this.props.match.url}/RegistroInvestigacion`}>Registrar</Link>
+                        <Col md={12}>
+                            <Button href={`${this.props.match.url}/RegistroInvestigacion`}>Registrar</Button>
+                            <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
                             <Button onClick={this.eliminar}>Eliminar</Button>
+                            <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
                             {myComponent}
                         </Col>
                     </Grid>
