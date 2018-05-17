@@ -643,7 +643,7 @@ a:hover .caret-white {
 .footer > .btn,
 .footer > .btn-group,
 .footer > .btn-toolbar {
-    margin-top: 10px;
+    margin-top: 10px !important;
 }
 .header > .btn-lg,
 .footer > .btn-lg {
@@ -1364,11 +1364,11 @@ body.container {
 
 .btn-default {
     color: #3C4043 !important;
-    background-color: #f5f7fa;
-    border-color: #d2dae1;
-    border-bottom-color: #cbd5dd;
-    -webkit-box-shadow: 0 1px 1px rgba(90, 90, 90, 0.1);
-    box-shadow: 0 1px 1px rgba(90, 90, 90, 0.1);
+    background-color: #f5f7fa !important;
+    border-color: #d2dae1 !important;
+    border-bottom-color: #cbd5dd !important;
+    -webkit-box-shadow: 0 1px 1px rgba(90, 90, 90, 0.1) !important;
+    box-shadow: 0 1px 1px rgba(90, 90, 90, 0.1) !important;
 }
 .btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active,
 .btn-default .open .dropdown-toggle {
@@ -1510,8 +1510,10 @@ body.container {
 }
 
 .btn {
-    font-weight: 400;
-    border-radius: 2px;
+    font-weight: 400 !important;
+    border-radius: 3px !important;
+    padding-top: 7px !important;
+    padding-bottom: 0px !important;
 }
 
 .btn-icon {
