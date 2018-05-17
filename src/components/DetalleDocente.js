@@ -68,27 +68,27 @@ class DetalleDocente extends Component {
   render() {
       console.log(this.props);
     return(
-      <div>
+      <div className="m-t-md">
         <Route exact path={`${this.props.match.path}`} render={() =>
           <Grid>
             <Row className="show-grid">
               <Col md={2}>
-                <Button type="button" class="btn btn-primary btn-cons" href={`${this.props.match.url}/cursos`} >Cursos</Button>
+                <a class="btn btn-primary" href={`${this.props.match.url}/cursos`} >Cursos</a>
               </Col>
               <Col md={2}>
-                <Button href={`${this.props.match.url}/descargaHoras`} >Descarga de Horas</Button>
+                <a class="btn btn-primary" href={`${this.props.match.url}/descargaHoras`} >Descarga de Horas</a>
               </Col>
               <Col md={2}>
-                <Button href={`${this.props.match.url}/encuestas`} >Encuestas</Button>
+                <a class="btn btn-primary" href={`${this.props.match.url}/encuestas`} >Encuestas</a>
               </Col>
               <Col md={2}>
-                <Button href={`${this.props.match.url}/investigaciones`}>Investigaciones</Button>
+                <a class="btn btn-primary" href={`${this.props.match.url}/investigaciones`}>Investigaciones</a>
               </Col>
               <Col md={2}>
-                <Button href={`${this.props.match.url}/solicitudesEconomicas`} >Solicitudes</Button>
+                <a class="btn btn-primary" href={`${this.props.match.url}/solicitudesEconomicas`} >Solicitudes</a>
               </Col>
               <Col md={2}>
-                <Button href={`${this.props.match.url}/Actividades`} >Plan de Proyecto</Button>
+                <a class="btn btn-primary" href={`${this.props.match.url}/Actividades`} >Plan de Proyecto</a>
               </Col>
             </Row>
             <Row className="show-grid" >
