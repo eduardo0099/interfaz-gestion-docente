@@ -1,6 +1,5 @@
 import React from 'react';
-import axios from 'axios';
-import {Table, Grid, Row, Col, Button, Glyphicon, Image, ListGroup, ListGroupItem, Panel} from 'react-bootstrap';
+import {Table, Grid, Row, Col, Button, Glyphicon, ListGroup, ListGroupItem, Panel} from 'react-bootstrap';
 import './../styles/ProfesorPerfilEncuesta.css';
 
 class ProfesorPerfilEncuesta extends React.Component {
@@ -57,6 +56,8 @@ class ProfesorPerfilEncuesta extends React.Component {
                     </Row>
                     <Row>
                         <Col md={12}>
+                            <table className="table table-striped">
+                            </table>
                             <Panel>
                                 <Panel.Heading>
                                     <Panel.Title componentClass="h3"> Comentarios </Panel.Title>
