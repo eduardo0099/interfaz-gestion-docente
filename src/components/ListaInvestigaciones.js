@@ -68,6 +68,12 @@ export class ListaInvestigaciones extends React.Component {
         }
     }
 
+    cambiarIdSel(row){
+        this.setState({
+            selectedId: row.id
+        });
+    }
+
 
 
     render () {
@@ -89,11 +95,9 @@ export class ListaInvestigaciones extends React.Component {
             clickToSelect: true
         };
 
-        const rowEvents = {
+        let rowEvents = {
             onClick: (e, row) => {
-                this.setState({
-                    selectedId: row.id
-                });
+                this.cambiarIdSel(row);
                 //alert(`clicked on row with index: ${this.state.selectedId}`);
             }
         };

@@ -4,6 +4,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Papa from 'papaparse';
 import axios from 'axios';
+import SimpleReactValidator from 'simple-react-validator'
 
 
 class RegistroInvestigación extends Component{
@@ -11,6 +12,7 @@ class RegistroInvestigación extends Component{
 
     constructor(props){
         super(props);
+        this.validator = new SimpleReactValidator();
         this.state={
             titulo: '',
             autor: '',
@@ -91,8 +93,7 @@ class RegistroInvestigación extends Component{
     }
 
     performPostRequest = ()=> {
-        var valido=this.validation();
-        if(valido==1){
+        if( this.validator.allValid() ){
             axios.post('http://200.16.7.151:8080/docente/investigacion/registrar', {
                 titulo: this.state.titulo,
                 autor: this.state.autor,
@@ -107,6 +108,10 @@ class RegistroInvestigación extends Component{
                 .catch(function (error) {
                     alert("Error: No se pudo registrar la investigación");
                 })
+        }else {
+            this.validator.showMessages();
+            // rerender to show messages for the first time
+            this.forceUpdate();
         }
     }
 
@@ -121,17 +126,20 @@ class RegistroInvestigación extends Component{
                 <div class="container">
                     <label class="col-sm-10">
                         Título:
-                        <input type="text" className="form-control" value={this.state.value} onChange={this.handleTitulo}></input>
+                        <input type="text" className="form-control" value={this.state.titulo} onChange={this.handleTitulo}></input>
+                        {this.validator.message('titulo', this.state.titulo, 'required|max:20', false, {required: 'Este campo es obligatorio',max:'El número máximo de caracteres es 20'})}
                         <br></br>
                     </label>
                     <label class="col-sm-10">
                         Autor:
-                        <input type="text" className="form-control" onChange={this.handleAutor}></input>
+                        <input type="text" className="form-control" value={this.state.autor} onChange={this.handleAutor}></input>
+                        {this.validator.message('titulo', this.state.autor, 'required|max:20', false, {required: 'Este campo es obligatorio',max:'El número máximo  de caracteres es 20'})}
                         <br></br>
                     </label>
                     <label class="col-sm-10">
                         Resumen:
-                        <input type="text" className="form-control" onChange={this.handleResumen}></input>
+                        <input type="text" className="form-control" value={this.state.resumen} onChange={this.handleResumen}></input>
+                        {this.validator.message('titulo', this.state.resumen, 'required|max:20', false, {required: 'Este campo es obligatorio',max:'El número máximo  de caracteres es 20'})}
                         <br></br>
                     </label>
                     <label class="col-sm-10">

@@ -25,6 +25,25 @@ class ModificarInvestigacion extends Component{
         this.handleFFin = this.handleFFin.bind(this);
     }
 
+    componentDidMount(){
+        axios.get('http://localhost:8080/docente/docente/investigacion', {
+            params: {
+                id: this.props.match.params.idInvestigacion,
+            }
+        })
+            .then(response =>{
+                console.log(response);
+                this.setState({
+                    titulo: response.data.investigacion.titulo,
+                    autor: response.data.autores[0],
+                    resumen: response.data.investigacion.resumen,
+                });
+            })
+            .catch(error =>{
+                console.log("Error obteniendo la investigacion",error);
+            });
+    }
+
     handleTitulo(event) {
         this.setState({titulo: event.target.value});
     }
@@ -120,17 +139,17 @@ class ModificarInvestigacion extends Component{
                 <div class="container">
                     <label class="col-sm-12">
                         Título:
-                    <input type="text" className="form-control" value={this.state.value} onChange={this.handleTitulo}></input>
+                    <input type="text" className="form-control" value={this.state.titulo} onChange={this.handleTitulo}></input>
                     <br></br>
                     </label>
                     <label class="col-sm-12">
                         Autor:
-                    <input type="text" className="form-control" onChange={this.handleAutor}></input>
+                    <input type="text" className="form-control" value={this.state.autor} onChange={this.handleAutor}></input>
                     <br></br>
                     </label>
                     <label class="col-sm-12">
                         Resumen:
-                    <input type="text" className="form-control" onChange={this.handleResumen}></input>
+                    <input type="text" className="form-control" value={this.state.resumen} onChange={this.handleResumen}></input>
                     <br></br>
                     </label>
                     <label class="col-sm-10">
