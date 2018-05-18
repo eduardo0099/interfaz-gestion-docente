@@ -48,9 +48,9 @@ label {
 
 .btn-primary {
   color: #fff !important;
-  background-color: #0275D8;
-  border-color: #0275D8;
-  background-image: none;
+  background-color: #0275D8 !important;
+  border-color: #0275D8 !important;
+  background-image: none !important;
 }
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active,

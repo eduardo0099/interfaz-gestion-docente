@@ -10,6 +10,8 @@ import ListaInvestigaciones from "./ListaInvestigaciones"
 import SolicitudesEconomicas from "./SolicitudesEconomicas"
 import DescargaHoras from "./DescargaHoras"
 import Actividades from "./Actividades"
+import "../styles/BotonStyle.css";
+import "../styles/HeaderPanel.css";
 
 class DetalleDocente extends Component {
 
@@ -48,56 +50,77 @@ class DetalleDocente extends Component {
       });
   }
 
+  obtenerTipo() {
+    let id = `${this.state.info.descripcion}`;
+    if(id == "TPA"){
+      return "Tiempo Parcial por Asignaturas (TPA)";
+    }
+    else{
+      return "Tiempo Completo (TC)";
+    }
+  }
+
+  obtenerMailTo() {
+    let correo = this.state.info.correo_pucp;
+    return("mailto:"+correo);
+  }
+
   render() {
       console.log(this.props);
     return(
-      <div>
+      <div className="m-t-md">
         <Route exact path={`${this.props.match.path}`} render={() =>
           <Grid>
             <Row className="show-grid">
-              <Col md={1}/>
-              <Col md={1}>
-                <Link to={`${this.props.match.url}/cursos`} >Cursos</Link>
+              <Col md={2}>
+                <a class="btn btn-primary" href={`${this.props.match.url}/cursos`} >Cursos</a>
               </Col>
               <Col md={2}>
-                  <Link to={`${this.props.match.url}/descargaHoras`} >Descarga Horas</Link>
+                <a class="btn btn-primary" href={`${this.props.match.url}/descargaHoras`} >Descarga de Horas</a>
               </Col>
               <Col md={2}>
-                  <Link to={`${this.props.match.url}/encuestas`} >Encuestas</Link>
+                <a class="btn btn-primary" href={`${this.props.match.url}/encuestas`} >Encuestas</a>
               </Col>
               <Col md={2}>
-                <Link to={`${this.props.match.url}/investigaciones`}>Investigaciones</Link>
+                <a class="btn btn-primary" href={`${this.props.match.url}/investigaciones`}>Investigaciones</a>
               </Col>
-                <Col md={2}>
-                    <Link to={`${this.props.match.url}/solicitudesEconomicas`} >Solicitudes Economicas</Link>
-                </Col>
-                <Col md={2}>
-                    <Link to={`${this.props.match.url}/Actividades`} >Plan de proyecto</Link>
-                </Col>
-              <Col md={1}/>
+              <Col md={2}>
+                <a class="btn btn-primary" href={`${this.props.match.url}/solicitudesEconomicas`} >Solicitudes</a>
+              </Col>
+              <Col md={2}>
+                <a class="btn btn-primary" href={`${this.props.match.url}/Actividades`} >Plan de Proyecto</a>
+              </Col>
             </Row>
             <Row className="show-grid" >
-              <Col md={12}>{"  "}</Col>
+              <Col md={12}><br></br></Col>
             </Row>
             <Row className="show-grid">
-              <Col md={1}/>
-              <Col md={10}>
+              <Col md={12}>
                 <Panel bsStyle="primary">
                   <Panel.Heading>
-                    <Panel.Title componentClass="h3">Detalle Docente</Panel.Title>
+                    <Panel.Title componentClass="h3">{`${this.state.info.apellido_paterno} ${this.state.info.apellido_materno}, ${this.state.info.nombres}`}</Panel.Title>
                   </Panel.Heading>
                   <Panel.Body>
                     <Row className="show-grid">
-                      <Col md={8}>
-                        <h4>Codigo: {this.state.info.codigo}</h4>
-                        <h4>Docente: {`${this.state.info.nombres} ${this.state.info.apellido_paterno} ${this.state.info.apellido_materno}`}</h4>
-                        <h4>Tipo: {`${this.state.info.descripcion}`}</h4>
-                        <h4>Telefono: {this.state.info.telefono}</h4>
-                        <h4>Correo: {this.state.info.correo_pucp}</h4>
-                        <h4>Departamento: {this.state.info.departamento}</h4>
-                        <h4>Seccion: {this.state.info.seccion}</h4>
+                      <Col md={1}></Col>
+                      <Col md={3}>
+                        <h4><br></br></h4>
+                        <h4>Código</h4>
+                        <h4-subtitle>{this.state.info.codigo}</h4-subtitle>
+                        <h4>Contacto</h4>
+                        <h4-subtitle> Teléfono: {this.state.info.telefono}<br></br></h4-subtitle>
+                        <h4-subtitle> Correo: {this.state.info.correo_pucp}</h4-subtitle>
+                        <Button href={this.obtenerMailTo()} >Enviar mensaje</Button>
                       </Col>
                       <Col md={4}>
+                        <h4><br></br></h4>
+                        <h4>Tipo</h4>
+                        <h4-subtitle>{this.obtenerTipo()}</h4-subtitle>
+                        <h4>Departamento/Sección</h4>
+                        <h4-subtitle>Departamento de {this.state.info.departamento}<br></br></h4-subtitle>
+                        <h4-subtitle>Sección de {this.state.info.seccion}</h4-subtitle>
+                      </Col>
+                      <Col md={3}>
                         <Image
                           className='avatar'
                           src={this.state.codigo === 1? foto : fotoAnonima }
@@ -106,11 +129,11 @@ class DetalleDocente extends Component {
                           rounded
                         />
                       </Col>
+                       <Col md={1}></Col>
                     </Row>
                   </Panel.Body>
                 </Panel>
               </Col>
-              <Col md={1}/>
             </Row>
           </Grid>
         } />
