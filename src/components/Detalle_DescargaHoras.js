@@ -15,7 +15,7 @@ class Detalle_DescargaHoras extends React.Component{
         }
     }
 
-    
+
 
     render(){
         const columnas=[
