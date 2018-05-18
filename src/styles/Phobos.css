@@ -4481,3 +4481,8 @@ div.pregunta_marco_desempeno:hover{
     border: none;
     box-shadow: none;
 }
+
+.validation-message {
+    color: #E74C3C;
+    margin-top: 5px;
+}

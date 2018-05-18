@@ -4,12 +4,15 @@ import Papa from 'papaparse';
 import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import SimpleReactValidator from "simple-react-validator";
+import moment from "moment"
 
 class ModificarInvestigacion extends Component{
 
 
     constructor(props){
         super(props);
+        this.validator = new SimpleReactValidator();
         this.state={
             titulo: '',
             autor: '',
@@ -37,6 +40,8 @@ class ModificarInvestigacion extends Component{
                     titulo: response.data.investigacion.titulo,
                     autor: response.data.autores[0],
                     resumen: response.data.investigacion.resumen,
+                    fecha_inicio: moment(response.data.investigacion.fecha_inicio),
+                    fecha_fin: moment(response.data.investigacion.fecha_fin)
                 });
             })
             .catch(error =>{
@@ -61,6 +66,7 @@ class ModificarInvestigacion extends Component{
     }
 
     handleFFin(date) {
+        console.log(date);
         this.setState({fecha_fin: date});
     }
 
@@ -82,34 +88,9 @@ class ModificarInvestigacion extends Component{
         console.log(cadena);
     }
 
-    validation(){
-        var valido=1
-        if(this.state.titulo.length == 0){
-            alert("El campo de titulo es obligatorio");
-            valido=0;
-        }
-        if(this.state.autor.length == 0){
-            alert("El campo de autor es obligatorio");
-            valido=0;
-        }
-        if(this.state.resumen.length == 0){
-            alert("El campo de resumen es obligatorio");
-            valido=0;
-        }
-        if(this.state.fecha_inicio == null){
-            alert("El campo de fecha ini es obligatorio");
-            valido=0;
-        }
-        if(this.state.fecha_fin == null){
-            alert("El campo de fecha fin es obligatorio");
-            valido=0;
-        }
-        return valido;
-    }
 
     performPostRequest = ()=> {
-        var valido=this.validation();
-        if(valido==1) {
+        if( this.validator.allValid() ){
             axios.put('http://200.16.7.151:8080/docente/investigacion/actualizar', {
                 id: this.props.match.params.idInvestigacion,
                 titulo: this.state.titulo,
@@ -125,51 +106,62 @@ class ModificarInvestigacion extends Component{
                 .catch(function (error) {
                     alert("Error: No se pudo registrar la investigación");
                 })
+        }else {
+            this.validator.showMessages();
+            // rerender to show messages for the first time
+            this.forceUpdate();
         }
     }
 
     render() {
 
         console.log(this.props.match.params.idInvestigacion);
+        console.log(moment(this.state.fecha_inicio));
         return (
             <div className="container">
                 <PageHeader>
                     Editar Informe
                 </PageHeader>
-                <div class="container">
-                    <label class="col-sm-12">
+                <Grid>
+                    <Row>
                         Título:
-                    <input type="text" className="form-control" value={this.state.titulo} onChange={this.handleTitulo}></input>
-                    <br></br>
-                    </label>
-                    <label class="col-sm-12">
+                        <input type="text" className="form-control" value={this.state.titulo} onChange={this.handleTitulo}></input>
+                        {this.validator.message('titulo', this.state.titulo, 'required|max:100', false, {required: 'Este campo es obligatorio',max:'El número máximo de caracteres es 20'})}
+                        <br></br>
+                    </Row>
+                    <Row>
                         Autor:
-                    <input type="text" className="form-control" value={this.state.autor} onChange={this.handleAutor}></input>
-                    <br></br>
-                    </label>
-                    <label class="col-sm-12">
+                        <input type="text" className="form-control" value={this.state.autor} onChange={this.handleAutor}></input>
+                        {this.validator.message('autor', this.state.autor, 'required|integer', false, {required: 'Este campo es obligatorio'})}
+                        <br></br>
+                    </Row>
+                    <Row>
                         Resumen:
-                    <input type="text" className="form-control" value={this.state.resumen} onChange={this.handleResumen}></input>
-                    <br></br>
-                    </label>
-                    <label class="col-sm-10">
+                        <input type="text" className="form-control" value={this.state.resumen} onChange={this.handleResumen}></input>
+                        {this.validator.message('resumen', this.state.resumen, 'required', false, {required: 'Este campo es obligatorio'})}
+                        <br></br>
+                    </Row>
+                    <Row>
                         Fecha Inicio:
                         <DatePicker
+                            dateFormat="DD/MM/YYYY"
                             selected={this.state.fecha_inicio}
                             onChange={this.handleFIni}
                         />
+                        {this.validator.message('fechaIni', this.state.fecha_inicio, 'required', false, {required: 'Este campo es obligatorio'})}
                         <br></br>
-                    </label>
-                    <label class="col-sm-10">
+                    </Row>
+                    <Row>
                         Fecha Fin:
                         <DatePicker
+                            dateFormat="DD/MM/YYYY"
                             selected={this.state.fecha_fin}
                             onChange={this.handleFFin}
                         />
-                        <label className="col-sm-10"/>
-                    <br></br>
-                    </label>
-                </div>
+                        {this.validator.message('fecha_fin', this.state.fecha_fin, 'required', false, {required: 'Este campo es obligatorio'})}
+                        <br></br>
+                    </Row>
+                </Grid>
                     <Button onClick={this.performPostRequest}>Modificar</Button>
                 <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
                 <Button onClick={this.props.history.goBack}>Cancelar</Button>
