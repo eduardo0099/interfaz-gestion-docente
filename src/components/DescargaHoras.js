@@ -100,7 +100,6 @@ class DescargaHoras extends React.Component{
                             </Col>
                         </Row>
                     </Grid>
-                    <Route path={`${this.props.match.path}/Detalle_DescargaHoras`} component={Detalle_DescargaHoras}/>
                 </div>
         );
     }

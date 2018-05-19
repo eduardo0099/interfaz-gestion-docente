@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import {Grid, Row, Button, Glyphicon, Col} from 'react-bootstrap';
 import axios from "axios/index";
 import BootstrapTable from 'react-bootstrap-table-next';
-import {Route,Link} from 'react-router-dom';
 import Detalle_SolicitudEconomica from "./Detalle_SolicitudEconomica";
+import {Route,Link} from 'react-router-dom';
 
 class SolicitudesEconomicas extends React.Component{
 
@@ -21,6 +21,8 @@ class SolicitudesEconomicas extends React.Component{
             ],
             cicloSelect: "",
             listaCiclos: [],
+            selectedId:-1,
+            verDetalle:false,
         }
     }
 
@@ -52,8 +54,27 @@ class SolicitudesEconomicas extends React.Component{
 
     }
 
+    cambioCiclo = (event) =>{
+        let nuevoCiclo = event.target.value;
+        axios.get('http://200.16.7.151:8080/docente/ayudaEconomica/lista', {
+            params: {
+                codigo: this.props.match.params.codigo,
+                ciclo: nuevoCiclo,
+            }
+        })
+            .then((response) => {
+                this.setState({
+                    ayudas: response.data.ayudas,
+                    cicloSeleccionado: nuevoCiclo
+                })
+            })
+            .catch(error => {
+                console.log(`Error al obtener datos de la pantalla cursos`,error);
+            });
+    };
 
     render(){
+        console.log(this.props);
         const columnas = [
             {text:'Titulo',dataField:'titulo'},
             {text:'Motivo',dataField:'motivo'},
@@ -61,57 +82,65 @@ class SolicitudesEconomicas extends React.Component{
             {text:'Monto',dataField:'monto_otorgado'},
             {text:'Estado',dataField:'estado'}
         ];
-        const selectRow ={
-            mode: 'checkbox',
-            clickToSelect: true,
-            hideSelectColumn: true,
-            bgColor: '#00BFFF'
+
+        const rowEvents = {
+            onClick: (e, row,rowIndex) => {
+                this.setState({
+                    selectedId : rowIndex
+                })
+                alert(`clicked on row with index: ${this.state.selectedId}`);
+            }
         };
 
-        return (
-
+            return (
                 <div>
-                <Grid>
-                    <Row className="back-bar">
-                        <Col md={12}>
-                            <Button onClick={this.props.history.goBack}><Glyphicon glyph="arrow-left"/></Button>
-                            <span
-                                className="professor-name"> Regresar a perfil docente </span>
-                        </Col>
-                    </Row>
-                    <Row><h1>Solicitudes Economicas</h1></Row>
-                    <Row>
-                        <Col md={6}>
-                            <p>Ciclo :
-                                <select ref="selectorCiclos" onChange={this.cambioCiclo}>
-                                    {this.state.listaCiclos.map((item,i)=>{
-                                        return <option key={i} value={item.descripcion}>{item.descripcion}</option>
-                                    })}
-                                </select>
-                            </p>
-                        </Col>
-                        <Col md={6}>
-                            <p>Monto Total(solicitudes aprovadas):
-                            </p>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col md={12}>
-                            <BootstrapTable keyField='id' data={ this.state.ayudas } columns={ columnas } selectRow={selectRow}/>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col md={10}>
-                        </Col>
-                        <Col md={2}>
-                            <Link to={`${this.props.match.url}/Detalle_SolicitudEconomica`}>Detalle</Link>
-                        </Col>
-                    </Row>
-                </Grid>
-                    <Route path={`${this.props.match.path}/Detalle_SolicitudEconomica`} component={Detalle_SolicitudEconomica}/>
+                    <Grid>
+                        <Row className="back-bar">
+                            <Col md={12}>
+                                <Button onClick={this.props.history.goBack}><Glyphicon glyph="arrow-left"/></Button>
+                                <span
+                                    className="professor-name"> Regresar a perfil docente </span>
+                            </Col>
+                        </Row>
+                        <Row><h1>Solicitudes Economicas</h1></Row>
+                        <Row>
+                            <Col md={6}>
+                                <p>Ciclo :
+                                    <select ref="selectorCiclos" onChange={this.cambioCiclo}>
+                                        {this.state.listaCiclos.map((item, i) => {
+                                            return <option key={i} value={item.descripcion}>{item.descripcion}</option>
+                                        })}
+                                    </select>
+                                </p>
+                            </Col>
+                            <Col md={6}>
+                                <p>Monto Total(solicitudes aprovadas):
+                                </p>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col md={12}>
+                                <BootstrapTable keyField='id' rowEvents={rowEvents}
+                                                data={this.state.ayudas} columns={columnas}/>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col md={10}>
+                            </Col>
+                            <Col md={2}>
+                                <td><Button href={`${this.props.match.url}/Detalle_SolicitudEconomica`}>Detalle</Button></td>
+                            </Col>
+                        </Row>
+                    </Grid>
+                    <Route path={`${this.props.match.path}/Detalle_SolicitudEconomica`} render={()=>
+                        <Detalle_SolicitudEconomica motivo = {this.state.ayudas[this.state.selectedId].motivo}
+                                                    monto = {this.state.ayudas[this.state.selectedId].monto_otorgado}
+                                                    fechaSolicitud = {this.state.ayudas[this.state.selectedId].fecha_solicitud}
+                                                    estado = {this.state.ayudas[this.state.selectedId].estado}
+                        />
+                    }/>
                 </div>
-
-        );
+            );
     }
 }
 
