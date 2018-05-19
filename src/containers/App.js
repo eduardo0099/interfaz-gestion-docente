@@ -9,7 +9,7 @@ import Home from "../components/Home";
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import ListaProfesores from "../components/ListaProfesores";
 import CargaDatos from '../components/CargaDatos';
-
+import PreferenciaCursos from '../components/PreferenciaCursos';
 
 class App extends Component {
 
@@ -62,6 +62,7 @@ class App extends Component {
               <Route exact path="/" render={ () => <Home/>} />
               <Route path="/profesores" component={ListaProfesores}/>
               <Route path="/carga" render={ () => <CargaDatos /> }/>
+              <Route path="/preferenciaCursos" component={PreferenciaCursos}/>
               <Route render={()=><div>La pagina que busca, no existe</div>} />
             </Switch>
           </div>
