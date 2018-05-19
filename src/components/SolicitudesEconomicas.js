@@ -95,6 +95,7 @@ class SolicitudesEconomicas extends Component{
                 //alert(`clicked on row with index: ${this.state.selectedId}`);
             }
         };
+
         //Permite bloquear el boton Detalle para obligar al usuario a presionar una solicitud.
         let myComponent;
         if(this.state.selectedId !== -1) {
