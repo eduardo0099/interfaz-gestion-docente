@@ -84,12 +84,12 @@ class RegistroInvestigación extends Component{
                 fecha_fin: this.armarFecha(this.state.fecha_fin._d),
                 archivo:null
             })
-                .then(function (response) {
-                    if(window.confirm("Investigación modificada")){
-                    }
+                .then(response => {
+                    alert("Investigación registrada");
+                    this.props.history.goBack();
                 })
-                .catch(function (error) {
-                    alert("Error: No se pudo modificar la investigación");
+                .catch(error => {
+                    alert("Error: No se pudo registrar la investigación");
                 })
         }else {
             if ( this.state.fecha_fin !== null && this.state.fecha_fin !== null ){
