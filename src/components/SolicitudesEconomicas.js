@@ -22,7 +22,6 @@ class SolicitudesEconomicas extends React.Component{
             cicloSelect: "",
             listaCiclos: [],
             selectedId:-1,
-            verDetalle:false,
         }
     }
 
@@ -82,16 +81,27 @@ class SolicitudesEconomicas extends React.Component{
             {text:'Monto',dataField:'monto_otorgado'},
             {text:'Estado',dataField:'estado'}
         ];
-
+        //Agrega radio buttons a las filas de la tabla, solo permite seleccionar una fila
+        const selectRow = {
+            mode: 'radio',
+            clickToSelect: true
+        };
+        //
         const rowEvents = {
             onClick: (e, row,rowIndex) => {
                 this.setState({
                     selectedId : rowIndex
                 })
-                alert(`clicked on row with index: ${this.state.selectedId}`);
+                //alert(`clicked on row with index: ${this.state.selectedId}`);
             }
         };
-
+        //Permite bloquear el boton Detalle para obligar al usuario a presionar una solicitud.
+        let myComponent;
+        if(this.state.selectedId !== -1) {
+            myComponent = <Button href={`${this.props.match.url}/${this.state.selectedId}/Detalle_SolicitudEconomica`}>Detalle</Button>
+        } else {
+            myComponent = <Button disabled={true}>Detalle</Button>
+        }
             return (
                 <div>
                     <Grid>
@@ -120,7 +130,7 @@ class SolicitudesEconomicas extends React.Component{
                         </Row>
                         <Row>
                             <Col md={12}>
-                                <BootstrapTable keyField='id' rowEvents={rowEvents}
+                                <BootstrapTable keyField='id' rowEvents={rowEvents} selectRow={selectRow}
                                                 data={this.state.ayudas} columns={columnas}/>
                             </Col>
                         </Row>
@@ -128,17 +138,14 @@ class SolicitudesEconomicas extends React.Component{
                             <Col md={10}>
                             </Col>
                             <Col md={2}>
-                                <td><Button href={`${this.props.match.url}/Detalle_SolicitudEconomica`}>Detalle</Button></td>
+                                <td>{myComponent}</td>
                             </Col>
                         </Row>
                     </Grid>
                     <Route path={`${this.props.match.path}/Detalle_SolicitudEconomica`} render={()=>
-                        <Detalle_SolicitudEconomica motivo = {this.state.ayudas[this.state.selectedId].motivo}
-                                                    monto = {this.state.ayudas[this.state.selectedId].monto_otorgado}
-                                                    fechaSolicitud = {this.state.ayudas[this.state.selectedId].fecha_solicitud}
-                                                    estado = {this.state.ayudas[this.state.selectedId].estado}
-                        />
-                    }/>
+                        <Detalle_SolicitudEconomica solicitud = {this.state.ayudas[this.state.selectedId]}
+                        />}
+                    />
                 </div>
             );
     }

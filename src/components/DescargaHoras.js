@@ -9,10 +9,11 @@ class DescargaHoras extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            descargas:[{"nombre":"",
-                        "codigo":"",
-                        "hDescargaTotal":"",
-                        "semana":[]}],
+            descargas:[{nombre:"",
+                        codigo:"",
+                        hDescargaTotal:"",
+                        semana:[]
+            }],
             listaCiclos:[],
             cicloSelect:"",
         }
@@ -46,6 +47,27 @@ class DescargaHoras extends React.Component{
             });
     }
 
+
+    cambioCiclo = (event) =>{
+        let nuevoCiclo = event.target.value;
+        axios.get('http://200.16.7.151:8080/docente/ayudaEconomica/lista', {
+            params: {
+                codigo: this.props.match.params.codigo,
+                ciclo: nuevoCiclo,
+            }
+        })
+            .then((response) => {
+                this.setState({
+                    descargas: response.data.descargas,
+                    cicloSeleccionado: nuevoCiclo
+                })
+            })
+            .catch(error => {
+                console.log(`Error al obtener datos de la pantalla cursos`,error);
+            });
+    };
+
+
     render(){
         const columnas=[
             {text:'Nombre del curso',dataField:'nombre'},
@@ -54,10 +76,8 @@ class DescargaHoras extends React.Component{
         ];
 
         const selectRow ={
-            mode: 'checkbox',
+            mode: 'radio',
             clickToSelect: true,
-            hideSelectColumn: true,
-            bgColor: '#00BFFF'
         };
 
         return(
@@ -75,7 +95,7 @@ class DescargaHoras extends React.Component{
                         <Row>
                             <Col md={12}>
                                 <p>Ciclo :
-                                    <select ref="selectorCiclos" onChange={this.state.cicloSelect}>
+                                    <select ref="selectorCiclos" onChange={this.cambioCiclo}>
                                         {this.state.listaCiclos.map((item, i) => {
                                             return <option key={i} value={item.descripcion}>{item.descripcion}</option>
                                         })}

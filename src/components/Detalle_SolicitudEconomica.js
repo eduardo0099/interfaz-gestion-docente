@@ -6,6 +6,7 @@ import {Route,Link} from 'react-router-dom';
 class Detalle_SolicitudEconomica extends React.Component{
     constructor(props){
         super(props);
+
     }
 
     render(){
@@ -24,7 +25,7 @@ class Detalle_SolicitudEconomica extends React.Component{
                                 </Panel.Heading>
                                 <ListGroup>
                                     <ListGroupItem> <Grid> <Row> <Col md={2}> Motivo: </Col> <Col md={4}> {this.props.motivo } </Col> </Row> </Grid> </ListGroupItem>
-                                    <ListGroupItem> <Grid> <Row> <Col md={2}> Monto: </Col> <Col md={4}> { this.props.monto} </Col> </Row> </Grid> </ListGroupItem>
+                                    <ListGroupItem> <Grid> <Row> <Col md={2}> Monto: </Col> <Col md={4}> { this.props.monto_otorgado} </Col> </Row> </Grid> </ListGroupItem>
                                     <ListGroupItem> <Grid> <Row> <Col md={2}> Fecha de registro: </Col> <Col md={4}>  { this.props.fechaSolicitud} </Col> </Row> </Grid> </ListGroupItem>
                                     <ListGroupItem> <Grid> <Row> <Col md={2}> Estado:  </Col> <Col md={4}> { this.props.estado }  </Col> </Row> </Grid> </ListGroupItem>
                                     <ListGroupItem> <Grid> <Row> <Col md={2}> Fecha de Inicio: </Col> <Col md={4}> </Col> </Row> </Grid> </ListGroupItem>
