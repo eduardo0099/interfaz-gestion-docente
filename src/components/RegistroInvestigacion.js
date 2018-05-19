@@ -4,7 +4,8 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Papa from 'papaparse';
 import axios from 'axios';
-import SimpleReactValidator from 'simple-react-validator'
+import SimpleReactValidator from 'simple-react-validator';
+import moment from "moment";
 
 
 class RegistroInvestigación extends Component{
@@ -64,10 +65,17 @@ class RegistroInvestigación extends Component{
             cadena=cadena+date.getDate();
         }
         console.log(cadena);
+        return cadena;
+    }
+
+    validDates(fFin,fIni){
+        var isafter = moment(fFin._d).isAfter(fIni._d);
+        console.log('fechas validas?:',isafter)
+        return isafter;
     }
 
     performPostRequest = ()=> {
-        if( this.validator.allValid() ){
+        if( this.validator.allValid() && this.validDates(this.state.fecha_fin,this.state.fecha_inicio)){
             axios.post('http://200.16.7.151:8080/docente/investigacion/registrar', {
                 titulo: this.state.titulo,
                 autor: this.state.autor,
@@ -77,12 +85,18 @@ class RegistroInvestigación extends Component{
                 archivo:null
             })
                 .then(function (response) {
-                    alert("Investigación modificada");
+                    if(window.confirm("Investigación modificada")){
+                    }
                 })
                 .catch(function (error) {
                     alert("Error: No se pudo modificar la investigación");
                 })
         }else {
+            if ( this.state.fecha_fin !== null && this.state.fecha_fin !== null ){
+                if (!this.validDates(this.state.fecha_fin,this.state.fecha_inicio)){
+                    alert("La fecha de fin es menor a la fecha de inicio!");
+                }
+            }
             this.validator.showMessages();
             // rerender to show messages for the first time
             this.forceUpdate();

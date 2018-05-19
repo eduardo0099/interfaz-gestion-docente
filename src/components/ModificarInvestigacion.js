@@ -5,7 +5,7 @@ import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import SimpleReactValidator from "simple-react-validator";
-import moment from "moment"
+import moment from "moment";
 
 class ModificarInvestigacion extends Component{
 
@@ -86,11 +86,17 @@ class ModificarInvestigacion extends Component{
             cadena=cadena+date.getDate();
         }
         console.log(cadena);
+        return cadena;
     }
 
+    validDates(fFin,fIni){
+        var isafter = moment(fFin._d).isAfter(fIni._d);
+        console.log('fechas validas?:',isafter)
+        return isafter;
+    }
 
     performPostRequest = ()=> {
-        if( this.validator.allValid() ){
+        if( this.validator.allValid() && this.validDates(this.state.fecha_fin,this.state.fecha_inicio) ){
             axios.put('http://200.16.7.151:8080/docente/investigacion/actualizar', {
                 id: this.props.match.params.idInvestigacion,
                 titulo: this.state.titulo,
@@ -107,6 +113,11 @@ class ModificarInvestigacion extends Component{
                     alert("Error: No se pudo registrar la investigación");
                 })
         }else {
+            if ( this.state.fecha_fin !== null && this.state.fecha_fin !== null ){
+                if (!this.validDates(this.state.fecha_fin,this.state.fecha_inicio)){
+                    alert("La fecha de fin es menor a la fecha de inicio!");
+                }
+            }
             this.validator.showMessages();
             // rerender to show messages for the first time
             this.forceUpdate();

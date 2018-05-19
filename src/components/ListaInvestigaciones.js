@@ -110,7 +110,21 @@ export class ListaInvestigaciones extends React.Component {
 
         const selectRow = {
             mode: 'radio',
-            clickToSelect: true
+            clickToSelect: true,
+            hideSelectColumn: true,
+            bgColor: '#93a3b5',
+            selected:[this.state.selectedId]
+        };
+
+
+        const rowEvents = {
+            onClick: (e, row, rowIndex) => {
+                console.log(rowIndex)
+                console.log(row)
+                this.setState({
+                    selectedId:row.id,
+                })
+            }
         };
 
         let myComponent;
@@ -126,16 +140,6 @@ export class ListaInvestigaciones extends React.Component {
         }else {
             eliminar = <Button disabled={true}>Eliminar</Button>
         }
-
-
-        const rowEvents = {
-            onClick: (e, row) => {
-                console.log(e)
-                this.setState({
-                    selectedId:row.id
-                })
-            }
-        };
 
         console.log(this.props)
 
