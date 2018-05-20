@@ -59,62 +59,59 @@ class SolicitudesEconomicas extends React.Component {
             <div>
                 <BaseContainer>
                     <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
+                        <div className="panel-heading">
+                            <a className="btn btn-default pull-right m-t-md btn-sm" onClick={this.props.history.goBack}> Volver al Perfil </a>
+                            <h2> Solicitudes Económicas </h2>
+                        </div>
+                        <div className="panel-body">
+                            <div className="form-group row col-md-3">
+                                <label> Ciclo </label>
+                                <Select value={this.state.ciclo}
+                                        labelKey="descripcion"
+                                        valueKey="id"
+                                        onChange={this.handleChangeCiclo.bind(this)}
+                                        options={this.state.ciclos}/>
+                            </div>
+                            <table className="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th className="v-middle col-md-1 text-center"> Codigo</th>
+                                    <th className="v-middle col-md-4"> Investigacion</th>
+                                    <th className="v-middle col-md-3"> Motivo</th>
+                                    <th className="v-middle col-md-2 text-center"> Monto</th>
+                                    <th className="v-middle col-md-2 text-center"> Estado</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {
+                                    this.state.ayudas.map(item => {
+                                        return (
+                                            <tr>
+                                                <td className="v-middle text-center">
+                                                    <span className="block text-primary"> 2018-08 </span>
+                                                    <small className="block text-muted"> 19/09/18</small>
+                                                </td>
+                                                <td className="v-middle"> {item.titulo} </td>
+                                                <td className="v-middle"> {item.motivo} </td>
+                                                <td className="v-middle text-center"> S/ {item.monto_otorgado} </td>
+                                                <td className="v-middle text-center">
+                                                    {
+                                                        item.estado === 'Aprobado' ?
+                                                            (<span
+                                                                className="label label-success">  {item.estado}  </span>) :
+                                                            (<span
+                                                                className="label label-warning">  {item.estado}  </span>)
+                                                    }
+                                                </td>
+                                            </tr>
+                                        );
+                                    })
+                                }
+                                </tbody>
+                            </table>
+                        </div>
                         <Grid>
-                            <Row className="back-bar">
-                                <Col md={12}>
-                                    <Button onClick={this.props.history.goBack}><Glyphicon glyph="arrow-left"/></Button>
-                                    <span className="professor-name"> Regresar a perfil docente </span>
-                                </Col>
-                            </Row>
-                            <Row><h1>Solicitudes Economicas</h1></Row>
-                            <Row>
-                                <div className="form-group row col-md-3">
-                                    <label> Ciclo </label>
-                                    <Select value={this.state.ciclo}
-                                            labelKey="descripcion"
-                                            valueKey="id"
-                                            onChange={this.handleChangeCiclo.bind(this)}
-                                            options={this.state.ciclos}/>
-                                </div>
-                                <table className="table table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th className="v-middle col-md-1 text-center"> Codigo</th>
-                                        <th className="v-middle col-md-4"> Investigacion</th>
-                                        <th className="v-middle col-md-3"> Motivo</th>
-                                        <th className="v-middle col-md-2 text-center"> Monto</th>
-                                        <th className="v-middle col-md-2 text-center"> Estado</th>
-                                        <th></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {
-                                        this.state.ayudas.map(item => {
-                                            return (
-                                                <tr>
-                                                    <td className="v-middle text-center">
-                                                        <span className="block text-primary"> 2018-08 </span>
-                                                        <small className="block text-muted"> 19/09/18</small>
-                                                    </td>
-                                                    <td className="v-middle"> {item.titulo} </td>
-                                                    <td className="v-middle"> {item.motivo} </td>
-                                                    <td className="v-middle text-center"> S/ {item.monto_otorgado} </td>
-                                                    <td className="v-middle text-center">
-                                                        {
-                                                            item.estado === 'Aprobado' ?
-                                                                (<span
-                                                                    className="label label-success">  {item.estado}  </span>) :
-                                                                (<span
-                                                                    className="label label-warning">  {item.estado}  </span>)
-                                                        }
-                                                    </td>
-                                                </tr>
-                                            );
-                                        })
-                                    }
-                                    </tbody>
-                                </table>
-                            </Row>
                             <Row>
                                 <Col md={10}>
                                 </Col>

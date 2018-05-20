@@ -61,54 +61,46 @@ class ListaEncuestas extends React.Component {
     };
 
     render() {
-        console.log("Mostrar", this.state.verComentarios);
         if (!this.state.verComentarios) {
             return (
                 <div>
                     <Route exact path={`${this.props.match.path}`} render={() =>
                         <BaseContainer>
                             <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
-                                <Grid>
-                                    <Row className="back-bar">
-                                        <Col md={12}>
-                                            <Button onClick={this.props.history.goBack}><Glyphicon glyph="arrow-left"/></Button>
-                                            <span
-                                                className="professor-name">Volver a perfil docente</span>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col md={12}>
-                                            <table className="table table-striped">
-                                                <thead>
-                                                <tr>
-                                                    <th className="col-md-4">Curso</th>
-                                                    <th className="col-md-4 text-center">Participacion</th>
-                                                    <th className="col-md-4 text-center">Puntaje</th>
-                                                    <th class>Comentarios</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
+                                <div className="panel-heading">
+                                    <a className="btn btn-default pull-right m-t-md" onClick={this.props.history.goBack}> Volver al Perfil </a>
+                                    <h2> Encuestas </h2>
+                                </div>
+                                <div className="panel-body">
+                                    <table className="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th className="col-md-4">Curso</th>
+                                            <th className="col-md-4 text-center">Participacion</th>
+                                            <th className="col-md-4 text-center">Puntaje</th>
+                                            <th className>Comentarios</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
 
-                                                {this.state.listaEncuesta.map((item, i) => {
-                                                    return <tr key={i}>
-                                                        <td className="v-middle">
-                                                            <span className="block text-primary"> {item.curso} </span>
-                                                            <small className="block text-muted"> {item.codigo} </small>
-                                                            <small
-                                                                className="block text-muted"> Horario {item.horario} </small>
-                                                        </td>
-                                                        <td className="v-middle text-center">{item.porcentaje}%</td>
-                                                        <td className="v-middle text-center">{item.puntaje}</td>
-                                                        <td className="v-middle"><Button
-                                                            onClick={() => this.mostarComentarios(i)}>Ver
-                                                            Comentarios</Button></td>
-                                                    </tr>
-                                                })}
-                                                </tbody>
-                                            </table>
-                                        </Col>
-                                    </Row>
-                                </Grid>
+                                        {this.state.listaEncuesta.map((item, i) => {
+                                            return <tr key={i}>
+                                                <td className="v-middle">
+                                                    <span className="block text-primary"> {item.curso} </span>
+                                                    <small className="block text-muted"> {item.codigo} </small>
+                                                    <small
+                                                        className="block text-muted"> Horario {item.horario} </small>
+                                                </td>
+                                                <td className="v-middle text-center">{item.porcentaje}%</td>
+                                                <td className="v-middle text-center">{item.puntaje}</td>
+                                                <td className="v-middle"><Button
+                                                    onClick={() => this.mostarComentarios(i)}>Ver
+                                                    Comentarios</Button></td>
+                                            </tr>
+                                        })}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </BaseContainer>
                     }/>

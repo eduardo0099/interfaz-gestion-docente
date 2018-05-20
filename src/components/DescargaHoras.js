@@ -4,6 +4,7 @@ import axios from "axios/index";
 import Detalle_DescargaHoras from "./Detalle_DescargaHoras";
 import {Route,Link} from 'react-router-dom';
 import BootstrapTable from 'react-bootstrap-table-next';
+import BaseContainer from "./BaseContainer";
 
 class DescargaHoras extends React.Component{
     constructor(props){
@@ -62,7 +63,9 @@ class DescargaHoras extends React.Component{
 
         return(
                 <div>
-                    <Grid>
+                    <BaseContainer>
+                        <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
+                        <Grid>
                         <Row className="back-bar">
                             <Col md={12}>
                                 <Button onClick={this.props.history.goBack}><Glyphicon
@@ -100,6 +103,8 @@ class DescargaHoras extends React.Component{
                             </Col>
                         </Row>
                     </Grid>
+                        </div>
+                    </BaseContainer>
                     <Route path={`${this.props.match.path}/Detalle_DescargaHoras`} component={Detalle_DescargaHoras}/>
                 </div>
         );

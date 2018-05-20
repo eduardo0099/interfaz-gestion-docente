@@ -76,9 +76,9 @@ class ConvocatoriasLista extends Component {
         }
         return (
             <BaseContainer>
-            <div className="panel">
+                <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
                 <div className="panel-heading">
-                    <button className="btn btn-primary pull-right m-t-md"> Nueva </button>
+                    <button className="btn btn-sm btn-primary pull-right m-t-md"> Nueva Convocatoria </button>
                     <h2 style={headerStyle}> Convocatorias </h2>
                 </div>
                 <div className="panel-body">
@@ -86,9 +86,9 @@ class ConvocatoriasLista extends Component {
                     <thead>
                     <tr>
                         <th className="v-middle col-md-1 text-center"> Código</th>
-                        <th className="v-middle col-md-3"> Nombre</th>
+                        <th className="v-middle col-md-4"> Nombre</th>
                         <th className="v-middle col-md-2"> Curso</th>
-                        <th className="v-middle col-md-5"></th>
+                        <th className="v-middle col-md-3"></th>
                         <th className="v-middle col-md-1 text-center"> Estado</th>
                         <th></th>
                     </tr>

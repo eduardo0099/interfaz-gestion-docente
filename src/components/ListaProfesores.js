@@ -31,10 +31,8 @@ class ListaProfesores extends Component {
     }
 
     render() {
-        console.log(this.state);
         return (
             <div>
-
                 <Route exact path={`${this.props.match.path}`} render={() =>
                     <BaseContainer>
                         <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
