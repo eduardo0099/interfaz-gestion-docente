@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Row,Grid,Table,Button,PageHeader} from 'react-bootstrap';
+import {Row,Grid,Table,Button,PageHeader,Col} from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Papa from 'papaparse';
@@ -16,7 +16,7 @@ class RegistroInvestigación extends Component{
         this.validator = new SimpleReactValidator();
         this.state={
             titulo: '',
-            autor: this.props.match.params.codigo,
+            autor: [this.props.match.params.codigo],
             resumen: '',
             fecha_inicio: null,
             fecha_fin: null,
@@ -35,6 +35,7 @@ class RegistroInvestigación extends Component{
 
     handleAutor(event) {
         this.setState({autor: event.target.value});
+        console.log(this.state.autor);
     }
 
     handleResumen(event) {
@@ -113,24 +114,31 @@ class RegistroInvestigación extends Component{
                 </PageHeader>
                 <Grid>
                     <Row>
+                        <Col md={12}>
                         Título:
                         <input type="text" className="form-control" value={this.state.titulo} onChange={this.handleTitulo}></input>
                         {this.validator.message('titulo', this.state.titulo, 'required|max:100', false, {required: 'Este campo es obligatorio',max:'El número máximo de caracteres es 20'})}
                         <br></br>
+                        </Col>
                     </Row>
                     <Row >
+                        <Col md={12}>
                         Autor:
-                        <input type="text" className="form-control" value={this.state.autor} onChange={this.handleAutor}></input>
+                        <input type="text" disabled={true} className="form-control" value={this.state.autor} onChange={this.handleAutor}></input>
                         {this.validator.message('autor', this.state.autor, 'required|integer', false, {required: 'Este campo es obligatorio'})}
                         <br></br>
+                        </Col>
                     </Row>
                     <Row >
+                        <Col md={12}>
                         Resumen:
                         <input type="text" className="form-control" value={this.state.resumen} onChange={this.handleResumen}></input>
                         {this.validator.message('resumen', this.state.resumen, 'required', false, {required: 'Este campo es obligatorio'})}
                         <br></br>
+                        </Col>
                     </Row>
                     <Row>
+                        <Col md={12}>
                         Fecha Inicio:
                         <DatePicker
                             dateFormat="DD/MM/YYYY"
@@ -139,8 +147,10 @@ class RegistroInvestigación extends Component{
                         />
                         {this.validator.message('fechaIni', this.state.fecha_inicio, 'required', false, {required: 'Este campo es obligatorio'})}
                         <br></br>
+                        </Col>
                     </Row>
                     <Row>
+                        <Col md={12}>
                         Fecha Fin:
                         <DatePicker
                             dateFormat="DD/MM/YYYY"
@@ -149,6 +159,7 @@ class RegistroInvestigación extends Component{
                         />
                         {this.validator.message('fechaFin', this.state.fecha_fin, 'required', false, {required: 'Este campo es obligatorio'})}
                         <br></br>
+                        </Col>
                     </Row>
                 </Grid>
                 <Button onClick={this.performPostRequest}>Registrar</Button>

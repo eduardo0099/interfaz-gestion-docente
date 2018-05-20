@@ -77,6 +77,7 @@ export class ListaInvestigaciones extends React.Component {
     eliminar = () =>{
         if (window.confirm('Seguro que deseas eliminar esta investigacion?')) {
             // Save it!
+            let selectedId=this.state.selectedId;
             axios.delete('http://200.16.7.151:8080/docente/investigacion/eliminar', {
                 data:{
                     id:this.state.selectedId
@@ -88,6 +89,12 @@ export class ListaInvestigaciones extends React.Component {
                 .catch(function (error) {
                     alert("Error: No se pudo eliminar la investigación");
                 })
+
+            this.setState({
+                investigaciones: this.state.investigaciones.filter(function(el) {
+                    return el.id !== selectedId;
+                })
+            })
         } else {
             // Do nothing!
         }
