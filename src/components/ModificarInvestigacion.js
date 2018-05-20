@@ -223,13 +223,16 @@ class ModificarInvestigacion extends Component{
     handleShowQuitar() {
         this.setState({ showQuitar: true });
         let listaFiltrada=[]
-
+        let autores= this.state.autor
         axios.get('http://200.16.7.151:8080/general/listaDocente')
             .then(response => {
+                console.log('response:',response.data.docentes);
+                console.log('autores a filtrar:',this.state.autor);
                 listaFiltrada=response.data.docentes;
-                this.state.autor.forEach(function(entry) {
+                autores.forEach(function(entry) {
                     listaFiltrada=listaFiltrada.filter(x => x.codigo == entry)
                 });
+                console.log('quitar filtrados:',listaFiltrada);
                 this.setState(
                     {autoresModal: listaFiltrada}
                 );
