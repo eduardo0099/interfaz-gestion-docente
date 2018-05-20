@@ -72,22 +72,22 @@ class DetalleDocente extends Component {
           <Grid>
             <Row className="show-grid">
               <Col md={2}>
-                <a class="btn btn-primary" href={`${this.props.match.url}/cursos`} >Cursos</a>
+                <a class="btn btn-primary col-md-12" href={`${this.props.match.url}/cursos`} >Cursos</a>
               </Col>
               <Col md={2}>
-                <a class="btn btn-primary" href={`${this.props.match.url}/descargaHoras`} >Descarga de Horas</a>
+                <a class="btn btn-primary col-md-12" href={`${this.props.match.url}/descargaHoras`} >Descarga de Horas</a>
               </Col>
               <Col md={2}>
-                <a class="btn btn-primary" href={`${this.props.match.url}/encuestas`} >Encuestas</a>
+                <a class="btn btn-primary col-md-12" href={`${this.props.match.url}/encuestas`} >Encuestas</a>
               </Col>
               <Col md={2}>
-                <a class="btn btn-primary" href={`${this.props.match.url}/investigaciones`}>Investigaciones</a>
+                <a class="btn btn-primary col-md-12" href={`${this.props.match.url}/investigaciones`}>Investigaciones</a>
               </Col>
               <Col md={2}>
-                <a class="btn btn-primary" href={`${this.props.match.url}/solicitudesEconomicas`} >Solicitudes</a>
+                <a class="btn btn-primary col-md-12" href={`${this.props.match.url}/solicitudesEconomicas`} >Solicitudes</a>
               </Col>
               <Col md={2}>
-                <a class="btn btn-primary" href={`${this.props.match.url}/Actividades`} >Plan de Proyecto</a>
+                <a class="btn btn-primary col-md-12" href={`${this.props.match.url}/Actividades`} >Plan de Proyecto</a>
               </Col>
             </Row>
             <Row className="show-grid" >
@@ -108,8 +108,7 @@ class DetalleDocente extends Component {
                         <h4-subtitle>{this.state.info.codigo}</h4-subtitle>
                         <h4>Contacto</h4>
                         <h4-subtitle> Teléfono: {this.state.info.telefono}<br></br></h4-subtitle>
-                        <h4-subtitle> Correo: {this.state.info.correo_pucp}</h4-subtitle>
-                        <Button href={this.obtenerMailTo()} >Enviar mensaje</Button>
+                          <h4-subtitle> Correo: <a  href={this.obtenerMailTo()} > {this.state.info.correo_pucp} </a></h4-subtitle>
                       </Col>
                       <Col md={4}>
                         <h4><br></br></h4>
