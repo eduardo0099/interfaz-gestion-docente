@@ -1729,3 +1729,8 @@ div.notas {
 }
 
 
+
+.validation-message {
+    color: #E74C3C;
+    margin-top: 5px;
+}

@@ -10,7 +10,6 @@ import ListaInvestigaciones from "./ListaInvestigaciones"
 import SolicitudesEconomicas from "./SolicitudesEconomicas"
 import DescargaHoras from "./DescargaHoras"
 import Actividades from "./Actividades"
-import "../styles/BotonStyle.css";
 import "../styles/HeaderPanel.css";
 
 class DetalleDocente extends Component {
