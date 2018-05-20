@@ -5,7 +5,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import Detalle_SolicitudEconomica from "./Detalle_SolicitudEconomica";
 import {Route,Link} from 'react-router-dom';
 
-class SolicitudesEconomicas extends React.Component{
+class SolicitudesEconomicas extends Component{
 
     constructor(props) {
 
@@ -105,49 +105,50 @@ class SolicitudesEconomicas extends React.Component{
         }
             return (
                 <div>
-                    <Route exact path={`${this.props.match.path}`}  render={()=>
-                        <Grid>
-                            <Row className="back-bar">
-                                <Col md={12}>
-                                    <Button onClick={this.props.history.goBack}><Glyphicon glyph="arrow-left"/></Button>
-                                    <span
-                                        className="professor-name"> Regresar a perfil docente </span>
-                                </Col>
-                            </Row>
-                            <Row><h1>Solicitudes Economicas</h1></Row>
-                            <Row>
-                                <Col md={6}>
-                                    <p>Ciclo :
-                                        <select ref="selectorCiclos" onChange={this.cambioCiclo}>
-                                            {this.state.listaCiclos.map((item, i) => {
-                                                return <option key={i} value={item.descripcion}>{item.descripcion}</option>
-                                            })}
-                                        </select>
-                                    </p>
-                                </Col>
-                                <Col md={6}>
-                                    <p>Monto Total(solicitudes aprovadas):
-                                    </p>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col md={12}>
-                                    <BootstrapTable keyField='id' rowEvents={rowEvents} selectRow={selectRow}
-                                                    data={this.state.ayudas} columns={columnas}/>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col md={10}>
-                                </Col>
-                                <Col md={2}>
-                                    <td>{myComponent}</td>
-                                </Col>
-                            </Row>
-                        </Grid>
+                    <Route exact path={`${this.props.match.path}`} render={() =>
+                      <Grid>
+                        <Row className="back-bar">
+                          <Col md={12}>
+                            <Button onClick={this.props.history.goBack}><Glyphicon glyph="arrow-left"/></Button>
+                            <span
+                              className="professor-name"> Regresar a perfil docente </span>
+                          </Col>
+                        </Row>
+                        <Row><h1>Solicitudes Economicas</h1></Row>
+                        <Row>
+                          <Col md={6}>
+                            <p>Ciclo :
+                              <select ref="selectorCiclos" onChange={this.cambioCiclo}>
+                                {this.state.listaCiclos.map((item, i) => {
+                                  return <option key={i} value={item.descripcion}>{item.descripcion}</option>
+                                })}
+                              </select>
+                            </p>
+                          </Col>
+                          <Col md={6}>
+                            <p>Monto Total(solicitudes aprovadas):
+                            </p>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col md={12}>
+                            <BootstrapTable keyField='id' rowEvents={rowEvents} selectRow={selectRow}
+                                            data={this.state.ayudas} columns={columnas}/>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col md={10}>
+                          </Col>
+                          <Col md={2}>
+                            <td>{myComponent}</td>
+                          </Col>
+                        </Row>
+                      </Grid>
                     }/>
                     <Route path={`${this.props.match.path}/:id`} render={()=>
-                        <Detalle_SolicitudEconomica solicitud={this.state.ayudas[this.state.selectedId]}
-                        />}/>
+                        <Detalle_SolicitudEconomica {...this.state.ayudas[this.state.selectedId]}
+                        />}
+                    />
                 </div>
             );
     }
