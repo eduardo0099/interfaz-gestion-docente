@@ -116,7 +116,7 @@ class ModificarInvestigacion extends Component{
             axios.put('http://200.16.7.151:8080/docente/investigacion/actualizar', {
                 id: this.props.match.params.idInvestigacion,
                 titulo: this.state.titulo,
-                autor: this.state.autor,
+                autor: [this.props.match.params.codigo],
                 resumen: this.state.resumen,
                 fecha_inicio: this.armarFecha(this.state.fecha_inicio._d),
                 fecha_fin: this.armarFecha(this.state.fecha_fin._d),
@@ -147,7 +147,16 @@ class ModificarInvestigacion extends Component{
     }
 
     guardarAgregados() {
-        alert("Profesores agregados");
+        axios.put('http://localhost:8080/docente/investigacion/actualizar/agregarAutores', {
+            id: this.props.match.params.idInvestigacion,
+            autor: this.state.selectedAgregar
+        })
+            .then(response => {
+                alert("Profesores agregados");
+            })
+            .catch(error => {
+                alert("Error: No se pudieron agregar los profesores");
+            })
         this.setState({
             showAgregar: false,
             autor:this.state.autor.concat(this.state.selectedAgregar),
@@ -208,8 +217,17 @@ class ModificarInvestigacion extends Component{
     }
 
     guardarQuitados() { //arreglar y ya esta
-        alert("Profesores quitados");
         console.log("quitados:",this.state.selectedQuitar);
+        axios.put('http://localhost:8080/docente/investigacion/eliminar/eliminarAutores', {
+            id: this.props.match.params.idInvestigacion,
+            autor: this.state.selectedQuitar
+        })
+            .then(response => {
+                alert("Profesores quitados");
+            })
+            .catch(error => {
+                alert("Error: No se pudieron quitar los profesores");
+            })
         let quitados=this.state.selectedQuitar;
         this.setState({
             showQuitar: false,
@@ -222,21 +240,30 @@ class ModificarInvestigacion extends Component{
 
     handleShowQuitar() {
         this.setState({ showQuitar: true });
-        let listaFiltrada=[]
+        let listaFiltrada=new Array();
+        let respuesta=[]
         let autores= this.state.autor
         axios.get('http://200.16.7.151:8080/general/listaDocente')
             .then(response => {
-                console.log('response:',response.data.docentes);
-                console.log('autores a filtrar:',this.state.autor);
-                listaFiltrada=response.data.docentes;
-                autores.forEach(function(entry) {
-                    listaFiltrada=listaFiltrada.filter(x => x.codigo == entry)
+                //console.log('response:',response.data.docentes);
+                //console.log('autores a filtrar:',this.state.autor);
+                respuesta=response.data.docentes;
+                autores.forEach(function(entryAut) {
+                    respuesta.forEach(function(entryResp){
+                        //console.log('============');
+                        //console.log('entryAut:',entryAut);
+                        //console.log('entryResp.codigo:',entryResp.codigo);
+                        if(entryAut==entryResp.codigo){
+                            //console.log('entro:',entryResp.codigo);
+                            listaFiltrada=[...listaFiltrada,entryResp]
+                        }
+                    });
                 });
-                console.log('quitar filtrados:',listaFiltrada);
+                //console.log('quitar filtrados:',listaFiltrada);
                 this.setState(
                     {autoresModal: listaFiltrada}
                 );
-                console.log('prosores:',listaFiltrada)
+                //console.log('prosores:',listaFiltrada)
             })
             .catch(error => {
                 console.log(error);
@@ -295,7 +322,8 @@ class ModificarInvestigacion extends Component{
             clickToSelect: true,
             selected: this.state.selectedQuitar,
             onSelect: this.handleOnSelectQuitar,
-            onSelectAll: this.handleOnSelectAllQuitar
+            onSelectAll: this.handleOnSelectAllQuitar,
+            nonSelectable: [this.props.match.params.codigo]
         };
 
 
