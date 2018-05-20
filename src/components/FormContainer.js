@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-class BaseContainer extends Component {
+class FormContainer extends Component {
 
   render() {
     return (
@@ -8,7 +8,9 @@ class BaseContainer extends Component {
         <section className="hbox stretch">
               <section className="vbox">
                 <section className="scrollable wrapper-lg base-container">
+                  <div className="panel wrapper-md col-md-offset-1 col-md-10">
                     {this.props.children}
+                  </div>
                 </section>
               </section>
         </section>
@@ -19,4 +21,4 @@ class BaseContainer extends Component {
 
 }
 
-export default BaseContainer;
+export default FormContainer;
