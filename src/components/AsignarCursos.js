@@ -71,6 +71,7 @@ class AsignarCursos extends Component {
         id="controlled-tab-example"
       >
         <Tab eventKey={1} title="Consulta de Preferencias">
+
           <BaseContainer>
           <Grid>
             <Col md={12}>
@@ -99,12 +100,15 @@ class AsignarCursos extends Component {
               </Col>
           </Grid>
           </BaseContainer>
+
+          Aqui solo se listan las preferencias
+
         </Tab>
         <Tab eventKey={2} title="Asignacion de cursos">
-          Tab 2 content
+          Asigna
         </Tab>
         <Tab eventKey={3} title="Revision de carga">
-          Tab 3 content
+          Resumen
         </Tab>
       </Tabs>
     );
