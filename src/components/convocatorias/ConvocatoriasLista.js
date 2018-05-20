@@ -87,7 +87,7 @@ class ConvocatoriasLista extends Component {
                     <tr>
                         <th className="v-middle col-md-1 text-center"> Código</th>
                         <th className="v-middle col-md-4"> Nombre</th>
-                        <th className="v-middle col-md-2"> Curso</th>
+                        <th className="v-middle col-md-3"> Curso</th>
                         <th className="v-middle col-md-3"></th>
                         <th className="v-middle col-md-1 text-center"> Estado</th>
                         <th></th>
