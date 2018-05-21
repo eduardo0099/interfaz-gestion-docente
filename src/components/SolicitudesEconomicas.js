@@ -60,7 +60,7 @@ class SolicitudesEconomicas extends React.Component {
                     <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
                         <div className="panel-heading">
                             <a className="btn btn-default pull-right m-t-md btn-sm" onClick={this.props.history.goBack}> Volver al Perfil </a>
-                            <h2> Viktor Kalashnikov <small className="block m-t-sm"> Solicitudes Económicas  </small></h2>
+                            <h2> Solicitudes Económicas </h2>
                         </div>
                         <div className="panel-body">
                             <div className="form-group row col-md-3">
