@@ -1,8 +1,6 @@
 import React from 'react';
-import ReactTable from 'react-table';
-import 'react-table/react-table.css';
-import {Grid, Row, Table, Button, Glyphicon, Col, PageHeader} from 'react-bootstrap';
-import {HashRouter, BrowserRouter, Router, Route, Link} from 'react-router-dom';
+import {Button} from 'react-bootstrap';
+import {Route} from 'react-router-dom';
 import RegistroInvestigacion from "./RegistroInvestigacion"
 import ModificarInvestigacion from "./ModificarInvestigacion"
 import axios from "axios/index";
