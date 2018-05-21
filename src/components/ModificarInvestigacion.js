@@ -46,7 +46,7 @@ class ModificarInvestigacion extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:8080/docente/docente/investigacion', {
+        axios.get('http://200.16.7.151:8080/docente/docente/investigacion', {
             params: {
                 id: this.props.match.params.idInvestigacion,
             }
@@ -148,7 +148,7 @@ class ModificarInvestigacion extends Component {
     }
 
     guardarAgregados() {
-        axios.delete('http://localhost:8080/docente/investigacion/actualizar/agregarAutores', {data:{
+        axios.delete('http://200.16.7.151:8080/docente/investigacion/actualizar/agregarAutores', {data:{
             id: this.props.match.params.idInvestigacion,
             autor: this.state.selectedAgregar
         }})
@@ -217,12 +217,13 @@ class ModificarInvestigacion extends Component {
         this.setState({showQuitar: false});
     }
 
-    guardarQuitados() { //arreglar y ya esta
+    guardarQuitados() {
         console.log("quitados:", this.state.selectedQuitar);
-        axios.put('http://localhost:8080/docente/investigacion/eliminar/eliminarAutores', {
-            id: this.props.match.params.idInvestigacion,
-            autor: this.state.selectedQuitar
-        })
+        axios.delete('http://200.16.7.151:8080/docente/investigacion/eliminar/eliminarAutores', {
+            data:{
+                id: this.props.match.params.idInvestigacion,
+                autor: this.state.selectedQuitar
+            }})
             .then(response => {
                 alert("Profesores quitados");
             })

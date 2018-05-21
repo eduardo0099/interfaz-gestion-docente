@@ -31,17 +31,27 @@ class DetalleDocente extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://200.16.7.151:8080/docente/docente/general', {
-            params: {
-                codigo: this.props.match.params.codigo,
-                ciclo: "2018-1",
-            }
-        }).then(response => {
-            this.setState({info: response.data});
-        }).catch(error => {
-            console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`);
-        });
+      axios.get('http://200.16.7.151:8080/docente/docente/general', {
+        params: {
+          codigo: this.props.match.params.codigo,
+          ciclo: "2018-1",
+        }
+      }).then(response => {
+        this.setState({info: response.data});
+      }).catch(error => {
+        console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`, error);
+      });
     }
+/*
+  obtenerTipo() {
+    let id = `${this.state.info.descripcion}`;
+    if(id == "TPA"){
+      return "Tiempo Parcial por Asignaturas (TPA)";
+    }
+    else{
+      return "Tiempo Completo (TC)";
+    }
+    */
 
     obtenerTipo() {
         let id = `${this.state.info.descripcion}`;

@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
+import {Route} from 'react-router-dom';
 import axios from "axios/index";
 import BaseContainer from "../BaseContainer";
-import {Route} from 'react-router-dom';
-import DetalleConvocatoria from "./DetalleConvocatoria";
-import {Row, Grid, Table, Button, PageHeader, Modal, Popover, Tooltip, OverlayTrigger, Col} from 'react-bootstrap';
+import Cursos from "../Cursos";
+import ConvocatoriaNuevo from "./ConvocatoriasNuevo";
+import ConvocatoriasListaPostulantes from "./ConvocatoriasListaPostulantes";
+
 
 class ConvocatoriasLista extends Component {
 
@@ -74,7 +76,6 @@ class ConvocatoriasLista extends Component {
     }
 
 
-
     render() {
         var headerStyle = {
             color: 'black'
@@ -85,7 +86,7 @@ class ConvocatoriasLista extends Component {
                     <BaseContainer>
                         <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
                             <div className="panel-heading">
-                                <button className="btn btn-sm btn-primary pull-right m-t-md"> Nueva Convocatoria </button>
+                                <a className="btn btn-sm btn-primary pull-right m-t-md" href="/convocatorias/nuevo"> Nueva Convocatoria</a>
                                 <h2 style={headerStyle}> Convocatorias </h2>
                             </div>
                             <div className="panel-body">
@@ -106,7 +107,9 @@ class ConvocatoriasLista extends Component {
                                             return (
                                                 <tr>
                                                     <td className="v-middle text-center">
-                                                        <Button className="block text-primary" href={'/convocatorias/' + item.codigo}> {item.codigo} </Button>
+
+                                                        <span className="block text-primary"> {item.codigo} </span>
+
                                                         <small className="block text-muted"> {item.fechaRegistro} </small>
                                                     </td>
                                                     <td className="v-middle">
@@ -117,7 +120,9 @@ class ConvocatoriasLista extends Component {
                                                         <small className="block text-muted"> {item.curso.codigo} </small>
                                                     </td>
                                                     <td className="v-middle text-center">
-                                                        <p className="badge"> {item.cantidadPostulantes} </p>
+
+                                                        <a className="badge" href="/convocatorias/postulantes"> {item.cantidadPostulantes} </a>
+
                                                         <span className="block small text-muted m-t-xs"> postulantes </span>
                                                     </td>
                                                     <td className="v-middle text-center">
@@ -136,7 +141,10 @@ class ConvocatoriasLista extends Component {
                         </div>
                     </BaseContainer>
                 }/>
-                <Route path={`${this.props.match.path}/:codigoConv`} component={DetalleConvocatoria}/>
+
+                <Route path={`${this.props.match.path}/nuevo`} component={ConvocatoriaNuevo}/>
+                <Route path={`${this.props.match.path}/postulantes`} component={ConvocatoriasListaPostulantes}/>
+
             </div>
         );
     }
