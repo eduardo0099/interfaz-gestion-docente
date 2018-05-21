@@ -148,10 +148,10 @@ class ModificarInvestigacion extends Component {
     }
 
     guardarAgregados() {
-        axios.put('http://localhost:8080/docente/investigacion/actualizar/agregarAutores', {
+        axios.delete('http://localhost:8080/docente/investigacion/actualizar/agregarAutores', {data:{
             id: this.props.match.params.idInvestigacion,
             autor: this.state.selectedAgregar
-        })
+        }})
             .then(response => {
                 alert("Profesores agregados");
             })
