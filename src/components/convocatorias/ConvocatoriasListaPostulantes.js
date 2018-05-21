@@ -8,7 +8,11 @@ import ConvocatoriaNuevo from "./ConvocatoriasNuevo";
 class ConvocatoriasListaPostulantes extends Component {
 
     state: {
-        convocatorias: []
+        nombre:'',
+        fechaLimite:'',
+        cantPostulantes:'',
+        cantAceptados:'',
+        postulantes: []
     }
 
     componentWillMount() {
@@ -17,14 +21,27 @@ class ConvocatoriasListaPostulantes extends Component {
     }
 
     search() {
-        axios.get('http://200.16.7.151:8080/convocatoria/lista')
+        axios.get('http://200.16.7.151:8080/convocatoria/general', {
+            params: {
+                codigo: this.props.match.params.codigoConv,
+            }
+        })
             .then(response => {
-                this.setState({convocatorias: response.data});
+                this.setState({
+                    nombre: response.data.nombre,
+                    fechaLimite: response.data.fechaLimite,
+                    cantPostulantes: response.data.cantPostulantes,
+                    cantAceptados: response.data.cantAceptados,
+                    postulantes: response.data});
             })
     }
 
     offlineSearch() {
         this.setState({
+            nombre: 'Convocatoria de Asistente de Docencia - Sistemas Operativos',
+            fechaLimite: '20/08/12',
+            cantPostulantes: 2,
+            cantAceptados: 1,
             postulantes: [
                 {
                     id: '1',
@@ -85,9 +102,21 @@ class ConvocatoriasListaPostulantes extends Component {
                     <BaseContainer>
                         <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
                             <div className="panel-heading">
-                                <h2> Postulantes </h2>
+                                <h2> {this.state.nombre} </h2>
                             </div>
                             <div className="panel-body">
+                                <div className="col-md-offset-0 col-md-4">
+                                    <h5> Fecha límite de Postulación: </h5>
+                                    <h5> Cantidad de postulantes: </h5>
+                                    <h5> Cantidad de postulantes aceptados: </h5>
+                                    <h5></h5>
+                                </div>
+                                <div className="col-md-5">
+                                    <h5> {this.state.fechaLimite} </h5>
+                                    <h5> {this.state.cantPostulantes} </h5>
+                                    <h5> {this.state.cantAceptados} </h5>
+                                    <h5></h5>
+                                </div>
                                 <table className="table table-striped">
                                     <thead>
                                     <tr>
