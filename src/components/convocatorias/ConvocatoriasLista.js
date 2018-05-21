@@ -65,6 +65,8 @@ class ConvocatoriasLista extends Component {
                 return <span class="label label-danger"> Cancelado </span>;
             case 'Finalizada':
                 return <span class="label label-success"> Finalizado </span>;
+            default:
+                return <span></span>;
         }
     }
 

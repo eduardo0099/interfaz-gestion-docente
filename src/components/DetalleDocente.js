@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Route, Link} from 'react-router-dom';
+import {Route} from 'react-router-dom';
 import fotoAnonima from '../resources/images/anonimo.png';
 import axios from "axios/index";
 import Cursos from "./Cursos";

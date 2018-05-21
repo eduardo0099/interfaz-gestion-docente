@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Grid, Row, Button, Glyphicon, Col, SplitButton, MenuItem} from 'react-bootstrap';
 import axios from "axios/index";
 import {Route, Link} from 'react-router-dom';

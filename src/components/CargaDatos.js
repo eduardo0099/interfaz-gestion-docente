@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Table, Button, PageHeader} from 'react-bootstrap';
+import {Button} from 'react-bootstrap';
 import Papa from 'papaparse';
 import axios from 'axios';
 import BaseContainer from "./BaseContainer";

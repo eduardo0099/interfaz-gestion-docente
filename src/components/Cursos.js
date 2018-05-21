@@ -117,12 +117,18 @@ export class Cursos extends React.Component {
             <div>
                 <BaseContainer>
                     <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
+                        <div className="panel-heading">
+                            <a className="btn btn-default pull-right m-t-md" onClick={this.props.history.goBack}> Volver al Perfil </a>
+                            <h2> Cursos </h2>
+                        </div>
+                        <div className="panel-body">
                         <select ref="selectorCiclos" onChange={this.cambioCiclo}>
                             {this.state.ciclos.map((item, i) => {
                                 return <option key={i} value={item.descripcion}>{item.descripcion}</option>
                             })}
                         </select>
                         <BootstrapTable keyField='id' data={listaCursos} columns={columnas}/>
+                        </div>
                     </div>
                 </BaseContainer>
             </div>

@@ -2,7 +2,7 @@ import React from 'react';
 import axios from "axios/index";
 import Select from 'react-select';
 import {Link, Route} from 'react-router-dom';
-import {Button, Col, Glyphicon, Grid, Row} from 'react-bootstrap';
+import {Col, Grid, Row} from 'react-bootstrap';
 import Detalle_SolicitudEconomica from "./Detalle_SolicitudEconomica";
 import BaseContainer from "./BaseContainer";
 
