@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
-import {Panel, Image, Col, Grid, Row, Button} from 'react-bootstrap';
-import foto from '../resources/images/1.PNG';
-import fotoAnonima from '../resources/images/anonimo.png';
 import {Route, Link} from 'react-router-dom';
+import fotoAnonima from '../resources/images/anonimo.png';
 import axios from "axios/index";
 import Cursos from "./Cursos";
 import ListasEncuestas from "./ListaEncuestas";
@@ -10,11 +8,8 @@ import ListaInvestigaciones from "./ListaInvestigaciones"
 import SolicitudesEconomicas from "./SolicitudesEconomicas"
 import DescargaHoras from "./DescargaHoras"
 import Actividades from "./Actividades"
-import FormContainer from "./FormContainer"
-
-import "../styles/HeaderPanel.css";
-import SmallFormContainer from "./SmallFormContainer";
 import BaseContainer from "./BaseContainer";
+import {Image} from 'react-bootstrap';
 
 class DetalleDocente extends Component {
 
@@ -35,27 +30,22 @@ class DetalleDocente extends Component {
         }
     }
 
-
     componentDidMount() {
         axios.get('http://200.16.7.151:8080/docente/docente/general', {
             params: {
                 codigo: this.props.match.params.codigo,
                 ciclo: "2018-1",
             }
-        })
-            .then(response => {
-                this.setState({
-                    info: response.data
-                });
-            })
-            .catch(error => {
-                console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`, error);
-            });
+        }).then(response => {
+            this.setState({info: response.data});
+        }).catch(error => {
+            console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`);
+        });
     }
 
     obtenerTipo() {
         let id = `${this.state.info.descripcion}`;
-        if (id == "TPA") {
+        if (id === "TPA") {
             return <span> Tiempo Parcial por Asignaturas <span className="label label-primary"> TPA </span> </span>;
         }
         else {
@@ -64,43 +54,34 @@ class DetalleDocente extends Component {
     }
 
     obtenerMailTo() {
-        let correo = this.state.info.correo_pucp;
-        return ("mailto:" + correo);
+        return ("mailto:" + this.state.info.correo_pucp);
     }
 
     render() {
-        console.log(this.props);
         return (
             <div className="m-t-md">
                 <Route exact path={`${this.props.match.path}`} render={() =>
                     <BaseContainer>
                         <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
-                            <div>
+                            <div className="m-t-sm">
                                 <div class="col-md-2">
                                     <a className="btn btn-primary col-md-12"
                                        href={`${this.props.match.url}/cursos`}>Cursos</a>
                                 </div>
                                 <div class="col-md-2">
-                                    <a className="btn btn-primary col-md-12"
-                                       href={`${this.props.match.url}/descargaHoras`}>Descarga
-                                        de Horas</a>
+                                    <a className="btn btn-primary col-md-12" href={`${this.props.match.url}/descargaHoras`}>Descarga de Horas</a>
                                 </div>
                                 <div class="col-md-2">
-                                    <a className="btn btn-primary col-md-12"
-                                       href={`${this.props.match.url}/encuestas`}>Encuestas</a>
+                                    <a className="btn btn-primary col-md-12" href={`${this.props.match.url}/encuestas`}>Encuestas</a>
                                 </div>
                                 <div class="col-md-2">
-                                    <a className="btn btn-primary col-md-12"
-                                       href={`${this.props.match.url}/investigaciones`}>Investigaciones</a>
+                                    <a className="btn btn-primary col-md-12" href={`${this.props.match.url}/investigaciones`}>Investigaciones</a>
                                 </div>
                                 <div class="col-md-2">
-                                    <a className="btn btn-primary col-md-12"
-                                       href={`${this.props.match.url}/solicitudesEconomicas`}>Solicitudes</a>
+                                    <a className="btn btn-primary col-md-12" href={`${this.props.match.url}/solicitudesEconomicas`}>Solicitudes</a>
                                 </div>
                                 <div class="col-md-2">
-                                    <a className="btn btn-primary col-md-12"
-                                       href={`${this.props.match.url}/Actividades`}>Plan
-                                        de Proyecto</a>
+                                    <a className="btn btn-primary col-md-12" href={`${this.props.match.url}/Actividades`}>Plan de Proyecto</a>
                                 </div>
                             </div>
                             <div class="col-md-12 m-t-lg">
@@ -111,22 +92,20 @@ class DetalleDocente extends Component {
                                     <div class="panel-body panel-perfil-profesor">
                                         <div class="col-md-offset-1 col-md-3">
                                             <h4> Código </h4>
-                                            <span> {this.state.info.codigo} </span>
-                                            <h4> Contacto </h4>
+                                            <span className="block"> {this.state.info.codigo} </span>
+                                            <h4 className="block m-t-lg"> Contacto </h4>
                                             <span className="block"> Teléfono: {this.state.info.telefono} </span>
-                                            <span className="block m-t-xs"> Correo: <a
-                                                href={this.obtenerMailTo()}> {this.state.info.correo_pucp} </a> </span>
+                                            <span className="block m-t-xs"> Correo: <a href={this.obtenerMailTo()}> {this.state.info.correo_pucp} </a> </span>
                                         </div>
                                         <div className="col-md-4">
-                                            <h4>Tipo</h4>
+                                            <h4> Tipo </h4>
                                             <span className="block">{this.obtenerTipo()}</span>
-                                            <h4>Departamento/Sección</h4>
-                                            <span
-                                                className="block">Departamento de {this.state.info.departamento}</span>
-                                            <span
-                                                className="block m-t-xs">Sección de {this.state.info.seccion}</span>
+                                            <h4> Departamento/Sección </h4>
+                                            <span className="block">Departamento de {this.state.info.departamento}</span>
+                                            <span className="block m-t-xs">Sección de {this.state.info.seccion}</span>
                                         </div>
                                         <div className="col-md-3">
+                                            <Image src={fotoAnonima} circle/>
                                         </div>
                                     </div>
                                 </div>
@@ -141,10 +120,9 @@ class DetalleDocente extends Component {
                 <Route path={`${this.props.match.path}/solicitudesEconomicas`} component={SolicitudesEconomicas}/>
                 <Route path={`${this.props.match.path}/descargaHoras`} component={DescargaHoras}/>
                 <Route path={`${this.props.match.path}/actividades`} component={Actividades}/>
+
             </div>
-
         );
-
     }
 }
 

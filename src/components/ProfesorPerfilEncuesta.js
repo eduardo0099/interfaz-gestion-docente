@@ -4,11 +4,6 @@ import './../styles/ProfesorPerfilEncuesta.css';
 
 class ProfesorPerfilEncuesta extends React.Component {
 
-    constructor(props){
-        super(props);
-    }
-
-
   render() {
         console.log('Renderizando tabla');
         console.log(JSON.stringify(this.props, null, 2));
