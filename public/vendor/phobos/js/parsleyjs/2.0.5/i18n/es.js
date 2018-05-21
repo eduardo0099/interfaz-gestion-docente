@@ -1,0 +1,34 @@
+// ParsleyConfig definition if not already set
+window.ParsleyConfig = window.ParsleyConfig || {};
+window.ParsleyConfig.i18n = window.ParsleyConfig.i18n || {};
+window.ParsleyConfig.i18n.es = $.extend(window.ParsleyConfig.i18n.es || {}, {
+    defaultMessage: "Este valor parece ser inválido.",
+    type: {
+        email: "Este valor debe ser un correo válido.",
+        url: "Este valor debe ser una URL válida.",
+        number: "Este valor debe ser un número válido.",
+        integer: "Este valor debe ser un número válido.",
+        digits: "Este valor debe ser un dígito válido.",
+        alphanum: "Este valor debe ser alfanumérico."
+    },
+    notblank: "Este valor no debe estar en blanco.",
+    required: "Este valor es requerido.",
+    pattern: "Este valor es incorrecto.",
+    min: "Este valor no debe ser menor que %s.",
+    max: "Este valor no debe ser mayor que %s.",
+    range: "Este valor debe estar entre %s y %s.",
+    minlength: "Este valor es muy corto. La longitud mínima es de %s caracteres.",
+    maxlength: "Este valor es muy largo. La longitud máxima es de %s caracteres.",
+    length: "La longitud de este valor debe estar entre %s y %s caracteres.",
+    mincheck: "Debe seleccionar al menos %s opciones.",
+    maxcheck: "Debe seleccionar %s opciones o menos.",
+    rangecheck: "Debe seleccionar entre %s y %s opciones.",
+    equalto: "Este valor debe ser idéntico.",
+    gt: "Este valor debe ser mayor que %s",
+    gte: "Este valor debe ser mayor o igual que %s",
+    lt: "Este valor deberia ser menor que %s",
+    lte: "Este valor deberia ser menor o igual que %s"
+});
+// If file is loaded after Parsley main file, auto-load locale
+if ('undefined' !== typeof window.ParsleyValidator)
+    window.ParsleyValidator.addCatalog('es', window.ParsleyConfig.i18n.es, true);

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Table,Button,PageHeader} from 'react-bootstrap';
 //import Papa from 'papaparse';
-//import axios from 'axios';
+import axios from 'axios';
 import '../styles/RegistroDocente.css';
 
 class RegistroActividad extends Component{
@@ -49,22 +49,16 @@ class RegistroActividad extends Component{
         return (
             <div className="container">
                 <PageHeader>
-                    Registro de docente
+                    Registro de Actividad
                 </PageHeader>
                 <div class="container">
                     <input type="text" className="form-control" placeholder="Nombre de la actividad"></input>
                     <br></br>
-                    <input type="text" className="form-control" placeholder="Apellido materno del docente"></input>
+                    <input type="text" className="form-control" placeholder="Tipo de Actividad"></input>
                     <br></br>
-                    <input type="text" className="form-control" placeholder="Nombres del docente"></input>
+                    <input type="text" className="form-control" placeholder="Fecha Inicio"></input>
                     <br></br>
-                    <input type="text" className="form-control" placeholder="Teléfono del docente" className="form-control"></input>
-                    <br></br>
-                    <input type="text" className="form-control" placeholder="Correo electrónico del docente" className="form-control"></input>
-                    <br></br>
-                    <input type="text" className="form-control" placeholder="Sección del docente" className="form-control"></input>
-                    <br></br>
-                    <input type="text" className="form-control" placeholder="Departamento del docente" className="form-control"></input>
+                    <input type="text" className="form-control" placeholder="Fecha Fin" className="form-control"></input>
                     <br></br>
                 </div>
                 <div class="centro">
