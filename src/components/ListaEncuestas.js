@@ -1,6 +1,6 @@
 import React from 'react';
 import {Route} from 'react-router-dom';
-import {Grid, Row, Table, Button, Glyphicon, Col} from 'react-bootstrap';
+import {Button} from 'react-bootstrap';
 import axios from "axios/index";
 import ProfesorPerfilEncuesta from "./ProfesorPerfilEncuesta";
 import BaseContainer from "./BaseContainer";
