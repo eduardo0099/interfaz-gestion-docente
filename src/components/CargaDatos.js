@@ -25,7 +25,7 @@ class CargaDatos extends Component{
     console.log(results.data);
     console.log(JSON.stringify(results.data,null,2));
 
-    axios.post('http://localhost:8080/carga/cargaDatos',results)
+    axios.post('http://200.16.7.151:8080/carga/cargaDatos',results)
       .then(function (response) {
         alert("Carga de datos completa");
         //console.log(response);
