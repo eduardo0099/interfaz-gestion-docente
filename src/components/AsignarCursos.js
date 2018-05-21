@@ -22,9 +22,9 @@ class AsignarCursos extends Component {
               ciclo2:"no"//Hace referencia a la segunda parte del año
           }]
       }],
-        listaSecciones:[{id:"1",descripcion:"Economia"},
-            {id:"2",descripcion:"Estudios Generales Letras"},
-            {id:"3",descripcion:"Ciencias e Ingenieria"}],
+        listaSecciones:[{id:"1",descripcion:"Todas"},{id:"2",descripcion:"Economia"},
+            {id:"3",descripcion:"Estudios Generales Letras"},
+            {id:"4",descripcion:"Ciencias e Ingenieria"}],
       key: 1,
         listaProfesores:[],
     };
@@ -79,13 +79,25 @@ class AsignarCursos extends Component {
     return lista;
   };
 
-  cambioSeccion = (event) =>{
-      let seccionSelect = event.target.value;
-
+  cambioSeccion = (e,lista) =>{
+          lista=[{
+              codigo:"123",
+              seccion:"Economia",
+              nombreCurso:"Locura",
+              claseCurso:"obligatoria",//obligatorio y elctivo
+              profesorPreferencia:[{
+                  codigo:"445",
+                  nombre:"jose perez",
+                  tipo:"TC",
+                  ciclo1:"si",//Hace referencia a la primera parte del año
+                  ciclo2:"no"//Hace referencia a la segunda parte del año
+              }]
+      }]
   };
 
 
   render(){
+
     const columnasPreferencias = [
         {text:'Codigo',dataField:'codigo'},
         {text:'Seccion',dataField:'seccion'},
@@ -114,7 +126,8 @@ class AsignarCursos extends Component {
                             Seccion:
                         </Col>
                       <Col sm={3}>
-                        <FormControl componentClass="select" placeholder="select" ref="selectorSeccion" onChange={this.cambioSeccion}>
+                        <FormControl componentClass="select" placeholder="select" ref="selectorSeccion" onChange={this.cambioSeccion.bind(lista())}
+                                     inputRef={ el => this.inputEl=el }>
                             {this.state.listaSecciones.map((item, i) => {
                                 return <option key={i} value={item.descripcion}>{item.descripcion}</option>
                             })}
