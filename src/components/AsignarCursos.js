@@ -234,6 +234,7 @@ class AsignarCursos extends Component {
 
     return (
       <BaseContainer>
+                <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
       <Tabs
         activeKey={this.state.key}
         onSelect={this.handleSelect}
@@ -398,6 +399,7 @@ class AsignarCursos extends Component {
           Resumen
         </Tab>
       </Tabs>
+      </div>
       </BaseContainer>
     );
   }
