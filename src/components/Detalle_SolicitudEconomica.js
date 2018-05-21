@@ -20,19 +20,12 @@ class Detalle_SolicitudEconomica extends Component{
                                 <Panel.Heading>
                                     <Panel.Title componentClass="h3"> Informacion Principal: </Panel.Title>
                                 </Panel.Heading>
-                                    {this.props.solicitud.map( item => {
-                                        return <tr>(<div>
                                             <ListGroup>
-                                                <ListGroupItem> <Grid> <Row> <Col md={2}> Motivo: </Col> <Col md={4}> {item.motivo } </Col> </Row> </Grid> </ListGroupItem>
-                                                <ListGroupItem> <Grid> <Row> <Col md={2}> Monto: </Col> <Col md={4}> { item.monto_otorgado} </Col> </Row> </Grid> </ListGroupItem>
-                                                <ListGroupItem> <Grid> <Row> <Col md={2}> Fecha de registro: </Col> <Col md={4}>  { item.fechaSolicitud} </Col> </Row> </Grid> </ListGroupItem>
-                                                <ListGroupItem> <Grid> <Row> <Col md={2}> Estado:  </Col> <Col md={4}> { item.estado }  </Col> </Row> </Grid> </ListGroupItem>
-                                                <ListGroupItem> <Grid> <Row> <Col md={2}> Fecha de Inicio: </Col> <Col md={4}> </Col> </Row> </Grid> </ListGroupItem>
-                                                <ListGroupItem> <Grid> <Row> <Col md={2}> Fecha de Fin: </Col> <Col md={4}>  </Col> </Row> </Grid> </ListGroupItem>
-                                                <ListGroupItem> <Grid> <Row> <Col md={2}> Comentarios Adicionales: </Col> <Col md={4}> </Col> </Row> </Grid> </ListGroupItem>
+                                                <ListGroupItem> <Grid> <Row> <Col md={2}> Motivo: </Col> <Col md={4}> {this.props.motivo } </Col> </Row> </Grid> </ListGroupItem>
+                                                <ListGroupItem> <Grid> <Row> <Col md={2}> Monto: </Col> <Col md={4}> { this.props.monto_otorgado} </Col> </Row> </Grid> </ListGroupItem>
+                                                <ListGroupItem> <Grid> <Row> <Col md={2}> Fecha de registro: </Col> <Col md={4}>  { this.props.fecha_solicitud} </Col> </Row> </Grid> </ListGroupItem>
+                                                <ListGroupItem> <Grid> <Row> <Col md={2}> Estado:  </Col> <Col md={4}> { this.props.estado }  </Col> </Row> </Grid> </ListGroupItem>
                                             </ListGroup>
-                                        </div>)</tr>;
-                                    })}
                             </panel>
                         </Col>
                     </Row>

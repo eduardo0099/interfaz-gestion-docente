@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Tabs,Tab,Col,FormGroup,ControlLabel,FormControl,Grid,Form} from 'react-bootstrap';
 import BaseContainer from "./BaseContainer";
 import BootstrapTable from 'react-bootstrap-table-next';
+import axios from "axios/index";
 
 class AsignarCursos extends Component {
   constructor(props){
@@ -21,49 +22,81 @@ class AsignarCursos extends Component {
               ciclo2:"no"//Hace referencia a la segunda parte del año
           }]
       }],
-        listaSecciones:[{id:"1",descripcion:"FCI"},
-            {id:"2",descripcion:"EEGGLL"}],
-      key: 1
+        listaSecciones:[{id:"1",descripcion:"Economia"},
+            {id:"2",descripcion:"Estudios Generales Letras"},
+            {id:"3",descripcion:"Ciencias e Ingenieria"}],
+      key: 1,
+        listaProfesores:[],
     };
   }
 
-  componentDidMount(){
 
-
-  }
-
+    componentDidMount(){
+        axios.get('https://demo4106552.mockable.io/asignacionHorarios/consultaPreferencias')
+            .then(response => {
+                this.setState({
+                    cursos: response.data.cursos
+                });
+            })
+            .catch(error => {
+                console.log(`Error al obtener datos de la pantalla asignacion de cursos`,error);
+            });
+    }
 
   handleSelect = key => {
     this.setState({ key });
   };
 
-  creaLista  = () =>{
+  creaLista  = ( ) =>{
     let lista = [];
     for(let i=0;i<this.state.cursos.length;i++){
         let obj = {};
         obj.codigo = this.state.cursos[i].codigo;
         obj.seccion = this.state.cursos[i].seccion;
         obj.nombreCurso = this.state.cursos[i].nombreCurso;
-        for(let j=0;j<this.state.cursos[i].profesorPreferencia.length;j++){
-            obj.nombre = this.state.cursos[i].profesorPreferencia[j].nombre;
-            obj.ciclo1 = this.state.cursos[i].profesorPreferencia[j].ciclo1;
-            obj.ciclo2 = this.state.cursos[i].profesorPreferencia[j].ciclo2;
+        obj.claseCurso = this.state.cursos[i].claseCurso;
+        if(this.state.cursos[i].profesorPreferencia.length)
+            for(let j=0;j<this.state.cursos[i].profesorPreferencia.length;j++){
+                obj.nombre = this.state.cursos[i].profesorPreferencia[j].nombre;
+                obj.tipo = this.state.cursos[i].profesorPreferencia[j].tipo;
+                if(this.state.cursos[i].profesorPreferencia[j].ciclo1 == true)
+                    obj.ciclo1 = "inscrito";
+                else
+                    obj.ciclo1 = "";
+                if(this.state.cursos[i].profesorPreferencia[j].ciclo2 == true)
+                    obj.ciclo2 = "inscrito";
+                else
+                    obj.ciclo2 = "";
+                lista.push(obj);
+            }
+        else {
+            obj.nombre = "";
+            obj.ciclo1 = "";
+            obj.ciclo2 = "";
             lista.push(obj);
         }
-
     }
     return lista;
   };
+
+  cambioSeccion = (event) =>{
+      let seccionSelect = event.target.value;
+
+  };
+
+
   render(){
     const columnasPreferencias = [
         {text:'Codigo',dataField:'codigo'},
-        {text:'Seccio',dataField:'seccion'},
+        {text:'Seccion',dataField:'seccion'},
         {text:'Curso',dataField:'nombreCurso'},
-        {text:'Profesor',dataField:'profesorPreferencia'},
-        {text:'Ciclo1',dataField:'ciclo1'},
-        {text:'Ciclo2',dataField:'ciclo2'}
+        {text:'Clase',dataField:'claseCurso'},
+        {text:'Profesor',dataField:'nombre'},
+        {text:'Tipo',dataField:'tipo'},
+        {text:'Ciclo_1',dataField:'ciclo1'},
+        {text:'Ciclo_2',dataField:'ciclo2'}
     ];
-    const lista=this.creaLista;
+    const lista = this.creaLista;
     return (
       <Tabs
         activeKey={this.state.key}
@@ -81,9 +114,10 @@ class AsignarCursos extends Component {
                             Seccion:
                         </Col>
                       <Col sm={3}>
-                        <FormControl componentClass="select" placeholder="select">
-                            <option value="select">select</option>
-                            <option value="other">...</option>
+                        <FormControl componentClass="select" placeholder="select" ref="selectorSeccion" onChange={this.cambioSeccion}>
+                            {this.state.listaSecciones.map((item, i) => {
+                                return <option key={i} value={item.descripcion}>{item.descripcion}</option>
+                            })}
                         </FormControl>
                       </Col>
                         <Col sm={4}>
@@ -96,12 +130,11 @@ class AsignarCursos extends Component {
               </Form>
             </Col>
               <Col md={12}>
-                  <BootstrapTable keyField='id' data={lista} columns={columnasPreferencias}/>
+                  <BootstrapTable keyField='id' data={lista()} columns={columnasPreferencias}/>
               </Col>
           </Grid>
           </BaseContainer>
 
-          Aqui solo se listan las preferencias
 
         </Tab>
         <Tab eventKey={2} title="Asignacion de cursos">
