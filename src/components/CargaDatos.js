@@ -1,18 +1,17 @@
-import React, { Component } from 'react';
-import {Table,Button,PageHeader} from 'react-bootstrap';
+import React, {Component} from 'react';
+import {Button} from 'react-bootstrap';
 import Papa from 'papaparse';
 import axios from 'axios';
+import BaseContainer from "./BaseContainer";
 
-class CargaDatos extends Component{
+class CargaDatos extends Component {
 
-
-  constructor(props){
+  constructor(props) {
     super(props);
-
     this.state = {
       cantidadFilas: 1
     }
-  }
+  };
 
   obtenerTipoFile= nombreFile => {
     let t = document.getElementsByTagName( 'select' );
@@ -36,89 +35,95 @@ class CargaDatos extends Component{
       });
   };
 
-  configPapa = {
-    delimiter: "",	// auto-detect
-    newline: "",	// auto-detect
-    quoteChar: '"',
-    escapeChar: '"',
-    header: false,
-    trimHeader: false,
-    dynamicTyping: false,
-    preview: 0,
-    encoding: "",
-    worker: false,
-    comments: false,
-    step: undefined,
-    complete: this.conversionCompleta,
-    error: undefined,
-    download: false,
-    skipEmptyLines: false,
-    chunk: undefined,
-    fastMode: undefined,
-    beforeFirstChunk: undefined,
-    withCredentials: undefined
-  };
+    configPapa = {
+      delimiter: "",	// auto-detect
+      newline: "",	// auto-detect
+      quoteChar: '"',
+      escapeChar: '"',
+      header: false,
+      trimHeader: false,
+      dynamicTyping: false,
+      preview: 0,
+      encoding: "",
+      worker: false,
+      comments: false,
+      step: undefined,
+      complete: this.conversionCompleta,
+      error: undefined,
+      download: false,
+      skipEmptyLines: false,
+      chunk: undefined,
+      fastMode: undefined,
+      beforeFirstChunk: undefined,
+      withCredentials: undefined
+    };
 
 
-  cargarDatos = () =>{
-    let f = document.getElementsByTagName( 'input' );
-    let t = document.getElementsByTagName( 'select' );
-    if(f[0].files.length > 0 && t[0].value !== 'vacio'){
+    cargarDatos = () => {
+      let f = document.getElementsByTagName('input');
+      let t = document.getElementsByTagName('select');
+      if (f[0].files.length > 0 && t[0].value !== 'vacio') {
 
-      Papa.parse(f[0].files[0],this.configPapa);
+        Papa.parse(f[0].files[0], this.configPapa);
 
-    }else {
-      alert("Error: Faltan completar campos");
+      } else {
+        alert("Error: Faltan completar campos");
+
+      }
+    };
+
+    agregarFila = () => {
+        this.setState({cantidadFilas: this.cantidadFilas + 1});
+    };
+
+    render() {
+        const filaCarga =
+            <tr>
+                <td className="v-middle">
+                    <input type="file" name="datafile"/>
+                </td>
+                <td className="v-middle">
+                    <select className="form-control" required>
+                        <option value="vacio">...</option>
+                        <option value="investigaciones">Investigaciones</option>
+                        <option value="encuestas">Encuestas</option>
+                        <option value="docentes">Docentes</option>
+                        <option value="cursos">Cursos</option>
+                        <option value="horarios">Horarios</option>
+                    </select>
+                </td>
+                <td><Button>x</Button></td>
+            </tr>;
+        return (
+
+            <BaseContainer>
+                <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
+                    <div className="panel-heading">
+                        <h2> Carga de Datos </h2>
+                    </div>
+                    <div className="panel-body">
+                        <table className="table table-striped">
+                            <thead>
+                            <tr>
+                                <th className="col-md-8">Archivo</th>
+                                <th className="col-md-4">Tipo</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {filaCarga}
+                            </tbody>
+                        </table>
+                        <div className="text-right m-t-lg">
+                            <button className="btn btn-default" onClick={this.agregarFila}>Agregar Fila</button>
+                            <button className="btn btn-primary m-l-md" onClick={this.cargarDatos}>Cargar Datos</button>
+                        </div>
+                    </div>
+                </div>
+            </BaseContainer>
+        );
     }
-
-  };
-
-  agregarFila = () =>{
-    this.setState({cantidadFilas: this.cantidadFilas +1 });
-  };
-  render() {
-    const filaCarga =
-      <tr>
-        <td><Button>x</Button></td>
-        <td><input type="file" name="datafile"/></td>
-        <td>
-          <select required>
-            <option value="vacio">...</option>
-            <option value="investigaciones">Investigaciones</option>
-            <option value="encuestas">Encuestas</option>
-            <option value="docentes">Docentes</option>
-            <option value="cursos">Cursos</option>
-            <option value="horarios">Horarios</option>
-          </select>
-        </td>
-      </tr>;
-    return (
-      <div className="container">
-        <PageHeader>
-          Carga de datos
-        </PageHeader>
-        <Table responsive >
-          <thead>
-          <tr>
-            <th> </th>
-            <th>Archivo</th>
-            <th >Tipo</th>
-          </tr>
-          </thead>
-          <tbody>
-            {filaCarga}
-          </tbody>
-        </Table>
-        <Button bsStyle="primary" onClick={this.agregarFila}>AGREGAR FILA</Button>
-        <Button bsStyle="warning" onClick={this.cargarDatos}>CARGAR DATOS</Button>
-      </div>
-
-
-    );
-  }
 }
-
-
 
 
 export default CargaDatos;
