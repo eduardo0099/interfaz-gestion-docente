@@ -1,16 +1,17 @@
 import React from 'react';
-import {Route } from 'react-router-dom';
-import {Grid,Row,Table,Button, Glyphicon,Col} from 'react-bootstrap';
+import {Route} from 'react-router-dom';
+import {Grid, Row, Table, Button, Glyphicon, Col} from 'react-bootstrap';
 import axios from "axios/index";
 import ProfesorPerfilEncuesta from "./ProfesorPerfilEncuesta";
+import BaseContainer from "./BaseContainer";
 
-class ListaEncuestas extends React.Component{
+class ListaEncuestas extends React.Component {
 
 
-    constructor(props){
+    constructor(props) {
 
         super(props);
-        this.state= {
+        this.state = {
             listaEncuesta: [],
             cicloSeleccionado: "2018-1",
             verComentarios: false,
@@ -19,15 +20,15 @@ class ListaEncuestas extends React.Component{
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         axios.get('http://200.16.7.151:8080/docente/docente/encDocente', {
             params: {
                 codigo: this.props.match.params.codigo,
                 ciclo: this.state.cicloSeleccionado,
             }
         }).then(response => {
-          console.log(JSON.stringify(response.data, null, 2))
-            this.setState({ listaEncuesta: response.data.encuestas });
+            console.log(JSON.stringify(response.data, null, 2))
+            this.setState({listaEncuesta: response.data.encuestas});
         }).catch(error => {
             console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`);
         });
@@ -38,49 +39,46 @@ class ListaEncuestas extends React.Component{
             }
         }).then(response => {
             this.setState({
-                nombreProfesor:`${response.data.nombres} ${response.data.apellido_paterno} ${response.data.apellido_materno}`
+                nombreProfesor: `${response.data.nombres} ${response.data.apellido_paterno} ${response.data.apellido_materno}`
             });
         }).catch(error => {
             console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`);
         });
     }
 
-    mostarComentarios = (index) =>{
+    mostarComentarios = (index) => {
         this.setState({
             comentarioSeleccionado: index,
-            verComentarios:true,
+            verComentarios: true,
         });
     };
 
-    regresarListaEncuesta =() =>{
+    regresarListaEncuesta = () => {
         this.setState({
             comentarioSeleccionado: -1,
-            verComentarios:false,
+            verComentarios: false,
         });
     };
 
-    render(){
-        console.log("Mostrar",this.state.verComentarios);
-        if(!this.state.verComentarios) {
+    render() {
+        if (!this.state.verComentarios) {
             return (
                 <div>
                     <Route exact path={`${this.props.match.path}`} render={() =>
-                        <Grid>
-                            <Row className="back-bar">
-                                <Col md={12}>
-                                    <Button onClick={this.props.history.goBack}><Glyphicon glyph="arrow-left"/></Button> <span
-                                    className="professor-name">Volver a perfil docente</span>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col md={12}>
+                        <BaseContainer>
+                            <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
+                                <div className="panel-heading">
+                                    <a className="btn btn-default pull-right m-t-md" onClick={this.props.history.goBack}> Volver al Perfil </a>
+                                    <h2> Encuestas </h2>
+                                </div>
+                                <div className="panel-body">
                                     <table className="table table-striped">
                                         <thead>
                                         <tr>
                                             <th className="col-md-4">Curso</th>
                                             <th className="col-md-4 text-center">Participacion</th>
                                             <th className="col-md-4 text-center">Puntaje</th>
-                                            <th class>Comentarios</th>
+                                            <th className>Comentarios</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -90,24 +88,27 @@ class ListaEncuestas extends React.Component{
                                                 <td className="v-middle">
                                                     <span className="block text-primary"> {item.curso} </span>
                                                     <small className="block text-muted"> {item.codigo} </small>
-                                                    <small className="block text-muted"> Horario {item.horario} </small>
+                                                    <small
+                                                        className="block text-muted"> Horario {item.horario} </small>
                                                 </td>
                                                 <td className="v-middle text-center">{item.porcentaje}%</td>
                                                 <td className="v-middle text-center">{item.puntaje}</td>
-                                                <td className="v-middle"><Button onClick={() => this.mostarComentarios(i)}>Ver Comentarios</Button></td>
+                                                <td className="v-middle"><Button
+                                                    onClick={() => this.mostarComentarios(i)}>Ver
+                                                    Comentarios</Button></td>
                                             </tr>
                                         })}
                                         </tbody>
                                     </table>
-                                </Col>
-                            </Row>
-                        </Grid>
+                                </div>
+                            </div>
+                        </BaseContainer>
                     }/>
 
                 </div>
             );
-        }else{
-            return(
+        } else {
+            return (
                 <ProfesorPerfilEncuesta
                     volverLista={this.regresarListaEncuesta}
                     profesor={this.state.nombreProfesor}
