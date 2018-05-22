@@ -16,6 +16,7 @@ class registroPostulante extends Component {
         super(props);
         this.validator1 = new SimpleReactValidator();
         this.validator2 = new SimpleReactValidator();
+        this.validator3 = new SimpleReactValidator();
         this.state = {
             btnAnterior:false,
             btnFinalizar:false,
@@ -43,6 +44,13 @@ class registroPostulante extends Component {
         this.handleFNac = this.handleFNac.bind(this);
         this.handleCheckM = this.handleCheckM.bind(this);
         this.handleCheckF = this.handleCheckF.bind(this);
+        this.handleNacionalidad = this.handleNacionalidad.bind(this);
+        this.handleDepartamento = this.handleDepartamento.bind(this);
+        this.handleProvincia = this.handleProvincia.bind(this);
+        this.handleDistrito = this.handleDistrito.bind(this);
+        this.handleEmail = this.handleEmail.bind(this);
+        this.handleTipoDoc = this.handleTipoDoc.bind(this);
+        this.handleNumDoc = this.handleNumDoc.bind(this);
     }
 
 
@@ -67,31 +75,31 @@ class registroPostulante extends Component {
     }
 
     handleNacionalidad(event) {
-        this.setState({nacionalidad: event});
+        this.setState({nacionalidad: event.target.value});
     }
 
     handleDepartamento(event) {
-        this.setState({departamento: event});
+        this.setState({departamento: event.target.value});
     }
 
     handleProvincia(event) {
-        this.setState({provincia: event});
+        this.setState({provincia: event.target.value});
     }
 
     handleDistrito(event) {
-        this.setState({distrito: event});
+        this.setState({distrito: event.target.value});
     }
 
     handleEmail(event) {
-        this.setState({email: event});
+        this.setState({email: event.target.value});
     }
 
     handleTipoDoc(event) {
-        this.setState({tipoDoc: event});
+        this.setState({tipoDoc: event.target.value});
     }
 
     handleNumDoc(event) {
-        this.setState({numDoc: event});
+        this.setState({numDoc: event.target.value});
     }
 
     handleCheckM(event) {
@@ -128,13 +136,15 @@ class registroPostulante extends Component {
         }else if(this.state.paso==2){
             if (this.validator2.allValid()) {
                 this.setState({
-                    paso: 3
+                    paso: 3,
+                    btnFinalizar:true
                 });
             } else {
                 this.validator2.showMessages();
                 // rerender to show messages for the first time
                 this.forceUpdate();
             }
+        }else if(this.state.paso==3){
         }
     }
 
@@ -143,6 +153,12 @@ class registroPostulante extends Component {
             this.setState({
                 paso: 1,
                 btnAnterior:false
+            });
+        }
+        else if(this.state.paso==3) {
+            this.setState({
+                paso: 2,
+                btnFinalizar:false
             });
         }
     }
@@ -267,8 +283,65 @@ class registroPostulante extends Component {
                     <br></br>
                 </div>
             </div>
+            //Parte 3:
         }else if(this.state.paso == 3){
+            cuerpo=
 
+                <div>
+                    <ul className="nav nav-tabs">
+                        <li className="active"><a href="#1" data-toggle="tab">Grados Academicos</a></li>
+                        <li><a href="#2" data-toggle="tab">Docencia</a></li>
+                        <li><a href="#3" data-toggle="tab">Experiencia Profesional</a></li>
+                        <li><a href="#4" data-toggle="tab">Investigaciones</a></li>
+                    </ul>
+                    <div className="tab-content clearfix m-t-md">
+                        <div className="tab-pane active row" id="1">
+                            <div className="form-group col-md-2 m-r-n">
+                                <ul className="nav nav-pills nav-stacked">
+                                    <li className="active"><a href="#1a" data-toggle="tab">Titulo Profesional </a></li>
+                                    <li><a href="#1b" data-toggle="tab"> Maestria </a></li>
+                                    <li><a href="#1c" data-toggle="tab"> Doctorado </a></li>
+                                    <li><a href="#1d" data-toggle="tab"> Diplomatura </a></li>
+                                </ul>
+                            </div>
+                            <div className="form-group col-md-10 m-l-n">
+                                <div className="tab-content clearfix">
+                                    <div className="tab-pane active row" id="1a">
+                                    </div>
+                                    <div className="tab-pane row" id="1b">
+                                    </div>
+                                    <div className="tab-pane row" id="1c">
+                                    </div>
+                                    <div className="tab-pane row" id="1d">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="tab-pane active row" id="2">
+                            <div className="form-group col-md-2 m-r-n">
+                                <ul className="nav nav-pills nav-stacked">
+                                    <li className="active"><a href="#2a" data-toggle="tab">Cursos a su Cargo </a></li>
+                                    <li><a href="#2b" data-toggle="tab"> Aseosria de Tesis </a></li>
+                                    <li><a href="#2c" data-toggle="tab"> Premios a la Docencia </a></li>
+                                </ul>
+                            </div>
+                            <div className="form-group col-md-10 m-l-n">
+                                <div className="tab-content clearfix">
+                                    <div className="tab-pane active row" id="2a">
+                                    </div>
+                                    <div className="tab-pane row" id="2b">
+                                    </div>
+                                    <div className="tab-pane row" id="2c">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="tab-pane" id="3">
+                        </div>
+                        <div className="tab-pane" id="4">
+                        </div>
+                    </div>
+                </div>
         }
 
         return (
