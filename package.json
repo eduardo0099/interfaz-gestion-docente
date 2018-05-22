@@ -29,6 +29,7 @@
     "react-validation": "^3.0.7",
     "reactjs-popup": "^1.1.1",
     "redux": "^3.7.2",
+    "simple-react-validator": "0.0.7",
     "validator": "^10.2.0"
   },
   "scripts": {
