@@ -16,6 +16,10 @@ class registroPostulante extends Component {
         super(props);
         this.validator1 = new SimpleReactValidator();
         this.validator2 = new SimpleReactValidator();
+        this.invValidator = new SimpleReactValidator();
+        this.tituloValidator = new SimpleReactValidator();
+        this.maestriaValidator = new SimpleReactValidator();
+        this.doctoradoValidator = new SimpleReactValidator();
         this.validator3 = new SimpleReactValidator();
         this.state = {
             btnAnterior:false,
@@ -35,7 +39,42 @@ class registroPostulante extends Component {
             distrito:'',
             email:'',
             tipoDoc:'',
-            numDoc:''
+            numDoc:'',
+
+            expProfesional:'',
+
+            investigaciones:[],
+            numInvestigaciones:0,
+            tituloInv:'',
+            resumenInv:'',
+            fechaInv:'',
+
+            titulo:{
+                nombreProg:'',
+                pais:'',
+                institucion:'',
+                nombreTitulo:'',
+                fechaTitulo:'',
+                tituloTesis:'',
+                urlTesis:'',
+                archivo:null
+            },
+            maestria:{
+                nombreProg:'',
+                pais:'',
+                institucion:'',
+                nombreTitulo:'',
+                fechaTitulo:'',
+                archivo:null
+            },
+            doctorado:{
+                nombreProg:'',
+                pais:'',
+                institucion:'',
+                nombreTitulo:'',
+                fechaTitulo:'',
+                archivo:null
+            }
         };
 
         this.handleNombres = this.handleNombres.bind(this);
@@ -44,6 +83,7 @@ class registroPostulante extends Component {
         this.handleFNac = this.handleFNac.bind(this);
         this.handleCheckM = this.handleCheckM.bind(this);
         this.handleCheckF = this.handleCheckF.bind(this);
+
         this.handleNacionalidad = this.handleNacionalidad.bind(this);
         this.handleDepartamento = this.handleDepartamento.bind(this);
         this.handleProvincia = this.handleProvincia.bind(this);
@@ -51,6 +91,35 @@ class registroPostulante extends Component {
         this.handleEmail = this.handleEmail.bind(this);
         this.handleTipoDoc = this.handleTipoDoc.bind(this);
         this.handleNumDoc = this.handleNumDoc.bind(this);
+
+        this.handleFInv = this.handleFInv.bind(this);
+        this.handleTituloInv = this.handleTituloInv.bind(this);
+        this.handleResumenInv = this.handleResumenInv.bind(this);
+
+
+        this.handleTituloNombreProg = this.handleTituloNombreProg.bind(this);
+        this.handleTituloPais = this.handleTituloPais.bind(this);
+        this.handleTituloInstitucion = this.handleTituloInstitucion.bind(this);
+        this.handleTituloNombreTitulo = this.handleTituloNombreTitulo.bind(this);
+        this.handleTituloFecha = this.handleTituloFecha.bind(this);
+        this.handleTituloNombreTesis = this.handleTituloNombreTesis.bind(this);
+        this.handleTituloUrlTesis = this.handleTituloUrlTesis.bind(this);
+
+        this.handleExpProfesional = this.handleExpProfesional.bind(this);
+
+        this.handleMaestriaNombreProg = this.handleMaestriaNombreProg.bind(this);
+        this.handleMaestriaPais = this.handleMaestriaPais.bind(this);
+        this.handleMaestriaInstitucion = this.handleMaestriaInstitucion.bind(this);
+        this.handleMaestriaNombreTitulo = this.handleMaestriaNombreTitulo.bind(this);
+        this.handleMaestriaFecha = this.handleMaestriaFecha.bind(this);
+
+        this.handleDoctoradoNombreProg = this.handleDoctoradoNombreProg.bind(this);
+        this.handleDoctoradoPais = this.handleDoctoradoPais.bind(this);
+        this.handleDoctoradoInstitucion = this.handleDoctoradoInstitucion.bind(this);
+        this.handleDoctoradoNombreTitulo = this.handleDoctoradoNombreTitulo.bind(this);
+        this.handleDoctoradoFecha = this.handleDoctoradoFecha.bind(this);
+
+
     }
 
 
@@ -120,9 +189,169 @@ class registroPostulante extends Component {
         console.log('sexo:',this.state.sexo,',F:',this.state.checkF,',M:',this.state.checkM)
     }
 
+    handleFInv(date){
+        this.setState({fechaInv: date});
+    }
+
+    handleTituloInv(event) {
+        this.setState({tituloInv: event.target.value});
+    }
+
+    handleResumenInv(event) {
+        this.setState({resumenInv: event.target.value});
+        console.log(this.state.titulo)
+    }
+
+
+    handleExpProfesional(event) {
+        this.setState({expProfesional: event.target.value});
+    }
+
+    ///////////
+
+    handleTituloNombreProg(event) {
+        let tempTitulo = {...this.state.titulo};
+        tempTitulo.nombreProg = event.target.value
+        this.setState({
+            titulo:tempTitulo
+        });
+    }
+
+    handleTituloPais(event) {
+        let tempTitulo = {...this.state.titulo};
+        tempTitulo.pais = event.target.value
+        this.setState({
+            titulo: tempTitulo
+        });
+    }
+
+    handleTituloInstitucion(event) {
+        let tempTitulo = {...this.state.titulo};
+        tempTitulo.institucion = event.target.value
+        this.setState({
+            titulo:tempTitulo
+        });
+    }
+
+    handleTituloNombreTitulo(event) {
+        let tempTitulo = {...this.state.titulo};
+        tempTitulo.nombreTitulo = event.target.value
+        this.setState({
+            titulo:tempTitulo
+        });
+    }
+
+    handleTituloFecha(date) {
+        let tempTitulo = {...this.state.titulo};
+        tempTitulo.fechaTitulo = date
+        this.setState({
+            titulo: tempTitulo
+        });
+    }
+
+    handleTituloNombreTesis(event) {
+        let tempTitulo = {...this.state.titulo};
+        tempTitulo.tituloTesis = event.target.value
+        this.setState({
+            titulo:tempTitulo
+        });
+    }
+
+    handleTituloUrlTesis(event) {
+        let tempTitulo = {...this.state.titulo};
+        tempTitulo.urlTesis = event.target.value
+        this.setState({
+            titulo:tempTitulo
+        });
+    }
+    ///////////
+
+    handleMaestriaNombreProg(event) {
+        let tempMaestria = {...this.state.maestria};
+        tempMaestria.nombreProg = event.target.value
+        this.setState({
+            maestria:tempMaestria
+        });
+    }
+
+    handleMaestriaPais(event) {
+        let tempMaestria = {...this.state.maestria};
+        tempMaestria.pais = event.target.value
+        this.setState({
+            maestria: tempMaestria
+        });
+    }
+
+    handleMaestriaInstitucion(event) {
+        let tempMaestria = {...this.state.maestria};
+        tempMaestria.institucion = event.target.value
+        this.setState({
+            maestria:tempMaestria
+        });
+    }
+
+    handleMaestriaNombreTitulo(event) {
+        let tempMaestria = {...this.state.maestria};
+        tempMaestria.nombreTitulo = event.target.value
+        this.setState({
+            maestria:tempMaestria
+        });
+    }
+
+    handleMaestriaFecha(date) {
+        let tempMaestria = {...this.state.maestria};
+        tempMaestria.fechaTitulo = date
+        this.setState({
+            maestria: tempMaestria
+        });
+    }
+
+    ///////////
+
+    handleDoctoradoNombreProg(event) {
+        let tempDoctorado = {...this.state.doctorado};
+        tempDoctorado.nombreProg = event.target.value
+        this.setState({
+            doctorado:tempDoctorado
+        });
+    }
+
+    handleDoctoradoPais(event) {
+        let tempDoctorado = {...this.state.doctorado};
+        tempDoctorado.pais = event.target.value
+        this.setState({
+            doctorado: tempDoctorado
+        });
+    }
+
+    handleDoctoradoInstitucion(event) {
+        let tempTitulo = {...this.state.doctorado};
+        tempTitulo.institucion = event.target.value
+        this.setState({
+            doctorado:tempTitulo
+        });
+    }
+
+    handleDoctoradoNombreTitulo(event) {
+        let tempDoctorado = {...this.state.doctorado};
+        tempDoctorado.nombreTitulo = event.target.value
+        this.setState({
+            doctorado:tempDoctorado
+        });
+    }
+
+    handleDoctoradoFecha(date) {
+        let tempDoctorado = {...this.state.doctorado};
+        tempDoctorado.fechaTitulo = date
+        this.setState({
+            doctorado: tempDoctorado
+        });
+    }
+
     performNext = ()=> {
         if(this.state.paso==1) {
             if (this.validator1.allValid()) {
+            //if (1) {
                 this.setState({
                     paso: 2,
                     btnAnterior:true
@@ -135,6 +364,7 @@ class registroPostulante extends Component {
 
         }else if(this.state.paso==2){
             if (this.validator2.allValid()) {
+            //if (1) {
                 this.setState({
                     paso: 3,
                     btnFinalizar:true
@@ -145,6 +375,21 @@ class registroPostulante extends Component {
                 this.forceUpdate();
             }
         }else if(this.state.paso==3){
+            if (this.tituloValidator.allValid() && this.validator3.allValid() && this.maestriaValidator.allValid() && this.doctoradoValidator.allValid() && this.state.investigaciones.length>0) {
+                console.log('titulo:', this.state.titulo);
+                console.log('maestria:', this.state.maestria);
+                console.log('doctorado:', this.state.doctorado);
+            }else {
+                this.tituloValidator.showMessages();
+                this.maestriaValidator.showMessages();
+                this.doctoradoValidator.showMessages();
+                this.validator3.showMessages();
+                // rerender to show messages for the first time
+                this.forceUpdate();
+                if(this.state.investigaciones.length==0){
+                    alert("registrar investigaciones!");
+                }
+            }
         }
     }
 
@@ -163,7 +408,44 @@ class registroPostulante extends Component {
         }
     }
 
+    agregarInvestigacion = ()=> {
+        if (this.invValidator.allValid()) {
+            var investigacion  = {id: this.state.numInvestigaciones+1, titulo: this.state.tituloInv, resumen: this.state.resumenInv,fecha:this.state.fechaInv,archivo:null};
+            this.setState({
+                investigaciones: [...this.state.investigaciones, investigacion],
+                numInvestigaciones:this.state.numInvestigaciones+1
+            });
+        }else {
+            this.invValidator.showMessages();
+            // rerender to show messages for the first time
+            this.forceUpdate();
+        }
+        console.log('investigaciones: ',this.state.investigaciones);
+    }
+
     render() {
+        const columns = [{
+            dataField: 'id',
+            text: 'ID',
+            hidden: true
+        }, {
+            dataField: 'titulo',
+            text: 'Nombre'
+        }, {
+            dataField: 'resumen',
+            text: 'Descripcion'
+        }];
+
+        const selectRow = {
+            mode: 'radio',
+            clickToSelect: true,
+            hideSelectColumn: true,
+            bgColor: '#93a3b5'
+        };
+
+        const rowEvents = {
+        };
+
         let btnAnterior;
         if (this.state.btnAnterior) {
             btnAnterior = <Button className="btn btn-primary" onClick={this.performBack}>Anterior</Button>
@@ -262,7 +544,7 @@ class registroPostulante extends Component {
                         <label> Correo electrónico: </label>
                         <input type="text" className="form-control" value={this.state.email}
                                onChange={this.handleEmail}/>
-                        {this.validator2.message('email', this.state.email, 'required', false, {required: 'Este campo es obligatorio'})}
+                        {this.validator2.message('email', this.state.email, 'required|email', false, {required: 'Este campo es obligatorio'})}
                         <br></br>
                     </div>
                     <div>
@@ -286,7 +568,6 @@ class registroPostulante extends Component {
             //Parte 3:
         }else if(this.state.paso == 3){
             cuerpo=
-
                 <div>
                     <ul className="nav nav-tabs">
                         <li className="active"><a href="#1" data-toggle="tab">Grados Academicos</a></li>
@@ -307,38 +588,228 @@ class registroPostulante extends Component {
                             <div className="form-group col-md-10 m-l-n">
                                 <div className="tab-content clearfix">
                                     <div className="tab-pane active row" id="1a">
+                                        <div className="form-group">
+                                            <div className="col-md-offset-1 col-md-7">
+                                                <label> Nombre del programa o especialidad: </label>
+                                                <input type="text" className="form-control" value={this.state.titulo.nombreProg}
+                                                       onChange={this.handleTituloNombreProg}/>
+                                                {this.tituloValidator.message('titulo.nombreProg', this.state.titulo.nombreProg, 'required', false, {required: 'Este campo es obligatorio'})}
+
+                                                <label> Pais: </label>
+                                                <input type="text" className="form-control" value={this.state.titulo.pais}
+                                                          onChange={this.handleTituloPais}/>
+                                                {this.tituloValidator.message('titulo.pais', this.state.titulo.pais, 'required', false, {required: 'Este campo es obligatorio'})}
+
+                                                <label> Institución educativa: </label>
+                                                <input type="text" className="form-control" value={this.state.titulo.institucion}
+                                                          onChange={this.handleTituloInstitucion}/>
+                                                {this.tituloValidator.message('titulo.institucion', this.state.titulo.institucion, 'required', false, {required: 'Este campo es obligatorio'})}
+
+                                                <label> Nombre del título: </label>
+                                                <input type="text" className="form-control" value={this.state.titulo.nombreTitulo}
+                                                          onChange={this.handleTituloNombreTitulo}/>
+                                                {this.tituloValidator.message('titulo.nombreTitulo', this.state.titulo.nombreTitulo, 'required', false, {required: 'Este campo es obligatorio'})}
+
+                                                <label> Fecha de obtención del título: </label>
+                                                <DatePicker
+                                                    className="form-control"
+                                                    dateFormat="DD/MM/YYYY"
+                                                    selected={this.state.titulo.fechaTitulo}
+                                                    onChange={this.handleTituloFecha}
+                                                />
+                                                {this.tituloValidator.message('titulo.fechaTitulo', this.state.titulo.fechaTitulo, 'required', false, {required: 'Este campo es obligatorio'})}
+
+                                                <label> Título de la tesis: </label>
+                                                <input type="text" className="form-control" value={this.state.titulo.tituloTesis}
+                                                          onChange={this.handleTituloNombreTesis}/>
+                                                {this.tituloValidator.message('titulo.tituloTesis', this.state.titulo.tituloTesis, 'required', false, {required: 'Este campo es obligatorio'})}
+
+                                                <label> URL de la tesis: </label>
+                                                <input type="text" className="form-control" value={this.state.titulo.urlTesis}
+                                                          onChange={this.handleTituloUrlTesis}/>
+                                                {this.tituloValidator.message('titulo.urlTesis', this.state.titulo.urlTesis, 'required', false, {required: 'Este campo es obligatorio'})}
+
+                                                <label> Archivo adjunto: </label>
+                                                <input type="file" name="datafile"/>
+                                                <br></br>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div className="tab-pane row" id="1b">
+                                        <div className="form-group">
+                                            <div className="col-md-offset-1 col-md-7">
+                                                <label> Nombre del programa o especialidad: </label>
+                                                <input type="text" className="form-control" value={this.state.maestria.nombreProg}
+                                                       onChange={this.handleMaestriaNombreProg}/>
+                                                {this.maestriaValidator.message('maestria.nombreProg', this.state.maestria.nombreProg, 'required', false, {required: 'Este campo es obligatorio'})}
+
+                                                <label> Pais: </label>
+                                                <input type="text" className="form-control" value={this.state.maestria.pais}
+                                                       onChange={this.handleMaestriaPais}/>
+                                                {this.maestriaValidator.message('maestria.pais', this.state.maestria.pais, 'required', false, {required: 'Este campo es obligatorio'})}
+
+                                                <label> Institución educativa: </label>
+                                                <input type="text" className="form-control" value={this.state.maestria.institucion}
+                                                       onChange={this.handleMaestriaInstitucion}/>
+                                                {this.maestriaValidator.message('maestria.institucion', this.state.maestria.institucion, 'required', false, {required: 'Este campo es obligatorio'})}
+
+                                                <label> Nombre del título: </label>
+                                                <input type="text" className="form-control" value={this.state.maestria.nombreTitulo}
+                                                       onChange={this.handleMaestriaNombreTitulo}/>
+                                                {this.maestriaValidator.message('maestria.nombreTitulo', this.state.maestria.nombreTitulo, 'required', false, {required: 'Este campo es obligatorio'})}
+
+                                                <label> Fecha de obtención del título: </label>
+                                                <DatePicker
+                                                    className="form-control"
+                                                    dateFormat="DD/MM/YYYY"
+                                                    selected={this.state.maestria.fechaTitulo}
+                                                    onChange={this.handleMaestriaFecha}
+                                                />
+                                                {this.maestriaValidator.message('maestria.fechaTitulo', this.state.maestria.fechaTitulo, 'required', false, {required: 'Este campo es obligatorio'})}
+
+                                                <label> Archivo adjunto: </label>
+                                                <input type="file" name="datafile"/>
+                                                <br></br>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div className="tab-pane row" id="1c">
+                                        <div className="form-group">
+                                            <div className="col-md-offset-1 col-md-7">
+                                                <label> Nombre del programa o especialidad: </label>
+                                                <input type="text" className="form-control" value={this.state.doctorado.nombreProg}
+                                                       onChange={this.handleDoctoradoNombreProg}/>
+                                                {this.doctoradoValidator.message('doctorado.nombreProg', this.state.doctorado.nombreProg, 'required', false, {required: 'Este campo es obligatorio'})}
+
+                                                <label> Pais: </label>
+                                                <input type="text" className="form-control" value={this.state.doctorado.pais}
+                                                       onChange={this.handleDoctoradoPais}/>
+                                                {this.doctoradoValidator.message('doctorado.pais', this.state.doctorado.pais, 'required', false, {required: 'Este campo es obligatorio'})}
+
+                                                <label> Institución educativa: </label>
+                                                <input type="text" className="form-control" value={this.state.doctorado.institucion}
+                                                       onChange={this.handleDoctoradoInstitucion}/>
+                                                {this.doctoradoValidator.message('doctorado.institucion', this.state.doctorado.institucion, 'required', false, {required: 'Este campo es obligatorio'})}
+
+                                                <label> Nombre del título: </label>
+                                                <input type="text" className="form-control" value={this.state.doctorado.nombreTitulo}
+                                                       onChange={this.handleDoctoradoNombreTitulo}/>
+                                                {this.doctoradoValidator.message('doctorado.nombreTitulo', this.state.doctorado.nombreTitulo, 'required', false, {required: 'Este campo es obligatorio'})}
+
+                                                <label> Fecha de obtención del título: </label>
+                                                <DatePicker
+                                                    className="form-control"
+                                                    dateFormat="DD/MM/YYYY"
+                                                    selected={this.state.doctorado.fechaTitulo}
+                                                    onChange={this.handleDoctoradoFecha}
+                                                />
+                                                {this.doctoradoValidator.message('doctorado.fechaTitulo', this.state.doctorado.fechaTitulo, 'required', false, {required: 'Este campo es obligatorio'})}
+
+                                                <label> Archivo adjunto: </label>
+                                                <input type="file" name="datafile"/>
+                                                <br></br>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div className="tab-pane row" id="1d">
+                                        <div className="form-group">
+                                            <div className="col-md-offset-1 col-md-7">
+                                                <label> Archivo adjunto: </label>
+                                                <input type="file" name="datafile"/>
+                                                <br></br>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="tab-pane active row" id="2">
+                        <div className="tab-pane" id="2">
                             <div className="form-group col-md-2 m-r-n">
                                 <ul className="nav nav-pills nav-stacked">
                                     <li className="active"><a href="#2a" data-toggle="tab">Cursos a su Cargo </a></li>
-                                    <li><a href="#2b" data-toggle="tab"> Aseosria de Tesis </a></li>
+                                    <li><a href="#2b" data-toggle="tab"> Asesoria de Tesis </a></li>
                                     <li><a href="#2c" data-toggle="tab"> Premios a la Docencia </a></li>
                                 </ul>
                             </div>
                             <div className="form-group col-md-10 m-l-n">
                                 <div className="tab-content clearfix">
                                     <div className="tab-pane active row" id="2a">
+                                        <div className="form-group">
+                                            <div className="col-md-offset-1 col-md-7">
+                                                <label> Archivo adjunto: </label>
+                                                <input type="file" name="datafile"/>
+                                                <br></br>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div className="tab-pane row" id="2b">
+                                        <div className="form-group">
+                                            <div className="col-md-offset-1 col-md-7">
+                                                <label> Archivo adjunto: </label>
+                                                <input type="file" name="datafile"/>
+                                                <br></br>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div className="tab-pane row" id="2c">
+                                        <div className="form-group">
+                                            <div className="col-md-offset-1 col-md-7">
+                                                <label> Archivo adjunto: </label>
+                                                <input type="file" name="datafile"/>
+                                                <br></br>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div className="tab-pane" id="3">
+                            <div className="form-group">
+                                <div className="col-md-offset-1 col-md-7">
+                                    <textarea className="form-control"value={this.state.expProfesional}
+                                              onChange={this.handleExpProfesional}></textarea>
+                                    {this.validator3.message('expProfesional', this.state.expProfesional, 'required', false, {required: 'Este campo es obligatorio'})}
+
+                                    <br></br>
+                                    <br></br>
+                                </div>
+                            </div>
                         </div>
                         <div className="tab-pane" id="4">
+                            <div className="form-group">
+                                <div className="col-md-offset-1 col-md-7">
+                                    <label> Titulo: </label>
+                                    <input type="text" className="form-control" value={this.state.tituloInv}
+                                           onChange={this.handleTituloInv}/>
+                                    {this.invValidator.message('tituloInv', this.state.tituloInv, 'required', false, {required: 'Este campo es obligatorio'})}
+
+                                    <label> Resumen: </label>
+                                    <textarea type="text" className="form-control" value={this.state.resumenInv}
+                                              onChange={this.handleResumenInv}/>
+                                    {this.invValidator.message('resumenInv', this.state.resumenInv, 'required', false, {required: 'Este campo es obligatorio'})}
+
+                                    <label> Fecha: </label>
+                                    <DatePicker
+                                        className="form-control"
+                                        dateFormat="DD/MM/YYYY"
+                                        selected={this.state.fechaInv}
+                                        onChange={this.handleFInv}
+                                    />
+                                    {this.invValidator.message('fechaInv', this.state.fechaInv, 'required', false, {required: 'Este campo es obligatorio'})}
+
+                                    <label> Archivo: </label>
+                                    <input type="file" name="datafile"/>
+                                    <br></br>
+                                    <div className="m-t-md">
+                                        <BootstrapTable keyField='id' data={this.state.investigaciones} columns={columns}  rowEvents={rowEvents} selectRow={selectRow}/>
+                                    </div>
+                                    <br></br>
+                                    <div className="panel-footer text-right">
+                                        <button className="btn btn-primary" onClick={this.agregarInvestigacion}> Agregar Investigación</button>
+                                    </div>
+                                    <br></br>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
