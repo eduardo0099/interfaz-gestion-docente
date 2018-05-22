@@ -11,24 +11,16 @@ class AsignarCursos extends Component {
     this.totalCursosXciclo = [];
 
     this.state = {
-      cursos:[{
-        codigo:"123",
-          seccion:"Economia",
-          nombreCurso:"Locura",
-          claseCurso:"obligatoria",//obligatorio y elctivo
-          profesorPreferencia:[{
-              codigo:"445",
-              nombre:"jose perez",
-              tipo:"TC",
-              ciclo1:"si",//Hace referencia a la primera parte del año
-              ciclo2:"no"//Hace referencia a la segunda parte del año
-          }]
-      }],
+        cursos:[],
         listaSeccioneskey1:[],
         filtroSeccionkey1:"todos",
+        cursoText:"",
+        profeText:"",
         key: 1,
         listaProfesoresTotal:[],
         listaProfesoresParcial:[],
+        filtro1: -1,
+        listaFiltrada1:[],
         showAsignar: false,
 
         listaSecciones: [],
@@ -232,14 +224,59 @@ class AsignarCursos extends Component {
 
   handleFiltroSeccionkey1 = e =>{
       if(e.target.value === "todos"){
-          this.setState({filtroSeccionkey1:e.target.value,listaProfesoresParcial:this.state.listaProfesoresTotal})
+          this.setState({
+              filtroSeccionkey1:e.target.value,
+              listaProfesoresParcial:this.state.listaProfesoresTotal,
+              listaFiltrada1:this.state.listaProfesoresTotal,
+              filtro1:-1
+          })
       }else{
-          this.setState({filtroSeccionkey1:e.target.value,
-              listaProfesoresParcial:this.state.listaProfesoresTotal.filter(c=>c.seccion === e.target.value)
+          this.setState({
+              filtroSeccionkey1:e.target.value,
+              listaProfesoresParcial:this.state.listaProfesoresTotal.filter(c=>c.seccion === e.target.value),
+              filtro1:1,
+              listaFiltrada1:this.state.listaProfesoresParcial
           })
       }
   }
 
+  busquedaCurso = e =>{
+        this.setState({
+            cursoText: e.target.value,
+        })
+      if(this.state.filtro1 === 1){//la lista fue filtrada por seccion
+          var aux= this.state.listaFiltrada1.filter((d)=>{
+              return d.nombreCurso.toUpperCase().indexOf(e.target.value.toUpperCase())!== -1
+          });
+      }
+      else{//la lista no ha sido filtrada
+          var aux= this.state.listaProfesoresTotal.filter((d)=>{
+              return d.nombreCurso.toUpperCase().indexOf(e.target.value.toUpperCase())!== -1
+          });
+      }
+      this.setState({
+          listaProfesoresParcial:aux
+      })
+  }
+
+  busquedaProfesor = e =>{
+      this.setState({
+          profeText: e.target.value,
+      })
+      if(this.state.filtro1 === 1){//la lista fue filtrada por seccion
+          var aux= this.state.listaFiltrada1.filter((d)=>{
+              return d.nombre.toUpperCase().indexOf(e.target.value.toUpperCase())!== -1
+          });
+      }
+      else{//la lista no ha sido filtrada
+          var aux= this.state.listaProfesoresTotal.filter((d)=>{
+              return d.nombre.toUpperCase().indexOf(e.target.value.toUpperCase())!== -1
+          });
+      }
+      this.setState({
+          listaProfesoresParcial:aux
+      })
+  }
   render(){
 
     const columnasPreferencias = [
@@ -337,7 +374,9 @@ class AsignarCursos extends Component {
                             Seccion:
                         </Col>
                       <Col sm={3}>
-                          <FormControl componentClass="select" placeholder="select" onChange={this.handleFiltroSeccionkey1} value={this.state.filtroSeccionkey1}>
+                          <FormControl componentClass="select" placeholder="select"
+                                       onChange={this.handleFiltroSeccionkey1}
+                                       value={this.state.filtroSeccionkey1}>
                               <option value="todos">Todos</option>
                               {this.state.listaSeccioneskey1.map((item,index) => {
                                   return <option key={index} value={item} >{item}</option>
@@ -345,10 +384,14 @@ class AsignarCursos extends Component {
                           </FormControl>
                       </Col>
                         <Col sm={4}>
-                            <FormControl type="Buscar Curso" placeholder="Buscar Curso" />
+                            <FormControl type="text" placeholder="Buscar Curso"
+                                         value={this.state.cursoText}
+                                        onChange={this.busquedaCurso.bind(this)}/>
                         </Col>
                         <Col sm={4}>
-                            <FormControl type="Buscar Profesor" placeholder="Buscar Profesor" />
+                            <FormControl type="Buscar Profesor" placeholder="Buscar Profesor"
+                                         value={this.state.profeText}
+                                         onChange={this.busquedaProfesor.bind(this)}/>
                         </Col>
                     </FormGroup>
               </Form>
