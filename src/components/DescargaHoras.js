@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Grid, Row, Button, Glyphicon, Col} from 'react-bootstrap';
+import {Grid, Row, Button, Col, FormControl, FormGroup, ControlLabel,Form} from 'react-bootstrap';
 import axios from "axios/index";
 import Detalle_DescargaHoras from "./Detalle_DescargaHoras";
 import {Route,Link} from 'react-router-dom';
@@ -15,8 +15,10 @@ class DescargaHoras extends React.Component{
                         hDescargaTotal:"",
                         semana:[]
             }],
+            listaDescargas:[],
             listaCiclos:[],
             cicloSelect:"",
+            selectedId:-1//
         }
     }
 
@@ -42,6 +44,17 @@ class DescargaHoras extends React.Component{
                     cicloSelect: cicloSeleccionado,
                     listaCiclos: listaCi,
                 });
+                let aux = [];
+                for(let i=0;i<this.state.descargas.length;i++){
+                    let obj = {};
+                    obj.nombre = this.state.descargas[i].nombre;
+                    obj.codigo = this.state.descargas[i].codigo;
+                    obj.hDescargaTotal = this.state.descargas[i].hDescargaTotal;
+                    aux.push(obj);
+                }
+                this.setState({
+                    listaDescargas : aux
+                })
             })
             .catch(error => {
                 console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`,error);
@@ -51,20 +64,31 @@ class DescargaHoras extends React.Component{
 
     cambioCiclo = (event) =>{
         let nuevoCiclo = event.target.value;
-        axios.get('http://200.16.7.151:8080/docente/ayudaEconomica/lista', {
+        axios.get('http://200.16.7.151:8080/docente/docente/horaDescDocente', {
             params: {
                 codigo: this.props.match.params.codigo,
-                ciclo: nuevoCiclo,
+                ciclo: nuevoCiclo
             }
         })
-            .then((response) => {
+            .then(response => {
                 this.setState({
                     descargas: response.data.descargas,
-                    cicloSeleccionado: nuevoCiclo
+                    cicloSelect:nuevoCiclo
+                });
+                let aux = [];
+                for(let i=0;i<this.state.descargas.length;i++){
+                    let obj = {};
+                    obj.nombre = this.state.descargas[i].nombre;
+                    obj.codigo = this.state.descargas[i].codigo;
+                    obj.hDescargaTotal = this.state.descargas[i].hDescargaTotal;
+                    aux.push(obj);
+                }
+                this.setState({
+                    listaDescargas : aux
                 })
             })
             .catch(error => {
-                console.log(`Error al obtener datos de la pantalla cursos`,error);
+                console.log(`Error al obtener datos de la descarga de horas`,error);
             });
     };
 
@@ -79,53 +103,79 @@ class DescargaHoras extends React.Component{
         const selectRow ={
             mode: 'radio',
             clickToSelect: true,
+            onSelect: this.handleOnSelectCurso,
+            bgColor: '#edeaea'
         };
 
+        const rowEvents = {
+            onClick: (e, row,rowIndex) => {
+            this.setState({
+                selectedId : rowIndex
+            })
+            //alert(`clicked on row with index: ${this.state.selectedId}`);
+            }
+        };
+        let myComponent;
+        if(this.state.selectedId !== -1) {
+            myComponent = <Link to={`${this.props.match.url}/${this.state.selectedId}`}>Detalle</Link>
+        } else {
+            myComponent = <Button disabled={true}>Detalle</Button>
+        }
         return(
                 <div>
                     <BaseContainer>
                         <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
                         <Grid>
-                        <Row className="back-bar">
-                            <Col md={12}>
-                                <Button onClick={this.props.history.goBack}><Glyphicon
-                                    glyph="arrow-left"></Glyphicon></Button>
-                                <span
-                                    className="professor-name"> Regresar a perfil docente </span>
-                            </Col>
-                        </Row>
-                        <Row><h1>Descarga de Horas</h1></Row>
-                        <Row>
-                            <Col md={12}>
-                                <p>Ciclo :
-                                    <select ref="selectorCiclos" onChange={this.cambioCiclo}>
-                                        {this.state.listaCiclos.map((item, i) => {
-                                            return <option key={i} value={item.descripcion}>{item.descripcion}</option>
-                                        })}
-                                    </select>
-                                </p>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col md={12}>
-                                <BootstrapTable
-                                    keyField='id'
-                                    data={this.state.descargas}
-                                    columns={columnas}
-                                    selectRow={selectRow}/>
-                            </Col>
-                        </Row>
+                            <Row>
+                                <Col md={8}>
+                                    <h2>Descarga de Horas</h2>
+                                </Col>
+                                <Col md={2}>
+                                <div className="panel-heading">
+                                    <a className="btn btn-default pull-right m-t-md btn-sm" onClick={this.props.history.goBack}> Volver al Perfil </a>
+                                </div>
+                                </Col>
+                            </Row>
+                            <Form horizontal>
+                                <FormGroup  controlId="formHorizontalSeccion">
+                                    <Col componentClass={ControlLabel} sm={1}>
+                                        Ciclo:
+                                    </Col>
+                                    <Col sm={3}>
+                                        <FormControl componentClass="select" placeholder="select"
+                                                     onChange={this.cambioCiclo}>
+                                            {this.state.listaCiclos.map((item, i) => {
+                                                return <option key={i} value={item.descripcion}>{item.descripcion}</option>
+                                            })}
+                                            </FormControl>
+                                    </Col>
+                                </FormGroup>
+                            </Form>
                         <Row>
                             <Col md={10}>
+                                <BootstrapTable
+                                    keyField='id'
+                                    data={this.state.listaDescargas}
+                                    columns={columnas}
+                                    selectRow={selectRow}
+                                    rowEvents = {rowEvents}
+                                />
                             </Col>
-                            <Col md={2}>
-                                <Link to={`${this.props.match.url}/Detalle_DescargaHoras`}>Detalle</Link>
+                        </Row>
+                        <Row>
+                            <Col md={8}>
+                            </Col>
+                            <Col md={4}>
+                                <td>{myComponent}</td>
                             </Col>
                         </Row>
                     </Grid>
                         </div>
                     </BaseContainer>
-                    <Route path={`${this.props.match.path}/Detalle_DescargaHoras`} component={Detalle_DescargaHoras}/>
+                    <Route path={`${this.props.match.path}/Detalle_DescargaHoras`} render={()=>
+                        <Detalle_DescargaHoras {...this.state.descargas[this.state.selectedId]}
+                        />}
+                    />
                 </div>
         );
     }
