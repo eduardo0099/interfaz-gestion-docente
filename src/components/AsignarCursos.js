@@ -73,12 +73,14 @@ class AsignarCursos extends Component {
 
   handleChangeListaPreferencias = e => {
     this.setState({mostrarPreferencias: e.target.checked,
-      asigHorasModal:1,
-      codigoProfSelec:"vacioprof",
+      asigHorasModal:1
+    });
+    
+    /*
+      codigoProfSelec:"",
       nombreProfSelec:"",
       horasTProfSelec:"",
-
-    });
+    */
   };
 
   handleAsigHoras = e => {
@@ -112,7 +114,26 @@ class AsignarCursos extends Component {
   };
 
   handleFiltroCiclo = e =>{
-    this.setState({filtroCiclo: e.target.value});
+    console.log(e.target.value);
+    axios.get('https://demo4106552.mockable.io/asigacionHorarios/listaCursosDisponible',{
+      params:{
+        ciclo: e.target.value
+      }
+    }).then(response => {
+      console.log(response.data);
+        this.totalCursosXciclo = response.data.cursos;
+        let aux = [];
+        for(let i=0;i<response.data.cursos.length;i++){
+          aux.push(response.data.cursos[i].seccion);
+        }
+        this.setState({dataTablaAsignacion: response.data.cursos,
+           listaSecciones: Array.from(new Set(aux)),
+           filtroCiclo: e.target.value });
+      })
+      .catch(error => {
+        alert("Ha ocurrido un error, intentelo luego");
+        console.log(error);
+      });
   };
 
   componentDidMount(){
