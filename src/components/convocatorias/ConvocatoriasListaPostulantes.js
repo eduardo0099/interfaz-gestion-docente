@@ -96,6 +96,7 @@ class ConvocatoriasListaPostulantes extends Component {
     }
 
     render() {
+                                        console.log(this.props);
         return (
             <div>
                 <Route exact path={`${this.props.match.path}`} render={() =>
@@ -133,7 +134,7 @@ class ConvocatoriasListaPostulantes extends Component {
                                             return (
                                                 <tr>
                                                     <td className="v-middle text-center">
-                                                        <span className="block text-primary"> {item.codigo} </span>
+                                                        <a className="block text-primary" href={`${this.props.history.location.pathname}/postulante/${item.id}`}> {item.codigo} </a>
                                                     </td>
                                                     <td className="v-middle">
                                                         <span className="block text-primary"> {item.nombre} </span>
@@ -158,7 +159,7 @@ class ConvocatoriasListaPostulantes extends Component {
                         </div>
                     </BaseContainer>
                 }/>
-                <Route path={`${this.props.match.path}/nuevo`} component={ConvocatoriaNuevo}/>
+                <Route path={`${this.props.match.path}/postulante/:id`} component={<div></div>}/>
             </div>
         );
     }
