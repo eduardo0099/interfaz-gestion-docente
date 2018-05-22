@@ -5,6 +5,7 @@ import BaseContainer from "../BaseContainer";
 import Cursos from "../Cursos";
 import ConvocatoriaNuevo from "./ConvocatoriasNuevo";
 import ConvocatoriasListaPostulantes from "./ConvocatoriasListaPostulantes";
+import registroPostulante from "./registroPostulante";
 
 
 class ConvocatoriasLista extends Component {
@@ -142,7 +143,7 @@ class ConvocatoriasLista extends Component {
                     </BaseContainer>
                 }/>
 
-                <Route path={`${this.props.match.path}/nuevo`} component={ConvocatoriaNuevo}/>
+                <Route path={`${this.props.match.path}/nuevo`} component={registroPostulante}/>
                 <Route path={`${this.props.match.path}/:codigoConv`} component={ConvocatoriasListaPostulantes}/>
 
             </div>
