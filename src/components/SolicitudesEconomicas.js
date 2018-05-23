@@ -88,7 +88,7 @@ class SolicitudesEconomicas extends React.Component {
     };
 
     render() {
-        if (!this.state.verComentarios) {
+        if (!this.state.verDetalle) {
             return (
                 <div>
                     <Route exact path={`${this.props.match.path}`} render={() =>
@@ -163,8 +163,8 @@ class SolicitudesEconomicas extends React.Component {
                     volverLista={this.regresarListaEncuesta}
                     titulo = {this.state.ayudas[this.state.selectedId].titulo}
                     motivo = {this.state.ayudas[this.state.selectedId].motivo}
-                    monto_otorgado = {this.state.ayudas[this.state.selectedId].motivo}
-                    fecha_soliciud = {this.state.ayudas[this.state.selectedId].fecha_solicitud}
+                    monto_otorgado = {this.state.ayudas[this.state.selectedId].monto_otorgado}
+                    fecha_solicitud = {this.state.ayudas[this.state.selectedId].fecha_solicitud}
                     estado = {this.state.ayudas[this.state.selectedId].estado}
                 />
             );

@@ -36,9 +36,15 @@ class Detalle_SolicitudEconomica extends React.Component {
                                 <ListGroupItem> <Grid> <Row> <Col md={2}> Monto: </Col> <Col md={4}> { this.props.monto_otorgado} </Col> </Row> </Grid> </ListGroupItem>
                                 <ListGroupItem> <Grid> <Row> <Col md={2}> Fecha de registro: </Col> <Col md={4}>  { this.props.fecha_solicitud} </Col> </Row> </Grid> </ListGroupItem>
                                 <ListGroupItem> <Grid> <Row> <Col md={2}> Estado:  </Col> <Col md={4} > { this.props.estado }  </Col> </Row> </Grid> </ListGroupItem>
-                                <ListGroupItem> <Grid> <Row> <Col md={2}> Comentarios Adicionales: </Col> <Col md={4}> </Col> </Row> </Grid> </ListGroupItem>
                             </ListGroup>
                         </panel>
+                    </Col>
+                    <Col md={10}>
+                        <panel>
+                            <Panel.Heading>
+                                <Panel.Title componentClass="h3"> Descarga de Paper: </Panel.Title>
+                            </Panel.Heading>
+                            </panel>
                     </Col>
                 </Row>
             </div>
