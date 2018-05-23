@@ -4,6 +4,7 @@ import axios from "axios/index";
 import BaseContainer from "../BaseContainer";
 import Cursos from "../Cursos";
 import ConvocatoriaNuevo from "./ConvocatoriasNuevo";
+import registroPostulante from "./registroPostulante";
 
 class ConvocatoriasListaPostulantes extends Component {
 
@@ -118,6 +119,9 @@ class ConvocatoriasListaPostulantes extends Component {
                                     <h5> {this.state.cantAceptados} </h5>
                                     <h5></h5>
                                 </div>
+
+                                <a className="btn btn-default pull-right" href={`${this.props.history.location.pathname}/nuevoPostulante`}> Nuevo postulante </a>
+
                                 <table className="table table-striped">
                                     <thead>
                                     <tr>
@@ -159,7 +163,8 @@ class ConvocatoriasListaPostulantes extends Component {
                         </div>
                     </BaseContainer>
                 }/>
-                <Route path={`${this.props.match.path}/postulante/:id`} component={<div></div>}/>
+                <Route path={`${this.props.match.path}/postulante/:id`} />
+                <Route path={`${this.props.match.path}/nuevoPostulante`} component={registroPostulante}/>
             </div>
         );
     }
