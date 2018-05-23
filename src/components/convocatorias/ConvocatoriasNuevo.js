@@ -32,6 +32,7 @@ class ConvocatoriaNuevo extends Component {
             investigacion: [],
 
             curso: '',
+            codigoCurso:'',
             descripcion: '',
             fecha_inicio: null,
             fecha_fin: null
@@ -40,6 +41,8 @@ class ConvocatoriaNuevo extends Component {
         this.handleDescripcion = this.handleDescripcion.bind(this);
         this.handleFIni = this.handleFIni.bind(this);
         this.handleFFin = this.handleFFin.bind(this);
+        this.handleCodigoCurso = this.handleCodigoCurso.bind(this);
+
     }
 
     gradosAcademicosChanged = (newGradoAcademico) => {
@@ -68,6 +71,10 @@ class ConvocatoriaNuevo extends Component {
 
     handleCurso(event) {
         this.setState({curso: event.target.value});
+    }
+
+    handleCodigoCurso(event) {
+        this.setState({codigoCurso: event.target.value});
     }
 
     handleDescripcion(event) {
@@ -162,6 +169,11 @@ class ConvocatoriaNuevo extends Component {
                             {this.validator.message('curso', this.state.curso, 'required', false, {required: 'Este campo es obligatorio'})}
                         </div>
                         <div className="form-group">
+                            <label> Código curso </label>
+                            <input type="text" className="form-control" value={this.state.codigoCurso} onChange={this.handleCodigoCurso}></input>
+                            {this.validator.message('codigoCurso', this.state.codigoCurso, 'required', false, {required: 'Este campo es obligatorio'})}
+                        </div>
+                        <div className="form-group">
                             <label> Descripción </label>
                             <textarea type="text" className="form-control" value={this.state.descripcion} onChange={this.handleDescripcion}></textarea>
                             {this.validator.message('descripcion', this.state.descripcion, 'required', false, {required: 'Este campo es obligatorio'})}
@@ -202,11 +214,13 @@ class ConvocatoriaNuevo extends Component {
                                     name="gradosAcademicos"
                                     value={this.state.gradosAcademicos}
                                     onChange={this.gradosAcademicosChanged}>
-                                    <label><Checkbox value="tituloProfesional"/> Título Profesional</label>
+                                    <label><Checkbox value="Titulo Profesional"/> Título Profesional</label>
                                     <br/>
-                                    <label><Checkbox value="maestria"/> Maestría</label>
+                                    <label><Checkbox value="Maestria"/> Maestría</label>
                                     <br/>
-                                    <label><Checkbox value="doctorado"/> Doctorado</label>
+                                    <label><Checkbox value="Doctorado"/> Doctorado</label>
+                                    <br/>
+                                    <label><Checkbox value="Diplomatura"/> Diplomado</label>
                                 </CheckboxGroup>
                                 </div>
 
@@ -219,11 +233,11 @@ class ConvocatoriaNuevo extends Component {
                                     name="docencia"
                                     value={this.state.docencia}
                                     onChange={this.docenciaChanged}>
-                                    <label><Checkbox value="cargosCurso"/> Cargos a su curso</label>
+                                    <label><Checkbox value="Cargos a su curso"/> Cargos a su curso</label>
                                     <br/>
-                                    <label><Checkbox value="asesoriaTesis"/> Asesoria de Tesis</label>
+                                    <label><Checkbox value="Asesoria de Tesis"/> Asesoria de Tesis</label>
                                     <br/>
-                                    <label><Checkbox value="premiosDocencia"/> Premios a la Docencia</label>
+                                    <label><Checkbox value="Premios a la Docencia"/> Premios a la Docencia</label>
                                 </CheckboxGroup>
                                 </div>
                             </div>
@@ -232,7 +246,7 @@ class ConvocatoriaNuevo extends Component {
                                 <div className="col-md-offset-1">
                                 <CheckboxGroup
                                     checkboxDepth={2} // This is needed to optimize the checkbox group
-                                    name="experienciaProfesional"
+                                    name="Solicitar Experiencia Profesional"
                                     value={this.state.experienciaProfesional}
                                     onChange={this.experienciaProfesionalChanged}>
                                     <label><Checkbox value="solExperienciaProfesional"/> Solicitar Experiencia Profesional</label>
@@ -244,7 +258,7 @@ class ConvocatoriaNuevo extends Component {
                                 <div className="col-md-offset-1">
                                 <CheckboxGroup
                                     checkboxDepth={2} // This is needed to optimize the checkbox group
-                                    name="investigacion"
+                                    name="Solicitar Investigacion"
                                     value={this.state.investigacion}
                                     onChange={this.investigacionProfesionalChanged}>
                                     <label><Checkbox value="solInvestigacion"/> Solicitar Investigacion</label>
