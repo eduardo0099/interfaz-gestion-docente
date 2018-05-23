@@ -29,6 +29,7 @@ class SolicitudesEconomicas extends React.Component {
             })
     }
 
+
     findCicloActual() {
         axios.get('http://200.16.7.151:8080/general/cicloActual')
             .then(response => {
