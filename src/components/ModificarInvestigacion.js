@@ -386,7 +386,7 @@ class ModificarInvestigacion extends Component {
                         </div>
                     </div>
                     <div className="panel-footer text-right">
-                        <button className="btn btn-primary"> Actualizar Investigación</button>
+                        <button className="btn btn-primary" onClick={this.performPostRequest}> Actualizar Investigación</button>
                     </div>
 
                     <Modal show={this.state.showAgregar} onHide={this.handleCloseAgregar}>

@@ -77,7 +77,7 @@ class ListaEncuestas extends React.Component {
                                         <tr>
                                             <th className="col-md-4">Curso</th>
                                             <th className="col-md-4 text-center">Participacion</th>
-                                            <th className="col-md-4 text-center">Puntaje</th>
+                                            <th className="col-md-4 text-center">Puntaje</th> T
                                             <th className>Comentarios</th>
                                         </tr>
                                         </thead>

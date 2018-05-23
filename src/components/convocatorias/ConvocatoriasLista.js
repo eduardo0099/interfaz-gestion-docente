@@ -5,6 +5,7 @@ import BaseContainer from "../BaseContainer";
 import Cursos from "../Cursos";
 import ConvocatoriaNuevo from "./ConvocatoriasNuevo";
 import ConvocatoriasListaPostulantes from "./ConvocatoriasListaPostulantes";
+import registroPostulante from "./registroPostulante";
 
 
 class ConvocatoriasLista extends Component {
@@ -121,7 +122,7 @@ class ConvocatoriasLista extends Component {
                                                     </td>
                                                     <td className="v-middle text-center">
 
-                                                        <a className="badge" href={'/convocatorias/' + item.codigo}> {item.cantidadPostulantes} </a>
+                                                        <a className="badge" href={'/convocatorias/'+ item.id}> {item.cantidadPostulantes} </a>
 
                                                         <span className="block small text-muted m-t-xs"> postulantes </span>
                                                     </td>
@@ -144,6 +145,7 @@ class ConvocatoriasLista extends Component {
 
                 <Route path={`${this.props.match.path}/nuevo`} component={ConvocatoriaNuevo}/>
                 <Route path={`${this.props.match.path}/:codigoConv`} component={ConvocatoriasListaPostulantes}/>
+
 
             </div>
         );
