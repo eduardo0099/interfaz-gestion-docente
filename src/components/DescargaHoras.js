@@ -13,7 +13,6 @@ class DescargaHoras extends React.Component{
                         hDescargaTotal:"",
                         semana:[]
             }],
-            listaDescargas:[],
             listaCiclos:[],
             cicloSelect:"",
             selectedId:-1,
@@ -43,26 +42,6 @@ class DescargaHoras extends React.Component{
                     cicloSelect: cicloSeleccionado,
                     listaCiclos: listaCi,
                 });
-                let aux = [];
-                for(let i=0;i<this.state.descargas.length;i++){
-                    let obj = {};
-                    obj.id = i;
-                    obj.nombre = this.state.descargas[i].nombre;
-                    obj.codigo = this.state.descargas[i].codigo;
-                    obj.hDescargaTotal = this.state.descargas[i].hDescargaTotal;
-                    obj.semana = [];
-                    for(let j=0;i<this.state.descargas[i].semana[j].length;i++) {
-                        let sem = {};
-                        sem.numero = this.state.descargas[i].semana[j].numero;
-                        sem.hdescarga = this.state.descargas[i].semana[j].hdescarga;
-                        sem.motivo = this.state.descargas[i].semana[j].motivo;
-                        obj.semana.push(sem);
-                    }
-                    aux.push(obj);
-                }
-                this.setState({
-                    listaDescargas : Array.from(new Set(aux))
-                })
             })
             .catch(error => {
                 console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`,error);
@@ -83,17 +62,6 @@ class DescargaHoras extends React.Component{
                     descargas: response.data.descargas,
                     cicloSelect:nuevoCiclo
                 });
-                let aux = [];
-                for(let i=0;i<this.state.descargas.length;i++){
-                    let obj = {};
-                    obj.nombre = this.state.descargas[i].nombre;
-                    obj.codigo = this.state.descargas[i].codigo;
-                    obj.hDescargaTotal = this.state.descargas[i].hDescargaTotal;
-                    aux.push(obj);
-                }
-                this.setState({
-                    listaDescargas : Array.from(new Set(aux))
-                })
             })
             .catch(error => {
                 console.log(`Error al obtener datos de la descarga de horas`,error);
@@ -102,20 +70,20 @@ class DescargaHoras extends React.Component{
     regresarListaEncuesta = () => {
         this.setState({
             selectedId: -1,
-            verComentarios: false,
+            verDetalle: false,
         });
     };
 
     mostarComentarios = (index) => {
         this.setState({
             selectedId: index,
-            verComentarios: true,
+            verDetalle: true,
         });
     };
 
 
     render(){
-        if (!this.state.verComentarios) {
+        if (!this.state.verDetalle) {
             return (
                 <div>
                     <BaseContainer>
@@ -162,7 +130,7 @@ class DescargaHoras extends React.Component{
                                             </thead>
                                             <tbody>
 
-                                            {this.state.listaDescargas.map((item, i) => {
+                                            {this.state.descargas.map((item, i) => {
                                                 return <tr key={i}>
                                                     <td className="v-middle">
                                                         <span className="block text-primary"> {item.nombre} </span>
@@ -190,7 +158,7 @@ class DescargaHoras extends React.Component{
             return (
                 <Detalle_DescargaHoras
                     volverLista={this.regresarListaEncuesta}
-                    semana = {this.state.listaDescargas[this.state.selectedId].semana}
+                    semana = {this.state.descargas[this.state.selectedId].semana}
                 />
             );
         }
