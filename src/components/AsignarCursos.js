@@ -195,7 +195,7 @@ class AsignarCursos extends Component {
   handleFiltroCicloRes = e => {
     let newCicloRes = e.target.value;
     axios.get('http://200.16.7.151:8080/asignacionHorarios/listaDocenteCargaAsignada',{
-          params:{ciclo:this.state.filtroCicloRes}
+          params:{ciclo:newCicloRes}
         }).then(res => {
           this.setState({resumenAsignacion: res.data.docentes, filtroCicloRes:newCicloRes});
         }).catch(error => {
