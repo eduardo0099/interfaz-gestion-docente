@@ -91,7 +91,7 @@ class DetalleDocente extends Component {
                                     <a className="btn btn-primary col-md-12" href={`${this.props.match.url}/solicitudesEconomicas`}>Solicitudes</a>
                                 </div>
                                 <div class="col-md-2">
-                                    <a className="btn btn-primary col-md-12" href={`${this.props.match.url}/Actividades`}>Plan de Proyecto</a>
+                                    <a className="btn btn-primary col-md-12" href={`${this.props.match.url}/Actividades`}>Plan de Trabajo</a>
                                 </div>
                             </div>
                             <div class="col-md-12 m-t-lg">

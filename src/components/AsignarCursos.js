@@ -66,7 +66,7 @@ class AsignarCursos extends Component {
                 alert("Ha ocurrido un error, intentelo luego");
                 console.log(error);
             });
-        axios.get('https://demo4106552.mockable.io/asignacionHorarios/consultaPreferencias')
+        axios.get('http://200.16.7.151:8080/asignacionHorarios/consultaPreferencias')
             .then(response => {
                 this.setState({
                     cursos: response.data.cursos
