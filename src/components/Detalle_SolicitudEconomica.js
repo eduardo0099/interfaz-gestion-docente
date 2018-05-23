@@ -3,6 +3,7 @@ import {Grid, Row, Button, Glyphicon, Col, SplitButton, MenuItem} from 'react-bo
 import axios from "axios/index";
 import {Route, Link} from 'react-router-dom';
 
+
 class Detalle_SolicitudEconomica extends React.Component {
     constructor(props) {
         super(props);

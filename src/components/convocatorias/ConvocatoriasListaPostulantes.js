@@ -4,6 +4,8 @@ import axios from "axios/index";
 import BaseContainer from "../BaseContainer";
 import Cursos from "../Cursos";
 import ConvocatoriaNuevo from "./ConvocatoriasNuevo";
+import registroPostulante from "./registroPostulante";
+import linkConvocatoria from "./linkConvocatoria";
 
 class ConvocatoriasListaPostulantes extends Component {
 
@@ -96,6 +98,7 @@ class ConvocatoriasListaPostulantes extends Component {
     }
 
     render() {
+                                        console.log(this.props);
         return (
             <div>
                 <Route exact path={`${this.props.match.path}`} render={() =>
@@ -117,6 +120,9 @@ class ConvocatoriasListaPostulantes extends Component {
                                     <h5> {this.state.cantAceptados} </h5>
                                     <h5></h5>
                                 </div>
+
+                                <a className="btn btn-default pull-right" href={`${this.props.history.location.pathname}/link`}> URL </a>
+
                                 <table className="table table-striped">
                                     <thead>
                                     <tr>
@@ -133,7 +139,7 @@ class ConvocatoriasListaPostulantes extends Component {
                                             return (
                                                 <tr>
                                                     <td className="v-middle text-center">
-                                                        <span className="block text-primary"> {item.codigo} </span>
+                                                        <a className="block text-primary" href={`${this.props.history.location.pathname}/postulante/${item.id}`}> {item.codigo} </a>
                                                     </td>
                                                     <td className="v-middle">
                                                         <span className="block text-primary"> {item.nombre} </span>
@@ -158,7 +164,8 @@ class ConvocatoriasListaPostulantes extends Component {
                         </div>
                     </BaseContainer>
                 }/>
-                <Route path={`${this.props.match.path}/nuevo`} component={ConvocatoriaNuevo}/>
+                <Route path={`${this.props.match.path}/postulante/:id`} />
+                <Route path={`${this.props.match.path}/link`} component={linkConvocatoria}/>
             </div>
         );
     }

@@ -1,57 +1,47 @@
 import React, {Component} from 'react';
-import {Grid, Row, Table, Button, Glyphicon, Col, SplitButton, MenuItem} from 'react-bootstrap';
-import axios from "axios/index";
+import {Grid, Row,Col} from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
-import {Route,Link} from 'react-router-dom';
+import BaseContainer from "./BaseContainer";
 
-class Detalle_DescargaHoras extends React.Component{
+class Detalle_DescargaHoras extends Component{
 
     constructor(props){
         super(props);
-        this.state = {
-            semanas: [{numero:"",
-                        hDescarga:"",
-                        motivo:""}]
-        }
+        console.log(this.props);
     }
-
-    
-
     render(){
         const columnas=[
             {text:'Semana',dataField:'numero'},
             {text:'Horas Descarga',dataField:'hDescarga'},
             {text:'Motivo',dataField:'motivo'}
         ];
-        console.log(this.state);
         return (
             <div>
-                <Route exact path={`${this.props.match.path}`} render={() =>
-
-                        <Grid>
-                            <Row className="back-bar">
-                                <Col md={12}>
-                                    <Button onClick={this.props.history.goBack}><Glyphicon
-                                        glyph="arrow-left"></Glyphicon></Button>
-                                    <span
-                                        className="professor-name"> Regresar a Descarga de Horas </span>
+                    <BaseContainer>
+                        <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
+                            <Grid>
+                                <Row>
+                                    <Col md={8}>
+                                        <h2>Detalle de descarga de Horas</h2>
+                                    </Col>
+                                    <Col md={2}>
+                                        <div className="panel-heading">
+                                            <a className="btn btn-default pull-right m-t-md btn-sm" onClick={this.props.history.goBack}> Volver  </a>
+                                        </div>
+                                    </Col>
+                                </Row>
+                                <Col md={6}>
+                                    <BootstrapTable
+                                        keyField='id'
+                                        data={this.props.semana}
+                                        columns={columnas}/>
                                 </Col>
-                            </Row>
-                            <Row>
-                                <h1>Detalle de descarga de horas</h1>
-                            </Row>
-                            <Col md={6}>
-                                <BootstrapTable
-                                    keyField='id'
-                                    data={this.state.semanas}
-                                    columns={columnas}/>
-                            </Col>
-                            <Col>
-                                Falta cuadro estadistico del horasXsemanaCiclo
-                            </Col>
-                        </Grid>
-
-                }/>
+                                <Col>
+                                    Falta cuadro estadistico del horasXsemanaCiclo
+                                </Col>
+                            </Grid>
+                        </div>
+                    </BaseContainer>
             </div>
         );
     }

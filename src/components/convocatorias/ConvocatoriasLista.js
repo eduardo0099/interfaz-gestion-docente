@@ -5,6 +5,7 @@ import BaseContainer from "../BaseContainer";
 import Cursos from "../Cursos";
 import ConvocatoriaNuevo from "./ConvocatoriasNuevo";
 import ConvocatoriasListaPostulantes from "./ConvocatoriasListaPostulantes";
+import registroPostulante from "./registroPostulante";
 
 
 class ConvocatoriasLista extends Component {
@@ -86,7 +87,7 @@ class ConvocatoriasLista extends Component {
                     <BaseContainer>
                         <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
                             <div className="panel-heading">
-                                <a className="btn btn-sm btn-primary pull-right m-t-md" href="/convocatorias/nuevo"> Nueva Convocatoria</a>
+                                <a className="btn btn-sm btn-primary pull-right m-t-md" href={`${this.props.match.url}/nuevo`}> Nueva Convocatoria</a>
                                 <h2 style={headerStyle}> Convocatorias </h2>
                             </div>
                             <div className="panel-body">
@@ -121,7 +122,7 @@ class ConvocatoriasLista extends Component {
                                                     </td>
                                                     <td className="v-middle text-center">
 
-                                                        <a className="badge" href={'/convocatorias/' + item.codigo}> {item.cantidadPostulantes} </a>
+                                                        <a className="badge" href={`${this.props.match.url}/id/${item.id}`}> {item.cantidadPostulantes} </a>
 
                                                         <span className="block small text-muted m-t-xs"> postulantes </span>
                                                     </td>
@@ -143,7 +144,8 @@ class ConvocatoriasLista extends Component {
                 }/>
 
                 <Route path={`${this.props.match.path}/nuevo`} component={ConvocatoriaNuevo}/>
-                <Route path={`${this.props.match.path}/:codigoConv`} component={ConvocatoriasListaPostulantes}/>
+                <Route path={`${this.props.match.path}/id/:codigoConv`} component={ConvocatoriasListaPostulantes}/>
+
 
             </div>
         );

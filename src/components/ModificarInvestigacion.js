@@ -27,7 +27,8 @@ class ModificarInvestigacion extends Component {
             profesores: [],
             showQuitar: false,
             selectedQuitar: [],
-            autoresModal: []
+            autoresModal: [],
+            autoresOrig:[]
         };
         this.handleTitulo = this.handleTitulo.bind(this);
         this.handleAutor = this.handleAutor.bind(this);
@@ -42,6 +43,7 @@ class ModificarInvestigacion extends Component {
         this.handleShowQuitar = this.handleShowQuitar.bind(this);
         this.handleCloseQuitar = this.handleCloseQuitar.bind(this);
         this.guardarQuitados = this.guardarQuitados.bind(this);
+
 
     }
 
@@ -58,7 +60,8 @@ class ModificarInvestigacion extends Component {
                     autor: response.data.autores,
                     resumen: response.data.investigacion.resumen,
                     fecha_inicio: moment(response.data.investigacion.fecha_inicio),
-                    fecha_fin: moment(response.data.investigacion.fecha_fin)
+                    fecha_fin: moment(response.data.investigacion.fecha_fin),
+                    autoresOrig: response.data.autores,
                 });
             })
             .catch(error => {
@@ -113,6 +116,16 @@ class ModificarInvestigacion extends Component {
     }
 
     performPostRequest = () => {
+        let autoresNuevos = this.state.autor;
+        let autoresOrig = this.state.autoresOrig;
+        let agregar=autoresNuevos.filter(function (el) {
+            return autoresOrig.indexOf(el) < 0;
+        });
+        let quitar=autoresOrig.filter(function (el) {
+            return autoresNuevos.indexOf(el) < 0;
+        });
+        console.log('agregar: ',agregar);
+        console.log('quitar: ',quitar);
         if (this.validator.allValid() && this.validDates(this.state.fecha_fin, this.state.fecha_inicio)) {
             axios.put('http://200.16.7.151:8080/docente/investigacion/actualizar', {
                 id: this.props.match.params.idInvestigacion,
@@ -129,7 +142,30 @@ class ModificarInvestigacion extends Component {
                 })
                 .catch(error => {
                     alert("Error: No se pudo registrar la modificación");
+                });
+            if(agregar.length>0){
+                axios.put('http://200.16.7.151:8080/docente/investigacion/actualizar/agregarAutores', {
+                    id: this.props.match.params.idInvestigacion,
+                    autor: agregar
                 })
+                    .then(response => {
+                    })
+                    .catch(error => {
+                        alert("Error: No se pudieron agregar los profesores");
+                    })
+            }
+            if(quitar.length>0){
+                axios.delete('http://200.16.7.151:8080/docente/investigacion/eliminar/eliminarAutores', {
+                    data:{
+                        id: this.props.match.params.idInvestigacion,
+                        autor: quitar
+                    }})
+                    .then(response => {
+                    })
+                    .catch(error => {
+                        alert("Error: No se pudieron quitar los profesores");
+                    })
+            }
         } else {
             if (this.state.fecha_fin !== null && this.state.fecha_fin !== null) {
                 if (!this.validDates(this.state.fecha_fin, this.state.fecha_inicio)) {
@@ -148,16 +184,6 @@ class ModificarInvestigacion extends Component {
     }
 
     guardarAgregados() {
-        axios.delete('http://200.16.7.151:8080/docente/investigacion/actualizar/agregarAutores', {data:{
-            id: this.props.match.params.idInvestigacion,
-            autor: this.state.selectedAgregar
-        }})
-            .then(response => {
-                alert("Profesores agregados");
-            })
-            .catch(error => {
-                alert("Error: No se pudieron agregar los profesores");
-            })
         this.setState({
             showAgregar: false,
             autor: this.state.autor.concat(this.state.selectedAgregar),
@@ -219,17 +245,6 @@ class ModificarInvestigacion extends Component {
 
     guardarQuitados() {
         console.log("quitados:", this.state.selectedQuitar);
-        axios.delete('http://200.16.7.151:8080/docente/investigacion/eliminar/eliminarAutores', {
-            data:{
-                id: this.props.match.params.idInvestigacion,
-                autor: this.state.selectedQuitar
-            }})
-            .then(response => {
-                alert("Profesores quitados");
-            })
-            .catch(error => {
-                alert("Error: No se pudieron quitar los profesores");
-            })
         let quitados = this.state.selectedQuitar;
         this.setState({
             showQuitar: false,
@@ -386,7 +401,7 @@ class ModificarInvestigacion extends Component {
                         </div>
                     </div>
                     <div className="panel-footer text-right">
-                        <button className="btn btn-primary"> Actualizar Investigación</button>
+                        <button className="btn btn-primary" onClick={this.performPostRequest}> Actualizar Investigación</button>
                     </div>
 
                     <Modal show={this.state.showAgregar} onHide={this.handleCloseAgregar}>
