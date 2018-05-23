@@ -7,6 +7,13 @@ class Detalle_DescargaHoras extends React.Component{
 
     constructor(props){
         super(props);
+        this.state={
+            semana:[{
+                numero:"",
+                hDescarga:"",
+                motivo:""
+            }]
+        }
     }
 
     render(){

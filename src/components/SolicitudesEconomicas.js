@@ -88,6 +88,7 @@ class SolicitudesEconomicas extends React.Component {
     };
 
     render() {
+        console.log('listaCiclos:',this.state.listaCiclos)
         if (!this.state.verDetalle) {
             return (
                 <div>
