@@ -47,13 +47,22 @@ class DescargaHoras extends React.Component{
                 let aux = [];
                 for(let i=0;i<this.state.descargas.length;i++){
                     let obj = {};
+                    obj.id = i;
                     obj.nombre = this.state.descargas[i].nombre;
                     obj.codigo = this.state.descargas[i].codigo;
                     obj.hDescargaTotal = this.state.descargas[i].hDescargaTotal;
+                    obj.semana = [];
+                    for(let j=0;i<this.state.descargas[i].semana[j].length;i++) {
+                        let sem = {};
+                        sem.numero = this.state.descargas[i].semana[j].numero;
+                        sem.hdescarga = this.state.descargas[i].semana[j].hdescarga;
+                        sem.motivo = this.state.descargas[i].semana[j].motivo;
+                        obj.semana.push(sem);
+                    }
                     aux.push(obj);
                 }
                 this.setState({
-                    listaDescargas : aux
+                    listaDescargas : Array.from(new Set(aux))
                 })
             })
             .catch(error => {
@@ -97,20 +106,24 @@ class DescargaHoras extends React.Component{
         const columnas=[
             {text:'Nombre del curso',dataField:'nombre'},
             {text:'Codigo',dataField:'codigo'},
-            {text:'Horas Descarga',dataField:'hDescargaTotal'}
+            {text:'Horas Descarga',dataField:'hDescargaTotal'},
+            {text: 'Semana',dataField: 'semana', hidden: true}
         ];
 
         const selectRow ={
             mode: 'radio',
             clickToSelect: true,
-            onSelect: this.handleOnSelectCurso,
-            bgColor: '#edeaea'
+            hideSelectColumn: true,
+            bgColor: '#93a3b5',
+            selected: [this.state.selectedId]
         };
 
         const rowEvents = {
             onClick: (e, row,rowIndex) => {
+                console.log(rowIndex)
+                console.log(row)
             this.setState({
-                selectedId : rowIndex
+                selectedId : row.id
             })
             //alert(`clicked on row with index: ${this.state.selectedId}`);
             }
@@ -172,8 +185,8 @@ class DescargaHoras extends React.Component{
                     </Grid>
                         </div>
                     </BaseContainer>
-                    <Route path={`${this.props.match.path}/Detalle_DescargaHoras`} render={()=>
-                        <Detalle_DescargaHoras {...this.state.descargas[this.state.selectedId]}
+                    <Route path={`${this.props.match.path}/:id`} render={()=>
+                        <Detalle_DescargaHoras {...this.state.listaDescargas[this.state.selectedId]}
                         />}
                     />
                 </div>

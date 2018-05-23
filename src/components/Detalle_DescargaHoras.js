@@ -3,13 +3,14 @@ import {Grid, Row,Col} from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import BaseContainer from "./BaseContainer";
 
-class Detalle_DescargaHoras extends Component{
+class Detalle_DescargaHoras extends React.Component{
 
     constructor(props){
         super(props);
         console.log(this.props);
     }
     render(){
+        console.log(this.props);
         const columnas=[
             {text:'Semana',dataField:'numero'},
             {text:'Horas Descarga',dataField:'hDescarga'},
@@ -26,7 +27,6 @@ class Detalle_DescargaHoras extends Component{
                                     </Col>
                                     <Col md={2}>
                                         <div className="panel-heading">
-                                            <a className="btn btn-default pull-right m-t-md btn-sm" onClick={this.props.history.goBack}> Volver  </a>
                                         </div>
                                     </Col>
                                 </Row>
