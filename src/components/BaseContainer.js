@@ -8,9 +8,7 @@ class BaseContainer extends Component {
         <section className="hbox stretch">
               <section className="vbox">
                 <section className="scrollable wrapper-lg base-container">
-                  <div className="panel wrapper-md">
                     {this.props.children}
-                  </div>
                 </section>
               </section>
         </section>

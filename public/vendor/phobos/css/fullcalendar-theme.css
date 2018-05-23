@@ -1,0 +1,56 @@
+.fc-toolbar {
+    height: 40px;
+    background-color: #fff;
+}
+
+.fc-toolbar .fc-button {
+    background: transparent;
+    margin: 6px 2px 0 2px;
+    height: 30px;
+    line-height: 18px;
+    padding: 0px 10px;
+    color: #363e45;
+}
+
+.fc-toolbar .fc-state-active, 
+.fc-toolbar .fc-state-down{
+    background: #666;
+    color: #fff;
+    box-shadow: none;
+    text-shadow: none;
+}
+
+.fc-toolbar h2 {
+    font-size: 18px;
+    line-height: 40px;
+    margin: 0;
+}
+
+.panel .fc-view {
+    margin: -1px;
+}
+
+.fc-view .fc-widget-header{
+    background-color: #ebeef5;
+}
+
+.fc-view .fc-widget-header,
+.fc-view .fc-widget-content {
+    border-color: #e8e8e8;
+    font-weight: normal;
+}
+
+.fc-view .fc-event {
+    padding: 4px 6px;
+    color: #333;
+}
+
+.fc-event {
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    border: none;
+    color: #fff;
+    cursor: default;
+    font-size: 0.8em;
+}
