@@ -16,10 +16,10 @@ class ModificarActividad extends Component {
         super(props);
         this.validator = new SimpleReactValidator();
         this.state = {
-            titulo: '',
-            tipo: [],
-            fecha_inicio: '',
-            fecha_fin: '',
+            titulo: 'Reunion Congresal de amantes del Hearthstone',
+            tipo: 'Congreso',
+            fecha_inicio: '2018-04-28',
+            fecha_fin: '2018-04-28',
             showAgregar: false,
             selectedAgregar: [],
             profesores: [],
@@ -45,7 +45,7 @@ class ModificarActividad extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://200.16.7.151:8080/docente/docente/actividad', {
+        /*axios.get('http://200.16.7.151:8080/docente/docente/actividad', {
             params: {
                 id: this.props.match.params.idActividad,
             }
@@ -62,15 +62,15 @@ class ModificarActividad extends Component {
                 });
             })
             .catch(error => {
-                console.log("Error obteniendo la investigacion", error);
-            });
+                console.log("Error obteniendo la actividad", error);
+            });*/
     }
 
     handleTitulo(event) {
         this.setState({titulo: event.target.value});
     }
 
-    handleAutor(event) {
+    handleTipo(event) {
         this.setState({autor: event.target.value});
     }
 
@@ -109,16 +109,9 @@ class ModificarActividad extends Component {
     }
 
     performPostRequest = () => {
-        let autoresNuevos = this.state.autor;
+        /*let autoresNuevos = this.state.autor;
         let autoresOrig = this.state.autoresOrig;
-        let agregar=autoresNuevos.filter(function (el) {
-            return autoresOrig.indexOf(el) < 0;
-        });
-        let quitar=autoresOrig.filter(function (el) {
-            return autoresNuevos.indexOf(el) < 0;
-        });
-        console.log('agregar: ',agregar);
-        console.log('quitar: ',quitar);
+        */
         if (this.validator.allValid() && this.validDates(this.state.fecha_fin, this.state.fecha_inicio)) {
             axios.put('http://200.16.7.151:8080/docente/investigacion/actualizar', {
                 id: this.props.match.params.idActividad,
@@ -135,29 +128,6 @@ class ModificarActividad extends Component {
                 .catch(error => {
                     alert("Error: No se pudo registrar la modificación");
                 });
-            if(agregar.length>0){
-                axios.put('http://200.16.7.151:8080/docente/investigacion/actualizar/agregarAutores', {
-                    id: this.props.match.params.idInvestigacion,
-                    autor: agregar
-                })
-                    .then(response => {
-                    })
-                    .catch(error => {
-                        alert("Error: No se pudieron agregar los profesores");
-                    })
-            }
-            if(quitar.length>0){
-                axios.delete('http://200.16.7.151:8080/docente/investigacion/eliminar/eliminarAutores', {
-                    data:{
-                        id: this.props.match.params.idInvestigacion,
-                        autor: quitar
-                    }})
-                    .then(response => {
-                    })
-                    .catch(error => {
-                        alert("Error: No se pudieron quitar los profesores");
-                    })
-            }
         } else {
             if (this.state.fecha_fin !== null && this.state.fecha_fin !== null) {
                 if (!this.validDates(this.state.fecha_fin, this.state.fecha_inicio)) {
@@ -344,7 +314,7 @@ class ModificarActividad extends Component {
                     <div className="panel-heading">
                         <header className="page-header m-t-sm">
                             <a className="btn btn-default pull-right" onClick={this.props.history.goBack}> Volver </a>
-                            <p className="h2 m-b-sm"> Editar Investigación </p>
+                            <p className="h2 m-b-sm"> Editar Actividad </p>
                         </header>
                     </div>
                     <div className="panel-body">
@@ -355,21 +325,10 @@ class ModificarActividad extends Component {
                         </div>
                         <div className="form-group row">
                             <div className="col-md-8 col-sm-12">
-                                <label> Autores </label>
+                                <label> Tipo </label>
                                 <input type="text" disabled={true} className="form-control" value={this.state.autor} onChange={this.handleAutor}></input>
                                 {this.validator.message('titulo', this.state.titulo, 'required|max:100', false, {required: 'Este campo es obligatorio', max: 'El número máximo de caracteres es 20'})}
                             </div>
-                            <div className="col-sm-12 col-md-2 text-center">
-                                <button className="btn btn-primary m-t-md col-md-12" onClick={this.handleShowAgregar}> Añadir</button>
-                            </div>
-                            <div className="col-sm-12 col-md-2 text-center">
-                                <button className="btn btn-primary m-t-md col-md-12" onClick={this.handleShowQuitar}> Quitar</button>
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <label> Resumen </label>
-                            <textarea className="form-control" value={this.state.resumen} onChange={this.handleResumen}></textarea>
-                            {this.validator.message('resumen', this.state.resumen, 'required', false, {required: 'Este campo es obligatorio'})}
                         </div>
                         <div className="form-group">
                             <label> Fecha Inicio </label>
@@ -393,36 +352,8 @@ class ModificarActividad extends Component {
                         </div>
                     </div>
                     <div className="panel-footer text-right">
-                        <button className="btn btn-primary" onClick={this.performPostRequest}> Actualizar Investigación</button>
+                        <button className="btn btn-primary" onClick={this.performPostRequest}> Actualizar Actividad</button>
                     </div>
-
-                    <Modal show={this.state.showAgregar} onHide={this.handleCloseAgregar}>
-                        <Modal.Header closeButton>
-                            <Modal.Title>Editar Autores</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <div className="form-group">
-                                <BootstrapTable keyField='codigo' data={this.state.profesores} columns={columns}
-                                                selectRow={selectRowAgregar}/>
-                            </div>
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <button className="btn btn-primary" onClick={this.guardarAgregados}>Guardar</button>
-                        </Modal.Footer>
-                    </Modal>
-
-                    <Modal show={this.state.showQuitar} onHide={this.handleCloseQuitar}>
-                        <Modal.Header closeButton>
-                            <Modal.Title>Quitar Autores</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <BootstrapTable keyField='codigo' data={this.state.autoresModal} columns={columns}
-                                            selectRow={selectRowQuitar}/>
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <button className="btn btn-primary" onClick={this.guardarQuitados}>Guardar</button>
-                        </Modal.Footer>
-                    </Modal>
                 </div>
             </BaseContainer>
         );
