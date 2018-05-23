@@ -5,6 +5,7 @@ import BaseContainer from "../BaseContainer";
 import Cursos from "../Cursos";
 import ConvocatoriaNuevo from "./ConvocatoriasNuevo";
 import registroPostulante from "./registroPostulante";
+import linkConvocatoria from "./linkConvocatoria";
 
 class ConvocatoriasListaPostulantes extends Component {
 
@@ -120,7 +121,7 @@ class ConvocatoriasListaPostulantes extends Component {
                                     <h5></h5>
                                 </div>
 
-                                <a className="btn btn-default pull-right" href={`${this.props.history.location.pathname}/nuevoPostulante`}> Nuevo postulante </a>
+                                <a className="btn btn-default pull-right" href={`${this.props.history.location.pathname}/link`}> URL </a>
 
                                 <table className="table table-striped">
                                     <thead>
@@ -164,7 +165,7 @@ class ConvocatoriasListaPostulantes extends Component {
                     </BaseContainer>
                 }/>
                 <Route path={`${this.props.match.path}/postulante/:id`} />
-                <Route path={`${this.props.match.path}/nuevoPostulante`} component={registroPostulante}/>
+                <Route path={`${this.props.match.path}/link`} component={linkConvocatoria}/>
             </div>
         );
     }

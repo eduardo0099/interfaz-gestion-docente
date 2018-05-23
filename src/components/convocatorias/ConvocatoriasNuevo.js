@@ -91,7 +91,7 @@ class ConvocatoriaNuevo extends Component {
     performNext = ()=> {
         if(this.state.paso==1) {
             if (this.validator.allValid() && this.validDates(this.state.fecha_fin,this.state.fecha_inicio)) {
-            //if (1) {
+                //if (1) {
                 this.setState({
                     paso: 2,
                     btnAnterior:true,
@@ -197,58 +197,58 @@ class ConvocatoriaNuevo extends Component {
                             <div className="form-group">
                                 <h5> Grados Academicos </h5>
                                 <div className="col-md-offset-1">
-                                <CheckboxGroup
-                                    checkboxDepth={2} // This is needed to optimize the checkbox group
-                                    name="gradosAcademicos"
-                                    value={this.state.gradosAcademicos}
-                                    onChange={this.gradosAcademicosChanged}>
-                                    <label><Checkbox value="tituloProfesional"/> Título Profesional</label>
-                                    <br/>
-                                    <label><Checkbox value="maestria"/> Maestría</label>
-                                    <br/>
-                                    <label><Checkbox value="doctorado"/> Doctorado</label>
-                                </CheckboxGroup>
+                                    <CheckboxGroup
+                                        checkboxDepth={2} // This is needed to optimize the checkbox group
+                                        name="gradosAcademicos"
+                                        value={this.state.gradosAcademicos}
+                                        onChange={this.gradosAcademicosChanged}>
+                                        <label><Checkbox value="tituloProfesional"/> Título Profesional</label>
+                                        <br/>
+                                        <label><Checkbox value="maestria"/> Maestría</label>
+                                        <br/>
+                                        <label><Checkbox value="doctorado"/> Doctorado</label>
+                                    </CheckboxGroup>
                                 </div>
 
                             </div>
                             <div className="form-group">
                                 <h5> Docencia </h5>
                                 <div className="col-md-offset-1">
-                                <CheckboxGroup
-                                    checkboxDepth={2} // This is needed to optimize the checkbox group
-                                    name="docencia"
-                                    value={this.state.docencia}
-                                    onChange={this.docenciaChanged}>
-                                    <label><Checkbox value="cargosCurso"/> Cargos a su curso</label>
-                                    <br/>
-                                    <label><Checkbox value="asesoriaTesis"/> Asesoria de Tesis</label>
-                                    <br/>
-                                    <label><Checkbox value="premiosDocencia"/> Premios a la Docencia</label>
-                                </CheckboxGroup>
+                                    <CheckboxGroup
+                                        checkboxDepth={2} // This is needed to optimize the checkbox group
+                                        name="docencia"
+                                        value={this.state.docencia}
+                                        onChange={this.docenciaChanged}>
+                                        <label><Checkbox value="cargosCurso"/> Cargos a su curso</label>
+                                        <br/>
+                                        <label><Checkbox value="asesoriaTesis"/> Asesoria de Tesis</label>
+                                        <br/>
+                                        <label><Checkbox value="premiosDocencia"/> Premios a la Docencia</label>
+                                    </CheckboxGroup>
                                 </div>
                             </div>
                             <div className="form-group">
                                 <h5> Experiencia Profesional </h5>
                                 <div className="col-md-offset-1">
-                                <CheckboxGroup
-                                    checkboxDepth={2} // This is needed to optimize the checkbox group
-                                    name="experienciaProfesional"
-                                    value={this.state.experienciaProfesional}
-                                    onChange={this.experienciaProfesionalChanged}>
-                                    <label><Checkbox value="solExperienciaProfesional"/> Solicitar Experiencia Profesional</label>
-                                </CheckboxGroup>
+                                    <CheckboxGroup
+                                        checkboxDepth={2} // This is needed to optimize the checkbox group
+                                        name="experienciaProfesional"
+                                        value={this.state.experienciaProfesional}
+                                        onChange={this.experienciaProfesionalChanged}>
+                                        <label><Checkbox value="solExperienciaProfesional"/> Solicitar Experiencia Profesional</label>
+                                    </CheckboxGroup>
                                 </div>
                             </div>
                             <div className="form-group">
                                 <h5> Investigacion </h5>
                                 <div className="col-md-offset-1">
-                                <CheckboxGroup
-                                    checkboxDepth={2} // This is needed to optimize the checkbox group
-                                    name="investigacion"
-                                    value={this.state.investigacion}
-                                    onChange={this.investigacionProfesionalChanged}>
-                                    <label><Checkbox value="solInvestigacion"/> Solicitar Investigacion</label>
-                                </CheckboxGroup>
+                                    <CheckboxGroup
+                                        checkboxDepth={2} // This is needed to optimize the checkbox group
+                                        name="investigacion"
+                                        value={this.state.investigacion}
+                                        onChange={this.investigacionProfesionalChanged}>
+                                        <label><Checkbox value="solInvestigacion"/> Solicitar Investigacion</label>
+                                    </CheckboxGroup>
                                 </div>
                             </div>
                         </div>

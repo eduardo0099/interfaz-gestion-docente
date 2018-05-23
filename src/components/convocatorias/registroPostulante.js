@@ -74,7 +74,16 @@ class registroPostulante extends Component {
                 nombreTitulo:'',
                 fechaTitulo:'',
                 archivo:null
-            }
+            },
+
+            tituloProf:false,
+            maestria:false,
+            doctorado:false,
+            cargos:false,
+            asesoria:false,
+            premios:false,
+            expProf:false,
+            investigacion:false
         };
 
         this.handleNombres = this.handleNombres.bind(this);
