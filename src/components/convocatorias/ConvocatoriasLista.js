@@ -143,7 +143,7 @@ class ConvocatoriasLista extends Component {
                     </BaseContainer>
                 }/>
 
-                <Route path={`${this.props.match.path}/nuevo`} component={registroPostulante}/>
+                <Route path={`${this.props.match.path}/nuevo`} component={ConvocatoriaNuevo}/>
                 <Route path={`${this.props.match.path}/:codigoConv`} component={ConvocatoriasListaPostulantes}/>
 
 
