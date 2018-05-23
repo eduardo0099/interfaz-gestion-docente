@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Grid, Row,Col} from 'react-bootstrap';
+import {Grid, Row,Col,Button,Glyphicon,ListGroup,ListGroupItem} from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import BaseContainer from "./BaseContainer";
 
@@ -7,10 +7,12 @@ class Detalle_DescargaHoras extends React.Component{
 
     constructor(props){
         super(props);
-        console.log(this.props);
     }
+
     render(){
-        console.log(this.props);
+        console.log('Renderizando tabla');
+        console.log(JSON.stringify(this.props, null, 2));
+
         const columnas=[
             {text:'Semana',dataField:'numero'},
             {text:'Horas Descarga',dataField:'hDescarga'},
@@ -21,6 +23,11 @@ class Detalle_DescargaHoras extends React.Component{
                     <BaseContainer>
                         <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
                             <Grid>
+                                <Row className="back-bar">
+                                    <Col md={12}>
+                                        <Button onClick={this.props.volverLista}><Glyphicon glyph="arrow-left"/></Button>
+                                    </Col>
+                                </Row>
                                 <Row>
                                     <Col md={8}>
                                         <h2>Detalle de descarga de Horas</h2>

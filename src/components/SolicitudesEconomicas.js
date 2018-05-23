@@ -22,6 +22,7 @@ class SolicitudesEconomicas extends React.Component {
             cicloSelect: "",
             listaCiclos: [],
             selectedId:-1,
+            verDetalle:false
         }
     }
 
@@ -72,125 +73,102 @@ class SolicitudesEconomicas extends React.Component {
             });
     };
 
-    //componentWillMount() {
-    //    this.allCiclos();
-    //    this.findCicloActual();
-    //}
+    regresarListaEncuesta = () => {
+        this.setState({
+            selectedId: -1,
+            verDetalle: false,
+        });
+    };
 
-    //allCiclos() {
-    //    axios.get('http://200.16.7.151:8080/general/listaCiclos')
-    //        .then(response => {
-    //            this.setState({ciclos: response.data.ciclos});
-    //        })
-    //}
-
-
-    //findCicloActual() {
-    //    axios.get('http://200.16.7.151:8080/general/cicloActual')
-    //        .then(response => {
-    //            this.setState({ciclo: {id: 1, descripcion: '2018-1'}}, () => {
-    //                this.search();
-    //            });
-    //        })
-    //}
-
-    //search() {
-    //    axios.get('http://200.16.7.151:8080/docente/ayudaEconomica/lista', {
-    //        params: {
-    //            codigo: this.props.match.params.codigo,
-    //            ciclo: this.state.ciclo.descripcion,
-    //        }
-    //    }).then(response => {
-    //        console.log(response);
-    //    })
-    //}
-
-    handleChangeCiclo(option) {
-        this.setState({ciclo: option}, () => this.search());
-    }
+    mostarComentarios = (index) => {
+        this.setState({
+            selectedId: index,
+            verDetalle: true,
+        });
+    };
 
     render() {
-        console.log(this.props);
-        const columnas = [
-            {text:'Titulo',dataField:'titulo'},
-            {text:'Motivo',dataField:'motivo'},
-            {text:'Fecha de Registro',dataField:'fecha_solicitud'},
-            {text:'Monto',dataField:'monto_otorgado'},
-            {text:'Estado',dataField:'estado'}
-        ];
-        //Agrega radio buttons a las filas de la tabla, solo permite seleccionar una fila
-        const selectRow = {
-            mode: 'radio',
-            clickToSelect: true,
-            hideSelectColumn: true,
-            bgColor: '#93a3b5',
-            selected: [this.state.selectedId]
-        };
-        const rowEvents = {
-            onClick: (e, row,rowIndex) => {
-                console.log(rowIndex)
-                console.log(row)
-                this.setState({
-                    selectedId : row.id
-                })
-                //alert(`clicked on row with index: ${this.state.selectedId}`);
-            }
-        };
-        //Permite bloquear el boton Detalle para obligar al usuario a presionar una solicitud.
-        let myComponent;
-        if(this.state.selectedId !== -1) {
-            myComponent = <Link to={`${this.props.match.url}/${this.state.selectedId}/Detalle_SolicitudEconomica`}>Detalle</Link>
-        } else {
-            myComponent = <Button disabled={true}>Detalle</Button>
-        }
-        return (
-            <div>
-            <BaseContainer>
-                <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
-                    <div className="panel-heading">
-                        <header className="page-header m-t-sm">
-                            <a className="btn btn-default pull-right" onClick={this.props.history.goBack}> Volver al Perfil </a>
-                            <p className="h2 m-b-sm"> Solicitudes Economicas </p>
-                        </header>
-                    </div>
-                    <Grid>
-                        <Form horizontal>
-                            <FormGroup  controlId="formHorizontalSeccion">
-                                <Col componentClass={ControlLabel} sm={1}>
-                                    Ciclo:
-                                </Col>
-                                <Col sm={3}>
-                                    <FormControl componentClass="select" placeholder="select"
-                                                 onChange={this.cambioCiclo}>
-                                        {this.state.listaCiclos.map((item, i) => {
-                                            return <option key={i} value={item.descripcion}>{item.descripcion}</option>
-                                        })}
-                                    </FormControl>
-                                </Col>
-                            </FormGroup>
-                        </Form>
-                        <Row>
-                            <Col md={10}>
-                                <BootstrapTable keyField='id' rowEvents={rowEvents} selectRow={selectRow}
-                                                data={this.state.ayudas} columns={columnas}/>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col md={8}>
-                            </Col>
-                            <Col md={2}>
-                                <td>{myComponent}</td>
-                            </Col>
-                        </Row>
-                    </Grid>
-                <Route path={`${this.props.match.path}/:idSolicitud/Detalle_SolicitudEconomica`} render={()=>
-                    <Detalle_SolicitudEconomica {...this.state.ayudas[this.state.selectedId - 1]}
-                    />}
+        if (!this.state.verComentarios) {
+            return (
+                <div>
+                    <Route exact path={`${this.props.match.path}`} render={() =>
+                        <BaseContainer>
+                            <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
+                                <div className="panel-heading">
+                                    <header className="page-header m-t-sm">
+                                        <a className="btn btn-default pull-right"
+                                           onClick={this.props.history.goBack}> Volver al Perfil </a>
+                                        <p className="h2 m-b-sm"> Solicitudes Economicas </p>
+                                    </header>
+                                </div>
+                                <Grid>
+                                    <Form horizontal>
+                                        <FormGroup controlId="formHorizontalSeccion">
+                                            <Col componentClass={ControlLabel} sm={1}>
+                                                Ciclo:
+                                            </Col>
+                                            <Col sm={3}>
+                                                <FormControl componentClass="select" placeholder="select"
+                                                             onChange={this.cambioCiclo}>
+                                                    {this.state.listaCiclos.map((item, i) => {
+                                                        return <option key={i}
+                                                                       value={item.descripcion}>{item.descripcion}</option>
+                                                    })}
+                                                </FormControl>
+                                            </Col>
+                                        </FormGroup>
+                                    </Form>
+                                    <div className="panel-body">
+                                        <Col md={10}>
+                                            <table className="table table-striped">
+                                                <thead>
+                                                <tr>
+                                                    <th className="col-md-3">Titulo</th>
+                                                    <th className="col-md-2 text-center">Motivo</th>
+                                                    <th className="col-md-2 text-center">Fecha de solicitud</th>
+                                                    <th className="col-md-2 text-center">Monto otorgado</th>
+                                                    <th className="col-md-2 text-center">Estado</th>
+                                                    <th className="col-md-2 text-center">Detalle</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {this.state.ayudas.map((item, i) => {
+                                                    return <tr key={i}>
+                                                        <td className="v-middle">
+                                                            <span className="block text-primary"> {item.titulo} </span>
+                                                        </td>
+                                                        <td className="v-middle text-center">{item.motivo}</td>
+                                                        <td className="v-middle text-center">{item.fecha_solicitud}</td>
+                                                        <td className="v-middle text-center">{item.monto_otorgado}</td>
+                                                        <td className="v-middle text-center">{item.estado}</td>
+                                                        <td className="v-middle"><Button
+                                                            onClick={() => this.mostarComentarios(i)}>Ver
+                                                            Detalle</Button>
+                                                        </td>
+                                                    </tr>
+                                                })}
+                                                </tbody>
+                                            </table>
+                                        </Col>
+                                    </div>
+                                </Grid>
+                            </div>
+                        </BaseContainer>
+                    }/>
+                </div>
+            );
+        }else{
+            return(
+                <Detalle_SolicitudEconomica
+                    volverLista={this.regresarListaEncuesta}
+                    titulo = {this.state.ayudas[this.state.selectedId].titulo}
+                    motivo = {this.state.ayudas[this.state.selectedId].motivo}
+                    monto_otorgado = {this.state.ayudas[this.state.selectedId].motivo}
+                    fecha_soliciud = {this.state.ayudas[this.state.selectedId].fecha_solicitud}
+                    estado = {this.state.ayudas[this.state.selectedId].estado}
                 />
-                    </div>
-            </BaseContainer>
-            </div>
-        );
+            );
+        }
     }
 }
 

@@ -3,18 +3,18 @@ import {Grid, Row, Button, Glyphicon, Col,Panel,ListGroup,ListGroupItem} from 'r
 import BaseContainer from "./BaseContainer";
 
 class Detalle_SolicitudEconomica extends React.Component {
-    constructor(props) {
-        super(props);
-        console.log(this.props);
-
-    }
 
     render() {
-        console.log(this.props);
+        console.log('Renderizando tabla');
+        console.log(JSON.stringify(this.props, null, 2));
         return(
             <BaseContainer>
                 <div className="panel col-lg-offset-2 col-lg-8 col-md-12 col-sm-12">
-
+                    <Row className="back-bar">
+                        <Col md={12}>
+                            <Button onClick={this.props.volverLista}><Glyphicon glyph="arrow-left"/></Button>
+                        </Col>
+                    </Row>
                 <Grid>
                     <Row>
                         <Col md={8}>
@@ -37,7 +37,7 @@ class Detalle_SolicitudEconomica extends React.Component {
                                 <ListGroupItem> <Grid> <Row> <Col md={2}> Fecha de registro: </Col> <Col md={4}>  { this.props.fecha_solicitud} </Col> </Row> </Grid> </ListGroupItem>
                                 <ListGroupItem> <Grid> <Row> <Col md={2}> Estado:  </Col> <Col md={4} > { this.props.estado }  </Col> </Row> </Grid> </ListGroupItem>
                                 <ListGroupItem> <Grid> <Row> <Col md={2}> Comentarios Adicionales: </Col> <Col md={4}> </Col> </Row> </Grid> </ListGroupItem>
-                                </ListGroup>
+                            </ListGroup>
                         </panel>
                     </Col>
                 </Row>

@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 import {Grid, Row, Button, Col, FormControl, FormGroup, ControlLabel,Form} from 'react-bootstrap';
 import axios from "axios/index";
 import Detalle_DescargaHoras from "./Detalle_DescargaHoras";
-import {Route,Link} from 'react-router-dom';
-import BootstrapTable from 'react-bootstrap-table-next';
 import BaseContainer from "./BaseContainer";
 
 class DescargaHoras extends React.Component{
@@ -18,7 +16,8 @@ class DescargaHoras extends React.Component{
             listaDescargas:[],
             listaCiclos:[],
             cicloSelect:"",
-            selectedId:-1//
+            selectedId:-1,
+            verDetalle:false
         }
     }
 
@@ -93,104 +92,108 @@ class DescargaHoras extends React.Component{
                     aux.push(obj);
                 }
                 this.setState({
-                    listaDescargas : aux
+                    listaDescargas : Array.from(new Set(aux))
                 })
             })
             .catch(error => {
                 console.log(`Error al obtener datos de la descarga de horas`,error);
             });
     };
+    regresarListaEncuesta = () => {
+        this.setState({
+            selectedId: -1,
+            verComentarios: false,
+        });
+    };
+
+    mostarComentarios = (index) => {
+        this.setState({
+            selectedId: index,
+            verComentarios: true,
+        });
+    };
 
 
     render(){
-        const columnas=[
-            {text:'Nombre del curso',dataField:'nombre'},
-            {text:'Codigo',dataField:'codigo'},
-            {text:'Horas Descarga',dataField:'hDescargaTotal'},
-            {text: 'Semana',dataField: 'semana', hidden: true}
-        ];
-
-        const selectRow ={
-            mode: 'radio',
-            clickToSelect: true,
-            hideSelectColumn: true,
-            bgColor: '#93a3b5',
-            selected: [this.state.selectedId]
-        };
-
-        const rowEvents = {
-            onClick: (e, row,rowIndex) => {
-                console.log(rowIndex)
-                console.log(row)
-            this.setState({
-                selectedId : row.id
-            })
-            //alert(`clicked on row with index: ${this.state.selectedId}`);
-            }
-        };
-        let myComponent;
-        if(this.state.selectedId !== -1) {
-            myComponent = <Link to={`${this.props.match.url}/${this.state.selectedId}`}>Detalle</Link>
-        } else {
-            myComponent = <Button disabled={true}>Detalle</Button>
-        }
-        return(
+        if (!this.state.verComentarios) {
+            return (
                 <div>
                     <BaseContainer>
                         <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
-                        <Grid>
-                            <Row>
-                                <Col md={8}>
-                                    <h2>Descarga de Horas</h2>
-                                </Col>
-                                <Col md={2}>
-                                <div className="panel-heading">
-                                    <a className="btn btn-default pull-right m-t-md btn-sm" onClick={this.props.history.goBack}> Volver al Perfil </a>
-                                </div>
-                                </Col>
-                            </Row>
-                            <Form horizontal>
-                                <FormGroup  controlId="formHorizontalSeccion">
-                                    <Col componentClass={ControlLabel} sm={1}>
-                                        Ciclo:
+                            <Grid>
+                                <Row>
+                                    <Col md={8}>
+                                        <h2>Descarga de Horas</h2>
                                     </Col>
-                                    <Col sm={3}>
-                                        <FormControl componentClass="select" placeholder="select"
-                                                     onChange={this.cambioCiclo}>
-                                            {this.state.listaCiclos.map((item, i) => {
-                                                return <option key={i} value={item.descripcion}>{item.descripcion}</option>
-                                            })}
+                                    <Col md={2}>
+                                        <div className="panel-heading">
+                                            <a className="btn btn-default pull-right m-t-md btn-sm"
+                                               onClick={this.props.history.goBack}> Volver al Perfil </a>
+                                        </div>
+                                    </Col>
+                                </Row>
+                                <Form horizontal>
+                                    <FormGroup controlId="formHorizontalSeccion">
+                                        <Col componentClass={ControlLabel} sm={1}>
+                                            Ciclo:
+                                        </Col>
+                                        <Col sm={3}>
+                                            <FormControl componentClass="select" placeholder="select"
+                                                         onChange={this.cambioCiclo}>
+                                                {this.state.listaCiclos.map((item, i) => {
+                                                    return <option key={i}
+                                                                   value={item.descripcion}>{item.descripcion}</option>
+                                                })}
                                             </FormControl>
-                                    </Col>
-                                </FormGroup>
-                            </Form>
-                        <Row>
-                            <Col md={10}>
-                                <BootstrapTable
-                                    keyField='id'
-                                    data={this.state.listaDescargas}
-                                    columns={columnas}
-                                    selectRow={selectRow}
-                                    rowEvents = {rowEvents}
-                                />
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col md={8}>
-                            </Col>
-                            <Col md={4}>
-                                <td>{myComponent}</td>
-                            </Col>
-                        </Row>
-                    </Grid>
+                                        </Col>
+                                    </FormGroup>
+                                </Form>
+                                <Row>
+                                    <div className="panel-body">
+                                        <Col md={10}>
+                                        <table className="table table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th className="col-md-3">Curso</th>
+                                                <th className="col-md-2 text-center">Codigo</th>
+                                                <th className="col-md-2 text-center">Horas de descarga</th>
+                                                <th className="col-md-2 text-center">Detalle</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            {this.state.listaDescargas.map((item, i) => {
+                                                return <tr key={i}>
+                                                    <td className="v-middle">
+                                                        <span className="block text-primary"> {item.nombre} </span>
+                                                    </td>
+                                                    <td className="v-middle text-center">{item.codigo}</td>
+                                                    <td className="v-middle text-center">{item.hDescargaTotal}</td>
+                                                    <td className="v-middle"><Button
+                                                        onClick={() => this.mostarComentarios(i)}>Ver
+                                                        Detalle</Button>
+                                                    </td>
+                                                </tr>
+                                            })}
+                                            </tbody>
+                                        </table>
+                                        </Col>
+                                    </div>
+                                </Row>
+                            </Grid>
                         </div>
                     </BaseContainer>
-                    <Route path={`${this.props.match.path}/:id`} render={()=>
-                        <Detalle_DescargaHoras {...this.state.listaDescargas[this.state.selectedId]}
-                        />}
-                    />
                 </div>
-        );
+            );
+        }
+        else{
+            return (
+                <Detalle_DescargaHoras
+                    volverLista={this.regresarListaEncuesta}
+                    semana = {this.state.listaDescargas[this.state.selectedId].semana}
+                />
+            );
+        }
     }
 }
 
