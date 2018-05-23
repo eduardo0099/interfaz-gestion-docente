@@ -4,8 +4,9 @@ import './../styles/ProfesorPerfilEncuesta.css';
 
 class ProfesorPerfilEncuesta extends React.Component {
 
-
   render() {
+        console.log('Renderizando tabla');
+        console.log(JSON.stringify(this.props, null, 2));
     return (
       <div>
           <Grid>

@@ -1,0 +1,17 @@
+.selected {
+    background-color: brown;
+    color: #FFF;
+}
+.td {
+    font-weight: 500;
+    padding: 0 20px;
+}
+
+.status {
+    border: 1px solid #e7e7e7;
+    color: #ff0000;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 0 20px;
+    text-align: right;
+}
