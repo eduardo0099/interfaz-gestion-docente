@@ -43,7 +43,7 @@ class PerfilTabs extends Component {
                             </div>
                         </div>
                     </div>
-                    <div className="tab-pane active row" id="2">
+                    <div className="tab-pane" id="2">
                         <div className="form-group col-md-2 m-r-n">
                             <ul className="nav nav-pills nav-stacked">
                                 <li className="active"><a href="#2a" data-toggle="tab">Cursos a su Cargo </a></li>
