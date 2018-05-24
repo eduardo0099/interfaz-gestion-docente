@@ -1,20 +1,22 @@
 import React, {Component} from 'react';
-import {Grid, Row, Button, Glyphicon, Col} from 'react-bootstrap';
+import {Grid, Row, Button, Col, FormControl, FormGroup, ControlLabel,Form} from 'react-bootstrap';
 import axios from "axios/index";
 import Detalle_DescargaHoras from "./Detalle_DescargaHoras";
-import {Route,Link} from 'react-router-dom';
-import BootstrapTable from 'react-bootstrap-table-next';
+import BaseContainer from "./BaseContainer";
 
 class DescargaHoras extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            descargas:[{"nombre":"",
-                        "codigo":"",
-                        "hDescargaTotal":"",
-                        "semana":[]}],
+            descargas:[{nombre:"",
+                        codigo:"",
+                        hDescargaTotal:"",
+                        semana:[]
+            }],
             listaCiclos:[],
             cicloSelect:"",
+            selectedId:-1,
+            verDetalle:false
         }
     }
 
@@ -46,63 +48,120 @@ class DescargaHoras extends React.Component{
             });
     }
 
+
+    cambioCiclo = (event) =>{
+        let nuevoCiclo = event.target.value;
+        axios.get('http://200.16.7.151:8080/docente/docente/horaDescDocente', {
+            params: {
+                codigo: this.props.match.params.codigo,
+                ciclo: nuevoCiclo
+            }
+        })
+            .then(response => {
+                this.setState({
+                    descargas: response.data.descargas,
+                    cicloSelect:nuevoCiclo
+                });
+            })
+            .catch(error => {
+                console.log(`Error al obtener datos de la descarga de horas`,error);
+            });
+    };
+    regresarListaEncuesta = () => {
+        this.setState({
+            selectedId: -1,
+            verDetalle: false,
+        });
+    };
+
+    mostarComentarios = (index) => {
+        this.setState({
+            selectedId: index,
+            verDetalle: true,
+        });
+    };
+
+
     render(){
-        const columnas=[
-            {text:'Nombre del curso',dataField:'nombre'},
-            {text:'Codigo',dataField:'codigo'},
-            {text:'Horas Descarga',dataField:'hDescargaTotal'}
-        ];
-
-        const selectRow ={
-            mode: 'checkbox',
-            clickToSelect: true,
-            hideSelectColumn: true,
-            bgColor: '#00BFFF'
-        };
-
-        return(
+        if (!this.state.verDetalle) {
+            return (
                 <div>
-                    <Grid>
-                        <Row className="back-bar">
-                            <Col md={12}>
-                                <Button onClick={this.props.history.goBack}><Glyphicon
-                                    glyph="arrow-left"></Glyphicon></Button>
-                                <span
-                                    className="professor-name"> Regresar a perfil docente </span>
-                            </Col>
-                        </Row>
-                        <Row><h1>Descarga de Horas</h1></Row>
-                        <Row>
-                            <Col md={12}>
-                                <p>Ciclo :
-                                    <select ref="selectorCiclos" onChange={this.state.cicloSelect}>
-                                        {this.state.listaCiclos.map((item, i) => {
-                                            return <option key={i} value={item.descripcion}>{item.descripcion}</option>
-                                        })}
-                                    </select>
-                                </p>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col md={12}>
-                                <BootstrapTable
-                                    keyField='id'
-                                    data={this.state.descargas}
-                                    columns={columnas}
-                                    selectRow={selectRow}/>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col md={10}>
-                            </Col>
-                            <Col md={2}>
-                                <Link to={`${this.props.match.url}/Detalle_DescargaHoras`}>Detalle</Link>
-                            </Col>
-                        </Row>
-                    </Grid>
-                    <Route path={`${this.props.match.path}/Detalle_DescargaHoras`} component={Detalle_DescargaHoras}/>
+                    <BaseContainer>
+                        <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
+                            <Grid>
+                                <Row>
+                                    <Col md={8}>
+                                        <h2>Descarga de Horas</h2>
+                                    </Col>
+                                    <Col md={2}>
+                                        <div className="panel-heading">
+                                            <a className="btn btn-default pull-right m-t-md btn-sm"
+                                               onClick={this.props.history.goBack}> Volver al Perfil </a>
+                                        </div>
+                                    </Col>
+                                </Row>
+                                <Form horizontal>
+                                    <FormGroup controlId="formHorizontalSeccion">
+                                        <Col componentClass={ControlLabel} sm={1}>
+                                            Ciclo:
+                                        </Col>
+                                        <Col sm={3}>
+                                            <FormControl componentClass="select" placeholder="select"
+                                                         onChange={this.cambioCiclo}>
+                                                {this.state.listaCiclos.map((item, i) => {
+                                                    return <option key={i}
+                                                                   value={item.descripcion}>{item.descripcion}</option>
+                                                })}
+                                            </FormControl>
+                                        </Col>
+                                    </FormGroup>
+                                </Form>
+                                <Row>
+                                    <div className="panel-body">
+                                        <Col md={10}>
+                                        <table className="table table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th className="col-md-3">Curso</th>
+                                                <th className="col-md-2 text-center">Codigo</th>
+                                                <th className="col-md-2 text-center">Horas de descarga</th>
+                                                <th className="col-md-2 text-center">Detalle</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            {this.state.descargas.map((item, i) => {
+                                                return <tr key={i}>
+                                                    <td className="v-middle">
+                                                        <span className="block text-primary"> {item.nombre} </span>
+                                                    </td>
+                                                    <td className="v-middle text-center">{item.codigo}</td>
+                                                    <td className="v-middle text-center">{item.hDescargaTotal}</td>
+                                                    <td className="v-middle"><Button
+                                                        onClick={() => this.mostarComentarios(i)}>Ver
+                                                        Detalle</Button>
+                                                    </td>
+                                                </tr>
+                                            })}
+                                            </tbody>
+                                        </table>
+                                        </Col>
+                                    </div>
+                                </Row>
+                            </Grid>
+                        </div>
+                    </BaseContainer>
                 </div>
-        );
+            );
+        }
+        else{
+            return (
+                <Detalle_DescargaHoras
+                    volverLista={this.regresarListaEncuesta}
+                    semana = {this.state.descargas[this.state.selectedId].semana}
+                />
+            );
+        }
     }
 }
 

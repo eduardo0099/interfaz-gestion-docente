@@ -1,69 +1,36 @@
 .content {
-  padding: 4.5em 1em 1em 1em;
+    padding: 4.5em 1em 1em 1em;
 }
 
-
-
 .App {
-  text-align: center;
+    text-align: center;
 }
 
 .App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+    animation: App-logo-spin infinite 20s linear;
+    height: 80px;
 }
 
 .App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+    background-color: #222;
+    height: 150px;
+    padding: 20px;
+    color: white;
 }
 
 .App-title {
-  font-size: 1.5em;
+    font-size: 1.5em;
 }
 
 .App-intro {
-  font-size: large;
+    font-size: large;
 }
 
 @keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-label {
-  font-weight: normal;
-  font-size: 12px;
-}
-
-.block {
-  display: block;
-}
-
-.v-middle {
-  vertical-align: middle !important;
-}
-
-.btn-primary {
-  color: #fff !important;
-  background-color: #0275D8;
-  border-color: #0275D8;
-  background-image: none;
-}
-
-.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active,
-.btn-primary .open .dropdown-toggle {
-  color: #fff !important;
-  background-color: #0267bf;
-  border-color: #025fb0;
-}
-.btn-primary:active, .btn-primary.active,
-.btn-primary .open .dropdown-toggle {
-  background-image: none;
-}
-.btn-primary.disabled, .btn-primary.disabled:hover, .btn-primary.disabled:focus, .btn-primary.disabled:active, .btn-primary.disabled.active, .btn-primary[disabled], .btn-primary[disabled]:hover, .btn-primary[disabled]:focus, .btn-primary[disabled]:active, .btn-primary[disabled].active, fieldset[disabled] .btn-primary, fieldset[disabled] .btn-primary:hover, fieldset[disabled] .btn-primary:focus, fieldset[disabled] .btn-primary:active, fieldset[disabled] .btn-primary.active {
-  background-color: #0275D8;
-  border-color: #0275D8;
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }

@@ -4,12 +4,17 @@ import Header from './../components/Header';
 import SidebarContent from './../components/SidebarContent';
 import '../styles/Sidebar.css';
 import '../styles/App.css';
-import '../styles/Phobos.css';
 import Home from "../components/Home";
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import ListaProfesores from "../components/ListaProfesores";
 import CargaDatos from '../components/CargaDatos';
+
 import PreferenciaCursos from '../components/PreferenciaCursos';
+
+import AsignarCursos from "../components/AsignarCursos";
+import ConvocatoriasLista from "../components/convocatorias/ConvocatoriasLista";
+import 'react-select/dist/react-select.css';
+
 
 class App extends Component {
 
@@ -61,8 +66,10 @@ class App extends Component {
             <Switch>
               <Route exact path="/" render={ () => <Home/>} />
               <Route path="/profesores" component={ListaProfesores}/>
+              <Route path="/convocatorias" component={ConvocatoriasLista}/>
               <Route path="/carga" render={ () => <CargaDatos /> }/>
               <Route path="/preferenciaCursos" component={PreferenciaCursos}/>
+              <Route path="/asignacionCursos" component={AsignarCursos}/>
               <Route render={()=><div>La pagina que busca, no existe</div>} />
             </Switch>
           </div>
