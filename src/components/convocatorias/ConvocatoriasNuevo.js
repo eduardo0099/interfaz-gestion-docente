@@ -95,6 +95,85 @@ class ConvocatoriaNuevo extends Component {
         return isafter;
     }
 
+    armarFecha(date){
+        var cadena="";
+        cadena=cadena+date.getFullYear();
+
+        if (date.getMonth()<9){
+            cadena=cadena+0+(date.getMonth()+1);
+        }else{
+            cadena=cadena+(date.getMonth()+1);
+        }
+
+        if (date.getDate()<10){
+            cadena=cadena+0+date.getDate();
+        }else{
+            cadena=cadena+date.getDate();
+        }
+        console.log(cadena);
+        return cadena;
+    }
+
+    performPostRequest = ()=> {
+        console.log('postrequest:')
+        let gradAcadRegistrar=[];
+        let docenciaRegistrar=[];
+        let expProfRegistrar=[];
+        let investigacionRegistrar=[];
+
+        this.state.gradosAcademicos.forEach(function(entry) {
+            let elemento  = {descripcion: entry, peso:10};
+            gradAcadRegistrar= [...gradAcadRegistrar, elemento];
+        });
+
+        this.state.docencia.forEach(function(entry) {
+            let elemento  = {descripcion: entry, peso:10};
+            docenciaRegistrar= [...docenciaRegistrar, elemento];
+        });
+
+        this.state.experienciaProfesional.forEach(function(entry) {
+            let elemento  = {descripcion: entry, peso:10};
+            expProfRegistrar= [...expProfRegistrar, elemento];
+        });
+
+        this.state.investigacion.forEach(function(entry) {
+            let elemento  = {descripcion: entry, peso:10};
+            investigacionRegistrar= [...investigacionRegistrar, elemento];
+        });
+        //console.log('gradAcadRegistrar:',gradAcadRegistrar);
+        //console.log('docenciaRegistrar:',docenciaRegistrar);
+        //console.log('expProfRegistrar:',expProfRegistrar);
+        //console.log('investigacionRegistrar:',investigacionRegistrar);
+        if( this.validator.allValid() && this.validDates(this.state.fecha_fin,this.state.fecha_inicio)){
+            axios.post('http://200.16.7.151:8080/convocatoria/convocatoria/registrar', {
+                nombre : this.state.curso,
+                codigo_curso : this.state.codigoCurso,
+                fecha_inicio : this.armarFecha(this.state.fecha_inicio._d),
+                fecha_fin : this.armarFecha(this.state.fecha_fin._d),
+                grados_academicos:gradAcadRegistrar,
+                docencia:docenciaRegistrar,
+                experiencia_profesional:expProfRegistrar,
+                investigacion:investigacionRegistrar,
+            })
+                .then(response => {
+                    alert("Convocatoria registrada");
+                    this.props.history.goBack();
+                })
+                .catch(error => {
+                    alert("Error: No se pudo registrar la investigación");
+                })
+        }else {
+            if ( this.state.fecha_fin !== null && this.state.fecha_fin !== null ){
+                if (!this.validDates(this.state.fecha_fin,this.state.fecha_inicio)){
+                    alert("La fecha de fin es menor a la fecha de inicio!");
+                }
+            }
+            this.validator.showMessages();
+            // rerender to show messages for the first time
+            this.forceUpdate();
+        }
+    }
+
     performNext = ()=> {
         if(this.state.paso==1) {
             if (this.validator.allValid() && this.validDates(this.state.fecha_fin,this.state.fecha_inicio)) {
@@ -122,6 +201,7 @@ class ConvocatoriaNuevo extends Component {
                 console.log('docencia:',this.state.docencia);
                 console.log('experienciaProfesional:',this.state.experienciaProfesional);
                 console.log('investigacion:',this.state.investigacion);
+                this.performPostRequest()
             } else {
             }
         }

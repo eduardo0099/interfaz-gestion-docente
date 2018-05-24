@@ -26,6 +26,19 @@ class ConvocatoriasLista extends Component {
             })
     }
 
+    componentDidMount() {
+        axios.get('http://200.16.7.151:8080/convocatoria/convocatoria/lista')
+            .then(response => {
+                this.setState({loading: false, profesores: response.data.docentes});
+            })
+            .catch(error => {
+                this.setState({
+                    error: `${error}`,
+                    loading: false
+                });
+            });
+    }
+
     offlineSearch() {
         this.setState({
             convocatorias: [
