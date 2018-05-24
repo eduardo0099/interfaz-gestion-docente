@@ -15,8 +15,25 @@ class PreferenciaCursos extends Component {
       error: '',
       cursosObl: [],
       cursosElec: [],
-      listaCursosPref: []
-    }
+      cursosPref: [],
+      codigoProfe: 0
+    };
+    this.handleProfCode = this.handleProfCode.bind(this);
+  }
+
+  handleProfCode(event) {
+    this.setState({codigoProfe: event.target.value});
+  }
+
+
+  handleChange(curso, e){
+      var nuevo = {
+        "codigoCurso": curso.codigo,
+        "ciclo": e.target.value
+      };
+      let nuevoArreglo = this.state.cursosPref;
+      nuevoArreglo.push(nuevo);
+      this.setState({cursosPref: nuevoArreglo});
   }
 
   componentDidMount() {
@@ -32,41 +49,23 @@ class PreferenciaCursos extends Component {
       });
   }
 
-  obtenerListaPrefencia(){
-    var CursoPreferencia = class CursoPreferencia{
-      constructor(codigo, ciclo){
-      this.codigo = codigo;
-      this.ciclo = ciclo;
-      }
-    };
-    let formp = document.getElementsByName('ECO204');
-    if(formp[0].checked === true){
-     let nuevo = new CursoPreferencia('ECO204','2018-1');
-     this.state.listaCursosPref.push(nuevo);
-    }else if (formp[1].checked === true){
-      let nuevo = new CursoPreferencia('ECO204','2018-2');
-      this.state.listaCursosPref.push(nuevo);
-    }else if (formp[2].checked === true){
-      let nuevo = new CursoPreferencia('ECO204','Ambos');
-      this.state.listaCursosPref.push(nuevo);
-    }
-  }
-
   performPostRequest(){
-    axios.post('http://200.16.7.151:8080/docente/investigacion/registrar', {
-      codigoProf: document.querySelectorAll('[name=codigoProfe]')[0].value,
-
-    })
-      .then(function (response) {
-        alert("Preferencia de dictado registrada");
+    console.log(JSON.stringify(this.state.cursosPref, null, 2));
+      axios.post('http://200.16.7.151:8080/asignacionHorarios/enviarPreferenciaProfesor', {
+        codigoProf: this.state.codigoProfe,
+        cursos: this.state.cursosPref
       })
-      .catch(function (error) {
-        alert("Error: No se pudo registrar la preferencia");
-      });
+        .then(function (response) {
+          alert("Preferencia de dictado registrada");
+        })
+        .catch(function (error) {
+          alert("Error: No se pudo registrar la preferencia");
+        });
   }
 
   unselect(){
     document.querySelectorAll('[type=radio]').forEach((x) => x.checked=false);
+    //this.setState({cursosPref: []});
   }
 
   render() {
@@ -82,7 +81,7 @@ class PreferenciaCursos extends Component {
             <div class="row">
               <div class="col-md-1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Código:</div>
               <div class="col-md-2">
-                <input type="text" name="codigoProfe"></input>
+                <input type="text" name="codigoProfe" onChange={this.handleProfCode}></input>
               </div>
               <div class="col-md-2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Apellidos y nombres:</div>
               <div class="col-md-6">
@@ -95,8 +94,7 @@ class PreferenciaCursos extends Component {
             <div class="row">
               <div class="col-md-6"></div>
               <div class="col-md-1">2018-1</div>
-              <div class="col-md-1">2018-2</div>
-              <div class="col-md-2">Ambos</div>
+              <div class="col-md-1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2018-2</div>
             </div>
             <div className="panel-body">
               <table className="table table-striped">
@@ -110,13 +108,10 @@ class PreferenciaCursos extends Component {
                       </td>
                       <td className="col-md-4">
                         <td className="col-md-1">
-                          <input type="radio" name={curso.codigo} value="1"></input>
+                          <input type="radio" name={curso.codigo} onChange={this.handleChange.bind(this, curso)} value="2018-1"></input>
                         </td>
                         <td className="col-md-1">
-                          <input type="radio" name={curso.codigo} value="2"></input>
-                        </td>
-                        <td className="col-md-1">
-                          <input type="radio" name={curso.codigo} value="3"></input>
+                          <input type="radio" name={curso.codigo} onChange={this.handleChange.bind(this, curso)} value="2018-2"></input>
                         </td>
                       </td>
                     </tr>
@@ -130,10 +125,8 @@ class PreferenciaCursos extends Component {
             </div>
             <div class="row">
               <div class="col-md-6"></div>
-              <div class="col-md-4">&nbsp;2018-1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              &nbsp;&nbsp;&nbsp;&nbsp;2018-2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ambos</div>
-              <div class="col-md-2"></div>
+              <div class="col-md-1">2018-1</div>
+              <div class="col-md-1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2018-2</div>
             </div>
             <div className="panel-body">
               <table className="table table-striped">
@@ -147,13 +140,10 @@ class PreferenciaCursos extends Component {
                       </td>
                       <td className="col-md-4">
                         <td className="col-md-1">
-                          <input type="radio" name={curso.codigo}></input>
+                          <input type="radio" name={curso.codigo} onChange={this.handleChange.bind(this, curso)} value="2018-1"></input>
                         </td>
                         <td className="col-md-1">
-                          <input type="radio" name={curso.codigo}></input>
-                        </td>
-                        <td className="col-md-1">
-                          <input type="radio" name={curso.codigo}></input>
+                          <input type="radio" name={curso.codigo} onChange={this.handleChange.bind(this, curso)} value="2018-2"></input>
                         </td>
                       </td>
                     </tr>
@@ -168,7 +158,7 @@ class PreferenciaCursos extends Component {
                 <Button class="btn btn-primary btn-cons" onClick={this.unselect}>Limpiar</Button>
               </div>
               <div class="col-md-4">
-                <Button class="btn btn-primary btn-cons" onClick={this.obtenerListaPrefencia}>Enviar preferencias</Button>
+                <Button class="btn btn-primary btn-cons" onClick={this.performPostRequest.bind(this)}>Enviar preferencias</Button>
               </div>
             </div>
           </div>
