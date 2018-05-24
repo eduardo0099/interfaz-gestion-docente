@@ -32,6 +32,7 @@ class ConvocatoriaNuevo extends Component {
             investigacion: [],
 
             curso: '',
+            codigoCurso:'',
             descripcion: '',
             fecha_inicio: null,
             fecha_fin: null
@@ -40,6 +41,8 @@ class ConvocatoriaNuevo extends Component {
         this.handleDescripcion = this.handleDescripcion.bind(this);
         this.handleFIni = this.handleFIni.bind(this);
         this.handleFFin = this.handleFFin.bind(this);
+        this.handleCodigoCurso = this.handleCodigoCurso.bind(this);
+
     }
 
     gradosAcademicosChanged = (newGradoAcademico) => {
@@ -70,6 +73,10 @@ class ConvocatoriaNuevo extends Component {
         this.setState({curso: event.target.value});
     }
 
+    handleCodigoCurso(event) {
+        this.setState({codigoCurso: event.target.value});
+    }
+
     handleDescripcion(event) {
         this.setState({descripcion: event.target.value});
     }
@@ -86,6 +93,85 @@ class ConvocatoriaNuevo extends Component {
         var isafter = moment(fFin._d).isAfter(fIni._d);
         console.log('fechas validas?:',isafter)
         return isafter;
+    }
+
+    armarFecha(date){
+        var cadena="";
+        cadena=cadena+date.getFullYear();
+
+        if (date.getMonth()<9){
+            cadena=cadena+0+(date.getMonth()+1);
+        }else{
+            cadena=cadena+(date.getMonth()+1);
+        }
+
+        if (date.getDate()<10){
+            cadena=cadena+0+date.getDate();
+        }else{
+            cadena=cadena+date.getDate();
+        }
+        console.log(cadena);
+        return cadena;
+    }
+
+    performPostRequest = ()=> {
+        console.log('postrequest:')
+        let gradAcadRegistrar=[];
+        let docenciaRegistrar=[];
+        let expProfRegistrar=[];
+        let investigacionRegistrar=[];
+
+        this.state.gradosAcademicos.forEach(function(entry) {
+            let elemento  = {descripcion: entry, peso:10};
+            gradAcadRegistrar= [...gradAcadRegistrar, elemento];
+        });
+
+        this.state.docencia.forEach(function(entry) {
+            let elemento  = {descripcion: entry, peso:10};
+            docenciaRegistrar= [...docenciaRegistrar, elemento];
+        });
+
+        this.state.experienciaProfesional.forEach(function(entry) {
+            let elemento  = {descripcion: entry, peso:10};
+            expProfRegistrar= [...expProfRegistrar, elemento];
+        });
+
+        this.state.investigacion.forEach(function(entry) {
+            let elemento  = {descripcion: entry, peso:10};
+            investigacionRegistrar= [...investigacionRegistrar, elemento];
+        });
+        //console.log('gradAcadRegistrar:',gradAcadRegistrar);
+        //console.log('docenciaRegistrar:',docenciaRegistrar);
+        //console.log('expProfRegistrar:',expProfRegistrar);
+        //console.log('investigacionRegistrar:',investigacionRegistrar);
+        if( this.validator.allValid() && this.validDates(this.state.fecha_fin,this.state.fecha_inicio)){
+            axios.post('http://200.16.7.151:8080/convocatoria/convocatoria/registrar', {
+                nombre : this.state.curso,
+                codigo_curso : this.state.codigoCurso,
+                fecha_inicio : this.armarFecha(this.state.fecha_inicio._d),
+                fecha_fin : this.armarFecha(this.state.fecha_fin._d),
+                grados_academicos:gradAcadRegistrar,
+                docencia:docenciaRegistrar,
+                experiencia_profesional:expProfRegistrar,
+                investigacion:investigacionRegistrar,
+            })
+                .then(response => {
+                    alert("Convocatoria registrada");
+                    this.props.history.goBack();
+                })
+                .catch(error => {
+                    alert("Error: No se pudo registrar la investigación");
+                })
+        }else {
+            if ( this.state.fecha_fin !== null && this.state.fecha_fin !== null ){
+                if (!this.validDates(this.state.fecha_fin,this.state.fecha_inicio)){
+                    alert("La fecha de fin es menor a la fecha de inicio!");
+                }
+            }
+            this.validator.showMessages();
+            // rerender to show messages for the first time
+            this.forceUpdate();
+        }
     }
 
     performNext = ()=> {
@@ -115,6 +201,7 @@ class ConvocatoriaNuevo extends Component {
                 console.log('docencia:',this.state.docencia);
                 console.log('experienciaProfesional:',this.state.experienciaProfesional);
                 console.log('investigacion:',this.state.investigacion);
+                this.performPostRequest()
             } else {
             }
         }
@@ -162,6 +249,11 @@ class ConvocatoriaNuevo extends Component {
                             {this.validator.message('curso', this.state.curso, 'required', false, {required: 'Este campo es obligatorio'})}
                         </div>
                         <div className="form-group">
+                            <label> Código curso </label>
+                            <input type="text" className="form-control" value={this.state.codigoCurso} onChange={this.handleCodigoCurso}></input>
+                            {this.validator.message('codigoCurso', this.state.codigoCurso, 'required', false, {required: 'Este campo es obligatorio'})}
+                        </div>
+                        <div className="form-group">
                             <label> Descripción </label>
                             <textarea type="text" className="form-control" value={this.state.descripcion} onChange={this.handleDescripcion}></textarea>
                             {this.validator.message('descripcion', this.state.descripcion, 'required', false, {required: 'Este campo es obligatorio'})}
@@ -202,11 +294,13 @@ class ConvocatoriaNuevo extends Component {
                                     name="gradosAcademicos"
                                     value={this.state.gradosAcademicos}
                                     onChange={this.gradosAcademicosChanged}>
-                                    <label><Checkbox value="tituloProfesional"/> Título Profesional</label>
+                                    <label><Checkbox value="Titulo Profesional"/> Título Profesional</label>
                                     <br/>
-                                    <label><Checkbox value="maestria"/> Maestría</label>
+                                    <label><Checkbox value="Maestria"/> Maestría</label>
                                     <br/>
-                                    <label><Checkbox value="doctorado"/> Doctorado</label>
+                                    <label><Checkbox value="Doctorado"/> Doctorado</label>
+                                    <br/>
+                                    <label><Checkbox value="Diplomatura"/> Diplomado</label>
                                 </CheckboxGroup>
                                 </div>
 
@@ -219,11 +313,11 @@ class ConvocatoriaNuevo extends Component {
                                     name="docencia"
                                     value={this.state.docencia}
                                     onChange={this.docenciaChanged}>
-                                    <label><Checkbox value="cargosCurso"/> Cargos a su curso</label>
+                                    <label><Checkbox value="Cargos a su curso"/> Cargos a su curso</label>
                                     <br/>
-                                    <label><Checkbox value="asesoriaTesis"/> Asesoria de Tesis</label>
+                                    <label><Checkbox value="Asesoria de Tesis"/> Asesoria de Tesis</label>
                                     <br/>
-                                    <label><Checkbox value="premiosDocencia"/> Premios a la Docencia</label>
+                                    <label><Checkbox value="Premios a la Docencia"/> Premios a la Docencia</label>
                                 </CheckboxGroup>
                                 </div>
                             </div>
@@ -232,7 +326,7 @@ class ConvocatoriaNuevo extends Component {
                                 <div className="col-md-offset-1">
                                 <CheckboxGroup
                                     checkboxDepth={2} // This is needed to optimize the checkbox group
-                                    name="experienciaProfesional"
+                                    name="Solicitar Experiencia Profesional"
                                     value={this.state.experienciaProfesional}
                                     onChange={this.experienciaProfesionalChanged}>
                                     <label><Checkbox value="solExperienciaProfesional"/> Solicitar Experiencia Profesional</label>
@@ -244,7 +338,7 @@ class ConvocatoriaNuevo extends Component {
                                 <div className="col-md-offset-1">
                                 <CheckboxGroup
                                     checkboxDepth={2} // This is needed to optimize the checkbox group
-                                    name="investigacion"
+                                    name="Solicitar Investigacion"
                                     value={this.state.investigacion}
                                     onChange={this.investigacionProfesionalChanged}>
                                     <label><Checkbox value="solInvestigacion"/> Solicitar Investigacion</label>

@@ -26,6 +26,19 @@ class ConvocatoriasLista extends Component {
             })
     }
 
+    componentDidMount() {
+        axios.get('http://200.16.7.151:8080/convocatoria/convocatoria/lista')
+            .then(response => {
+                this.setState({loading: false, profesores: response.data.docentes});
+            })
+            .catch(error => {
+                this.setState({
+                    error: `${error}`,
+                    loading: false
+                });
+            });
+    }
+
     offlineSearch() {
         this.setState({
             convocatorias: [
@@ -87,7 +100,7 @@ class ConvocatoriasLista extends Component {
                     <BaseContainer>
                         <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
                             <div className="panel-heading">
-                                <a className="btn btn-sm btn-primary pull-right m-t-md" href="/convocatorias/nuevo"> Nueva Convocatoria</a>
+                                <a className="btn btn-sm btn-primary pull-right m-t-md" href={`${this.props.match.url}/nuevo`}> Nueva Convocatoria</a>
                                 <h2 style={headerStyle}> Convocatorias </h2>
                             </div>
                             <div className="panel-body">
@@ -122,7 +135,7 @@ class ConvocatoriasLista extends Component {
                                                     </td>
                                                     <td className="v-middle text-center">
 
-                                                        <a className="badge" href={'/convocatorias/'+ item.id}> {item.cantidadPostulantes} </a>
+                                                        <a className="badge" href={`${this.props.match.url}/id/${item.id}`}> {item.cantidadPostulantes} </a>
 
                                                         <span className="block small text-muted m-t-xs"> postulantes </span>
                                                     </td>
@@ -144,7 +157,7 @@ class ConvocatoriasLista extends Component {
                 }/>
 
                 <Route path={`${this.props.match.path}/nuevo`} component={ConvocatoriaNuevo}/>
-                <Route path={`${this.props.match.path}/:codigoConv`} component={ConvocatoriasListaPostulantes}/>
+                <Route path={`${this.props.match.path}/id/:codigoConv`} component={ConvocatoriasListaPostulantes}/>
 
 
             </div>
