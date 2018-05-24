@@ -588,10 +588,149 @@ class registroPostulante extends Component {
 
     ///////////
 
+    performPostRequest = ()=> {
+        console.log('postrequest:')
+
+        let experiencia=this.state.experiencia;
+        experiencia.forEach(function(entry) {
+            delete entry.id;
+        });
+        let investigaciones=this.state.investigaciones;
+        investigaciones.forEach(function(entry) {
+            delete entry.id;
+        });
+        let cargos=this.state.cargos;
+        cargos.forEach(function(entry) {
+            delete entry.id;
+        });
+        let premios=this.state.premios;
+        premios.forEach(function(entry) {
+            delete entry.id;
+        });
+        let asesorias=this.state.asesorias;
+        asesorias.forEach(function(entry) {
+            delete entry.id;
+        });
+
+        let titulo  = {
+            especialidad:"esp1",
+            pais:this.state.titulo.pais,
+            institucion:this.state.titulo.institucion,
+            nombre_titulo:this.state.titulo.nombreTitulo,
+            egresado:1,
+            fecha_obtencion:this.armarFecha(this.state.titulo.fechaTitulo._d),
+            titulo_tesis:this.state.titulo.tituloTesis,
+            url_tesis:this.state.titulo.urlTesis,
+            archivo_tesis: null,
+            grado_academico: "Título",
+            premio:null};
+
+        let maestria  = {
+            especialidad:"esp1",
+            pais:this.state.maestria.pais,
+            institucion:this.state.maestria.institucion,
+            nombre_titulo:this.state.maestria.nombreTitulo,
+            egresado:1,
+            fecha_obtencion:this.armarFecha(this.state.maestria.fechaTitulo._d),
+            titulo_tesis:this.state.maestria.tituloTesis,
+            url_tesis:this.state.maestria.urlTesis,
+            archivo_tesis: null,
+            grado_academico: "Maestría",
+            premio:null};
+
+        let doctorado  = {
+            especialidad:"esp1",
+            pais:this.state.doctorado.pais,
+            institucion:this.state.doctorado.institucion,
+            nombre_titulo:this.state.doctorado.nombreTitulo,
+            egresado:1,
+            fecha_obtencion:this.armarFecha(this.state.doctorado.fechaTitulo._d),
+            titulo_tesis:this.state.doctorado.tituloTesis,
+            url_tesis:this.state.doctorado.urlTesis,
+            archivo_tesis: null,
+            grado_academico: "Doctorado",
+            premio:null};
+
+        let diplomado  = {
+            especialidad:"esp1",
+            pais:this.state.doctorado.pais,
+            institucion:this.state.doctorado.institucion,
+            nombre_titulo:this.state.doctorado.nombreTitulo,
+            egresado:1,
+            fecha_obtencion:this.armarFecha(this.state.doctorado.fechaTitulo._d),
+            titulo_tesis:this.state.doctorado.tituloTesis,
+            url_tesis:this.state.doctorado.urlTesis,
+            archivo_tesis: null,
+            grado_academico: "Diplomatura",
+            premio:null};
+
+        let grad_acad=[titulo,maestria,doctorado,diplomado];
+
+        let postulante=
+                {
+                    nombres: this.state.nombres,
+                    apellido_paterno: this.state.aPaterno,
+                    apellido_materno: this.state.aMaterno,
+                    correo: this.state.email,
+                    fecha_nacimiento: this.armarFecha(this.state.fechaNac._d),
+                    numero_documento: this.state.numDoc,
+                    tipo_documento: this.state.tipoDoc,
+                    sexo: this.state.sexo,
+                    pais_nacimiento: this.state.paisNac,
+                    lugar_nacimiento: this.state.lugarNac,
+                    direccion_domicilio: this.state.direccion,
+                    pais_domicilio: this.state.nacionalidad,
+                    telefono: this.state.telefono,
+                    celular: this.state.celular
+                };
+
+        console.log('grad_acad:',grad_acad);
+        console.log('postulante:',postulante);
+        //console.log('docenciaRegistrar:',docenciaRegistrar);
+        //console.log('expProfRegistrar:',expProfRegistrar);
+        //console.log('investigacionRegistrar:',investigacionRegistrar);
+        axios.post('http://200.16.7.151:8080/convocatoria/convocatoria/postulante/registrar', {
+            postulante:
+                {
+                    nombres: this.state.nombres,
+                    apellido_paterno: this.state.aPaterno,
+                    apellido_materno: this.state.aMaterno,
+                    correo: this.state.email,
+                    fecha_nacimiento: this.armarFecha(this.state.fechaNac._d),
+                    numero_documento: this.state.numDoc,
+                    tipo_documento: this.state.tipoDoc,
+                    sexo: this.state.sexo,
+                    pais_nacimiento: this.state.paisNac,
+                    lugar_nacimiento: this.state.lugarNac,
+                    direccion_domicilio: this.state.direccion,
+                    pais_domicilio: this.state.nacionalidad,
+                    telefono: this.state.telefono,
+                    celular: this.state.celular
+                },
+            id_convocatoria:this.props.match.params.codigoConv,
+            postulante_experiencia:experiencia,
+            postulante_investigacion:investigaciones,
+            postulante_docencia_cargo:cargos,
+            postulante_docencia_premio:premios,
+            postulante_docencia_asesoria:asesorias,
+            postulante_grado_academico:grad_acad,
+
+        })
+            .then(response => {
+                alert("postulante registrado",response.data);
+                this.props.history.goBack();
+            })
+            .catch(error => {
+                alert("Error: No se pudo registrar la investigación");
+            })
+
+
+    }
+
     performNext = ()=> {
         if(this.state.paso==1) {
-            //if (this.validator1.allValid()) {
-            if (1) {
+            if (this.validator1.allValid()) {
+            //if (1) {
                 this.setState({
                     paso: 2,
                     btnAnterior:true
@@ -603,8 +742,8 @@ class registroPostulante extends Component {
             }
 
         }else if(this.state.paso==2){
-            //if (this.validator2.allValid()) {
-            if (1) {
+            if (this.validator2.allValid()) {
+            //if (1) {
                 this.setState({
                     paso: 3,
                     btnFinalizar:true
@@ -616,15 +755,13 @@ class registroPostulante extends Component {
             }
         }else if(this.state.paso==3){
             if (this.diplomadoValidator.allValid() && this.tituloValidator.allValid()  && this.maestriaValidator.allValid() && this.doctoradoValidator.allValid() && this.state.investigaciones.length>0) {
-                console.log('titulo:', this.state.titulo);
-                console.log('maestria:', this.state.maestria);
-                console.log('doctorado:', this.state.doctorado);
+
+                this.performPostRequest()
             }else {
                 this.tituloValidator.showMessages();
                 this.maestriaValidator.showMessages();
                 this.doctoradoValidator.showMessages();
                 this.diplomadoValidator.showMessages();
-
                 // rerender to show messages for the first time
                 this.forceUpdate();
                 if(this.state.investigaciones.length==0){
