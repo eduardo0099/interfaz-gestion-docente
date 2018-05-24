@@ -16,26 +16,27 @@ class ModificarActividad extends Component {
         super(props);
         this.validator = new SimpleReactValidator();
         this.state = {
+			id_actividad:'1',
             titulo: 'Reunion Congresal de amantes del Hearthstone',
             tipo: 'Congreso',
-            fecha_inicio: '2018-04-28',
-            fecha_fin: '2018-04-28',
-            showAgregar: false,
-            selectedAgregar: [],
+            fecha_inicio: '',
+            fecha_fin: '',
+            //showAgregar: false,
+            //selectedAgregar: [],
             profesores: [],
             showQuitar: false,
             selectedQuitar: [],
-            autoresModal: [],
-            autoresOrig:[]
+            //autoresModal: [],
+            //autoresOrig:[]
         };
         this.handleTitulo = this.handleTitulo.bind(this);
         this.handleTipo = this.handleTipo.bind(this);
         this.handleFIni = this.handleFIni.bind(this);
         this.handleFFin = this.handleFFin.bind(this);
 
-        this.handleShowAgregar = this.handleShowAgregar.bind(this);
+        //this.handleShowAgregar = this.handleShowAgregar.bind(this);
         this.handleCloseAgregar = this.handleCloseAgregar.bind(this);
-        this.guardarAgregados = this.guardarAgregados.bind(this);
+        //this.guardarAgregados = this.guardarAgregados.bind(this);
 
         this.handleShowQuitar = this.handleShowQuitar.bind(this);
         this.handleCloseQuitar = this.handleCloseQuitar.bind(this);
@@ -45,6 +46,11 @@ class ModificarActividad extends Component {
     }
 
     componentDidMount() {
+		//console.log(this.history.match.params.idActividad);
+		console.log(this.props.match.params.id_actividad);
+		
+		
+		this.setState({id_actividad: this.props.match.params.id_actividad});
         /*axios.get('http://200.16.7.151:8080/docente/docente/actividad', {
             params: {
                 id: this.props.match.params.idActividad,
@@ -71,7 +77,7 @@ class ModificarActividad extends Component {
     }
 
     handleTipo(event) {
-        this.setState({autor: event.target.value});
+        this.setState({tipo: event.target.value});
     }
 
     handleFIni(date) {
@@ -84,20 +90,23 @@ class ModificarActividad extends Component {
     }
 
     armarFecha(date) {
-        var cadena = "";
-        cadena = cadena + date.getFullYear();
-
-        if (date.getMonth() < 9) {
-            cadena = cadena + 0 + (date.getMonth() + 1);
-        } else {
-            cadena = cadena + (date.getMonth() + 1);
+        var cadena="";
+        //cadena=cadena+date.getFullYear();
+		
+		
+		if (date.getDate()<10){
+            cadena=cadena+0+date.getDate();
+        }else{
+            cadena=cadena+date.getDate();
         }
-
-        if (date.getDate() < 10) {
-            cadena = cadena + 0 + date.getDate();
-        } else {
-            cadena = cadena + date.getDate();
+		cadena += "-";
+        if (date.getMonth()<9){
+            cadena=cadena+0+(date.getMonth()+1);
+        }else{
+            cadena=cadena+(date.getMonth()+1);
         }
+		cadena = cadena + "-";
+		cadena=cadena+date.getFullYear();
         console.log(cadena);
         return cadena;
     }
@@ -113,17 +122,18 @@ class ModificarActividad extends Component {
         let autoresOrig = this.state.autoresOrig;
         */
         if (this.validator.allValid() && this.validDates(this.state.fecha_fin, this.state.fecha_inicio)) {
-            axios.put('http://200.16.7.151:8080/docente/investigacion/actualizar', {
-                id: this.props.match.params.idActividad,
+            axios.put('http://200.16.7.151:8080/docente/actividad/actualizar', {
+                id_actividad: this.state.id_actividad,
+				tipo: this.state.tipo,
                 titulo: this.state.titulo,
-                autor: [this.props.match.params.codigo],
-                resumen: this.state.resumen,
                 fecha_inicio: this.armarFecha(this.state.fecha_inicio._d),
                 fecha_fin: this.armarFecha(this.state.fecha_fin._d),
+				estado: this.state.estado,
+				lugar: this.state.lugar
             })
                 .then(response => {
                     alert("Modificación registrada");
-                    this.props.history.goBack();
+                    //this.props.history.goBack();
                 })
                 .catch(error => {
                     alert("Error: No se pudo registrar la modificación");
@@ -326,8 +336,8 @@ class ModificarActividad extends Component {
                         <div className="form-group row">
                             <div className="col-md-8 col-sm-12">
                                 <label> Tipo </label>
-                                <input type="text" disabled={true} className="form-control" value={this.state.autor} onChange={this.handleAutor}></input>
-                                {this.validator.message('titulo', this.state.titulo, 'required|max:100', false, {required: 'Este campo es obligatorio', max: 'El número máximo de caracteres es 20'})}
+                                <input type="text" className="form-control" value={this.state.tipo} onChange={this.handleTipo}></input>
+                                {this.validator.message('tipo', this.state.tipo, 'required|max:100', false, {required: 'Este campo es obligatorio', max: 'El número máximo de caracteres es 20'})}
                             </div>
                         </div>
                         <div className="form-group">

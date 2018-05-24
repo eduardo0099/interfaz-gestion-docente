@@ -70,7 +70,7 @@ export class Actividades extends React.Component {
                 })
 
             this.setState({
-                investigaciones: this.state.investigaciones.filter(function (el) {
+                actividades: this.state.actividades.filter(function (el) {
                     return el.id !== selectedId;
                 })
             })

@@ -18,7 +18,11 @@ class RegistroActividad extends Component{
             tipo:"",
             fecha_inicio:"",
             fecha_fin:"",
-            estado:"CREADA"
+            estado:"Asistira",
+            idProfesor:"20112728",
+            ciclo:"2018-1",
+            lugar:"PUCP"
+
         };
         this.handleTitulo = this.handleTitulo.bind(this);
         this.handleTipo = this.handleTipo.bind(this);
@@ -51,19 +55,22 @@ class RegistroActividad extends Component{
 
     armarFecha(date){
         var cadena="";
-        cadena=cadena+date.getFullYear();
-
+        //cadena=cadena+date.getFullYear();
+		
+		
+		if (date.getDate()<10){
+            cadena=cadena+0+date.getDate();
+        }else{
+            cadena=cadena+date.getDate();
+        }
+		cadena += "-";
         if (date.getMonth()<9){
             cadena=cadena+0+(date.getMonth()+1);
         }else{
             cadena=cadena+(date.getMonth()+1);
         }
-
-        if (date.getDate()<10){
-            cadena=cadena+0+date.getDate();
-        }else{
-            cadena=cadena+date.getDate();
-        }
+		cadena = cadena + "-";
+		cadena=cadena+date.getFullYear();
         console.log(cadena);
         return cadena;
     }
@@ -77,10 +84,14 @@ class RegistroActividad extends Component{
     performPostRequest = ()=> {
         if( this.validator.allValid() && this.validDates(this.state.fecha_fin,this.state.fecha_inicio)){
             axios.post('http://200.16.7.151:8080/docente/actividad/registrar', {
-                titulo: this.state.titulo,
+                idProfesor: this.state.idProfesor,
+                ciclo: this.state.ciclo,
                 tipo: this.state.tipo,
+                titulo: this.state.titulo,
                 fecha_inicio: this.armarFecha(this.state.fecha_inicio._d),
                 fecha_fin: this.armarFecha(this.state.fecha_fin._d),
+                estado: this.state.estado,
+                lugar: this.state.lugar
             })
                 .then(response => {
                     alert("Actividad registrada");
