@@ -361,7 +361,6 @@ class ConvocatoriaNuevo extends Component {
                         </header>
                     </div>
                     {cuerpo}
-
                     <div className="panel-footer text-right">
                         {btnAnterior}
                         <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
