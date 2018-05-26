@@ -3,7 +3,6 @@ import {Route} from 'react-router-dom';
 import BaseContainer from "./BaseContainer";
 import axios from "axios/index";
 import {Button} from 'react-bootstrap';
-import "../styles/BotonStyle.css";
 
 class PreferenciaCursos extends Component {
 
