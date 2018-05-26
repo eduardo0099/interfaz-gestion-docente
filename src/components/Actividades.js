@@ -2,14 +2,10 @@ import React from 'react';
 import 'react-table/react-table.css';
 import axios from "axios/index";
 import '../styles/Actividades.css';
-import {Button, Col, Grid} from 'react-bootstrap';
+import {Button} from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import {Route} from 'react-router-dom';
-import SkyLight from 'react-skylight';
-import DatePicker from 'react-date-picker'
 import BaseContainer from "./BaseContainer";
-import RegistroInvestigacion from "./RegistroInvestigacion";
-import ModificarInvestigacion from "./ModificarInvestigacion";
 import RegistroActividad from "./RegistroActividad";
 import ModificarActividad from "./ModificarActividad";
 

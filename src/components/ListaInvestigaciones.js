@@ -8,8 +8,6 @@ import './../styles/ListaInvestigaciones.css';
 import BootstrapTable from 'react-bootstrap-table-next';
 import BaseContainer from "./BaseContainer";
 
-let idSel = -1
-
 export class ListaInvestigaciones extends React.Component {
     constructor(props) {
         super(props);

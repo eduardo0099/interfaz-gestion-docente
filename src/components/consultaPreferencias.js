@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import {Grid, Row, Button, Glyphicon, Col} from 'react-bootstrap';
 
 class consultaPreferencias extends Component {
 

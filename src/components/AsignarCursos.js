@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Tabs,Tab,Col,Grid,Row,FormGroup,ControlLabel,FormControl,Form,Button,Checkbox,Modal,Popover,Tooltip} from 'react-bootstrap';
+import {Tabs,Tab,Col,Grid,Row,FormGroup,ControlLabel,FormControl,Form,Button,Checkbox,Modal} from 'react-bootstrap';
 import BaseContainer from './BaseContainer';
 import BootstrapTable from 'react-bootstrap-table-next';
 import axios from 'axios';
