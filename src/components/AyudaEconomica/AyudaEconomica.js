@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import Select from 'react-select';
 import {Panel} from 'react-bootstrap';
+import BaseContainer from "../BaseContainer";
 
 class AyudaEconomica extends React.Component {
 
@@ -232,7 +233,15 @@ class AyudaEconomica extends React.Component {
     render() {
         return (
             <div>
-                <div className="col-md-3">
+                <BaseContainer>
+                    <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
+                        <div className="panel-heading">
+                            <a className="btn btn-sm btn-primary pull-right m-t-md" href={`${this.props.match.url}/nuevo`}> Nueva </a>
+                            <h2> Ayudas Económicas  </h2>
+                        </div>
+                        <div className="panel-body row">
+
+                    <div className="col-md-3">
                     <Panel>
                         <Panel.Heading> Búsqueda </Panel.Heading>
                         <Panel.Body>
@@ -363,6 +372,9 @@ class AyudaEconomica extends React.Component {
                         </table>
                     </Panel>
                 </div>
+                        </div>
+                    </div>
+                </BaseContainer>
             </div>
         );
     }

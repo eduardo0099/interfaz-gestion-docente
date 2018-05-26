@@ -15,7 +15,9 @@ const BodySidebar = (props) => {
        {divider}
       <Link to="/carga" onClick={() => props.handleMenu(false)}  className="link-body-sidebar">Carga de datos</Link>
       {divider}
-      <Link to="/asignacionCursos" onClick={() => props.handleMenu(false)}  className="link-body-sidebar">Asignar Cursos</Link>
+        <Link to="/asignacionCursos" onClick={() => props.handleMenu(false)}  className="link-body-sidebar">Asignar Cursos</Link>
+          {divider}
+          <Link to="/ayudaeconomica" onClick={() => props.handleMenu(false)}  className="link-body-sidebar">Ayudas Económicas</Link>
     </div>
   );
 };
