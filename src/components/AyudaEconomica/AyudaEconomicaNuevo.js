@@ -3,8 +3,6 @@ import {Route} from 'react-router-dom';
 import axios from "axios/index";
 import BaseContainer from "../BaseContainer";
 
-
-
 class AyudaEconomicaNuevo extends Component {
 
     constructor(props) {
