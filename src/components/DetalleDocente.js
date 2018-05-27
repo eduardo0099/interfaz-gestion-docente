@@ -10,6 +10,7 @@ import DescargaHoras from "./DescargaHoras"
 import Actividades from "./Actividades"
 import BaseContainer from "./BaseContainer";
 import {Image} from 'react-bootstrap';
+import API from '../api';
 
 class DetalleDocente extends Component {
 
@@ -31,7 +32,7 @@ class DetalleDocente extends Component {
     }
 
     componentDidMount() {
-      axios.get('http://200.16.7.151:8080/docente/docente/general', {
+      API.get('docente/docente/general', {
         params: {
           codigo: this.props.match.params.codigo,
           ciclo: "2018-1",
@@ -42,16 +43,6 @@ class DetalleDocente extends Component {
         console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`, error);
       });
     }
-/*
-  obtenerTipo() {
-    let id = `${this.state.info.descripcion}`;
-    if(id == "TPA"){
-      return "Tiempo Parcial por Asignaturas (TPA)";
-    }
-    else{
-      return "Tiempo Completo (TC)";
-    }
-    */
 
     obtenerTipo() {
         let id = `${this.state.info.descripcion}`;

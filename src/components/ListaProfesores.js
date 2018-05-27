@@ -4,6 +4,7 @@ import DetalleDocente from "./DetalleDocente";
 import BaseContainer from "./BaseContainer";
 import axios from "axios/index";
 import {Glyphicon, Dropdown, MenuItem} from 'react-bootstrap';
+import API from '../api';
 
 class ListaProfesores extends Component {
 
@@ -18,7 +19,7 @@ class ListaProfesores extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://200.16.7.151:8080/general/listaDocente')
+        API.get('general/listaDocente')
             .then(response => {
                 this.setState({loading: false, profesores: response.data.docentes});
             })
