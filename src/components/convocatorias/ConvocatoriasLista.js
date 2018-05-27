@@ -6,7 +6,7 @@ import Cursos from "../Cursos";
 import ConvocatoriaNuevo from "./ConvocatoriasNuevo";
 import ConvocatoriasListaPostulantes from "./ConvocatoriasListaPostulantes";
 import registroPostulante from "./registroPostulante";
-
+import API from '../../api.js';
 
 class ConvocatoriasLista extends Component {
 
@@ -14,29 +14,25 @@ class ConvocatoriasLista extends Component {
         convocatorias: []
     }
 
-    componentWillMount() {
-        // search();
+    componentWillMount(){
         this.offlineSearch();
     }
 
     search() {
-        axios.get('http://200.16.7.151:8080/convocatoria/lista')
+        console.log('asdads');
+        API.get('convocatoria/convocatoria/lista')
             .then(response => {
-                this.setState({convocatorias: response.data});
+                //this.setState({convocatorias: response.data});
             })
     }
 
     componentDidMount() {
-        axios.get('http://200.16.7.151:8080/convocatoria/convocatoria/lista')
+        console.log('asdads');
+        API.get('convocatoria/convocatoria/lista')
             .then(response => {
-                this.setState({loading: false, profesores: response.data.docentes});
+                this.setState({convocatorias: response.data.convocatorias});
             })
-            .catch(error => {
-                this.setState({
-                    error: `${error}`,
-                    loading: false
-                });
-            });
+
     }
 
     offlineSearch() {
