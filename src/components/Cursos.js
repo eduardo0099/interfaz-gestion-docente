@@ -1,6 +1,4 @@
 import React from 'react';
-import 'react-table/react-table.css';
-import BootstrapTable from 'react-bootstrap-table-next';
 import BaseContainer from "./BaseContainer";
 import API from "../api";
 
@@ -11,7 +9,8 @@ export class Cursos extends React.Component {
         this.state = {
             infoCursos: [],
             ciclos: [],
-            cicloSeleccionado: ""
+            cicloSeleccionado: "",
+            infoDocente: {}
         }
     }
 
@@ -25,6 +24,7 @@ export class Cursos extends React.Component {
             .then(response => {
                 this.setState({ cicloSeleccionado: response.data.cicloActual })
                 this.findCursos(response.data.cicloActual);
+                this.findDocente(response.data.cicloActual);
             })
     }
 
@@ -46,6 +46,19 @@ export class Cursos extends React.Component {
         })
     }
 
+
+    findDocente(ciclo) {
+        API.get('docente/docente/general', {
+            params: {
+                codigo: this.props.match.params.codigo,
+                ciclo: ciclo,
+            }
+        }).then(response => {
+            this.setState({ infoDocente: response.data });
+        }).catch(error => {
+        });
+    }
+
     cambioCiclo = (event) => {
         let ciclo = event.target.value;
         this.setState({ cicloSeleccionado: ciclo });
@@ -56,10 +69,15 @@ export class Cursos extends React.Component {
         return (
             <div>
                 <BaseContainer>
-                    <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
+                    <div className="panel col-lg-offset-2 col-lg-8 col-md-12 col-sm-12">
                         <div className="panel-heading">
-                            <a className="btn btn-default pull-right m-t-md" onClick={ this.props.history.goBack }> Volver al Perfil </a>
-                            <h2> Cursos </h2>
+                            <header className="page-header">
+                                <a className="btn btn-default pull-right"
+                                   onClick={ this.props.history.goBack }> Volver al Perfil </a>
+                                <p className="h2 m-b-sm"> { this.state.infoDocente.nombres } { this.state.infoDocente.apellido_paterno } { this.state.infoDocente.apellido_materno }
+                                    <small className="block m-t-xs"> Cursos </small>
+                                </p>
+                            </header>
                         </div>
                         <div className="panel-body">
                             <select ref="selectorCiclos" onChange={ this.cambioCiclo }>

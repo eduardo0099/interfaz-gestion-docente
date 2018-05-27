@@ -1,49 +1,68 @@
 import React from 'react';
-import {Route} from 'react-router-dom';
-import {Button} from 'react-bootstrap';
+import { Route } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
 import axios from "axios/index";
 import ProfesorPerfilEncuesta from "./ProfesorPerfilEncuesta";
 import BaseContainer from "./BaseContainer";
+import API from '../api';
 
 class ListaEncuestas extends React.Component {
 
-
     constructor(props) {
-
         super(props);
         this.state = {
             listaEncuesta: [],
             cicloSeleccionado: "2018-1",
             verComentarios: false,
             comentarioSeleccionado: -1,
-            nombreProfesor: "",
+            infoDocente: {},
+            ciclos: []
         }
     }
 
-    componentDidMount() {
-        axios.get('http://200.16.7.151:8080/docente/docente/encDocente', {
+    findCicloActual() {
+        API.get('general/cicloActual')
+            .then(response => {
+                this.setState({ cicloSeleccionado: response.data.cicloActual })
+                this.findEncuestas(response.data.cicloActual);
+                this.findDocente(response.data.cicloActual);
+            })
+    }
+
+    allCiclos() {
+        API.get('general/listaCiclos')
+            .then(response => {
+                this.setState({ ciclos: response.data.ciclos })
+            })
+    }
+
+    findDocente(ciclo) {
+        API.get('docente/docente/general', {
             params: {
                 codigo: this.props.match.params.codigo,
-                ciclo: this.state.cicloSeleccionado,
+                ciclo: ciclo,
             }
         }).then(response => {
-            console.log(JSON.stringify(response.data, null, 2))
-            this.setState({listaEncuesta: response.data.encuestas});
+            this.setState({ infoDocente: response.data });
         }).catch(error => {
-            console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`);
         });
+    }
 
-        axios.get('http://200.16.7.151:8080/docente/docente/general', {
+    findEncuestas(ciclo) {
+        API.get('docente/docente/encDocente', {
             params: {
-                codigo: this.props.match.params.codigo
+                codigo: this.props.match.params.codigo,
+                ciclo: ciclo,
             }
-        }).then(response => {
-            this.setState({
-                nombreProfesor: `${response.data.nombres} ${response.data.apellido_paterno} ${response.data.apellido_materno}`
-            });
+        }).then((response) => {
+            this.setState({ listaEncuesta: response.data.encuestas })
         }).catch(error => {
-            console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`);
         });
+    }
+
+    componentDidMount() {
+        this.findCicloActual();
+        this.allCiclos();
     }
 
     mostarComentarios = (index) => {
@@ -64,12 +83,17 @@ class ListaEncuestas extends React.Component {
         if (!this.state.verComentarios) {
             return (
                 <div>
-                    <Route exact path={`${this.props.match.path}`} render={() =>
+                    <Route exact path={ `${this.props.match.path}` } render={ () =>
                         <BaseContainer>
-                            <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
+                            <div className="panel col-lg-offset-2 col-lg-8 col-md-12 col-sm-12">
                                 <div className="panel-heading">
-                                    <a className="btn btn-default pull-right m-t-md" onClick={this.props.history.goBack}> Volver al Perfil </a>
-                                    <h2> Encuestas </h2>
+                                    <header className="page-header">
+                                        <a className="btn btn-default pull-right"
+                                           onClick={ this.props.history.goBack }> Volver al Perfil </a>
+                                        <p className="h2 m-b-sm"> { this.state.infoDocente.nombres } { this.state.infoDocente.apellido_paterno } { this.state.infoDocente.apellido_materno }
+                                            <small className="block m-t-xs"> Encuestas </small>
+                                        </p>
+                                    </header>
                                 </div>
                                 <div className="panel-body">
                                     <table className="table table-striped">
@@ -83,21 +107,21 @@ class ListaEncuestas extends React.Component {
                                         </thead>
                                         <tbody>
 
-                                        {this.state.listaEncuesta.map((item, i) => {
-                                            return <tr key={i}>
+                                        { this.state.listaEncuesta.map((item, i) => {
+                                            return <tr key={ i }>
                                                 <td className="v-middle">
-                                                    <span className="block text-primary"> {item.curso} </span>
-                                                    <small className="block text-muted"> {item.codigo} </small>
+                                                    <span className="block text-primary"> { item.curso } </span>
+                                                    <small className="block text-muted"> { item.codigo } </small>
                                                     <small
-                                                        className="block text-muted"> Horario {item.horario} </small>
+                                                        className="block text-muted"> Horario { item.horario } </small>
                                                 </td>
-                                                <td className="v-middle text-center">{item.porcentaje}%</td>
-                                                <td className="v-middle text-center">{item.puntaje}</td>
+                                                <td className="v-middle text-center">{ item.porcentaje }%</td>
+                                                <td className="v-middle text-center">{ item.puntaje }</td>
                                                 <td className="v-middle"><Button
-                                                    onClick={() => this.mostarComentarios(i)}>Ver
+                                                    onClick={ () => this.mostarComentarios(i) }>Ver
                                                     Comentarios</Button></td>
                                             </tr>
-                                        })}
+                                        }) }
                                         </tbody>
                                     </table>
                                 </div>
@@ -110,14 +134,14 @@ class ListaEncuestas extends React.Component {
         } else {
             return (
                 <ProfesorPerfilEncuesta
-                    volverLista={this.regresarListaEncuesta}
-                    profesor={this.state.nombreProfesor}
-                    ciclo={this.state.listaEncuesta[this.state.comentarioSeleccionado].ciclo}
-                    curso={this.state.listaEncuesta[this.state.comentarioSeleccionado].curso}
-                    codigo={this.state.listaEncuesta[this.state.comentarioSeleccionado].codigo}
-                    participacion={this.state.listaEncuesta[this.state.comentarioSeleccionado].porcentaje}
-                    puntaje={this.state.listaEncuesta[this.state.comentarioSeleccionado].puntaje}
-                    encuestas={this.state.listaEncuesta[this.state.comentarioSeleccionado].comentarios}
+                    volverLista={ this.regresarListaEncuesta }
+                    profesor={ this.state.nombreProfesor }
+                    ciclo={ this.state.listaEncuesta[this.state.comentarioSeleccionado].ciclo }
+                    curso={ this.state.listaEncuesta[this.state.comentarioSeleccionado].curso }
+                    codigo={ this.state.listaEncuesta[this.state.comentarioSeleccionado].codigo }
+                    participacion={ this.state.listaEncuesta[this.state.comentarioSeleccionado].porcentaje }
+                    puntaje={ this.state.listaEncuesta[this.state.comentarioSeleccionado].puntaje }
+                    encuestas={ this.state.listaEncuesta[this.state.comentarioSeleccionado].comentarios }
                 />
             );
         }
