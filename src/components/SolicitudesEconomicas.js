@@ -6,6 +6,7 @@ import Detalle_SolicitudEconomica from "./Detalle_SolicitudEconomica";
 import { Route, Link } from 'react-router-dom';
 import BaseContainer from "./BaseContainer";
 import API from "../api";
+import Select from 'react-select';
 
 class SolicitudesEconomicas extends React.Component {
 
@@ -77,8 +78,9 @@ class SolicitudesEconomicas extends React.Component {
         this.allCiclos();
     }
 
-    cambioCiclo = (event) => {
-        let ciclo = event.target.value;
+    cambioCiclo = (obj) => {
+        let ciclo = obj.descripcion;
+        this.setState({ cicloSeleccionado: ciclo })
         this.findAyudas(ciclo);
     };
 
@@ -108,28 +110,25 @@ class SolicitudesEconomicas extends React.Component {
                                     <header className="page-header">
                                         <a className="btn btn-default pull-right"
                                            onClick={ this.props.history.goBack }> Volver al Perfil </a>
-                                        <p className="h2 m-b-sm"> { this.state.infoDocente.nombres } { this.state.infoDocente.apellido_paterno } { this.state.infoDocente.apellido_materno }
+                                        <p className="h2"> { this.state.infoDocente.nombres } { this.state.infoDocente.apellido_paterno } { this.state.infoDocente.apellido_materno }
                                             <small className="block m-t-xs"> Solicitudes Económicas</small>
                                         </p>
                                     </header>
                                 </div>
                                 <div className="panel-body">
-                                    <Form horizontal>
-                                        <FormGroup controlId="formHorizontalSeccion">
-                                            <Col componentClass={ ControlLabel } sm={ 1 }>
-                                                Ciclo:
-                                            </Col>
-                                            <Col sm={ 3 }>
-                                                <FormControl componentClass="select" placeholder="select"
-                                                             onChange={ this.cambioCiclo }>
-                                                    { this.state.ciclos.map((item, i) => {
-                                                        return <option key={ i }
-                                                                       value={ item.descripcion }>{ item.descripcion }</option>
-                                                    }) }
-                                                </FormControl>
-                                            </Col>
-                                        </FormGroup>
-                                    </Form>
+                                    <div>
+                                        <div className="form-group col-md-2 row ">
+                                            <label> Ciclo </label>
+                                            <Select
+                                                value={ this.state.cicloSeleccionado }
+                                                onChange={ this.cambioCiclo }
+                                                valueKey={ "descripcion" }
+                                                labelKey={ "descripcion" }
+                                                options={ this.state.ciclos }
+                                                clearable={ false }
+                                            />
+                                        </div>
+                                    </div>
                                     <table className="table table-striped">
                                         <thead>
                                         <tr>

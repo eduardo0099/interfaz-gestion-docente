@@ -1898,3 +1898,7 @@ div.notas {
     padding-top: 5px;
     background-color: #004bff;
 }
+
+.page-header {
+    margin: 0px;
+}

@@ -7,6 +7,7 @@ import axios from "axios/index";
 import BootstrapTable from 'react-bootstrap-table-next';
 import BaseContainer from "./BaseContainer";
 import API from "../api";
+import Select from 'react-select';
 
 export class ListaInvestigaciones extends React.Component {
     constructor(props) {
@@ -54,8 +55,9 @@ export class ListaInvestigaciones extends React.Component {
             })
     }
 
-    cambioCiclo = (event) => {
-        let ciclo = event.target.value;
+    cambioCiclo = (obj) => {
+        let ciclo = obj.descripcion;
+        this.setState({ cicloSeleccionado: ciclo })
         this.findInvestigaciones(ciclo);
     };
 
@@ -156,18 +158,24 @@ export class ListaInvestigaciones extends React.Component {
                                 <header className="page-header">
                                     <a className="btn btn-default pull-right"
                                        onClick={ this.props.history.goBack }> Volver al Perfil </a>
-                                    <p className="h2 m-b-sm"> {this.state.infoDocente.nombres} {this.state.infoDocente.apellido_paterno}  {this.state.infoDocente.apellido_materno} <small className="block m-t-xs"> Investigaciones</small> </p>
+                                    <p className="h2 m-b-sm"> { this.state.infoDocente.nombres } { this.state.infoDocente.apellido_paterno } { this.state.infoDocente.apellido_materno }
+                                        <small className="block m-t-xs"> Investigaciones</small>
+                                    </p>
                                 </header>
                             </div>
                             <div className="panel-body">
                                 <div>
-                                    <p>Ciclo:
-                                        <select ref="selectorCiclos" onChange={ this.cambioCiclo }>
-                                            { this.state.ciclos.map((item, i) => {
-                                                return <option key={ i } value={ item.descripcion }>{ item.descripcion }</option>
-                                            }) }
-                                        </select>
-                                    </p>
+                                    <div className="form-group col-md-2 row ">
+                                        <label> Ciclo </label>
+                                        <Select
+                                            value={ this.state.cicloSeleccionado }
+                                            onChange={ this.cambioCiclo }
+                                            valueKey={ "descripcion" }
+                                            labelKey={ "descripcion" }
+                                            options={ this.state.ciclos }
+                                            clearable={ false }
+                                        />
+                                    </div>
                                 </div>
                                 <div className="m-t-md">
                                     <BootstrapTable keyField='id' data={ this.state.investigaciones } columns={ columns } rowEvents={ rowEvents } selectRow={ selectRow }/>

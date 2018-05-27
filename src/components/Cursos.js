@@ -1,6 +1,7 @@
 import React from 'react';
 import BaseContainer from "./BaseContainer";
 import API from "../api";
+import Select from 'react-select';
 
 export class Cursos extends React.Component {
 
@@ -59,8 +60,8 @@ export class Cursos extends React.Component {
         });
     }
 
-    cambioCiclo = (event) => {
-        let ciclo = event.target.value;
+    cambioCiclo = (obj) => {
+        let ciclo = obj.descripcion;
         this.setState({ cicloSeleccionado: ciclo });
         this.findCursos(ciclo);
     };
@@ -80,11 +81,19 @@ export class Cursos extends React.Component {
                             </header>
                         </div>
                         <div className="panel-body">
-                            <select ref="selectorCiclos" onChange={ this.cambioCiclo }>
-                                { this.state.ciclos.map((item, i) => {
-                                    return <option key={ i } value={ item.descripcion }>{ item.descripcion }</option>
-                                }) }
-                            </select>
+                            <div>
+                                <div className="form-group col-md-2 row ">
+                                    <label> Ciclo </label>
+                                    <Select
+                                        value={ this.state.cicloSeleccionado }
+                                        onChange={ this.cambioCiclo }
+                                        valueKey={ "descripcion" }
+                                        labelKey={ "descripcion" }
+                                        options={ this.state.ciclos }
+                                        clearable={ false }
+                                    />
+                                </div>
+                            </div>
                             <table className="table table-striped">
                                 <thead>
                                 <th className="v-middle col-md-4"> Curso</th>

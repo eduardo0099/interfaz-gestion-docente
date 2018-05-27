@@ -5,6 +5,7 @@ import axios from "axios/index";
 import ProfesorPerfilEncuesta from "./ProfesorPerfilEncuesta";
 import BaseContainer from "./BaseContainer";
 import API from '../api';
+import Select from 'react-select';
 
 class ListaEncuestas extends React.Component {
 
@@ -60,6 +61,12 @@ class ListaEncuestas extends React.Component {
         });
     }
 
+    cambioCiclo = (obj) => {
+        let ciclo = obj.descripcion;
+        this.setState({ cicloSeleccionado: ciclo })
+        this.findEncuestas(ciclo);
+    };
+
     componentDidMount() {
         this.findCicloActual();
         this.allCiclos();
@@ -96,6 +103,19 @@ class ListaEncuestas extends React.Component {
                                     </header>
                                 </div>
                                 <div className="panel-body">
+                                    <div>
+                                        <div className="form-group col-md-2 row ">
+                                            <label> Ciclo </label>
+                                            <Select
+                                                value={ this.state.cicloSeleccionado }
+                                                onChange={ this.cambioCiclo }
+                                                valueKey={ "descripcion" }
+                                                labelKey={ "descripcion" }
+                                                options={ this.state.ciclos }
+                                                clearable={ false }
+                                            />
+                                        </div>
+                                    </div>
                                     <table className="table table-striped">
                                         <thead>
                                         <tr>
