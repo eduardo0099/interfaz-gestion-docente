@@ -9,6 +9,8 @@ import moment from "moment";
 import BootstrapTable from 'react-bootstrap-table-next';
 import BaseContainer from "../BaseContainer";
 import {Checkbox, CheckboxGroup} from 'react-checkbox-group';
+import API from "../../api";
+import Select from 'react-select';
 
 const gradosAcademicos = [
     'Título Profesional',
@@ -23,6 +25,7 @@ class ConvocatoriaNuevo extends Component {
         super(props);
         this.validator = new SimpleReactValidator();
         this.state = {
+            cursos:[],
             paso:1,
             btnAnterior:false,
             btnFinalizar:false,
@@ -31,18 +34,29 @@ class ConvocatoriaNuevo extends Component {
             experienciaProfesional: [],
             investigacion: [],
 
-            curso: '',
+            nombre: '',
             codigoCurso:'',
             descripcion: '',
             fecha_inicio: null,
             fecha_fin: null
         };
-        this.handleCurso = this.handleCurso.bind(this);
+        this.handleNombre = this.handleNombre.bind(this);
         this.handleDescripcion = this.handleDescripcion.bind(this);
         this.handleFIni = this.handleFIni.bind(this);
         this.handleFFin = this.handleFFin.bind(this);
         this.handleCodigoCurso = this.handleCodigoCurso.bind(this);
 
+    }
+
+    componentDidMount() {
+        this.allCursos();
+    }
+
+    allCursos() {
+        API.get('general/listaCiclos')
+            .then(response => {
+                this.setState({ cursos: response.data.ciclos })
+            })
     }
 
     gradosAcademicosChanged = (newGradoAcademico) => {
@@ -69,12 +83,13 @@ class ConvocatoriaNuevo extends Component {
         });
     }
 
-    handleCurso(event) {
-        this.setState({curso: event.target.value});
+    handleNombre(event) {
+        this.setState({nombre: event.target.value});
     }
 
-    handleCodigoCurso(event) {
-        this.setState({codigoCurso: event.target.value});
+    handleCodigoCurso(obj) {
+        let codCurso = obj.descripcion;
+        this.setState({ codigoCurso: codCurso })
     }
 
     handleDescripcion(event) {
@@ -244,13 +259,20 @@ class ConvocatoriaNuevo extends Component {
                     <div className="col-md-offset-0 col-md-7">
                         <hr/>
                         <div className="form-group">
-                            <label> Curso </label>
-                            <input type="text" className="form-control" value={this.state.curso} onChange={this.handleCurso}></input>
-                            {this.validator.message('curso', this.state.curso, 'required', false, {required: 'Este campo es obligatorio'})}
+                            <label> Nombre </label>
+                            <input type="text" className="form-control" value={this.state.nombre} onChange={this.handleNombre}></input>
+                            {this.validator.message('nombre', this.state.nombre, 'required', false, {required: 'Este campo es obligatorio'})}
                         </div>
                         <div className="form-group">
                             <label> Código curso </label>
-                            <input type="text" className="form-control" value={this.state.codigoCurso} onChange={this.handleCodigoCurso}></input>
+                            <Select
+                                value={ this.state.codigoCurso }
+                                onChange={ this.handleCodigoCurso }
+                                valueKey={ "descripcion" }
+                                labelKey={ "descripcion" }
+                                options={ this.state.cursos }
+                                clearable={ false }
+                            />
                             {this.validator.message('codigoCurso', this.state.codigoCurso, 'required', false, {required: 'Este campo es obligatorio'})}
                         </div>
                         <div className="form-group">

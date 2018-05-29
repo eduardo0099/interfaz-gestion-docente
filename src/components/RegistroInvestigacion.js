@@ -5,6 +5,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import SimpleReactValidator from 'simple-react-validator';
 import moment from "moment";
+import BaseContainer from "./BaseContainer";
 
 
 class RegistroInvestigación extends Component{
@@ -107,64 +108,54 @@ class RegistroInvestigación extends Component{
 
         console.log(this.props);
         return (
-            <div className="container">
-                <PageHeader>
-                    Registrar Informe
-                </PageHeader>
-                <Grid>
-                    <Row>
-                        <Col md={12}>
-                        Título:
-                        <input type="text" className="form-control" value={this.state.titulo} onChange={this.handleTitulo}></input>
-                        {this.validator.message('titulo', this.state.titulo, 'required|max:100', false, {required: 'Este campo es obligatorio',max:'El número máximo de caracteres es 20'})}
-                        <br></br>
-                        </Col>
-                    </Row>
-                    <Row >
-                        <Col md={12}>
-                        Autor:
-                        <input type="text" disabled={true} className="form-control" value={this.state.autor} onChange={this.handleAutor}></input>
-                        {this.validator.message('autor', this.state.autor, 'required|integer', false, {required: 'Este campo es obligatorio'})}
-                        <br></br>
-                        </Col>
-                    </Row>
-                    <Row >
-                        <Col md={12}>
-                        Resumen:
-                        <input type="text" className="form-control" value={this.state.resumen} onChange={this.handleResumen}></input>
-                        {this.validator.message('resumen', this.state.resumen, 'required', false, {required: 'Este campo es obligatorio'})}
-                        <br></br>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col md={12}>
-                        Fecha Inicio:
-                        <DatePicker
-                            dateFormat="DD/MM/YYYY"
-                            selected={this.state.fecha_inicio}
-                            onChange={this.handleFIni}
-                        />
-                        {this.validator.message('fechaIni', this.state.fecha_inicio, 'required', false, {required: 'Este campo es obligatorio'})}
-                        <br></br>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col md={12}>
-                        Fecha Fin:
-                        <DatePicker
-                            dateFormat="DD/MM/YYYY"
-                            selected={this.state.fecha_fin}
-                            onChange={this.handleFFin}
-                        />
-                        {this.validator.message('fechaFin', this.state.fecha_fin, 'required', false, {required: 'Este campo es obligatorio'})}
-                        <br></br>
-                        </Col>
-                    </Row>
-                </Grid>
-                <Button onClick={this.performPostRequest}>Registrar</Button>
-                <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
-                <Button onClick={this.props.history.goBack}>Cancelar</Button>
-            </div>
+            <BaseContainer>
+                <div className="panel col-lg-offset-2 col-lg-8 col-md-12 col-sm-12">
+                    <div className="panel-heading">
+                        <header className="page-header m-t-sm">
+                            <a className="btn btn-default pull-right" onClick={this.props.history.goBack}> Volver </a>
+                            <p className="h2 m-b-sm"> Registrar Investigación </p>
+                        </header>
+                    </div>
+                    <div className="panel-body">
+                        <div className="form-group">
+                            <label> Título </label>
+                            <input type="text" className="form-control" value={this.state.titulo} onChange={this.handleTitulo}></input>
+                            {this.validator.message('titulo', this.state.titulo, 'required|max:100', false, {required: 'Este campo es obligatorio',max:'El número máximo de caracteres es 20'})}
+                        </div>
+                        <div className="form-group ">
+                            <label> Autor </label>
+                            <input type="text" disabled={true} className="form-control" value={this.state.autor} onChange={this.handleAutor}></input>
+                            {this.validator.message('autor', this.state.autor, 'required|integer', false, {required: 'Este campo es obligatorio'})}
+                        </div>
+                        <div className="form-group">
+                            <label> Resumen </label>
+                            <textarea type="text" className="form-control" value={this.state.resumen} onChange={this.handleResumen}></textarea>
+                            {this.validator.message('resumen', this.state.resumen, 'required', false, {required: 'Este campo es obligatorio'})}
+                        </div>
+                        <div className="form-group">
+                            <label> Fecha Inicio </label>
+                            <DatePicker
+                                dateFormat="DD/MM/YYYY"
+                                selected={this.state.fecha_inicio}
+                                onChange={this.handleFIni}
+                            />
+                            {this.validator.message('fechaIni', this.state.fecha_inicio, 'required', false, {required: 'Este campo es obligatorio'})}
+                        </div>
+                        <div className="form-group">
+                            <label> Fecha Fin </label>
+                            <DatePicker
+                                dateFormat="DD/MM/YYYY"
+                                selected={this.state.fecha_fin}
+                                onChange={this.handleFFin}
+                            />
+                            {this.validator.message('fechaFin', this.state.fecha_fin, 'required', false, {required: 'Este campo es obligatorio'})}
+                        </div>
+                    </div>
+                    <div className="panel-footer text-right">
+                        <button className="btn btn-primary" onClick={this.performPostRequest}>Registrar</button>
+                    </div>
+                </div>
+            </BaseContainer>
         );
     }
 }
