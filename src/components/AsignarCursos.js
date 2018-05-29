@@ -78,13 +78,13 @@ class AsignarCursos extends Component {
                 }
                 let lista = [];
                 for (let i = 0; i < this.state.cursos.length; i++) {
-                    let obj = {};
-                    obj.codigo = this.state.cursos[i].codigo;
-                    obj.seccion = this.state.cursos[i].seccion;
-                    obj.nombreCurso = this.state.cursos[i].nombreCurso;
-                    obj.claseCurso = this.state.cursos[i].claseCurso;
                     if (this.state.cursos[i].profesorPreferencia.length)
                         for (let j = 0; j < this.state.cursos[i].profesorPreferencia.length; j++) {
+                            let obj = {};
+                            obj.codigo = this.state.cursos[i].codigo;
+                            obj.seccion = this.state.cursos[i].seccion;
+                            obj.nombreCurso = this.state.cursos[i].nombreCurso;
+                            obj.claseCurso = this.state.cursos[i].claseCurso;
                             obj.nombre = this.state.cursos[i].profesorPreferencia[j].nombre;
                             obj.tipo = this.state.cursos[i].profesorPreferencia[j].tipo;
                             if (this.state.cursos[i].profesorPreferencia[j].ciclo1 == true)
@@ -98,6 +98,11 @@ class AsignarCursos extends Component {
                             lista.push(obj);
                         }
                     else {
+                        let obj = {};
+                        obj.codigo = this.state.cursos[i].codigo;
+                        obj.seccion = this.state.cursos[i].seccion;
+                        obj.nombreCurso = this.state.cursos[i].nombreCurso;
+                        obj.claseCurso = this.state.cursos[i].claseCurso;
                         obj.nombre = "";
                         obj.ciclo1 = "";
                         obj.ciclo2 = "";
