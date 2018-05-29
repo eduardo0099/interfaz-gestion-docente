@@ -15,13 +15,38 @@ class PreferenciaCursos extends Component {
 			cursosObl: [],
 			cursosElec: [],
 			cursosPref: [],
-			codigoProfe: 0
+			codigoProfe: 0,
+			nombreProfe: ""
 		};
 		this.handleProfCode = this.handleProfCode.bind(this);
 	}
 
 	handleProfCode(event) {
 		this.setState({codigoProfe: event.target.value});
+		/*
+		//Servicio donde se envia el código del profesor
+		axios.post('http://200.16.7.151:8080/asignacionHorarios/enviarCodigoProfe', {
+			codigoProfe: this.state.codigoProfe,
+		})
+			.then(response => {
+			})
+			.catch(error => {
+			})
+		//Servicio que recoge el nombre del profesor
+		axios.get('http://demo4106552.mockable.io/asignacionHorarios/nombreProfeReferenciado')
+			.then(response => {
+				this.setState({nombreProfe: response.data.nombreProfe});
+			})
+			.catch(error => {
+			})
+		//Evaluador
+		if(this.state.nombreProfe == "ERROR"){
+			alert("Error: el código proporcionado no corresponde a ningún profesor de la sección.")
+		}
+		else{
+			document.getElementsByName("codigoProfe")[0].value=this.state.nombreProfe;
+		}
+		*/
 	}
 
 
@@ -52,7 +77,7 @@ class PreferenciaCursos extends Component {
 	}
 
 	componentDidMount() {
-		axios.get('http://demo4106552.mockable.io/asignacionHorarios/listaCursosPreferencia')
+		axios.get('http://200.16.7.151:8080/asignacionHorarios/listaCursosPreferencia')
 			.then(response => {
 				this.setState({loading: false, cursosObl: response.data.obligatorios, cursosElec: response.data.electivos});
 			})
@@ -82,31 +107,34 @@ class PreferenciaCursos extends Component {
 	}
 
 	performPostRequest(){
-		console.log(JSON.stringify(this.state.cursosPref, null, 2));
+		//console.log(JSON.stringify(this.state.cursosPref, null, 2));
 		if(this.state.cursosPref.length > 0){
-			let str = "Con este formulario, está confirmando su inscripción al dictado de los " +
-				"siguientes cursos\n";
-			let cursos=this.state.cursosPref
-			for(let i=0; i<cursos.length; i++){
-				str = str + "(" + (i+1).toString() + ") " + this.devolverNombreCurso(cursos[i]) + " ("
-				str = str + cursos[i].codigoCurso.toString() + "): ciclo " + cursos[i].ciclo.toString() + "\n";
-			}
-			str = str + "¿Está seguro de enviar su preferencia?"
-			let r = window.confirm(str);
-			if(r == true){
-				/*axios.post('http://200.16.7.151:8080/asignacionHorarios/enviarPreferenciaProfesor', {
-					codigoProf: this.state.codigoProfe,
-					cursos: this.state.cursosPref,
-				})
-					.then(response => {
-						alert("Preferencia de dictado registrada.");
-						this.props.history.goBack();
+			if(this.state.codigoProfe > 0){
+				let str = "Con este formulario, está confirmando su inscripción al dictado de los " +
+					"siguientes cursos\n";
+				let cursos=this.state.cursosPref
+				for(let i=0; i<cursos.length; i++){
+					str = str + "(" + (i+1).toString() + ") " + this.devolverNombreCurso(cursos[i]) + " ("
+					str = str + cursos[i].codigoCurso.toString() + "): ciclo " + cursos[i].ciclo.toString() + "\n";
+				}
+				str = str + "¿Está seguro de enviar su preferencia?"
+				let r = window.confirm(str);
+				if(r == true){
+					axios.post('http://200.16.7.151:8080/asignacionHorarios/enviarPreferenciaProfesor', {
+						codigoProf: this.state.codigoProfe,
+						cursos: this.state.cursosPref,
 					})
-					.catch(error => {
-						alert("Error: No se pudo registrar la preferencia de dictado.");
-					})
-					*/
-				alert("Preferencia almacenada");
+						.then(response => {
+							alert("Preferencia de dictado registrada.");
+							this.props.history.goBack();
+						})
+						.catch(error => {
+							alert("Error: No se pudo registrar la preferencia de dictado.");
+						})
+					alert("Preferencia almacenada");
+				}
+			}else{
+				alert("Error: no ha colocado su código");
 			}
 		}else{
 			alert("Error: no ha seleccionado ningún curso.");
@@ -120,40 +148,38 @@ class PreferenciaCursos extends Component {
 	}
 
 	render() {
-			console.log(this.state);
+			//console.log(this.state);
 		return (
 			<BaseContainer>
+                    <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
+
 				<Route exact path={`${this.props.match.path}`} render={() =>
 					<div>
-						<div className="panel-title">
-							<h2> Preferencias de cursos </h2>
-						</div>
-						<br></br>
-						<div class="panel-heading">
-							<div class="col-md-1">Código:</div>
-							<div class="col-md-2">
-								<input type="text" class="form-control" name="codigoProfe" onChange={this.handleProfCode}></input>
-							</div>
-							<div class="col-md-2">Apellidos y nombres:</div>
-							<div class="col-md-6">
-								<input type="text" class="form-control" size="80" name="CodigoProfe" disabled></input>
-							</div>
-						</div>
-						<br></br>
 						<div className="panel-heading">
-							<h2> Cursos obligatorios </h2>
+							<header className="page-header m-b-lg text-center">
+                                    <p className="h2 m-b-lg"> PREFERENCIAS DE CURSOS </p>
+                            </header>
 						</div>
 						<div className="panel-body">
-							<table className="table table-striped">
+							<div className="row form-group">
+								<div class="col-md-1">Código:</div>
+								<div class="col-md-2">
+									<input type="text" class="form-control" name="codigoProfe" onChange={this.handleProfCode}></input>
+								</div>
+								<div class="col-md-2">Apellidos y nombres:</div>
+								<div class="col-md-6">
+									<input type="text" class="form-control" size="80" name="nombreProfe" disabled></input>
+								</div>
+							</div>
+							<div> 
+							<hr/>
+							<h4> Cursos obligatorios </h4>
+							<table className="table table-striped m-t-md">
 								<thead>
 									<tr>
-										<th className="col-md-6"></th>
-										<th className="col-md-3 text-center">
-											2018-1
-										</th>
-										<th className="col-md-3 text-center">
-											2018-2
-										</th>
+										<th className="col-md-4"></th>
+										<th className="col-md-4 text-center">2018-1	</th>
+										<th className="col-md-4 text-center"> 2018-2 </th>
 									</tr>
 								</thead>
 								<tbody>
@@ -175,21 +201,16 @@ class PreferenciaCursos extends Component {
 								})}
 								</tbody>
 							</table>
-						</div>
-						<div className="panel-heading">
-							<h2> Cursos electivos </h2>
-						</div>
-						<div className="panel-body">
-							<table className="table table-striped">
+							</div>
+							<div>
+								<hr/>
+								<h4> Cursos electivos </h4>
+								<table className="table table-striped m-t-md">
 								<thead>
 									<tr>
-										<th className="col-md-6"></th>
-										<th className="col-md-3 text-center">
-											2018-1
-										</th>
-										<th className="col-md-3 text-center">
-											2018-2
-										</th>
+										<th className="col-md-4"></th>
+										<th className="col-md-4 text-center"> 2018-1 </th>
+										<th className="col-md-4 text-center"> 2018-2 </th>
 									</tr>
 								</thead>
 								<tbody>
@@ -211,18 +232,15 @@ class PreferenciaCursos extends Component {
 								})}
 								</tbody>
 							</table>
+							</div>
 						</div>
-						<div class="row">
-							<div class="col-md-2"></div>
-							<div class="col-md-4">
-								<Button class="btn btn-primary btn-cons" onClick={this.unselect.bind(this)}>Limpiar</Button>
-							</div>
-							<div class="col-md-4">
-								<Button class="btn btn-primary btn-cons" onClick={this.performPostRequest.bind(this)}>Enviar preferencias</Button>
-							</div>
+						<div className="panel-footer text-right">
+							<button class="btn btn-default" onClick={this.unselect.bind(this)}>Limpiar</button>
+							<button class="btn btn-primary m-l-md" onClick={this.performPostRequest.bind(this)}> Enviar preferencias </button>
 						</div>
 					</div>
 				}/>
+				</div>
 			</BaseContainer>
 		);
 	}

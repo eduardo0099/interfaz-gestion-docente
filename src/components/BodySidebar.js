@@ -16,6 +16,8 @@ const BodySidebar = (props) => {
       <Link to="/carga" onClick={() => props.handleMenu(false)}  className="link-body-sidebar">Carga de datos</Link>
       {divider}
       <Link to="/asignacionCursos" onClick={() => props.handleMenu(false)}  className="link-body-sidebar">Asignar Cursos</Link>
+      {divider}
+      <Link to="/preferenciaCursos" onClick={() => props.handleMenu(false)} className="link-body-sidebar">Prefencia de Dictado</Link>
     </div>
   );
 };

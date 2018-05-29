@@ -25,7 +25,8 @@ export class Cursos extends React.Component {
                 }
             ],
             ciclos: [],
-            cicloSeleccionado: ""
+            cicloSeleccionado: "",
+            listadoCursos:[]
         }
     }
 
@@ -63,10 +64,15 @@ export class Cursos extends React.Component {
                 codigo: this.props.match.params.codigo,
                 ciclo: nuevoCiclo,
             }
-        })
-            .then((respcursos) => {
+        }).then((respcursos) => {
+            let temp = [];
+            respcursos.data.cursos.forEach(curso => {
+                temp = temp.concat(curso.listaCursos);
+            });
+            console.log(JSON.stringify(temp, null, 2));
+
                 this.setState({
-                    infoCursos: respcursos.data.cursos,
+                    listadoCursos: temp,
                     cicloSeleccionado: nuevoCiclo
                 })
             })
@@ -76,43 +82,6 @@ export class Cursos extends React.Component {
     };
 
     render() {
-        let listaCursos = [];
-        let tipoCursos = ["pregrado", "postgrado", "otros"];
-        for (let i = 0; i < this.state.infoCursos.length; i++) {
-            for (let j = 0; j < this.state.infoCursos[i].listaCursos.length; j++) {
-                listaCursos.push({
-                    codigo: this.state.infoCursos[i].listaCursos[j].codigo,
-                    nombre: this.state.infoCursos[i].listaCursos[j].nombre,
-                    horario: this.state.infoCursos[i].listaCursos[j].horario,
-                    unidad: this.state.infoCursos[i].listaCursos[j].unidad,
-                    horas: this.state.infoCursos[i].listaCursos[j].horas,
-                    creditos: this.state.infoCursos[i].listaCursos[j].creditos,
-                    tipo: tipoCursos[i],
-                })
-            }
-        }
-        const columnas = [
-            {
-                text: 'Codigo',
-                dataField: 'codigo'
-            },
-            {
-                text: 'Nombre',
-                dataField: 'nombre'
-            },
-            {
-                text: 'Creditos',
-                dataField: 'creditos'
-            }, {
-                text: 'Horario',
-                dataField: 'horario'
-            }, {
-                text: 'Horas Semanales',
-                dataField: 'horas'
-            }
-        ];
-
-
         return (
             <div>
                 <BaseContainer>
@@ -127,7 +96,36 @@ export class Cursos extends React.Component {
                                 return <option key={i} value={item.descripcion}>{item.descripcion}</option>
                             })}
                         </select>
-                        <BootstrapTable keyField='id' data={listaCursos} columns={columnas}/>
+                        <table className="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th className="v-middle col-md-4">Curso</th>
+                                <th className="v-middle col-md-4"></th>
+                                <th className="v-middle col-md-4"> </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {this.state.listadoCursos.map( curso => {
+                                return (
+                                <tr>
+                                <td className="-v-middle">
+                                    <span className="block text-primary"> { curso.nombre } </span>
+                                    <small className="block text-muted"> { curso.codigo } </small>
+                                    <small className="block text-muted"> Horario { curso.horario } </small>
+                                </td>
+                                <td className="-v-middle text-center">
+                                    <span className="badge"> { curso.creditos } </span>
+                                    <small className="block text-muted m-t-xs"> créditos </small>
+                                </td>
+                                <td className="-v-middle text-center">
+                                       <span className="badge"> { curso.horas } </span>
+                                    <small className="block text-muted m-t-xs"> horas semanales </small>
+                                </td>
+                                </tr>
+                                )
+                            })}
+                        </tbody>
+                        </table>
                         </div>
                     </div>
                 </BaseContainer>
