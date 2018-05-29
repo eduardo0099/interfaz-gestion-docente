@@ -8,16 +8,18 @@ const BodySidebar = (props) => {
   return (
     <div className="bodySidebar">
       <Link to="/" onClick={() => props.handleMenu(false)} className="link-body-sidebar">Inicio</Link>
-      {divider}
-      <Link to="/profesores" onClick={() => props.handleMenu(false)}  className="link-body-sidebar">Profesores</Link>
-      {divider}
-      <Link to="/convocatorias" onClick={() => props.handleMenu(false)} className="link-body-sidebar">Convocatorias</Link>
-       {divider}
-      <Link to="/carga" onClick={() => props.handleMenu(false)}  className="link-body-sidebar">Carga de datos</Link>
-      {divider}
-      <Link to="/asignacionCursos" onClick={() => props.handleMenu(false)}  className="link-body-sidebar">Asignar Cursos</Link>
-      {divider}
-      <Link to="/preferenciaCursos" onClick={() => props.handleMenu(false)} className="link-body-sidebar">Prefencia de Dictado</Link>
+        {divider}
+        <Link to="/profesores" onClick={() => props.handleMenu(false)}  className="link-body-sidebar">Profesores</Link>
+        {divider}
+        <Link to="/convocatorias" onClick={() => props.handleMenu(false)} className="link-body-sidebar">Convocatorias</Link>
+        {divider}
+        <Link to="/carga" onClick={() => props.handleMenu(false)}  className="link-body-sidebar">Carga de datos</Link>
+        {divider}
+        <Link to="/asignacionCursos" onClick={() => props.handleMenu(false)}  className="link-body-sidebar">Asignar Cursos</Link>
+        {divider}
+        <Link to="/ayudaeconomica" onClick={() => props.handleMenu(false)}  className="link-body-sidebar">Ayudas Económicas</Link>
+        {divider}
+        <Link to="/preferenciaCursos" onClick={() => props.handleMenu(false)} className="link-body-sidebar">Prefencia de Dictado</Link>
     </div>
   );
 };

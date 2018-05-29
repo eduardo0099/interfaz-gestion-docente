@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import {Row,Grid,Table,Button,PageHeader,Col} from 'react-bootstrap';
+import {Row,Grid,Button,PageHeader,Col} from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import Papa from 'papaparse';
 import axios from 'axios';
 import SimpleReactValidator from 'simple-react-validator';
 import moment from "moment";

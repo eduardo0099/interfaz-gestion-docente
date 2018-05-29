@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {Route} from 'react-router-dom';
+import React, { Component } from 'react';
+import { Route } from 'react-router-dom';
 import axios from "axios/index";
 import BaseContainer from "../BaseContainer";
 import Cursos from "../Cursos";
@@ -7,73 +7,34 @@ import ConvocatoriaNuevo from "./ConvocatoriasNuevo";
 import registroPostulante from "./registroPostulante";
 import linkConvocatoria from "./linkConvocatoria";
 import ConvocatoriasPostulantePerfil from "./ConvocatoriasPostulantePerfil";
+import API from '../../api.js';
 
 class ConvocatoriasListaPostulantes extends Component {
 
-    state: {
-        nombre:'',
-        fechaLimite:'',
-        cantPostulantes:'',
-        cantAceptados:'',
-        postulantes: []
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            nombre: '',
+            fecha_limite: '',
+            postulantes: []
+        }
+
     }
 
     componentWillMount() {
         // search();
-        this.offlineSearch();
+        this.search();
     }
 
     search() {
-        axios.get('http://200.16.7.151:8080/convocatoria/general', {
+        API.get('convocatoria/convocatoria/detalle', {
             params: {
-                codigo: this.props.match.params.codigoConv,
+                id: this.props.match.params.codigoConv
             }
+        }).then(response => {
+            this.setState(response.data[0]);
         })
-            .then(response => {
-                this.setState({
-                    nombre: response.data.nombre,
-                    fechaLimite: response.data.fechaLimite,
-                    cantPostulantes: response.data.cantPostulantes,
-                    cantAceptados: response.data.cantAceptados,
-                    postulantes: response.data});
-            })
-    }
-
-    offlineSearch() {
-        this.setState({
-            nombre: 'Convocatoria de Asistente de Docencia - Sistemas Operativos',
-            fechaLimite: '20/08/12',
-            cantPostulantes: 2,
-            cantAceptados: 1,
-            postulantes: [
-                {
-                    id: '1',
-                    codigo: 'POS001',
-                    nombre: 'Rubén Jordán RIP',
-                    numeroDocumento: '74836789',
-                    documento: {
-                        nombre: 'Documento Nacional de Identidad',
-                        simbolo: 'DNI'
-                    },
-                    fechaPostulacion: '12/12/12',
-                    estadoPostulacion: 'Aceptado',
-                    estadoDocumentos: 'Verificados',
-                },
-                {
-                    id: '2',
-                    codigo: 'POS002',
-                    nombre: 'Rubén RIP',
-                    numeroDocumento: '74456789',
-                    documento: {
-                        nombre: 'Documento Nacional de Identidad',
-                        simbolo: 'DNI'
-                    },
-                    fechaPostulacion: '12/12/12',
-                    estadoPostulacion: 'Rechazado',
-                    estadoDocumentos: 'Inconsistentes',
-                },
-            ]
-        });
     }
 
     labelDocumento(estado) {
@@ -94,19 +55,18 @@ class ConvocatoriasListaPostulantes extends Component {
             case 'Rechazado':
                 return <span className="label label-danger"> Rechazado </span>;
             case 'Pendiente':
-                return <span className="label label-danger"> Sin Verificar </span>;
+                return <span className="label label-warning"> Sin Verificar </span>;
         }
     }
 
     render() {
-                                        console.log(this.props);
         return (
             <div>
-                <Route exact path={`${this.props.match.path}`} render={() =>
+                <Route exact path={ `${this.props.match.path}` } render={ () =>
                     <BaseContainer>
                         <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
                             <div className="panel-heading">
-                                <h2> {this.state.nombre} </h2>
+                                <h2> { this.state.nombre } </h2>
                             </div>
                             <div className="panel-body">
                                 <div className="col-md-offset-0 col-md-4">
@@ -116,13 +76,13 @@ class ConvocatoriasListaPostulantes extends Component {
                                     <h5></h5>
                                 </div>
                                 <div className="col-md-5">
-                                    <h5> {this.state.fechaLimite} </h5>
-                                    <h5> {this.state.cantPostulantes} </h5>
-                                    <h5> {this.state.cantAceptados} </h5>
+                                    <h5> { this.state.fechaLimite } </h5>
+                                    <h5> { this.state.cantPostulantes } </h5>
+                                    <h5> { this.state.cantAceptados } </h5>
                                     <h5></h5>
                                 </div>
 
-                                <a className="btn btn-default pull-right" href={`${this.props.history.location.pathname}/link`}> URL </a>
+                                <a className="btn btn-default pull-right" href={ `${this.props.history.location.pathname}/link` }> URL </a>
 
                                 <table className="table table-striped">
                                     <thead>
@@ -140,20 +100,19 @@ class ConvocatoriasListaPostulantes extends Component {
                                             return (
                                                 <tr>
                                                     <td className="v-middle text-center">
-                                                        <a className="block text-primary" href={`${this.props.history.location.pathname}/postulante/${item.id}`}> {item.codigo} </a>
+                                                        <a className="block text-primary" href={ `${this.props.history.location.pathname}/postulante/${item.id}` }> { item.codigo } AC S</a>
                                                     </td>
                                                     <td className="v-middle">
-                                                        <span className="block text-primary"> {item.nombre} </span>
-                                                        <small className="block text-muted"> {item.documento.simbolo} {item.numeroDocumento}</small>
+                                                        <span className="block text-primary"> { item.nombre } </span>
                                                     </td>
                                                     <td className="v-middle text-center">
-                                                        <span className="block"> {item.fechaPostulacion} </span>
+                                                        <span className="block"> { item.fecha_postulacion } </span>
                                                     </td>
                                                     <td className="v-middle text-center">
-                                                        {this.labelDocumento(item.estadoDocumentos)}
+                                                        { this.labelDocumento(item.estadoDocumentos) }
                                                     </td>
                                                     <td className="v-middle text-center">
-                                                        {this.labelPostulacion(item.estadoPostulacion)}
+                                                        { this.labelPostulacion(item.estado_postulacion) }
                                                     </td>
                                                 </tr>
                                             );
@@ -165,8 +124,8 @@ class ConvocatoriasListaPostulantes extends Component {
                         </div>
                     </BaseContainer>
                 }/>
-                <Route path={`${this.props.match.path}/postulante/:id`} component={ConvocatoriasPostulantePerfil}/>
-                <Route path={`${this.props.match.path}/link`} component={linkConvocatoria}/>
+                <Route path={ `${this.props.match.path}/postulante/:id` } component={ ConvocatoriasPostulantePerfil }/>
+                <Route path={ `${this.props.match.path}/link` } component={ linkConvocatoria }/>
             </div>
         );
     }

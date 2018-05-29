@@ -14,6 +14,7 @@ import PreferenciaCursos from '../components/PreferenciaCursos';
 import AsignarCursos from "../components/AsignarCursos";
 import ConvocatoriasLista from "../components/convocatorias/ConvocatoriasLista";
 import 'react-select/dist/react-select.css';
+import AyudaEconomica from "../components/AyudaEconomica/AyudaEconomica";
 
 
 class App extends Component {
@@ -69,7 +70,8 @@ class App extends Component {
               <Route path="/convocatorias" component={ConvocatoriasLista}/>
               <Route path="/carga" render={ () => <CargaDatos /> }/>
               <Route path="/preferenciaCursos" component={PreferenciaCursos}/>
-              <Route path="/asignacionCursos" component={AsignarCursos}/>
+                <Route path="/asignacionCursos" component={AsignarCursos}/>
+                <Route path="/ayudaeconomica" component={AyudaEconomica}/>
               <Route render={()=><div>La pagina que busca, no existe</div>} />
             </Switch>
           </div>
