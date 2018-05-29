@@ -607,7 +607,7 @@ class AsignarCursos extends Component {
                                         <Col md={ 4 } mdOffset={ 3 }>
                                             <Form horizontal>
                                                 <FormGroup controlId="formHorizontalBuscarCurso">
-                                                    <Col sm={ 12 }>
+                                                    <Col sm={ 10  }>
                                                         <FormControl type="curso" placeholder="Buscar curso"/>
                                                     </Col>
                                                 </FormGroup>
