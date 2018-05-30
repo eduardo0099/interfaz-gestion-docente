@@ -8,6 +8,7 @@ import SimpleReactValidator from "simple-react-validator";
 import moment from "moment";
 import BootstrapTable from 'react-bootstrap-table-next';
 import BaseContainer from "./BaseContainer";
+import Select from 'react-select';
 
 class ModificarActividad extends Component {
 
@@ -26,6 +27,7 @@ class ModificarActividad extends Component {
             profesores: [],
             showQuitar: false,
             selectedQuitar: [],
+            tipoSeleccionado: ""
             //autoresModal: [],
             //autoresOrig:[]
         };
@@ -333,12 +335,21 @@ class ModificarActividad extends Component {
                             <input type="text" className="form-control" value={this.state.titulo} onChange={this.handleTitulo}></input>
                             {this.validator.message('titulo', this.state.titulo, 'required|max:100', false, {required: 'Este campo es obligatorio', max: 'El número máximo de caracteres es 20'})}
                         </div>
+
                         <div className="form-group row">
-                            <div className="col-md-8 col-sm-12">
+                            <div className="form-group col-md-2 row ">
                                 <label> Tipo </label>
-                                <input type="text" className="form-control" value={this.state.tipo} onChange={this.handleTipo}></input>
-                                {this.validator.message('tipo', this.state.tipo, 'required|max:100', false, {required: 'Este campo es obligatorio', max: 'El número máximo de caracteres es 20'})}
+                                <Select
+                                    value={ this.state.tipoSeleccionado }
+                                    //onChange={ this.cambioCiclo }
+                                    valueKey={ "descripcion" }
+                                    labelKey={ "descripcion" }
+                                    options={ ["Congreso"] }
+                                    clearable={ false }
+                                />
                             </div>
+
+
                         </div>
                         <div className="form-group">
                             <label> Fecha Inicio </label>
