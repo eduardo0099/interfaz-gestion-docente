@@ -3,44 +3,68 @@ import 'react-table/react-table.css';
 import axios from "axios/index";
 import '../styles/Actividades.css';
 import {Button} from 'react-bootstrap';
+import { Route } from 'react-router-dom';
 import BootstrapTable from 'react-bootstrap-table-next';
-import {Route} from 'react-router-dom';
 import BaseContainer from "./BaseContainer";
 import RegistroActividad from "./RegistroActividad";
 import ModificarActividad from "./ModificarActividad";
+import API from "../api";
+import Select from 'react-select';
 
 export class Actividades extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             selectedId: -1,
-            actividades: [
-                {
-                    id: "",
-                    titulo: "",
-                    tipo: "",
-                    fecha_inicio: "",
-                    fecha_fin: "",
-                    estado: "",
-                }
-            ],
+            actividades: [],
             ciclos: [],
             cicloSeleccionado: "",
+            infoDocente: {},
             dateInit: new Date(),
             dateFin: new Date(),
         }
     }
 
     componentDidMount() {
-        axios.get('http://200.16.7.151:8080/docente/docente/actDocente?codigo=' + this.props.match.params.codigo + '&ciclo=2018-1')
+        this.findCicloActual();
+        this.allCiclos();
+    }
+
+    findCicloActual(){
+        API.get('general/cicloActual')
             .then(response => {
-                this.setState({
-                    actividades: response.data.actividades
-                })
+                this.setState({cicloSeleccionado: response.data.cicloActual})
+                this.findActividades(response.data.cicloActual);
+                this.findDocente(response.data.cicloActual);
             })
-            .catch(error => {
-                console.log(`Error al obtener datos de la actividad ${this.props.match.params.codigo}`, error);
+    }
+
+    allCiclos() {
+        API.get('general/listaCiclos')
+            .then(response => {
+                this.setState({ ciclos: response.data.ciclos })
             })
+    }
+
+    cambioCiclo = (obj) => {
+        let ciclo = obj.descripcion;
+        this.setState({ cicloSeleccionado: ciclo })
+        this.findInvestigaciones(ciclo);
+    };
+
+    findInvestigaciones(ciclo) {
+        API.get('/docente/docente/actDocente', {
+            params: {
+                codigo: this.props.match.params.codigo,
+                ciclo: ciclo,
+            }
+        }).then(response => {
+            this.setState({
+                actividades: response.data.actividades
+            })
+        }).catch(error => {
+            console.log("Error obteniendo la lista de las investigaciones", error);
+        });
     }
 
     guardar = () => {
@@ -144,23 +168,41 @@ export class Actividades extends React.Component {
 
         return (
             <div>
-                <Route exact path={`${this.props.match.path}`} render={() =>
+                <Route exact path={ `${this.props.match.path}` } render={ () =>
                     <BaseContainer>
-                        <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
+                        <div className="panel col-lg-offset-2 col-lg-8 col-md-12 col-sm-12">
                             <div className="panel-heading">
-                                <a className="btn btn-default pull-right m-t-md" onClick={this.props.history.goBack}> Volver al Perfil </a>
-                                <h1> Actividades </h1>
+                                <header className="page-header">
+                                    <a className="btn btn-default pull-right"
+                                       onClick={ this.props.history.goBack }> Volver al Perfil </a>
+                                    <p className="h2 m-b-sm"> { this.state.infoDocente.nombres } { this.state.infoDocente.apellido_paterno } { this.state.infoDocente.apellido_materno }
+                                        <small className="block m-t-xs"> Actividades</small>
+                                    </p>
+                                </header>
                             </div>
                             <div className="panel-body">
-                                <div className="m-t-md">
-                                    <BootstrapTable keyField='id' data={this.state.actividades} columns={columns}  rowEvents={rowEvents} selectRow={selectRow}/>
+                                <div>
+                                    <div className="form-group col-md-2 row ">
+                                        <label> Ciclo </label>
+                                        <Select
+                                            value={ this.state.cicloSeleccionado }
+                                            onChange={ this.cambioCiclo }
+                                            valueKey={ "descripcion" }
+                                            labelKey={ "descripcion" }
+                                            options={ this.state.ciclos }
+                                            clearable={ false }
+                                        />
+                                    </div>
                                 </div>
                                 <div className="m-t-md">
-                                    <a className="btn btn-default" href={`${this.props.match.url}/RegistroActividad`}>Registrar</a>
+                                    <BootstrapTable keyField='id' data={ this.state.actividades } columns={ columns } rowEvents={ rowEvents } selectRow={ selectRow }/>
+                                </div>
+                                <div className="m-t-md">
+                                    <a className="btn btn-primary" href={ `${this.props.match.url}/RegistroActividad` }>Registrar</a>
                                     <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
-                                    {eliminar}
+                                    { eliminar }
                                     <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
-                                    {myComponent}
+                                    { myComponent }
                                 </div>
                             </div>
                         </div>
@@ -176,3 +218,4 @@ export class Actividades extends React.Component {
 }
 
 export default Actividades;
+    
