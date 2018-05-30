@@ -292,7 +292,7 @@ class AyudaEconomica extends React.Component {
                                                         <div className="form-horizontal">
                                                             <div className="form-group">
                                                                 <label
-                                                                    className="control-label col-md-2"> Mínimo </label>
+                                                                    className="control-label col-md-2"> Mín: </label>
                                                                 <div className="col-md-10">
                                                                     <input type="number"
                                                                            className="form-control"></input>
@@ -300,7 +300,7 @@ class AyudaEconomica extends React.Component {
                                                             </div>
                                                             <div className="form-group">
                                                                 <label
-                                                                    className="control-label col-md-2"> Máximo </label>
+                                                                    className="control-label col-md-2"> Máx: </label>
                                                                 <div className="col-md-10">
                                                                     <input type="number"
                                                                            className="form-control"></input>
@@ -317,14 +317,14 @@ class AyudaEconomica extends React.Component {
                                                         <div className="form-horizontal">
                                                             <div className="form-group">
                                                                 <label
-                                                                    className="control-label col-md-2"> Mínimo </label>
+                                                                    className="control-label col-md-2"> Mín: </label>
                                                                 <div className="col-md-10">
                                                                     <input type="date" className="form-control"></input>
                                                                 </div>
                                                             </div>
                                                             <div className="form-group">
                                                                 <label
-                                                                    className="control-label col-md-2"> Máximo </label>
+                                                                    className="control-label col-md-2"> Máx: </label>
                                                                 <div className="col-md-10">
                                                                     <input type="date" className="form-control"></input>
                                                                 </div>

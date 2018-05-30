@@ -11,7 +11,11 @@ export class Cursos extends React.Component {
             infoCursos: [],
             ciclos: [],
             cicloSeleccionado: "",
-            infoDocente: {}
+            infoDocente: {},
+            tipoCursos:[{id:"1",descripcion:"pregrado"},
+                {id:"2",descripcion:"posgrado"},
+                {id:"3",descripcion:"otros"}],
+            tipoSeleccionado:"pregrado",
         }
     }
 
@@ -43,7 +47,7 @@ export class Cursos extends React.Component {
                 ciclo: ciclo,
             }
         }).then(response => {
-            this.setState({ infoCursos: response.data.cursos[0].listaCursos })
+            this.setState({ infoCursos: response.data.cursos[0].listaCursos})
         })
     }
 
@@ -62,9 +66,31 @@ export class Cursos extends React.Component {
 
     cambioCiclo = (obj) => {
         let ciclo = obj.descripcion;
-        this.setState({ cicloSeleccionado: ciclo });
+        this.setState({ cicloSeleccionado: ciclo ,tipoSeleccionado: "pregrado"});
         this.findCursos(ciclo);
     };
+
+    findCursosXTipo(ciclo){
+        API.get('docente/docente/curDocente', {
+            params: {
+                codigo: this.props.match.params.codigo,
+                ciclo: ciclo,
+            }
+        }).then(response => {
+            if(this.state.tipoSeleccionado === "pregrado")
+                this.setState({ infoCursos: response.data.cursos[0].listaCursos})
+            if(this.state.tipoSeleccionado === "posgrado")
+                this.setState({ infoCursos: response.data.cursos[1].listaCursos})
+            if(this.state.tipoSeleccionado === "otros")
+                this.setState({ infoCursos: response.data.cursos[2].listaCursos})
+        })
+    }
+
+    cambioTipoCurso = (obj) => {
+        let tipo = obj.descripcion;
+        this.setState({tipoSeleccionado : tipo})
+        this.findCursosXTipo(this.state.cicloSeleccionado);
+    }
 
     render() {
         return (
@@ -90,6 +116,17 @@ export class Cursos extends React.Component {
                                         valueKey={ "descripcion" }
                                         labelKey={ "descripcion" }
                                         options={ this.state.ciclos }
+                                        clearable={ false }
+                                    />
+                                </div>
+                                <div className="form-group col-md-2 row ">
+                                    <label> Tipo </label>
+                                    <Select
+                                        value={ this.state.tipoSeleccionado }
+                                        onChange={ this.cambioTipoCurso }
+                                        valueKey={ "descripcion" }
+                                        labelKey={ "descripcion" }
+                                        options={ this.state.tipoCursos }
                                         clearable={ false }
                                     />
                                 </div>
