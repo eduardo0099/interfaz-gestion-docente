@@ -13,6 +13,7 @@ class AyudaEconomica extends React.Component {
         super(props);
 
         this.state = {
+            investigacion:'',
             ayudas: [
                 {
                     id: 20,
@@ -49,186 +50,6 @@ class AyudaEconomica extends React.Component {
                     montoJustificado: 8000000.63,
                     fechaSolicitud: '12/12/12',
                     fechaAceptacion: '12/12/12'
-                },
-                {
-                    id: 21,
-                    codigo: 'SOL002',
-                    profesor: {
-                        id: 1,
-                        nombre: 'Alejando Khlebnikov',
-                        codigo: '12033102',
-                        seccion: 'Secc. Ingeiería Informática',
-                        tipoProfesor: 'Docente Contratado'
-                    },
-                    investigacion: {id: 1, titulo: 'Investigando las Causas de las Investigaciones 2'},
-                    motivo: {id: 13, descripcion: 'Compra de Café'},
-                    estado: {id: 12, descripcion: 'Rechazado'},
-                    montoOtorgado: 8000000.63,
-                    montoJustificado: 8000000.63,
-                    fechaSolicitud: '12/12/12',
-                    fechaAceptacion: '12/12/12'
-                },
-                {
-                    id: 21,
-                    codigo: 'SOL002',
-                    profesor: {
-                        id: 1,
-                        nombre: 'Alejando Khlebnikov',
-                        codigo: '12033102',
-                        seccion: 'Secc. Ingeiería Informática',
-                        tipoProfesor: 'Docente Contratado'
-                    },
-                    investigacion: {id: 1, titulo: 'Investigando las Causas de las Investigaciones 2'},
-                    motivo: {id: 13, descripcion: 'Compra de Café'},
-                    estado: {id: 12, descripcion: 'Rechazado'},
-                    montoOtorgado: 8000000.63,
-                    montoJustificado: 8000000.63,
-                    fechaSolicitud: '12/12/12',
-                    fechaAceptacion: '12/12/12'
-                },
-                {
-                    id: 20,
-                    codigo: 'SOL001',
-                    profesor: {
-                        id: 1,
-                        nombre: 'Viktor Kalashnikov',
-                        codigo: '12033102',
-                        seccion: 'Secc. Ingeiería Informática',
-                        tipoProfesor: 'Docente Contratado'
-                    },
-                    investigacion: {id: 1, titulo: 'Investigando las Causas de las Investigaciones 1'},
-                    motivo: {id: 13, descripcion: 'Compra de Materiales'},
-                    estado: {id: 12, descripcion: 'Aprobado'},
-                    montoOtorgado: 8000000.63,
-                    montoJustificado: 8000000.63,
-                    fechaSolicitud: '12/12/12',
-                    fechaAceptacion: '12/12/12',
-                },
-                {
-                    id: 20,
-                    codigo: 'SOL001',
-                    profesor: {
-                        id: 1,
-                        nombre: 'Viktor Kalashnikov',
-                        codigo: '12033102',
-                        seccion: 'Secc. Ingeiería Informática',
-                        tipoProfesor: 'Docente Contratado'
-                    },
-                    investigacion: {id: 1, titulo: 'Investigando las Causas de las Investigaciones 1'},
-                    motivo: {id: 13, descripcion: 'Compra de Materiales'},
-                    estado: {id: 12, descripcion: 'Aprobado'},
-                    montoOtorgado: 8000000.63,
-                    montoJustificado: 8000000.63,
-                    fechaSolicitud: '12/12/12',
-                    fechaAceptacion: '12/12/12',
-                },
-                {
-                    id: 20,
-                    codigo: 'SOL001',
-                    profesor: {
-                        id: 1,
-                        nombre: 'Viktor Kalashnikov',
-                        codigo: '12033102',
-                        seccion: 'Secc. Ingeiería Informática',
-                        tipoProfesor: 'Docente Contratado'
-                    },
-                    investigacion: {id: 1, titulo: 'Investigando las Causas de las Investigaciones 1'},
-                    motivo: {id: 13, descripcion: 'Compra de Materiales'},
-                    estado: {id: 12, descripcion: 'Aprobado'},
-                    montoOtorgado: 8000000.63,
-                    montoJustificado: 8000000.63,
-                    fechaSolicitud: '12/12/12',
-                    fechaAceptacion: '12/12/12',
-                },
-                {
-                    id: 21,
-                    codigo: 'SOL002',
-                    profesor: {
-                        id: 1,
-                        nombre: 'Alejando Khlebnikov',
-                        codigo: '12033102',
-                        seccion: 'Secc. Ingeiería Informática',
-                        tipoProfesor: 'Docente Contratado'
-                    },
-                    investigacion: {id: 1, titulo: 'Investigando las Causas de las Investigaciones 2'},
-                    motivo: {id: 13, descripcion: 'Compra de Café'},
-                    estado: {id: 12, descripcion: 'Rechazado'},
-                    montoOtorgado: 8000000.63,
-                    montoJustificado: 8000000.63,
-                    fechaSolicitud: '12/12/12',
-                    fechaAceptacion: '12/12/12'
-                },
-                {
-                    id: 20,
-                    codigo: 'SOL001',
-                    profesor: {
-                        id: 1,
-                        nombre: 'Viktor Kalashnikov',
-                        codigo: '12033102',
-                        seccion: 'Secc. Ingeiería Informática',
-                        tipoProfesor: 'Docente Contratado'
-                    },
-                    investigacion: {id: 1, titulo: 'Investigando las Causas de las Investigaciones 1'},
-                    motivo: {id: 13, descripcion: 'Compra de Materiales'},
-                    estado: {id: 12, descripcion: 'Aprobado'},
-                    montoOtorgado: 8000000.63,
-                    montoJustificado: 8000000.63,
-                    fechaSolicitud: '12/12/12',
-                    fechaAceptacion: '12/12/12',
-                },
-                {
-                    id: 20,
-                    codigo: 'SOL001',
-                    profesor: {
-                        id: 1,
-                        nombre: 'Viktor Kalashnikov',
-                        codigo: '12033102',
-                        seccion: 'Secc. Ingeiería Informática',
-                        tipoProfesor: 'Docente Contratado'
-                    },
-                    investigacion: {id: 1, titulo: 'Investigando las Causas de las Investigaciones 1'},
-                    motivo: {id: 13, descripcion: 'Compra de Materiales'},
-                    estado: {id: 12, descripcion: 'Aprobado'},
-                    montoOtorgado: 8000000.63,
-                    montoJustificado: 8000000.63,
-                    fechaSolicitud: '12/12/12',
-                    fechaAceptacion: '12/12/12',
-                },
-                {
-                    id: 20,
-                    codigo: 'SOL001',
-                    profesor: {
-                        id: 1,
-                        nombre: 'Viktor Kalashnikov',
-                        codigo: '12033102',
-                        seccion: 'Secc. Ingeiería Informática',
-                        tipoProfesor: 'Docente Contratado'
-                    },
-                    investigacion: {id: 1, titulo: 'Investigando las Causas de las Investigaciones 1'},
-                    motivo: {id: 13, descripcion: 'Compra de Materiales'},
-                    estado: {id: 12, descripcion: 'Aprobado'},
-                    montoOtorgado: 8000000.63,
-                    montoJustificado: 8000000.63,
-                    fechaSolicitud: '12/12/12',
-                    fechaAceptacion: '12/12/12',
-                },
-                {
-                    id: 20,
-                    codigo: 'SOL001',
-                    profesor: {
-                        id: 1,
-                        nombre: 'Viktor Kalashnikov',
-                        codigo: '12033102',
-                        seccion: 'Secc. Ingeiería Informática',
-                        tipoProfesor: 'Docente Contratado'
-                    },
-                    investigacion: {id: 1, titulo: 'Investigando las Causas de las Investigaciones 1'},
-                    motivo: {id: 13, descripcion: 'Compra de Materiales'},
-                    estado: {id: 12, descripcion: 'Aprobado'},
-                    montoOtorgado: 8000000.63,
-                    montoJustificado: 8000000.63,
-                    fechaSolicitud: '12/12/12',
-                    fechaAceptacion: '12/12/12',
                 }]
         }
     }
@@ -253,8 +74,11 @@ class AyudaEconomica extends React.Component {
                                             <div className="form-group">
                                                 <label> Investigación </label>
                                                 <Select
-                                                    name="form-field-name"
-                                                    options={[]}
+                                                    value={ this.state.investigacion }
+                                                    valueKey={ "investigacion.id" }
+                                                    labelKey={ "investigacion.id" }
+                                                    options={ this.state.ayudas }
+                                                    clearable={ false }
                                                 />
                                             </div>
                                             <div className="form-group">
@@ -292,7 +116,7 @@ class AyudaEconomica extends React.Component {
                                                         <div className="form-horizontal">
                                                             <div className="form-group">
                                                                 <label
-                                                                    className="control-label col-md-2"> Mínimo </label>
+                                                                    className="control-label col-md-2"> Mín </label>
                                                                 <div className="col-md-10">
                                                                     <input type="number"
                                                                            className="form-control"></input>
@@ -300,7 +124,7 @@ class AyudaEconomica extends React.Component {
                                                             </div>
                                                             <div className="form-group">
                                                                 <label
-                                                                    className="control-label col-md-2"> Máximo </label>
+                                                                    className="control-label col-md-2"> Máx </label>
                                                                 <div className="col-md-10">
                                                                     <input type="number"
                                                                            className="form-control"></input>
@@ -317,14 +141,14 @@ class AyudaEconomica extends React.Component {
                                                         <div className="form-horizontal">
                                                             <div className="form-group">
                                                                 <label
-                                                                    className="control-label col-md-2"> Mínimo </label>
+                                                                    className="control-label col-md-2"> Mín </label>
                                                                 <div className="col-md-10">
                                                                     <input type="date" className="form-control"></input>
                                                                 </div>
                                                             </div>
                                                             <div className="form-group">
                                                                 <label
-                                                                    className="control-label col-md-2"> Máximo </label>
+                                                                    className="control-label col-md-2"> Máx </label>
                                                                 <div className="col-md-10">
                                                                     <input type="date" className="form-control"></input>
                                                                 </div>

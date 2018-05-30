@@ -127,6 +127,32 @@ class ModificarInvestigacion extends Component {
         console.log('agregar: ',agregar);
         console.log('quitar: ',quitar);
         if (this.validator.allValid() && this.validDates(this.state.fecha_fin, this.state.fecha_inicio)) {
+
+            if(agregar.length>0){
+                API.put('docente/investigacion/actualizar/agregarAutores', {
+                    id: this.props.match.params.idInvestigacion,
+                    autor: agregar
+                })
+                    .then(response => {
+                    })
+                    .catch(error => {
+                        alert("Error: No se pudieron agregar los profesores");
+                    })
+            }
+            if(quitar.length>0){
+                console.log('entro a quitar:',quitar);
+                API.delete('docente/investigacion/eliminar/eliminarAutores', {
+                    data:{
+                        id: this.props.match.params.idInvestigacion,
+                        autor: quitar
+                    }})
+                    .then(response => {
+                    })
+                    .catch(error => {
+                        alert("Error: No se pudieron quitar los profesores");
+                    })
+            }
+
             API.put('docente/investigacion/actualizar', {
                 id: this.props.match.params.idInvestigacion,
                 titulo: this.state.titulo,
@@ -143,29 +169,6 @@ class ModificarInvestigacion extends Component {
                 .catch(error => {
                     alert("Error: No se pudo registrar la modificación");
                 });
-            if(agregar.length>0){
-                API.put('docente/investigacion/actualizar/agregarAutores', {
-                    id: this.props.match.params.idInvestigacion,
-                    autor: agregar
-                })
-                    .then(response => {
-                    })
-                    .catch(error => {
-                        alert("Error: No se pudieron agregar los profesores");
-                    })
-            }
-            if(quitar.length>0){
-                API.delete('docente/investigacion/eliminar/eliminarAutores', {
-                    data:{
-                        id: this.props.match.params.idInvestigacion,
-                        autor: quitar
-                    }})
-                    .then(response => {
-                    })
-                    .catch(error => {
-                        alert("Error: No se pudieron quitar los profesores");
-                    })
-            }
         } else {
             if (this.state.fecha_fin !== null && this.state.fecha_fin !== null) {
                 if (!this.validDates(this.state.fecha_fin, this.state.fecha_inicio)) {
