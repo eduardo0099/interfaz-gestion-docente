@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import {Checkbox,Radio,FormGroup,FormControl,ControlLabel,Button} from 'react-bootstrap';
 import BaseContainer from './BaseContainer';
-import axios from 'axios'
+import axios from 'axios';
 
 class SignUp extends Component {
 	constructor(props){
