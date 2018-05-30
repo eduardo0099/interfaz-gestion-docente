@@ -110,9 +110,7 @@ class ListaProfesores extends Component {
                                 <Form horizontal>
                                     <FormGroup controlId="formHorizontalSeccion">
 
-                                        <Col componentClass={ ControlLabel } sm={ 1 }>
-                                            Seccion:
-                                        </Col>
+
 
 
                                         <Col sm={ 4 }>
