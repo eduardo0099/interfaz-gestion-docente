@@ -46,9 +46,9 @@ class SignUp extends Component {
 						correo: this.state.correo,
 						codigo: parseInt(this.state.codigo),
 						password: this.state.password,
-						id_tipo_usuario: this.state.id_tipo_usuario,
-						id_departamento: this.state.id_departamento,
-						id_seccion: this.state.id_seccion
+						id_tipo_usuario: parseInt(this.state.id_tipo_usuario),
+						id_departamento: parseInt(this.state.id_departamento),
+						id_seccion: parseInt(this.state.id_seccion)
 					}).then(res => {
 						alert("Se ha registrado correctamente");
 					}).catch(err => {
@@ -67,8 +67,8 @@ class SignUp extends Component {
 						correo: this.state.correo,
 						codigo: parseInt(this.state.codigo),
 						password: this.state.password,
-						id_tipo_usuario: this.state.id_tipo_usuario,
-						id_departamento: this.state.id_departamento,
+						id_tipo_usuario: parseInt(this.state.id_tipo_usuario),
+						id_departamento: parseInt(this.state.id_departamento),
 					}).then(res => {
 						alert("Se ha registrado correctamente");
 					}).catch(err => {
