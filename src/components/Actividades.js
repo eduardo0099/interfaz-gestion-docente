@@ -62,7 +62,7 @@ export class Actividades extends React.Component {
     cambioCiclo = (obj) => {
         let ciclo = obj.descripcion;
         this.setState({ cicloSeleccionado: ciclo })
-        this.findInvestigaciones(ciclo);
+        this.findActividades(ciclo);
     };
 
     findActividades(ciclo) {
