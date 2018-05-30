@@ -52,7 +52,7 @@ export class Actividades extends React.Component {
         this.findInvestigaciones(ciclo);
     };
 
-    findInvestigaciones(ciclo) {
+    findActividades(ciclo) {
         API.get('/docente/docente/actDocente', {
             params: {
                 codigo: this.props.match.params.codigo,
