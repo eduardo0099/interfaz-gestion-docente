@@ -213,10 +213,10 @@ class SignUp extends Component {
 					      <ControlLabel>Seleccione el tipo de usuario</ControlLabel>
 					      <FormControl componentClass="select" onChange={this.handleChangeVerTipo} placeholder="Seleccione el tipo de usuario">
 					        <option value="0">Seleccionar</option>
-					        <option value="1">Jefe de departamento</option>
+					        <option value="3">Jefe de departamento</option>
 					        <option value="2">Coordinador de seccion</option>
-					        <option value="3">Asistente de departamento</option>
-					        <option value="4">Asistente de seccion</option>
+					        <option value="4">Asistente de departamento</option>
+					        <option value="5">Asistente de seccion</option>
 					      </FormControl>
 					    </FormGroup>
 
