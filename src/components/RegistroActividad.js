@@ -6,6 +6,9 @@ import axios from 'axios';
 import '../styles/RegistroDocente.css';
 import moment from "moment";
 import SimpleReactValidator from "simple-react-validator";
+import BaseContainer from "./BaseContainer";
+import Select from 'react-select';
+import API from "../api";
 
 class RegistroActividad extends Component{
 
@@ -15,15 +18,17 @@ class RegistroActividad extends Component{
         this.validator = new SimpleReactValidator();
         this.state = {
             titulo:"",
-            tipo:"",
             fecha_inicio:"",
             fecha_fin:"",
             estado:"Asistira",
-            idProfesor:"20112728",
-            ciclo:"2018-1",
-            lugar:"PUCP"
+            idProfesor:this.props.match.params.codigo,
+            ciclo:"",
+            lugar:"PUCP",
+            listaTipo: [{id:"1",descripcion:"Congreso"},{id:"2",descripcion:"Visita"}],
+            tipoSeleccionado:"",
 
         };
+        console.log(this.props.match.params);
         this.handleTitulo = this.handleTitulo.bind(this);
         this.handleTipo = this.handleTipo.bind(this);
         this.handleFIni = this.handleFIni.bind(this);
@@ -37,7 +42,7 @@ class RegistroActividad extends Component{
 
     handleTipo(event) {
         this.setState({tipo: event.target.value});
-        console.log(this.state.tipo);
+        //console.log(this.state.tipo);
     }
 
     handleFIni(date) {
@@ -50,7 +55,7 @@ class RegistroActividad extends Component{
 
     handleEstado(event) {
         this.setState({estado: event.target.value});
-        console.log(this.state.estado);
+        //console.log(this.state.estado);
     }
 
     armarFecha(date){
@@ -71,14 +76,25 @@ class RegistroActividad extends Component{
         }
 		cadena = cadena + "-";
 		cadena=cadena+date.getFullYear();
-        console.log(cadena);
+        //console.log(cadena);
         return cadena;
     }
 
     validDates(fFin,fIni){
         var isafter = moment(fFin._d).isAfter(fIni._d);
-        console.log('fechas validas?:',isafter)
+        //console.log('fechas validas?:',isafter)
         return isafter;
+    }
+
+    componentDidMount() {
+        this.findCicloActual();
+    }
+
+    findCicloActual(){
+        API.get('general/cicloActual')
+            .then(response => {
+                this.setState({ciclo: response.data.cicloActual})
+            })
     }
 
     performPostRequest = ()=> {
@@ -86,7 +102,7 @@ class RegistroActividad extends Component{
             axios.post('http://200.16.7.151:8080/docente/actividad/registrar', {
                 idProfesor: this.state.idProfesor,
                 ciclo: this.state.ciclo,
-                tipo: this.state.tipo,
+                tipo: this.state.tipoSeleccionado,
                 titulo: this.state.titulo,
                 fecha_inicio: this.armarFecha(this.state.fecha_inicio._d),
                 fecha_fin: this.armarFecha(this.state.fecha_fin._d),
@@ -112,67 +128,77 @@ class RegistroActividad extends Component{
         }
     }
 
+    cambioTipo = (obj) => {
+        this.setState({ tipoSeleccionado: obj.descripcion })
+    };
+
     render(){
 
-        console.log(this.props);
+        //console.log(this.props);
         return (
-            <div className="container">
-                <PageHeader>
-                    Registrar Actividad
-                </PageHeader>
-                <Grid>
-                    <Row>
-                        <Col md={12}>
-                            Título:
-                            <input type="text" className="form-control" value={this.state.titulo} onChange={this.handleTitulo}></input>
-                            {this.validator.message('titulo', this.state.titulo, 'required|max:100', false, {required: 'Este campo es obligatorio',max:'El número máximo de caracteres es 50'})}
-                            <br></br>
-                        </Col>
-                    </Row>
-                    <Row >
-                        <Col md={12}>
-                            Tipo:
-                            <input type="text" className="form-control" value={this.state.tipo} onChange={this.handleTipo}></input>
-                            {this.validator.message('tipo', this.state.tipo, 'required|max:20', false, {required: 'Este campo es obligatorio'})}
-                            <br></br>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col md={12}>
-                            Fecha Inicio:
-                            <DatePicker
-                                dateFormat="DD/MM/YYYY"
-                                selected={this.state.fecha_inicio}
-                                onChange={this.handleFIni}
-                            />
-                            {this.validator.message('fechaIni', this.state.fecha_inicio, 'required', false, {required: 'Este campo es obligatorio'})}
-                            <br></br>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col md={12}>
-                            Fecha Fin:
-                            <DatePicker
-                                dateFormat="DD/MM/YYYY"
-                                selected={this.state.fecha_fin}
-                                onChange={this.handleFFin}
-                            />
-                            {this.validator.message('fechaFin', this.state.fecha_fin, 'required', false, {required: 'Este campo es obligatorio'})}
-                            <br></br>
-                        </Col>
-                    </Row>
-                    <Row >
-                        <Col md={12}>
-                            Estado:
-                            <input type="text" disabled={true} className="form-control" value={this.state.estado} onChange={this.handleEstado}></input>
-                            {this.validator.message('estado', this.state.estado, 'required|max:20', false, {required: 'Este campo es obligatorio'})}
-                            <br></br>
-                        </Col>
-                    </Row>
-                </Grid>
-                <Button onClick={this.performPostRequest}>Registrar</Button>
-                <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
-                <Button onClick={this.props.history.goBack}>Cancelar</Button>
+            <div>
+                <BaseContainer>
+                    <div className="panel col-lg-offset-2 col-lg-8 col-md-12 col-sm-12">
+                        <div className="panel-body">
+                            <PageHeader>
+                                Registrar Actividad
+                            </PageHeader>
+                            <Grid>
+                                <Row>
+                                    <Col md={6}>
+                                        Título:
+                                        <input type="text" className="form-control" value={this.state.titulo} onChange={this.handleTitulo}></input>
+                                        {this.validator.message('titulo', this.state.titulo, 'required|max:100', false, {required: 'Este campo es obligatorio',max:'El número máximo de caracteres es 50'})}
+                                        <br></br>
+                                    </Col>
+                                </Row>
+                                <Row >
+                                    <Col md={12}>
+                                        <div className="form-group col-md-4 row ">
+                                        <label> Tipo: </label>
+                                        <Select
+                                            value={ this.state.tipoSeleccionado }
+                                            onChange={ this.cambioTipo }
+                                            valueKey={ "descripcion" }
+                                            labelKey={ "descripcion" }
+                                            options={ this.state.listaTipo }
+                                            clearable={ false }
+                                        />
+                                    </div>
+                                        <br></br>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col md={12}>
+                                        Fecha Inicio:
+                                        <DatePicker
+                                            dateFormat="DD/MM/YYYY"
+                                            selected={this.state.fecha_inicio}
+                                            onChange={this.handleFIni}
+                                        />
+                                        {this.validator.message('fechaIni', this.state.fecha_inicio, 'required', false, {required: 'Este campo es obligatorio'})}
+                                        <br></br>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col md={12}>
+                                        Fecha Fin:
+                                        <DatePicker
+                                            dateFormat="DD/MM/YYYY"
+                                            selected={this.state.fecha_fin}
+                                            onChange={this.handleFFin}
+                                        />
+                                        {this.validator.message('fechaFin', this.state.fecha_fin, 'required', false, {required: 'Este campo es obligatorio'})}
+                                        <br></br>
+                                    </Col>
+                                </Row>
+                            </Grid>
+                            <Button onClick={this.performPostRequest}>Registrar</Button>
+                            <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
+                            <Button onClick={this.props.history.goBack}>Cancelar</Button>
+                        </div>
+                    </div>
+                </BaseContainer>
             </div>
         );
     }
