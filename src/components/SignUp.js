@@ -53,6 +53,7 @@ class SignUp extends Component {
 						alert("Se ha registrado correctamente");
 					}).catch(err => {
 						alert("Ha ocurrido un error");
+						console.log("error registro",err);
 					});
 				}else{
 					alert("Falta completar datos");
@@ -73,6 +74,7 @@ class SignUp extends Component {
 						alert("Se ha registrado correctamente");
 					}).catch(err => {
 						alert("Ha ocurrido un error");
+						console.log("error registro",err);
 					});
 			}
 				
