@@ -6,6 +6,7 @@ import axios from 'axios';
 import SimpleReactValidator from 'simple-react-validator';
 import moment from "moment";
 import BaseContainer from "./BaseContainer";
+import API from "../api";
 
 
 class RegistroInvestigación extends Component{
@@ -77,7 +78,7 @@ class RegistroInvestigación extends Component{
 
     performPostRequest = ()=> {
         if( this.validator.allValid() && this.validDates(this.state.fecha_fin,this.state.fecha_inicio)){
-            axios.post('http://200.16.7.151:8080/docente/investigacion/registrar', {
+            API.post('docente/investigacion/registrar', {
                 titulo: this.state.titulo,
                 autor: this.state.autor,
                 resumen: this.state.resumen,

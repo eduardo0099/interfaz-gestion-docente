@@ -53,9 +53,9 @@ class ConvocatoriaNuevo extends Component {
     }
 
     allCursos() {
-        API.get('general/listaCiclos')
+        API.get('general/listaCurso')
             .then(response => {
-                this.setState({ cursos: response.data.ciclos })
+                this.setState({ cursos: response.data.curso })
             })
     }
 
@@ -88,7 +88,7 @@ class ConvocatoriaNuevo extends Component {
     }
 
     handleCodigoCurso(obj) {
-        let codCurso = obj.descripcion;
+        let codCurso = obj.codigo;
         this.setState({ codigoCurso: codCurso })
     }
 
@@ -160,8 +160,8 @@ class ConvocatoriaNuevo extends Component {
         //console.log('expProfRegistrar:',expProfRegistrar);
         //console.log('investigacionRegistrar:',investigacionRegistrar);
         if( this.validator.allValid() && this.validDates(this.state.fecha_fin,this.state.fecha_inicio)){
-            axios.post('http://200.16.7.151:8080/convocatoria/convocatoria/registrar', {
-                nombre : this.state.curso,
+            API.post('convocatoria/convocatoria/registrar', {
+                nombre : this.state.nombre,
                 codigo_curso : this.state.codigoCurso,
                 fecha_inicio : this.armarFecha(this.state.fecha_inicio._d),
                 fecha_fin : this.armarFecha(this.state.fecha_fin._d),
@@ -268,8 +268,8 @@ class ConvocatoriaNuevo extends Component {
                             <Select
                                 value={ this.state.codigoCurso }
                                 onChange={ this.handleCodigoCurso }
-                                valueKey={ "descripcion" }
-                                labelKey={ "descripcion" }
+                                valueKey={ "codigo" }
+                                labelKey={ "codigo" }
                                 options={ this.state.cursos }
                                 clearable={ false }
                             />
@@ -351,7 +351,7 @@ class ConvocatoriaNuevo extends Component {
                                     name="Solicitar Experiencia Profesional"
                                     value={this.state.experienciaProfesional}
                                     onChange={this.experienciaProfesionalChanged}>
-                                    <label><Checkbox value="solExperienciaProfesional"/> Solicitar Experiencia Profesional</label>
+                                    <label><Checkbox value="Solicitar Experiencia Profesional"/> Solicitar Experiencia Profesional</label>
                                 </CheckboxGroup>
                                 </div>
                             </div>
@@ -363,7 +363,7 @@ class ConvocatoriaNuevo extends Component {
                                     name="Solicitar Investigacion"
                                     value={this.state.investigacion}
                                     onChange={this.investigacionProfesionalChanged}>
-                                    <label><Checkbox value="solInvestigacion"/> Solicitar Investigacion</label>
+                                    <label><Checkbox value="Solicitar Investigacion"/> Solicitar Investigacion</label>
                                 </CheckboxGroup>
                                 </div>
                             </div>

@@ -37,7 +37,6 @@ class registroPostulante extends Component {
             fechaNac:'',
             paisNac:'',
             lugarNac:'',
-            gradosAcademicos: [],
             nombres:'',
             aPaterno:'',
             aMaterno:'',
@@ -52,7 +51,6 @@ class registroPostulante extends Component {
             celular:'',
             direccion:'',
 
-            expProfesional:'',
 
             investigaciones:[],
             numInvestigaciones:0,
@@ -137,16 +135,18 @@ class registroPostulante extends Component {
                 archivo:null
             },
 
-            mostrarGA:true,
-            mostrarDocencia:true,
-            mostrarExpProf:true,
-            mostrarInvestigaciones:true,
-            mostrarTitulo:true,
-            mostrarMaestria:true,
-            mostrarDoctorado:true,
-            mostrarDiplomatura:true,
-            mostrarAsesoriaTesis:true,
-            mostrarPremiosDoc:true
+            infoConvocatoria:{},
+
+            //mostrarGA:true,
+            mostrarDocencia:false,
+            mostrarExpProf:false,
+            mostrarInvestigaciones:false,
+            mostrarTitulo:false,
+            mostrarMaestria:false,
+            mostrarDoctorado:false,
+            mostrarDiplomatura:false,
+            mostrarAsesoriaTesis:false,
+            mostrarPremiosDoc:false
 
             //tituloProf:false,
             //maestria:false,
@@ -231,24 +231,85 @@ class registroPostulante extends Component {
         this.handleDiplomadoNombreTesis = this.handleDiplomadoNombreTesis.bind(this);
         this.handleDiplomadoUrlTesis = this.handleDiplomadoUrlTesis.bind(this);
 
+
+
     }
 
     componentDidMount() {
         this.allPaises();
         this.allTipoDoc();
+        this.findConvocatoria();
+    }
+
+    findConvocatoria() {
+        API.get('convocatoria/convocatoria/devolver', {
+            params: {
+                id: this.props.match.params.codigoConv,
+            }
+        }).then(response => {
+            let infoConv=response.data[0];
+            this.setState({ infoConvocatoria: response.data[0] });
+            if(infoConv.requiere_docencia_asesoria===1){
+                this.setState({
+                    mostrarAsesoriaTesis:true,
+                });
+            }
+            if(infoConv.requiere_docencia_cargo===1){
+                this.setState({
+                    mostrarDocencia:true,
+                });
+            }
+            if(infoConv.requiere_docencia_premio===1){
+                this.setState({
+                    mostrarPremiosDoc:true,
+                });
+            }
+            if(infoConv.requiere_experiencia===1){
+                this.setState({
+                    mostrarExpProf:true,
+                });
+            }
+            if(infoConv.requiere_grado_diplomatura===1){
+                this.setState({
+                    mostrarDiplomatura:true,
+                });
+            }
+            if(infoConv.requiere_grado_doctorado===1){
+                this.setState({
+                    mostrarDoctorado:true,
+                });
+            }
+            if(infoConv.requiere_grado_maestria===1){
+                this.setState({
+                    mostrarMaestria:true,
+                });
+            }
+            if(infoConv.requiere_grado_titulo===1){
+                this.setState({
+                    mostrarTitulo:true,
+                });
+            }
+            if(infoConv.requiere_investigacion===1){
+                this.setState({
+                    mostrarInvestigaciones:true,
+                });
+            }
+        }).catch(error => {
+            console.log(`Error al obtener datos de convocatoria ${this.props.match.params.codigoConv}`, error);
+        });
     }
 
     allPaises() {
-        API.get('general/listaCiclos')
+        API.get('general/listaPais')
             .then(response => {
-                this.setState({ paises: response.data.ciclos })
+                this.setState({ paises: response.data.pais })
             })
     }
 
     allTipoDoc() {
-        API.get('general/listaCiclos')
+        API.get('general/listaTipoDocumento')
             .then(response => {
-                this.setState({ tipoDocList: response.data.ciclos })
+                this.setState({ tipoDocList: response.data.tipo_documento })
             })
     }
 
@@ -269,7 +330,7 @@ class registroPostulante extends Component {
     }
 
     handleNacionalidad(obj) {
-        let pais = obj.descripcion;
+        let pais = obj.pais;
         this.setState({ nacionalidad: pais })
     }
 
@@ -278,7 +339,7 @@ class registroPostulante extends Component {
     }
 
     handleTipoDoc(obj) {
-        let tipoDoc = obj.descripcion;
+        let tipoDoc = obj.tipo_documento;
         this.setState({ tipoDoc: tipoDoc })
     }
 
@@ -317,7 +378,7 @@ class registroPostulante extends Component {
     }
 
     handlePaisNac(obj) {
-        let pais = obj.descripcion;
+        let pais = obj.pais;
         this.setState({ paisNac: pais })
     }
 
@@ -417,7 +478,7 @@ class registroPostulante extends Component {
     handleTituloPais(obj) {
         let tempTitulo = {...this.state.titulo};
 
-        let pais = obj.descripcion;
+        let pais = obj.pais;
 
         tempTitulo.pais = pais
         this.setState({
@@ -476,7 +537,7 @@ class registroPostulante extends Component {
 
     handleMaestriaPais(obj) {
         let tempMaestria = {...this.state.maestria};
-        let pais = obj.descripcion;
+        let pais = obj.pais;
         tempMaestria.pais = pais
         this.setState({
             maestria: tempMaestria
@@ -535,7 +596,7 @@ class registroPostulante extends Component {
 
     handleDoctoradoPais(obj) {
         let tempDoctorado = {...this.state.doctorado};
-        let pais = obj.descripcion;
+        let pais = obj.pais;
         tempDoctorado.pais = pais
         this.setState({
             doctorado: tempDoctorado
@@ -594,7 +655,7 @@ class registroPostulante extends Component {
 
     handleDiplomadoPais(obj) {
         let tempDiplomado = {...this.state.diplomado};
-        let pais = obj.descripcion;
+        let pais = obj.pais;
         tempDiplomado.pais = pais
         this.setState({
             diplomado: tempDiplomado
@@ -684,59 +745,15 @@ class registroPostulante extends Component {
             delete entry.id;
         });
 
-        let titulo  = {
-            especialidad:this.state.titulo.nombreProg,
-            pais:this.state.titulo.pais,
-            institucion:this.state.titulo.institucion,
-            nombre_titulo:this.state.titulo.nombreTitulo,
-            egresado:1,
-            fecha_obtencion:this.armarFecha(this.state.titulo.fechaTitulo._d),
-            titulo_tesis:this.state.titulo.tituloTesis,
-            url_tesis:this.state.titulo.urlTesis,
-            archivo_tesis: null,
-            grado_academico: "Título",
-            premio:null};
+        //let grad_acad=[titulo,maestria,doctorado,diplomado];
+        let titulo=this.state.titulos;
+        let maestria=this.state.maestrias;
+        let doctorado=this.state.doctorados;
+        let diplomado=this.state.diplomados;
+        let grad_acad=titulo.concat(maestria);
+        grad_acad=grad_acad.concat(doctorado);
+        grad_acad=grad_acad.concat(diplomado);
 
-        let maestria  = {
-            especialidad:this.state.maestria.nombreProg,
-            pais:this.state.maestria.pais,
-            institucion:this.state.maestria.institucion,
-            nombre_titulo:this.state.maestria.nombreTitulo,
-            egresado:1,
-            fecha_obtencion:this.armarFecha(this.state.maestria.fechaTitulo._d),
-            titulo_tesis:this.state.maestria.tituloTesis,
-            url_tesis:this.state.maestria.urlTesis,
-            archivo_tesis: null,
-            grado_academico: "Maestría",
-            premio:null};
-
-        let doctorado  = {
-            especialidad:this.state.doctorado.nombreProg,
-            pais:this.state.doctorado.pais,
-            institucion:this.state.doctorado.institucion,
-            nombre_titulo:this.state.doctorado.nombreTitulo,
-            egresado:1,
-            fecha_obtencion:this.armarFecha(this.state.doctorado.fechaTitulo._d),
-            titulo_tesis:this.state.doctorado.tituloTesis,
-            url_tesis:this.state.doctorado.urlTesis,
-            archivo_tesis: null,
-            grado_academico: "Doctorado",
-            premio:null};
-
-        let diplomado  = {
-            especialidad:this.state.diplomado.nombreProg,
-            pais:this.state.diplomado.pais,
-            institucion:this.state.diplomado.institucion,
-            nombre_titulo:this.state.diplomado.nombreTitulo,
-            egresado:1,
-            fecha_obtencion:this.armarFecha(this.state.diplomado.fechaTitulo._d),
-            titulo_tesis:this.state.diplomado.tituloTesis,
-            url_tesis:this.state.diplomado.urlTesis,
-            archivo_tesis: null,
-            grado_academico: "Diplomatura",
-            premio:null};
-
-        let grad_acad=[titulo,maestria,doctorado,diplomado];
 
         let postulante=
                 {
@@ -761,7 +778,7 @@ class registroPostulante extends Component {
         //console.log('docenciaRegistrar:',docenciaRegistrar);
         //console.log('expProfRegistrar:',expProfRegistrar);
         //console.log('investigacionRegistrar:',investigacionRegistrar);
-        axios.post('http://200.16.7.151:8080/convocatoria/convocatoria/postulante/registrar', {
+        API.post('convocatoria/convocatoria/postulante/registrar', {
             postulante:
                 {
                     nombres: this.state.nombres,
@@ -826,14 +843,15 @@ class registroPostulante extends Component {
                 this.forceUpdate();
             }
         }else if(this.state.paso==3){
-            if (this.diplomadoValidator.allValid() && this.tituloValidator.allValid()  && this.maestriaValidator.allValid() && this.doctoradoValidator.allValid() && this.state.investigaciones.length>0) {
+            let valido=this.validarRequisitos();
+            console.log(valido);
+            if (valido) {
+                console.log('Campos validos');
 
                 this.performPostRequest()
             }else {
-                this.tituloValidator.showMessages();
-                this.maestriaValidator.showMessages();
-                this.doctoradoValidator.showMessages();
-                this.diplomadoValidator.showMessages();
+                console.log('llenar campos');
+                alert("Llenar todos los requisitos");
                 // rerender to show messages for the first time
                 this.forceUpdate();
             }
@@ -1064,8 +1082,63 @@ class registroPostulante extends Component {
         }
     }
 
+    validarRequisitos=()=>{
+        var valido = true;
+        var infoConv=this.state.infoConvocatoria;
+        if(infoConv.requiere_docencia_asesoria===1){
+            if(this.state.asesorias.length===0){
+                valido =false;
+            }
+        }
+        if(infoConv.requiere_docencia_cargo===1){
+            if(this.state.cargos.length===0){
+                valido =false;
+            }
+        }
+        if(infoConv.requiere_docencia_premio===1){
+            if(this.state.premios.length===0){
+                valido =false;
+            }
+        }
+        if(infoConv.requiere_experiencia===1){
+            if(this.state.experiencia.length===0){
+                valido =false;
+            }
+        }
+        if(infoConv.requiere_grado_diplomatura===1){
+            if(this.state.diplomados.length===0){
+                valido =false;
+            }
+        }
+        if(infoConv.requiere_grado_doctorado===1){
+            if(this.state.doctorados.length===0){
+                valido =false;
+            }
+        }
+        if(infoConv.requiere_grado_maestria===1){
+            if(this.state.maestrias.length===0){
+                valido =false;
+            }
+        }
+        if(infoConv.requiere_grado_titulo===1){
+            if(this.state.titulos.length===0){
+                valido =false;
+            }
+        }
+        if(infoConv.requiere_investigacion===1){
+            if(this.state.investigaciones.length===0){
+                valido =false;
+            }
+        }
+        return valido;
+    }
+
     render() {
+
         console.log(this.props)
+
+        console.log(this.state)
+
         const columns = [{
             dataField: 'id',
             text: 'ID',
@@ -1278,6 +1351,66 @@ class registroPostulante extends Component {
             btnSiguiente = <button className="btn btn-primary" onClick={this.performNext}> Siguiente </button>
         }
 
+
+
+        let investigaciones;
+        if(this.state.mostrarInvestigaciones) {
+            investigaciones = <li><a href="#4" data-toggle="tab">Investigaciones</a></li>
+        }
+
+        let gradosAcademicos;
+        if(this.state.mostrarMaestria || this.state.mostrarTitulo || this.state.mostrarDiplomatura || this.state.mostrarDoctorado) {
+            gradosAcademicos = <li className="active"><a href="#1" data-toggle="tab">Grados Academicos</a></li>
+        }
+
+        let docencia;
+        if(this.state.mostrarDocencia || this.state.mostrarAsesoriaTesis || this.state.mostrarPremiosDoc) {
+            docencia = <li><a href="#2" data-toggle="tab">Docencia</a></li>
+        }
+
+        let expLaboral;
+        if(this.state.mostrarExpProf) {
+            expLaboral=<li><a href="#3" data-toggle="tab">Experiencia Profesional</a></li>
+        }
+
+
+        let tituloProf;
+        if(this.state.mostrarTitulo) {
+            tituloProf=<li><a href="#1a" data-toggle="tab">Titulo Profesional </a></li>
+        }
+
+        let maestria;
+        if(this.state.mostrarMaestria) {
+            maestria=<li><a href="#1b" data-toggle="tab"> Maestria </a></li>
+        }
+
+        let doctorado;
+        if(this.state.mostrarDoctorado) {
+            doctorado=<li><a href="#1c" data-toggle="tab"> Doctorado </a></li>
+        }
+
+        let diplomatura;
+        if(this.state.mostrarDiplomatura) {
+            diplomatura=<li><a href="#1d" data-toggle="tab"> Diplomatura </a></li>
+        }
+
+        let cursosCargo;
+        if(this.state.mostrarDocencia) {
+            cursosCargo=<li><a href="#2a" data-toggle="tab">Cursos a su Cargo </a></li>
+        }
+
+        let asesoria;
+        if(this.state.mostrarAsesoriaTesis) {
+            asesoria=<li><a href="#2b" data-toggle="tab"> Asesoria de Tesis </a></li>
+        }
+
+        let premios;
+        if(this.state.mostrarPremiosDoc) {
+            premios=<li><a href="#2c" data-toggle="tab"> Premios a la Docencia </a></li>
+        }
+
+
+
         let cuerpo;
         if (this.state.paso == 1) {
             cuerpo =
@@ -1335,8 +1468,8 @@ class registroPostulante extends Component {
                                 <Select
                                     value={ this.state.paisNac }
                                     onChange={ this.handlePaisNac }
-                                    valueKey={ "descripcion" }
-                                    labelKey={ "descripcion" }
+                                    valueKey={ "pais" }
+                                    labelKey={ "pais" }
                                     options={ this.state.paises }
                                     clearable={ false }
                                 />
@@ -1375,8 +1508,8 @@ class registroPostulante extends Component {
                                 <Select
                                     value={ this.state.tipoDoc }
                                     onChange={ this.handleTipoDoc }
-                                    valueKey={ "descripcion" }
-                                    labelKey={ "descripcion" }
+                                    valueKey={ "tipo_documento" }
+                                    labelKey={ "tipo_documento" }
                                     options={ this.state.tipoDocList }
                                     clearable={ false }
                                 />
@@ -1400,8 +1533,8 @@ class registroPostulante extends Component {
                                 <Select
                                     value={ this.state.nacionalidad }
                                     onChange={ this.handleNacionalidad }
-                                    valueKey={ "descripcion" }
-                                    labelKey={ "descripcion" }
+                                    valueKey={ "pais" }
+                                    labelKey={ "pais" }
                                     options={ this.state.paises }
                                     clearable={ false }
                                 />
@@ -1446,19 +1579,19 @@ class registroPostulante extends Component {
             cuerpo=
                 <div>
                     <ul className="nav nav-tabs">
-                        <li className="active"><a href="#1" data-toggle="tab">Grados Academicos</a></li>
-                        <li><a href="#2" data-toggle="tab">Docencia</a></li>
-                        <li><a href="#3" data-toggle="tab">Experiencia Profesional</a></li>
-                        <li><a href="#4" data-toggle="tab">Investigaciones</a></li>
+                        {gradosAcademicos}
+                        {docencia}
+                        {expLaboral}
+                        {investigaciones}
                     </ul>
                     <div className="tab-content clearfix m-t-md">
                         <div className="tab-pane active row" id="1">
                             <div className="form-group col-md-2 m-r-n">
                                 <ul className="nav nav-pills nav-stacked">
-                                    <li className="active"><a href="#1a" data-toggle="tab">Titulo Profesional </a></li>
-                                    <li><a href="#1b" data-toggle="tab"> Maestria </a></li>
-                                    <li><a href="#1c" data-toggle="tab"> Doctorado </a></li>
-                                    <li><a href="#1d" data-toggle="tab"> Diplomatura </a></li>
+                                    {tituloProf}
+                                    {maestria}
+                                    {doctorado}
+                                    {diplomatura}
                                 </ul>
                             </div>
                             <div className="form-group col-md-10 m-l-n">
@@ -1475,8 +1608,8 @@ class registroPostulante extends Component {
                                                 <Select
                                                     value={ this.state.titulo.pais }
                                                     onChange={ this.handleTituloPais }
-                                                    valueKey={ "descripcion" }
-                                                    labelKey={ "descripcion" }
+                                                    valueKey={ "pais" }
+                                                    labelKey={ "pais" }
                                                     options={ this.state.paises }
                                                     clearable={ false }
                                                 />
@@ -1537,8 +1670,8 @@ class registroPostulante extends Component {
                                                 <Select
                                                     value={ this.state.maestria.pais }
                                                     onChange={ this.handleMaestriaPais }
-                                                    valueKey={ "descripcion" }
-                                                    labelKey={ "descripcion" }
+                                                    valueKey={ "pais" }
+                                                    labelKey={ "pais" }
                                                     options={ this.state.paises }
                                                     clearable={ false }
                                                 />
@@ -1599,8 +1732,8 @@ class registroPostulante extends Component {
                                                 <Select
                                                     value={ this.state.doctorado.pais }
                                                     onChange={ this.handleDoctoradoPais }
-                                                    valueKey={ "descripcion" }
-                                                    labelKey={ "descripcion" }
+                                                    valueKey={ "pais" }
+                                                    labelKey={ "pais" }
                                                     options={ this.state.paises }
                                                     clearable={ false }
                                                 />
@@ -1662,8 +1795,8 @@ class registroPostulante extends Component {
                                                 <Select
                                                     value={ this.state.diplomado.pais }
                                                     onChange={ this.handleDiplomadoPais }
-                                                    valueKey={ "descripcion" }
-                                                    labelKey={ "descripcion" }
+                                                    valueKey={ "pais" }
+                                                    labelKey={ "pais" }
                                                     options={ this.state.paises }
                                                     clearable={ false }
                                                 />
@@ -1719,14 +1852,14 @@ class registroPostulante extends Component {
                         <div className="tab-pane" id="2">
                             <div className="form-group col-md-2 m-r-n">
                                 <ul className="nav nav-pills nav-stacked">
-                                    <li className="active"><a href="#2a" data-toggle="tab">Cursos a su Cargo </a></li>
-                                    <li><a href="#2b" data-toggle="tab"> Asesoria de Tesis </a></li>
-                                    <li><a href="#2c" data-toggle="tab"> Premios a la Docencia </a></li>
+                                    {cursosCargo}
+                                    {asesoria}
+                                    {premios}
                                 </ul>
                             </div>
                             <div className="form-group col-md-10 m-l-n">
                                 <div className="tab-content clearfix">
-                                    <div className="tab-pane active row" id="2a">
+                                    <div className="tab-pane row" id="2a">
                                         <div className="form-group">
                                             <div className="col-md-offset-1 col-md-7">
                                                 <label> Nombre: </label>

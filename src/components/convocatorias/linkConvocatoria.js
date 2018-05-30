@@ -7,6 +7,7 @@ import ConvocatoriaNuevo from "./ConvocatoriasNuevo";
 import ConvocatoriasListaPostulantes from "./ConvocatoriasListaPostulantes";
 import registroPostulante from "./registroPostulante";
 import SimpleReactValidator from "simple-react-validator";
+import API from "../../api";
 
 
 class linkConvocatoria extends Component {
@@ -15,6 +16,7 @@ class linkConvocatoria extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            infoConvocatoria:{},
             curso:'Sistemas Operativos',
             descripcion:'Convocatoria de Asistente de Docencia',
             fechaIni:'06/06/06',
@@ -30,6 +32,22 @@ class linkConvocatoria extends Component {
         };
     }
 
+    componentDidMount() {
+        this.findConvocatoria();
+    }
+
+    findConvocatoria() {
+        API.get('convocatoria/convocatoria/devolver', {
+            params: {
+                id: this.props.match.params.codigoConv,
+            }
+        }).then(response => {
+            this.setState({ infoConvocatoria: response.data[0] });
+        }).catch(error => {
+            console.log(`Error al obtener datos de convocatoria ${this.props.match.params.codigoConv}`, error);
+        });
+    }
+
 
     render() {
         var headerStyle = {
@@ -41,13 +59,21 @@ class linkConvocatoria extends Component {
                     <BaseContainer>
                         <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
                             <div className="panel-heading">
-                                <h2 style={headerStyle}>{this.state.descripcion} - {this.state.curso}</h2>
+                                <h2 style={headerStyle}>{this.state.infoConvocatoria.nombre}</h2>
                             </div>
                             <div className="panel-body">
-                                <h3>Fecha Límite: {this.state.fechaFin} </h3>
-                            </div>
-                            <div className="col-md-offset-1">
-                                <a className="btn btn-sm btn-primary m-t-md" href={`${this.props.match.url}/registro`}>Registrarse</a>
+                                <div className="form-group">
+                                    <h4>Fecha Límite: {this.state.infoConvocatoria.fecha_fin} </h4>
+                                </div>
+                                <div className="form-group">
+                                    <h4>Cantidad de postulantes: {this.state.infoConvocatoria.cantidad_postulantes} </h4>
+                                </div>
+                                <div className="form-group">
+                                    <h4>Estado: {this.state.infoConvocatoria.descripcion} </h4>
+                                </div>
+                                <div>
+                                    <a className="btn btn-sm btn-primary m-t-md" href={`${this.props.match.url}/registro`}>Registrarse</a>
+                                </div>
                             </div>
                         </div>
                     </BaseContainer>
