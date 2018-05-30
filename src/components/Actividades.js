@@ -30,6 +30,19 @@ export class Actividades extends React.Component {
         this.allCiclos();
     }
 
+    findDocente(ciclo) {
+        API.get('docente/docente/general', {
+            params: {
+                codigo: this.props.match.params.codigo,
+                ciclo: ciclo,
+            }
+        }).then(response => {
+            this.setState({ infoDocente: response.data });
+        }).catch(error => {
+            console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`, error);
+        });
+    }
+
     findCicloActual(){
         API.get('general/cicloActual')
             .then(response => {
