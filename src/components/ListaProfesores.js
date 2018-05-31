@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Route} from 'react-router-dom';
+import {Route,Link} from 'react-router-dom';
 import DetalleDocente from "./DetalleDocente";
 import BaseContainer from "./BaseContainer";
 import axios from "axios/index";
@@ -133,7 +133,7 @@ class ListaProfesores extends Component {
                                         return (
                                             <tr className="pointer">
                                                 <td className="col-md-12">
-                                                    <span className="block text-primary"> {profesor.nombre} </span>
+                                                    <span className="block text-primary"><Link to={"/profesores/"+profesor.codigo}> {profesor.nombre}</Link> </span>
                                                     <small className="block text-muted"> {profesor.codigo} </small>
                                                 </td>
                                                 <td className="v-middle">

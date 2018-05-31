@@ -55,6 +55,13 @@ class App extends Component {
     this.setState({auth:true});
   }
 
+  componentWillMount(){
+    /*
+    localStorage.removeItem('jwt');
+    localStorage.removeItem('user');
+    */
+  }
+
   render() {
     let sidebarContent = <SidebarContent handleMenu={this.onSetOpen}/>;
 
@@ -71,7 +78,7 @@ class App extends Component {
           <Header handleMenu={this.menuButtonClick}/>
           <div className="content">
             
-              {this.state.auth?
+              {(this.state.auth || localStorage.getItem('jwt') != null)? 
                 <Switch>
                 <Route exact path="/" render={()=> <SignIn auth={this.state.auth} handleLogIn={this.handleLogIn}/>}/>
                 <Route path="/registrar" component={SignUp}/>
