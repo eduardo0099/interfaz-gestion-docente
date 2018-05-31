@@ -16,6 +16,7 @@ import ConvocatoriasLista from "../components/convocatorias/ConvocatoriasLista";
 import 'react-select/dist/react-select.css';
 import AyudaEconomica from "../components/AyudaEconomica/AyudaEconomica";
 import SignUp from "../components/SignUp";
+import SignIn from "../components/SignIn";
 
 class App extends Component {
 
@@ -24,6 +25,7 @@ class App extends Component {
 
     this.state = {
       open: false,
+      auth: false
     };
 
     this.onSetOpen = this.onSetOpen.bind(this);
@@ -49,6 +51,10 @@ class App extends Component {
     document.addEventListener("keydown", this.escFunction, false);
   }
 
+  handleLogIn =() =>{
+    this.setState({auth:true});
+  }
+
   render() {
     let sidebarContent = <SidebarContent handleMenu={this.onSetOpen}/>;
 
@@ -64,17 +70,28 @@ class App extends Component {
         <Sidebar {...sidebarProps}>
           <Header handleMenu={this.menuButtonClick}/>
           <div className="content">
-            <Switch>
-              <Route exact path="/" render={ () => <Home/>} />
-              <Route path="/profesores" component={ListaProfesores}/>
-              <Route path="/convocatorias" component={ConvocatoriasLista}/>
-              <Route path="/carga" render={ () => <CargaDatos /> }/>
-              <Route path="/preferenciaCursos" component={PreferenciaCursos}/>
-              <Route path="/asignacionCursos" component={AsignarCursos}/>
-              <Route path="/ayudaeconomica" component={AyudaEconomica}/>
-              <Route path="/registrar" component={SignUp}/>
-              <Route render={()=><div>La pagina que busca, no existe</div>} />
-            </Switch>
+            
+              {this.state.auth?
+                <Switch>
+                <Route exact path="/" render={()=> <SignIn auth={this.state.auth} handleLogIn={this.handleLogIn}/>}/>
+                <Route path="/registrar" component={SignUp}/>
+                <Route path="/preferenciaCursos" component={PreferenciaCursos}/> 
+                <Route path="/home" render={ () => <Home/>} />
+                <Route path="/profesores" component={ListaProfesores}/>
+                <Route path="/convocatorias" component={ConvocatoriasLista}/>
+                <Route path="/carga" render={ () => <CargaDatos /> }/>
+                <Route path="/asignacionCursos" component={AsignarCursos}/>
+                <Route path="/ayudaeconomica" component={AyudaEconomica}/>
+                <Route render={()=><div>La pagina que busca no existe</div>} />
+                </Switch>
+                :
+                <Switch>
+                <Route exact path="/" render={()=> <SignIn auth={this.state.auth} handleLogIn={this.handleLogIn}/>}/>
+                <Route path="/registrar" component={SignUp}/>
+                <Route path="/preferenciaCursos" component={PreferenciaCursos}/>
+                <Route render={()=><div>La pagina que busca no existe o necesita iniciar sesión</div>} />
+                </Switch>
+               }
           </div>
         </Sidebar>
       </BrowserRouter>
