@@ -87,7 +87,15 @@ class RegistroActividad extends Component{
     }
 
     componentDidMount() {
+        this.listarTipo();
         this.findCicloActual();
+    }
+
+    listarTipo(){
+        API.get('general/listaTipoActividad')
+            .then(response => {
+                this.setState({listaTipo: response.data.tipo_actividad})
+            })
     }
 
     findCicloActual(){
