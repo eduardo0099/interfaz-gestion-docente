@@ -100,7 +100,7 @@ class ConvocatoriasListaPostulantes extends Component {
                                             return (
                                                 <tr>
                                                     <td className="v-middle text-center">
-                                                        <a className="block text-primary" href={ `${this.props.history.location.pathname}/postulante/${item.id}` }> { item.codigo } AC S</a>
+                                                        <a className="block text-primary" href={ `${this.props.history.location.pathname}postulante/${item.codigo}` }> { item.codigo } AC S</a>
                                                     </td>
                                                     <td className="v-middle">
                                                         <span className="block text-primary"> { item.nombre } </span>
