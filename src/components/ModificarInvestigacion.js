@@ -7,6 +7,7 @@ import SimpleReactValidator from "simple-react-validator";
 import moment from "moment";
 import BootstrapTable from 'react-bootstrap-table-next';
 import BaseContainer from "./BaseContainer";
+import API from "../api";
 
 class ModificarInvestigacion extends Component {
 
@@ -47,7 +48,7 @@ class ModificarInvestigacion extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://200.16.7.151:8080/docente/docente/investigacion', {
+        API.get('docente/docente/investigacion', {
             params: {
                 id: this.props.match.params.idInvestigacion,
             }
@@ -126,7 +127,33 @@ class ModificarInvestigacion extends Component {
         console.log('agregar: ',agregar);
         console.log('quitar: ',quitar);
         if (this.validator.allValid() && this.validDates(this.state.fecha_fin, this.state.fecha_inicio)) {
-            axios.put('http://200.16.7.151:8080/docente/investigacion/actualizar', {
+
+            if(agregar.length>0){
+                API.put('docente/investigacion/actualizar/agregarAutores', {
+                    id: this.props.match.params.idInvestigacion,
+                    autor: agregar
+                })
+                    .then(response => {
+                    })
+                    .catch(error => {
+                        alert("Error: No se pudieron agregar los profesores");
+                    })
+            }
+            if(quitar.length>0){
+                console.log('entro a quitar:',quitar);
+                API.delete('docente/investigacion/eliminar/eliminarAutores', {
+                    data:{
+                        id: this.props.match.params.idInvestigacion,
+                        autor: quitar
+                    }})
+                    .then(response => {
+                    })
+                    .catch(error => {
+                        alert("Error: No se pudieron quitar los profesores");
+                    })
+            }
+
+            API.put('docente/investigacion/actualizar', {
                 id: this.props.match.params.idInvestigacion,
                 titulo: this.state.titulo,
                 autor: [this.props.match.params.codigo],
@@ -142,29 +169,6 @@ class ModificarInvestigacion extends Component {
                 .catch(error => {
                     alert("Error: No se pudo registrar la modificación");
                 });
-            if(agregar.length>0){
-                axios.put('http://200.16.7.151:8080/docente/investigacion/actualizar/agregarAutores', {
-                    id: this.props.match.params.idInvestigacion,
-                    autor: agregar
-                })
-                    .then(response => {
-                    })
-                    .catch(error => {
-                        alert("Error: No se pudieron agregar los profesores");
-                    })
-            }
-            if(quitar.length>0){
-                axios.delete('http://200.16.7.151:8080/docente/investigacion/eliminar/eliminarAutores', {
-                    data:{
-                        id: this.props.match.params.idInvestigacion,
-                        autor: quitar
-                    }})
-                    .then(response => {
-                    })
-                    .catch(error => {
-                        alert("Error: No se pudieron quitar los profesores");
-                    })
-            }
         } else {
             if (this.state.fecha_fin !== null && this.state.fecha_fin !== null) {
                 if (!this.validDates(this.state.fecha_fin, this.state.fecha_inicio)) {
@@ -183,6 +187,7 @@ class ModificarInvestigacion extends Component {
     }
 
     guardarAgregados() {
+        console.log("agregados:", this.state.selectedAgregar);
         this.setState({
             showAgregar: false,
             autor: this.state.autor.concat(this.state.selectedAgregar),
@@ -194,7 +199,7 @@ class ModificarInvestigacion extends Component {
         this.setState({showAgregar: true});
         let listaFiltrada = []
 
-        axios.get('http://200.16.7.151:8080/general/listaDocente')
+        API.get('general/listaDocente')
             .then(response => {
                 listaFiltrada = response.data.docentes;
                 this.state.autor.forEach(function (entry) {
@@ -259,7 +264,7 @@ class ModificarInvestigacion extends Component {
         let listaFiltrada = new Array();
         let respuesta = []
         let autores = this.state.autor
-        axios.get('http://200.16.7.151:8080/general/listaDocente')
+        API.get('general/listaDocente')
             .then(response => {
                 //console.log('response:',response.data.docentes);
                 //console.log('autores a filtrar:',this.state.autor);

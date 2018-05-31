@@ -9,6 +9,8 @@ import moment from "moment";
 import BootstrapTable from 'react-bootstrap-table-next';
 import BaseContainer from "../BaseContainer";
 import {Checkbox, CheckboxGroup} from 'react-checkbox-group';
+import API from "../../api";
+import Select from 'react-select';
 
 const gradosAcademicos = [
     'Título Profesional',
@@ -23,6 +25,7 @@ class ConvocatoriaNuevo extends Component {
         super(props);
         this.validator = new SimpleReactValidator();
         this.state = {
+            cursos:[],
             paso:1,
             btnAnterior:false,
             btnFinalizar:false,
@@ -31,18 +34,29 @@ class ConvocatoriaNuevo extends Component {
             experienciaProfesional: [],
             investigacion: [],
 
-            curso: '',
+            nombre: '',
             codigoCurso:'',
             descripcion: '',
             fecha_inicio: null,
             fecha_fin: null
         };
-        this.handleCurso = this.handleCurso.bind(this);
+        this.handleNombre = this.handleNombre.bind(this);
         this.handleDescripcion = this.handleDescripcion.bind(this);
         this.handleFIni = this.handleFIni.bind(this);
         this.handleFFin = this.handleFFin.bind(this);
         this.handleCodigoCurso = this.handleCodigoCurso.bind(this);
 
+    }
+
+    componentDidMount() {
+        this.allCursos();
+    }
+
+    allCursos() {
+        API.get('general/listaCurso')
+            .then(response => {
+                this.setState({ cursos: response.data.curso })
+            })
     }
 
     gradosAcademicosChanged = (newGradoAcademico) => {
@@ -69,12 +83,13 @@ class ConvocatoriaNuevo extends Component {
         });
     }
 
-    handleCurso(event) {
-        this.setState({curso: event.target.value});
+    handleNombre(event) {
+        this.setState({nombre: event.target.value});
     }
 
-    handleCodigoCurso(event) {
-        this.setState({codigoCurso: event.target.value});
+    handleCodigoCurso(obj) {
+        let codCurso = obj.codigo;
+        this.setState({ codigoCurso: codCurso })
     }
 
     handleDescripcion(event) {
@@ -145,8 +160,8 @@ class ConvocatoriaNuevo extends Component {
         //console.log('expProfRegistrar:',expProfRegistrar);
         //console.log('investigacionRegistrar:',investigacionRegistrar);
         if( this.validator.allValid() && this.validDates(this.state.fecha_fin,this.state.fecha_inicio)){
-            axios.post('http://200.16.7.151:8080/convocatoria/convocatoria/registrar', {
-                nombre : this.state.curso,
+            API.post('convocatoria/convocatoria/registrar', {
+                nombre : this.state.nombre,
                 codigo_curso : this.state.codigoCurso,
                 fecha_inicio : this.armarFecha(this.state.fecha_inicio._d),
                 fecha_fin : this.armarFecha(this.state.fecha_fin._d),
@@ -244,13 +259,20 @@ class ConvocatoriaNuevo extends Component {
                     <div className="col-md-offset-0 col-md-7">
                         <hr/>
                         <div className="form-group">
-                            <label> Curso </label>
-                            <input type="text" className="form-control" value={this.state.curso} onChange={this.handleCurso}></input>
-                            {this.validator.message('curso', this.state.curso, 'required', false, {required: 'Este campo es obligatorio'})}
+                            <label> Nombre </label>
+                            <input type="text" className="form-control" value={this.state.nombre} onChange={this.handleNombre}></input>
+                            {this.validator.message('nombre', this.state.nombre, 'required', false, {required: 'Este campo es obligatorio'})}
                         </div>
                         <div className="form-group">
                             <label> Código curso </label>
-                            <input type="text" className="form-control" value={this.state.codigoCurso} onChange={this.handleCodigoCurso}></input>
+                            <Select
+                                value={ this.state.codigoCurso }
+                                onChange={ this.handleCodigoCurso }
+                                valueKey={ "codigo" }
+                                labelKey={ "codigo" }
+                                options={ this.state.cursos }
+                                clearable={ false }
+                            />
                             {this.validator.message('codigoCurso', this.state.codigoCurso, 'required', false, {required: 'Este campo es obligatorio'})}
                         </div>
                         <div className="form-group">
@@ -329,7 +351,7 @@ class ConvocatoriaNuevo extends Component {
                                     name="Solicitar Experiencia Profesional"
                                     value={this.state.experienciaProfesional}
                                     onChange={this.experienciaProfesionalChanged}>
-                                    <label><Checkbox value="solExperienciaProfesional"/> Solicitar Experiencia Profesional</label>
+                                    <label><Checkbox value="Solicitar Experiencia Profesional"/> Solicitar Experiencia Profesional</label>
                                 </CheckboxGroup>
                                 </div>
                             </div>
@@ -341,7 +363,7 @@ class ConvocatoriaNuevo extends Component {
                                     name="Solicitar Investigacion"
                                     value={this.state.investigacion}
                                     onChange={this.investigacionProfesionalChanged}>
-                                    <label><Checkbox value="solInvestigacion"/> Solicitar Investigacion</label>
+                                    <label><Checkbox value="Solicitar Investigacion"/> Solicitar Investigacion</label>
                                 </CheckboxGroup>
                                 </div>
                             </div>

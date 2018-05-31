@@ -3,6 +3,7 @@ import {Button} from 'react-bootstrap';
 import Papa from 'papaparse';
 import axios from 'axios';
 import BaseContainer from "./BaseContainer";
+import API from '../api';
 
 class CargaDatos extends Component {
 
@@ -24,7 +25,7 @@ class CargaDatos extends Component {
     console.log(results.data);
     console.log(JSON.stringify(results.data,null,2));
 
-    axios.post('http://200.16.7.151:8080/carga/cargaDatos',results)
+    API.post('carga/cargaDatos',results)
       .then(function (response) {
         alert("Carga de datos completa");
         //console.log(response);

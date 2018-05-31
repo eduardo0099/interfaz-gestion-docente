@@ -76,7 +76,7 @@ class ConvocatoriasListaPostulantes extends Component {
                                     <h5></h5>
                                 </div>
                                 <div className="col-md-5">
-                                    <h5> { this.state.fechaLimite } </h5>
+                                    <h5> { this.state.fecha_limite } </h5>
                                     <h5> { this.state.cantPostulantes } </h5>
                                     <h5> { this.state.cantAceptados } </h5>
                                     <h5></h5>

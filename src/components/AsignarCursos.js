@@ -572,49 +572,46 @@ class AsignarCursos extends Component {
                             <div style={ { "padding": "1em" } }>
                                 <Grid>
                                     <Row>
-                                        <Col md={ 2 }>
+                                        <Col md={ 10 }>
                                             <Form horizontal>
-                                                <FormGroup controlId="formHorizontalSeccion">
-                                                    <Col componentClass={ ControlLabel } sm={ 2 }>
-                                                        Ciclo:
-                                                    </Col>
-                                                    <Col sm={ 10 }>
-                                                        <FormControl componentClass="select" placeholder="select" onChange={ this.handleFiltroCiclo } value={ this.state.filtroCiclo }>
-                                                            <option value="2018-1">2018-1</option>
-                                                            <option value="2018-2">2018-2</option>
-                                                        </FormControl>
-                                                    </Col>
-                                                </FormGroup>
-                                            </Form>
-                                        </Col>
-                                        <Col md={ 3 }>
-                                            <Form horizontal>
-                                                <FormGroup controlId="formHorizontalSeccion">
-                                                    <Col componentClass={ ControlLabel } sm={ 2 }>
-                                                        Sección:
-                                                    </Col>
-                                                    <Col sm={ 10 }>
-                                                        <FormControl componentClass="select" placeholder="select" onChange={ this.handleFiltroSeccion } value={ this.state.filtroSeccion }>
-                                                            <option value="todos">Todos</option>
-                                                            { this.state.listaSecciones.map((item, index) => {
-                                                                return <option key={ index } value={ item }>{ item }</option>
-                                                            }) }
-                                                        </FormControl>
-                                                    </Col>
-                                                </FormGroup>
-                                            </Form>
-                                        </Col>
-                                        <Col md={ 4 } mdOffset={ 3 }>
-                                            <Form horizontal>
-                                                <FormGroup controlId="formHorizontalBuscarCurso">
-                                                    <Col sm={ 12 }>
-                                                        <FormControl type="curso" placeholder="Buscar curso"/>
-                                                    </Col>
-                                                </FormGroup>
+                                                <Col md={ 3 }>
+                                                        <FormGroup controlId="formHorizontalSeccion">
+                                                            <Col componentClass={ ControlLabel } sm={ 2 }>
+                                                                Ciclo:
+                                                            </Col>
+                                                            <Col sm={ 10 }>
+                                                                <FormControl componentClass="select" placeholder="select" onChange={ this.handleFiltroCiclo } value={ this.state.filtroCiclo }>
+                                                                    <option value="2018-1">2018-1</option>
+                                                                    <option value="2018-2">2018-2</option>
+                                                                </FormControl>
+                                                            </Col>
+                                                        </FormGroup>
+                                                </Col>
+                                                <Col md={ 4 }>
+                                                        <FormGroup controlId="formHorizontalSeccion">
+                                                            <Col componentClass={ ControlLabel } sm={ 2 }>
+                                                                Sección:
+                                                            </Col>
+                                                            <Col sm={ 10 }>
+                                                                <FormControl componentClass="select" placeholder="select" onChange={ this.handleFiltroSeccion } value={ this.state.filtroSeccion }>
+                                                                    <option value="todos">Todos</option>
+                                                                    { this.state.listaSecciones.map((item, index) => {
+                                                                        return <option key={ index } value={ item }>{ item }</option>
+                                                                    }) }
+                                                                </FormControl>
+                                                            </Col>
+                                                        </FormGroup>
+                                                </Col>
+                                                <Col md={ 3 } >
+                                                        <FormGroup controlId="formHorizontalBuscarCurso">
+                                                            <Col sm={ 12  }>
+                                                                <FormControl type="curso" placeholder="Buscar curso"/>
+                                                            </Col>
+                                                        </FormGroup>
+                                                </Col>
                                             </Form>
                                         </Col>
                                     </Row>
-
                                     <Row>
                                         <Col md={ 10 }>
                                             <BootstrapTable
@@ -628,12 +625,12 @@ class AsignarCursos extends Component {
                                     { this.state.codSeleccionado !== "" ?
                                         <span>
                 <Row>
-                  <Col md={ 12 }>
+                  <Col md={ 10 }>
                     <h4>Horarios del curso seleccionado:</h4>
                   </Col>
                 </Row>
                 <Row>
-                  <Col md={ 12 }>
+                  <Col md={ 10 }>
                     <BootstrapTable
                         keyField='id'
                         data={ this.state.datacodSeleccionado }
