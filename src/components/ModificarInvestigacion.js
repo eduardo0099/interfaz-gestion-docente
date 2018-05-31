@@ -187,6 +187,7 @@ class ModificarInvestigacion extends Component {
     }
 
     guardarAgregados() {
+        console.log("agregados:", this.state.selectedAgregar);
         this.setState({
             showAgregar: false,
             autor: this.state.autor.concat(this.state.selectedAgregar),
