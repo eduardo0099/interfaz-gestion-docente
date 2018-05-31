@@ -9,6 +9,7 @@ import moment from "moment";
 import BootstrapTable from 'react-bootstrap-table-next';
 import BaseContainer from "./BaseContainer";
 import Select from 'react-select';
+import API from "../api";
 
 class ModificarActividad extends Component {
 
@@ -17,20 +18,21 @@ class ModificarActividad extends Component {
         super(props);
         this.validator = new SimpleReactValidator();
         this.state = {
-			id_actividad:'1',
-            titulo: 'Reunion Congresal de amantes del Hearthstone',
-            tipo: 'Congreso',
+			id_actividad: this.props.match.params.idActividad,
+            titulo: "Hola",
+            tipo: "Congreso",
             fecha_inicio: '',
             fecha_fin: '',
-            //showAgregar: false,
-            //selectedAgregar: [],
+            estado: 'Asistira',
+            lugar: '',
             profesores: [],
             showQuitar: false,
             selectedQuitar: [],
-            tipoSeleccionado: ""
-            //autoresModal: [],
-            //autoresOrig:[]
+            tipoSeleccionado: "",
+            listaTipo: [{id:"1",descripcion:"Congreso"},{id:"2",descripcion:"Visita"}],
+            tipoSeleccionado:"",
         };
+
         this.handleTitulo = this.handleTitulo.bind(this);
         this.handleTipo = this.handleTipo.bind(this);
         this.handleFIni = this.handleFIni.bind(this);
@@ -48,30 +50,19 @@ class ModificarActividad extends Component {
     }
 
     componentDidMount() {
-		//console.log(this.history.match.params.idActividad);
-		console.log(this.props.match.params.id_actividad);
-		
-		
-		this.setState({id_actividad: this.props.match.params.id_actividad});
-        /*axios.get('http://200.16.7.151:8080/docente/docente/actividad', {
-            params: {
-                id: this.props.match.params.idActividad,
-            }
-        })
+		this.listarTipo();
+        //this.obtenerDatosActividad();
+    }
+
+    listarTipo(){
+        API.get('general/listaTipoActividad')
             .then(response => {
-                console.log(response);
-                this.setState({
-                    titulo: response.data.investigacion.titulo,
-                    tipo: response.data.autores,
-                    resumen: response.data.investigacion.resumen,
-                    fecha_inicio: moment(response.data.investigacion.fecha_inicio),
-                    fecha_fin: moment(response.data.investigacion.fecha_fin),
-                    autoresOrig: response.data.autores,
-                });
+                this.setState({listaTipo: response.data.tipo_actividad})
             })
-            .catch(error => {
-                console.log("Error obteniendo la actividad", error);
-            });*/
+    }
+
+    obtenerDatosActividad(){
+        
     }
 
     handleTitulo(event) {
@@ -120,11 +111,8 @@ class ModificarActividad extends Component {
     }
 
     performPostRequest = () => {
-        /*let autoresNuevos = this.state.autor;
-        let autoresOrig = this.state.autoresOrig;
-        */
         if (this.validator.allValid() && this.validDates(this.state.fecha_fin, this.state.fecha_inicio)) {
-            axios.put('http://200.16.7.151:8080/docente/actividad/actualizar', {
+            API.put('http://200.16.7.151:8080/docente/actividad/actualizar', {
                 id_actividad: this.state.id_actividad,
 				tipo: this.state.tipo,
                 titulo: this.state.titulo,
@@ -288,6 +276,9 @@ class ModificarActividad extends Component {
 
     //fin modal quitar
 
+    cambioTipo = (obj) => {
+        this.setState({ tipoSeleccionado: obj.descripcion })
+    };
 
     render() {
         console.log('autores:', this.state.autor)
@@ -341,10 +332,10 @@ class ModificarActividad extends Component {
                                 <label> Tipo </label>
                                 <Select
                                     value={ this.state.tipoSeleccionado }
-                                    //onChange={ this.cambioCiclo }
+                                    onChange={ this.cambioTipo }
                                     valueKey={ "descripcion" }
                                     labelKey={ "descripcion" }
-                                    options={ ["Congreso"] }
+                                    options={ this.state.listaTipo }
                                     clearable={ false }
                                 />
                             </div>
