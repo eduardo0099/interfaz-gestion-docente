@@ -29,3 +29,9 @@
 - Hacer click en open debe aparecer la siguiente ventana (La primera vez que se haga esto saldra un modal con yes/no/cancel, hacer click en yes)
 
 ![](https://raw.githubusercontent.com/eduardo0099/interfaz-gestion-docente/develop/ssh_tunnel/resources/7.PNG)
+
+- Copiar y pegar la contrase;a (En putty se pega presionando click derecho), la ventana deberia quedar asi:
+
+![](https://raw.githubusercontent.com/eduardo0099/interfaz-gestion-docente/develop/ssh_tunnel/resources/8.PNG)
+
+- Probar que la conexion este bien yendo a http://localhost:8080/general/cicloActual
