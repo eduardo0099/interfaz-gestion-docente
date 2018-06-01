@@ -28,4 +28,4 @@
 
 - Hacer click en open debe aparecer la siguiente ventana (La primera vez que se haga esto saldra un modal con yes/no/cancel, hacer click en yes)
 
-![](https://raw.githubusercontent.com/eduardo0099/interfaz-gestion-docente/develop/ssh_tunnel/resources/6.PNG)
+![](https://raw.githubusercontent.com/eduardo0099/interfaz-gestion-docente/develop/ssh_tunnel/resources/7.PNG)
