@@ -8,6 +8,6 @@
 
 - Ir a Connections > SSH > Tunnels
 
-![](https://raw.githubusercontent.com/eduardo0099/interfaz-gestion-docente/develop/ssh_tunnel/resources/1.PNG)
+![](https://raw.githubusercontent.com/eduardo0099/interfaz-gestion-docente/develop/ssh_tunnel/resources/2.PNG)
 
 
