@@ -26,7 +26,7 @@
 
 - Ir a Session, volver a seleccionar *Default Settings* y hacer click en *Save*
 
-- Hacer click en open debe aparecer la siguiente ventana (La primera vez que se haga esto saldra un modal con yes/no/cancel, hacer click en yes)
+- Hacer click en *Open*, debe aparecer la siguiente ventana (La primera vez que se haga esto saldra un modal con yes/no/cancel, hacer click en yes)
 
 ![](https://raw.githubusercontent.com/eduardo0099/interfaz-gestion-docente/develop/ssh_tunnel/resources/7.PNG)
 
@@ -35,3 +35,5 @@
 ![](https://raw.githubusercontent.com/eduardo0099/interfaz-gestion-docente/develop/ssh_tunnel/resources/8.PNG)
 
 - Probar que la conexion este bien yendo a http://localhost:8080/general/cicloActual
+
+Nota: esta ventana es la que mantiene viva la conexion con el puerto 8080 del servidor, si la cierran se va la conexion, para volver a establecerla, solo deben abrir putty, hacer click en *Default Settings* luego en *load* y por ultimo en *Open* e ingresar el password
