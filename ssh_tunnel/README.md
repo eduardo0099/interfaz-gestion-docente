@@ -10,10 +10,22 @@
 
 ![](https://raw.githubusercontent.com/eduardo0099/interfaz-gestion-docente/develop/ssh_tunnel/resources/2.PNG)
 
-- En Source Port colocar *8080* y en Destination *127.0.0.1:8080* y hacer click en save
+- En *Source Port* colocar **8080** y en *Destination* **127.0.0.1:8080**, hacer click en Add
 
 ![](https://raw.githubusercontent.com/eduardo0099/interfaz-gestion-docente/develop/ssh_tunnel/resources/3.PNG)
 
 - Deberia quedar asi
 
 ![](https://raw.githubusercontent.com/eduardo0099/interfaz-gestion-docente/develop/ssh_tunnel/resources/4.PNG)
+
+- Ir a Connection  > SSH
+
+![](https://raw.githubusercontent.com/eduardo0099/interfaz-gestion-docente/develop/ssh_tunnel/resources/5.PNG)
+
+- Marcar la opcion *Don't start a shell or command at all* 
+
+- Ir a Session, volver a seleccionar *Default Settings* y hacer click en *Save*
+
+- Hacer click en open debe aparecer la siguiente ventana (La primera vez que se haga esto saldra un modal con yes/no/cancel, hacer click en yes)
+
+![](https://raw.githubusercontent.com/eduardo0099/interfaz-gestion-docente/develop/ssh_tunnel/resources/6.PNG)
