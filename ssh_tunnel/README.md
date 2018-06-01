@@ -10,4 +10,10 @@
 
 ![](https://raw.githubusercontent.com/eduardo0099/interfaz-gestion-docente/develop/ssh_tunnel/resources/2.PNG)
 
+- En Source Port colocar *8080* y en Destination *127.0.0.1:8080* y hacer click en save
 
+![](https://raw.githubusercontent.com/eduardo0099/interfaz-gestion-docente/develop/ssh_tunnel/resources/3.PNG)
+
+- Deberia quedar asi
+
+![](https://raw.githubusercontent.com/eduardo0099/interfaz-gestion-docente/develop/ssh_tunnel/resources/4.PNG)
