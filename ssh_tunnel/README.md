@@ -1,17 +1,3 @@
-# interfaz-gestion-docente
+# Habilitar el SSH Tunnel 
 
-[Proyecto de curso INF245] Interfaz del sistema de gestión de docente de la PUCP. 
-
-
-###### Comandos básicos:
-```
-npm install
-npm start
-```
-
-**Versión de node:**
-9.10.1
-
-**Versión de npm:**
-5.8.0
-
+- Descargar, instalar y abrir PuTTY link[https://the.earth.li/~sgtatham/putty/latest/w64/putty-64bit-0.70-installer.msi]
