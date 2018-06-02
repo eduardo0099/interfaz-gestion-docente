@@ -1,22 +1,19 @@
 import React, {Component} from 'react';
 
-class PerfilTesis extends Component {
+class PerfilPremiosDocencia extends Component {
 
     render() {
         return (
             <div className="panel padder-md row m-t-md m-l-md">
                 <div className="row form-group">
                     <div className="col-md-3">
-                        <label> Anio de Publicacion </label>
-                        <span className="form-control"> { this.props.item.fecha_publicacion } </span>
+                        <label> Descripcion </label>
+                        <span className="form-control"> { this.props.item.descripcion } </span>
                     </div>
                 </div>
                 <div className="form-group">
-                    <label> Titulo </label>
-                    <span className="form-control"> { this.props.item.titulo } </span>
-                </div><div className="form-group">
-                    <label> Resumen </label>
-                    <span className="form-control"> { this.props.item.resumen } </span>
+                    <label> URL </label>
+                    <span className="form-control"> { this.props.item.url_premio } </span>
                 </div>
                 <div className="row form-group">
                     <div className="col-md-3">
@@ -30,4 +27,4 @@ class PerfilTesis extends Component {
     }
 }
 
-export default PerfilTesis;
+export default PerfilPremiosDocencia;

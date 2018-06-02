@@ -14,12 +14,11 @@ class PerfilCursos extends Component {
                 <div className="row form-group">
                     <div className="col-md-6">
                         <label> Nombre </label>
-                        <span
-                            className="form-control"> Ingenieria de Software </span>
+                        <span className="form-control"> { this.props.item.nombre_curso } </span>
                     </div>
                     <div className="col-md-6">
                         <label> Institucion Educativa</label>
-                        <span className="form-control"> Pontificia Univerisdad Catolica del Peru</span>
+                        <span className="form-control"> { this.props.item.institucion } </span>
                     </div>
                 </div>
                 <div className="row form-group">

@@ -52,8 +52,7 @@ class ConvocatoriasPostulantePerfil extends Component {
                 id_postulante: this.props.match.params.id,
             }
         }).then(response => {
-            console.log(JSON.stringify(response.data));
-            this.setState({info: response.data}, () => console.log(this.state));
+            this.setState(response.data);
         }).catch(error => {
             console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`, error);
         });
@@ -147,7 +146,17 @@ class ConvocatoriasPostulantePerfil extends Component {
                                     </div>
                                 </div>
                                 <div className="m-t-lg">
-                                    <PerfilTabs/>
+                                    <PerfilTabs
+                                        asesorias={this.state.postulante_docencia_asesoria}
+                                        docencias={this.state.postulante_docencia_cargo}
+                                        premios={this.state.postulante_docencia_premio}
+                                        experiencias={this.state.postulante_experiencia}
+                                        diplomaturas={this.state.postulante_grado_diplomatura}
+                                        doctorados={this.state.postulante_grado_doctorado}
+                                        maestrias={this.state.postulante_grado_maestria}
+                                        titulos={this.state.postulante_grado_titulo}
+                                        investigaciones={this.state.postulante_investigacion}
+                                    />
                                 </div>
                             </div>
                         </div>

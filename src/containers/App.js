@@ -86,7 +86,6 @@ class App extends Component {
                 <Route path="/preferenciaCursos" component={PreferenciaCursos}/> 
                 <Route path="/home" render={ () => <Home/>} />
                 <Route path="/profesores" component={ListaProfesores}/>
-                <Route path="/convocatorias" component={ConvocatoriasLista}/>
                 <Route path="/carga" render={ () => <CargaDatos /> }/>
                 <Route path="/asignacionCursos" component={AsignarCursos}/>
                 <Route path="/ayudaeconomica" component={AyudaEconomica}/>
@@ -96,6 +95,7 @@ class App extends Component {
                 <Switch>
                 <Route exact path="/" render={()=> <SignIn auth={this.state.auth} handleLogIn={this.handleLogIn}/>}/>
                 <Route path="/registrar" component={SignUp}/>
+                <Route path="/convocatorias" component={ConvocatoriasLista}/>
                 <Route path="/ayudaeconomicadetalle" component={AyudaEconomicaDetalle}/>
                 <Route path="/preferenciaCursos" component={PreferenciaCursos}/>
                 <Route render={()=><div>La pagina que busca no existe o necesita iniciar sesión</div>} />
