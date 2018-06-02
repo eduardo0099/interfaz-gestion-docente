@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import {Route} from 'react-router-dom';
 import Select from 'react-select';
-import {Panel} from 'react-bootstrap';
+import {Panel,Modal} from 'react-bootstrap';
 import BaseContainer from "../BaseContainer";
 import ConvocatoriaNuevo from "../convocatorias/ConvocatoriasNuevo";
 import AyudaEconomicaNuevo from "./AyudaEconomicaNuevo";
@@ -26,7 +26,9 @@ class AyudaEconomicaDetalle extends React.Component {
                     {id: 2, numero:'001-23022', tipo: 'Boleta', detalle: 'Impresiones y copiasA', monto: 350.00, observaciones: 'algo2'},
                     {id: 3, numero:'001-23023', tipo: 'Boleta', detalle: 'Impresiones y copiasB', monto: 3500.00, observaciones: 'algo3'}
                 ]
-            }
+            },
+            showModal:false,
+            aux:1
         }
     }
 
@@ -40,10 +42,14 @@ class AyudaEconomicaDetalle extends React.Component {
         //este metodo se llama cada vez que se hace click en una fila de la tabla
     }
 
-    agregarGasto(e){
+    agregarGasto = () =>{
         //Johana en este metodo deberias abrir el modal vacio para registrar
+        this.setState({showModal:true})
     }
 
+    handleClose=()=>{
+        this.setState({showModal:false})
+    }
     render() {
         return (
             <div>
@@ -119,6 +125,14 @@ class AyudaEconomicaDetalle extends React.Component {
                             </div>
                             <div className="panel-footer text-right">
                                 <button className="btn btn-primary" onClick={ this.agregarGasto()}> Agregar Gasto </button>
+                                {this.state.aux != 0 ?
+                                    <Modal onHide={this.handleClose()}>
+                                        <Modal.Header>
+                                        </Modal.Header>
+                                        <Modal.Body>
+                                        </Modal.Body>
+                                    </Modal>
+                                :<span/>}
                             </div>
                         </div>
                     </BaseContainer>
