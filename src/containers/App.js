@@ -25,7 +25,7 @@ class App extends Component {
 
     this.state = {
       open: false,
-      auth: false
+      auth: true
     };
 
     this.onSetOpen = this.onSetOpen.bind(this);

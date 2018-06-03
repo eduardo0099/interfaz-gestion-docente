@@ -8,6 +8,31 @@ import ConvocatoriaNuevo from "../convocatorias/ConvocatoriasNuevo";
 import AyudaEconomicaNuevo from "./AyudaEconomicaNuevo";
 import API from "../../api";
 
+function onlyUnique(array) {
+    var BreakException = {};
+    let aux=[];
+    array.forEach(entry => {
+        let repetido=0;
+        if(aux.length==0){
+            aux=[...aux,entry];
+        }
+
+        try{
+            aux.forEach(entry2=>{
+                if(JSON.stringify(entry)==JSON.stringify(entry2)){
+                    repetido=1;
+                    throw BreakException;
+                }
+            });
+            aux=[...aux,entry];
+        } catch (e) {
+            if (e !== BreakException) throw e;
+        }
+
+    });
+    return aux;
+}
+
 class AyudaEconomica extends React.Component {
 
     constructor(props){
@@ -80,6 +105,7 @@ class AyudaEconomica extends React.Component {
     }
 
     findAyudas(ciclo) {
+
         API.get('ayudasEconomicas/ayudasEconomicas/listar', {
             params: {
                 ciclo: ciclo,
@@ -91,6 +117,7 @@ class AyudaEconomica extends React.Component {
             let listaCBMotivo=[];
             let listaCBEstado=[];
             let listaCBCodigo=[];
+
             response.data.ayudaEconomica.forEach(function (entry) {
                 listaCBInvestigaciones=[...listaCBInvestigaciones,{titulo:entry.titulo}];
                 listaCBProfesor=[...listaCBProfesor,{nombres:entry.profesor.nombres}];
@@ -99,15 +126,21 @@ class AyudaEconomica extends React.Component {
                 listaCBEstado=[...listaCBEstado,{estado:entry.estado}];
                 listaCBCodigo=[...listaCBCodigo,{codigo:entry.codigo_solicitud}];
             });
+            console.log('listaCBProfesor0:',listaCBProfesor[0]);
+            console.log('listaCBProfesor1:',listaCBProfesor[1]);
+            console.log('Prueba obj:');
+            if(JSON.stringify(listaCBProfesor[0])===JSON.stringify(listaCBProfesor[1])){
+                console.log('ala mrdd');
+            }
             this.setState({
                 ayudas: response.data.ayudaEconomica,
                 ayudasMostrar: response.data.ayudaEconomica,
-                listaCBInvestigaciones:listaCBInvestigaciones.filter( this.onlyUnique ),
-                listaCBProfesor:listaCBProfesor.filter( this.onlyUnique ),
-                listaCBSeccion:listaCBSeccion.filter( this.onlyUnique ),
-                listaCBMotivo:listaCBMotivo.filter( this.onlyUnique ),
-                listaCBEstado:listaCBEstado.filter( this.onlyUnique ),
-                listaCBCodigo:listaCBCodigo.filter( this.onlyUnique )
+                listaCBInvestigaciones:onlyUnique(listaCBInvestigaciones),
+                listaCBProfesor:onlyUnique(listaCBProfesor),
+                listaCBSeccion:onlyUnique(listaCBSeccion),
+                listaCBMotivo:onlyUnique(listaCBMotivo),
+                listaCBEstado:onlyUnique(listaCBEstado),
+                listaCBCodigo:onlyUnique(listaCBCodigo)
             })
         }).catch(error => {
             console.log("Error obteniendo la lista de las investigaciones", error);
@@ -144,9 +177,6 @@ class AyudaEconomica extends React.Component {
         this.setState({ codigoSelect: obj.codigo })
     }
 
-    onlyUnique(value, index, self) {
-        return self.indexOf(value) === index;
-    }
 
     realizarFiltro=()=>{
         let listaFiltro=[];
@@ -204,7 +234,7 @@ class AyudaEconomica extends React.Component {
                 }
             });
         }
-        var unique = listaFiltro.filter( this.onlyUnique );
+        var unique = listaFiltro;
         this.setState(() => ({
             ayudasMostrar: unique
         }));
@@ -293,6 +323,55 @@ class AyudaEconomica extends React.Component {
                                                     options={ this.state.listaCBEstado }
                                                     clearable={ false }
                                                 />
+                                            </div>
+
+                                            <div className="form-group">
+                                                <Panel>
+                                                    <Panel.Heading> Monto </Panel.Heading>
+                                                    <Panel.Body>
+                                                        <div className="form-horizontal">
+                                                            <div className="form-group">
+                                                                <label
+                                                                    className="control-label col-md-2"> Mín </label>
+                                                                <div className="col-md-10">
+                                                                    <input type="number"
+                                                                           className="form-control"></input>
+                                                                </div>
+                                                            </div>
+                                                            <div className="form-group">
+                                                                <label
+                                                                    className="control-label col-md-2"> Máx </label>
+                                                                <div className="col-md-10">
+                                                                    <input type="number"
+                                                                           className="form-control"></input>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </Panel.Body>
+                                                </Panel>
+                                            </div>
+                                            <div className="form-group">
+                                                <Panel>
+                                                    <Panel.Heading> Fecha </Panel.Heading>
+                                                    <Panel.Body>
+                                                        <div className="form-horizontal">
+                                                            <div className="form-group">
+                                                                <label
+                                                                    className="control-label col-md-2"> Mín </label>
+                                                                <div className="col-md-10">
+                                                                    <input type="date" className="form-control"></input>
+                                                                </div>
+                                                            </div>
+                                                            <div className="form-group">
+                                                                <label
+                                                                    className="control-label col-md-2"> Máx </label>
+                                                                <div className="col-md-10">
+                                                                    <input type="date" className="form-control"></input>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </Panel.Body>
+                                                </Panel>
                                             </div>
                                             <div>
                                                 <button className="btn btn-primary btn-block" onClick={this.realizarFiltro}> Filtrar</button>
