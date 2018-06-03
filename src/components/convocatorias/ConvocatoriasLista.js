@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+import React, {Component} from 'react';
+import {Route} from 'react-router-dom';
 import BaseContainer from "../BaseContainer";
 import ConvocatoriaNuevo from "./ConvocatoriasNuevo";
 import ConvocatoriasListaPostulantes from "./ConvocatoriasListaPostulantes";
@@ -21,38 +21,58 @@ class ConvocatoriasLista extends Component {
     search() {
         API.get('convocatoria/convocatoria/lista')
             .then(response => {
-                this.setState({ convocatorias: response.data.convocatorias })
+                this.setState({convocatorias: response.data.convocatorias})
             })
     }
 
     labelEstado(estado) {
         switch (estado) {
             case 'Creada':
-                return <span class="label label-default"> Creado </span>;
+                return <span className="label label-default"> Creado </span>;
             case 'Abierta':
-                return <span class="label label-success"> Abierta </span>;
+                return <span className="label label-success"> Abierta </span>;
             case 'Cerrada':
-                return <span class="label label-danger"> Cerrado </span>;
+                return <span className="label label-danger"> Cerrado </span>;
             case 'Cancelada':
-                return <span class="label label-danger"> Cancelado </span>;
+                return <span className="label label-danger"> Cancelado </span>;
             case 'Finalizada':
-                return <span class="label label-success"> Finalizado </span>;
+                return <span className="label label-success"> Finalizado </span>;
             default:
                 return <span></span>;
         }
     }
 
+    uploadFile(e) {
+        let file = e.target.files[0];
+        let formData = new FormData();
+        formData.append('file', file);
+        API.post('tests/upload',
+            formData,
+            {
+                headers: {'Content-Type': 'multipart/form-data'}
+            }
+        ).then(function () {
+            console.log('Archivo subido');
+        }).catch(function () {
+            console.log('Error al subir el archivo');
+        });
+    }
 
     render() {
         return (
             <div>
-                <Route exact path={ `${this.props.match.path}` } render={ () =>
+                <Route exact path={`${this.props.match.path}`} render={() =>
                     <BaseContainer>
                         <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
                             <div className="panel-heading">
                                 <a className="btn btn-sm btn-primary pull-right m-t-md"
-                                   href={ `${this.props.match.url}/nuevo` }> Nueva Convocatoria</a>
+                                   href={`${this.props.match.url}/nuevo`}> Nueva Convocatoria</a>
                                 <h2> Convocatorias </h2>
+                            </div>
+                            <div className="panel-body">
+                                <label>Files
+                                    <input type="file" id="files" ref="files" onChange={this.uploadFile}/>
+                                </label>
                             </div>
                             <div className="panel-body">
                                 <table className="table table-striped">
@@ -66,30 +86,31 @@ class ConvocatoriasLista extends Component {
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    { this.state.convocatorias.map(item => {
+                                    {this.state.convocatorias.map(item => {
                                         return (
-                                            <tr>
+                                            <tr key = {item.id}>
                                                 <td className="v-middle text-center">
-                                                    <span className="block text-primary"> { item.codigo } </span>
-                                                    <small className="block text-muted"> { item.fechaRegistro } </small>
+                                                    <span className="block text-primary"> {item.codigo} </span>
+                                                    <small className="block text-muted"> {item.fechaRegistro} </small>
                                                 </td>
                                                 <td className="v-middle">
-                                                    <span> { item.nombre } </span>
+                                                    <span> {item.nombre} </span>
                                                 </td>
                                                 <td className="v-middle">
-                                                    <span className="block text-primary"> { item.curso.nombre } </span>
-                                                    <small className="block text-muted"> { item.curso.codigo } </small>
+                                                    <span className="block text-primary"> {item.curso.nombre} </span>
+                                                    <small className="block text-muted"> {item.curso.codigo} </small>
                                                 </td>
                                                 <td className="v-middle text-center">
-                                                    <a className="badge" href={ `${this.props.match.url}/id/${item.id}` }> { item.cantidadPostulantes } </a>
+                                                    <a className="badge"
+                                                       href={`${this.props.match.url}/id/${item.id}`}> {item.cantidadPostulantes} </a>
                                                     <span className="block small text-muted m-t-xs"> postulantes </span>
                                                 </td>
                                                 <td className="v-middle text-center">
-                                                    { this.labelEstado(item.estado) }
+                                                    {this.labelEstado(item.estado)}
                                                 </td>
                                             </tr>
                                         );
-                                    }) }
+                                    })}
                                     </tbody>
                                 </table>
                             </div>
@@ -97,8 +118,8 @@ class ConvocatoriasLista extends Component {
                     </BaseContainer>
                 }/>
 
-                <Route path={ `${this.props.match.path}/nuevo` } component={ ConvocatoriaNuevo }/>
-                <Route path={ `${this.props.match.path}/id/:codigoConv` } component={ ConvocatoriasListaPostulantes }/>
+                <Route path={`${this.props.match.path}/nuevo`} component={ConvocatoriaNuevo}/>
+                    <Route path={`${this.props.match.path}/id/:codigoConv`} component={ConvocatoriasListaPostulantes}/>
 
             </div>
         );
