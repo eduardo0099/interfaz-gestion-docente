@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Route} from 'react-router-dom';
+import {Route, Link} from 'react-router-dom';
 import BaseContainer from "../BaseContainer";
 import ConvocatoriaNuevo from "./ConvocatoriasNuevo";
 import ConvocatoriasListaPostulantes from "./ConvocatoriasListaPostulantes";
@@ -66,8 +66,8 @@ class ConvocatoriasLista extends Component {
                     <BaseContainer>
                         <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
                             <div className="panel-heading">
-                                <a className="btn btn-sm btn-primary pull-right m-t-md"
-                                   href={`${this.props.match.url}/nuevo`}> Nueva Convocatoria</a>
+                                <Link className="btn btn-sm btn-primary pull-right m-t-md"
+                                      to={"/convocatorias/nuevo"}> Nueva Convocatoria</Link>
                                 <h2> Convocatorias </h2>
                             </div>
                             <div className="panel-body">
@@ -89,7 +89,7 @@ class ConvocatoriasLista extends Component {
                                     <tbody>
                                     {this.state.convocatorias.map(item => {
                                         return (
-                                            <tr key = {item.id}>
+                                            <tr key={item.id}>
                                                 <td className="v-middle text-center">
                                                     <span className="block text-primary"> {item.codigo} </span>
                                                     <small className="block text-muted"> {item.fechaRegistro} </small>
@@ -102,9 +102,12 @@ class ConvocatoriasLista extends Component {
                                                     <small className="block text-muted"> {item.curso.codigo} </small>
                                                 </td>
                                                 <td className="v-middle text-center">
-                                                    <a className="badge"
-                                                       href={`${this.props.match.url}/id/${item.id}`}> {item.cantidadPostulantes} </a>
-                                                    <span className="block small text-muted m-t-xs"> postulantes </span>
+                                                    <Link to={"/convocatorias/" + item.id}>
+
+                                                            <span className="badge"> {item.cantidadPostulantes} </span>
+                                                            <span
+                                                                className="block small text-muted m-t-xs"> postulantes </span>
+                                                    </Link>
                                                 </td>
                                                 <td className="v-middle text-center">
                                                     {this.labelEstado(item.estado)}
@@ -119,8 +122,8 @@ class ConvocatoriasLista extends Component {
                     </BaseContainer>
                 }/>
 
-                <Route path={`${this.props.match.path}/nuevo`} component={ConvocatoriaNuevo}/>
-                    <Route path={`${this.props.match.path}/id/:codigoConv`} component={ConvocatoriasListaPostulantes}/>
+                <Route path="/convocatorias/nuevo" component={ConvocatoriaNuevo}/>
+                <Route path="/convocatorias/:id_convocatoria" component={ConvocatoriasListaPostulantes}/>
 
             </div>
         );
