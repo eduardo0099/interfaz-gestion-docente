@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Route} from 'react-router-dom';
 import axios from "axios/index";
 import BaseContainer from "../BaseContainer";
+import {Panel} from 'react-bootstrap';
 
 class AyudaEconomicaNuevo extends Component {
 
@@ -9,8 +10,7 @@ class AyudaEconomicaNuevo extends Component {
         super(props);
 
         this.state = {
-            info: {
-            }
+            motivo:''
         }
     }
 
@@ -28,6 +28,36 @@ class AyudaEconomicaNuevo extends Component {
                                 </header>
                             </div>
                             <div className="panel-body">
+                                <div className="form-group">
+                                    <Panel>
+                                        <Panel.Heading> Profesor </Panel.Heading>
+                                        <Panel.Body>
+                                            <div className="form-horizontal">
+                                                <div className="form-group form-horizontal">
+                                                    <label
+                                                        className="control-label col-md-2"> Código: </label>
+                                                    <div className="col-md-10">
+                                                        <input type="date" className="form-control"></input>
+                                                    </div>
+                                                </div>
+                                                <div className="form-group">
+                                                    <label
+                                                        className="control-label col-md-2"> Nombre: </label>
+                                                    <div className="col-md-10">
+                                                        <input type="date" className="form-control"></input>
+                                                    </div>
+                                                </div>
+                                                <div className="form-group">
+                                                    <label
+                                                        className="control-label col-md-2"> Investigación: </label>
+                                                    <div className="col-md-10">
+                                                        <input type="date" className="form-control"></input>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </Panel.Body>
+                                    </Panel>
+                                </div>
                                 <div className="row form-group">
                                     <div className="col-md-6">
                                         <label>Docente</label>

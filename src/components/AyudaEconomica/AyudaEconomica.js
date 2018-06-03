@@ -39,12 +39,19 @@ class AyudaEconomica extends React.Component {
         super(props);
 
         this.state = {
-            investigacionSelect:'',
-            estadoSelect:'',
-            motivoSelect:'',
-            seccionSelect:'',
+            investigacionSelect:-1,
+            estadoSelect:-1,
+            motivoSelect:-1,
+            seccionSelect:-1,
             profesorSelect:'',
-            codigoSelect:'',
+            codigoProfesorSelect:-1,
+            codigoSelect:-1,
+            idCodigoSolSelect:-1,
+            montoMin:-1,
+            montoMax:-1,
+            fechaIni:-1,
+            fechaFin:-1,
+
             ayudasMostrar:[],
             ciclos: [],
             cicloSeleccionado: "",
@@ -61,7 +68,7 @@ class AyudaEconomica extends React.Component {
                     codigo_solicitud: 'SOL001',
                     titulo: 'Investigando las Causas de las Investigaciones 1',
                     motivo: 'Compra de Materiales',
-                    montoOtorgado: 8000000.63,
+                    monto_otorgado: 8000000.63,
                     estado:'Aprobado',
                     fechaSolicitud: '12/12/12',
                     profesor: {
@@ -82,6 +89,8 @@ class AyudaEconomica extends React.Component {
         this.handleSeccion = this.handleSeccion.bind(this);
         this.handleProfesor = this.handleProfesor.bind(this);
         this.handleCodigo = this.handleCodigo.bind(this);
+        this.handleMontoMin = this.handleMontoMin.bind(this);
+        this.handleMontoMax = this.handleMontoMax.bind(this);
     }
 
     componentDidMount() {
@@ -120,11 +129,11 @@ class AyudaEconomica extends React.Component {
 
             response.data.ayudaEconomica.forEach(function (entry) {
                 listaCBInvestigaciones=[...listaCBInvestigaciones,{titulo:entry.titulo}];
-                listaCBProfesor=[...listaCBProfesor,{nombres:entry.profesor.nombres}];
+                listaCBProfesor=[...listaCBProfesor,{codigo:entry.profesor.codigo_profesor,nombres:entry.profesor.nombres +" "+ entry.profesor.apellido_paterno +" "+ entry.profesor.apellido_materno}];
                 listaCBSeccion=[...listaCBSeccion,{seccion:entry.profesor.seccion}];
                 listaCBMotivo=[...listaCBMotivo,{motivo:entry.motivo}];
                 listaCBEstado=[...listaCBEstado,{estado:entry.estado}];
-                listaCBCodigo=[...listaCBCodigo,{codigo:entry.codigo_solicitud}];
+                listaCBCodigo=[...listaCBCodigo,{codigo:entry.codigo_solicitud,id:entry.id}];
             });
             console.log('listaCBProfesor0:',listaCBProfesor[0]);
             console.log('listaCBProfesor1:',listaCBProfesor[1]);
@@ -170,75 +179,59 @@ class AyudaEconomica extends React.Component {
     }
 
     handleProfesor(obj) {
-        this.setState({ profesorSelect: obj.nombres })
+        this.setState({
+            codigoProfesorSelect: obj.codigo,
+            profesorSelect:obj.nombres})
     }
 
     handleCodigo(obj) {
-        this.setState({ codigoSelect: obj.codigo })
+        this.setState({
+            codigoSelect: obj.codigo,
+            idCodigoSolSelect:obj.id
+        })
+    }
+
+    handleMontoMin(event) {
+        this.setState({montoMin: event.target.value});
+    }
+
+    handleMontoMax(event) {
+        this.setState({montoMax: event.target.value});
     }
 
 
     realizarFiltro=()=>{
-        let listaFiltro=[];
-        if(this.state.codigoSelect!=''){
-            let ayudas= this.state.ayudas;
-            let codigo=this.state.codigoSelect;
-            ayudas.forEach(entry => {
-                if(entry.codigo_solicitud===codigo){
-                    listaFiltro= [...listaFiltro, entry]
-                }
-            });
-        }
-        if(this.state.investigacionSelect!=''){
-            let ayudas= this.state.ayudas;
-            let investigacion=this.state.investigacionSelect;
-            ayudas.forEach(entry => {
-                if(entry.titulo===investigacion){
-                    listaFiltro= [...listaFiltro, entry]
-                }
-            });
-        }
-        if(this.state.profesorSelect!=''){
-            let ayudas= this.state.ayudas;
-            let profesor=this.state.profesorSelect;
-            ayudas.forEach(entry => {
-                if(entry.profesor.nombres===profesor){
-                    listaFiltro= [...listaFiltro, entry]
-                }
-            });
-        }
-        if(this.state.motivoSelect!=''){
-            let ayudas= this.state.ayudas;
-            let motivo=this.state.motivoSelect;
-            ayudas.forEach(entry => {
-                if(entry.motivo===motivo){
-                    listaFiltro= [...listaFiltro, entry]
-                }
-            });
-        }
-        if(this.state.seccionSelect!=''){
-            let ayudas= this.state.ayudas;
-            let seccion=this.state.seccionSelect;
-            ayudas.forEach(entry => {
-                if(entry.profesor.seccion===seccion){
-                    listaFiltro= [...listaFiltro, entry]
-                }
-            });
-        }
-        if(this.state.estadoSelect!=''){
-            let ayudas= this.state.ayudas;
-            let estado=this.state.estadoSelect;
-            ayudas.forEach(entry => {
-                if(entry.estado===estado){
-                    listaFiltro= [...listaFiltro, entry]
-                }
-            });
-        }
-        var unique = listaFiltro;
-        this.setState(() => ({
-            ayudasMostrar: unique
-        }));
-        console.log('listaFiltro:',unique);
+        console.log('investigacionSelect:',this.state.investigacionSelect);
+        console.log('estadoSelect:',this.state.estadoSelect);
+        console.log('motivoSelect:',this.state.motivoSelect);
+        console.log('seccionSelect:',this.state.seccionSelect);
+        console.log('profesorSelect:',this.state.codigoProfesorSelect);
+        console.log('codigoSelect:',this.state.idCodigoSolSelect);
+        console.log('montoMin:',this.state.montoMin);
+        console.log('montoMax:',this.state.montoMax);
+
+
+        API.get('ayudasEconomicas/ayudasEconomicas/filtrar', {
+            params: {
+                ciclo:this.state.cicloSeleccionado,
+                codigo_ayuda:this.state.idCodigoSolSelect,
+                codigo_inv:-1,
+                titulo:this.state.investigacionSelect,
+                codigo_profesor:this.state.codigoProfesorSelect,
+                seccion:this.state.seccionSelect,
+                motivo:this.state.motivoSelect,
+                estado:this.state.estadoSelect,
+                montoMin:this.state.montoMin,
+                montoMax:this.state.montoMax,
+                fecha_inicio:-1,
+                fecha_fin:-1
+            }
+        }).then(response => {
+            console.log('response:',response);
+            this.setState({ayudasMostrar: response.data.ayudaEconomica});
+        }).catch(error => {
+            console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`, error);
+        });
     }
 
     render() {
@@ -335,7 +328,7 @@ class AyudaEconomica extends React.Component {
                                                                     className="control-label col-md-2"> Mín </label>
                                                                 <div className="col-md-10">
                                                                     <input type="number"
-                                                                           className="form-control"></input>
+                                                                           className="form-control" onChange ={this.handleMontoMin}></input>
                                                                 </div>
                                                             </div>
                                                             <div className="form-group">
@@ -343,36 +336,16 @@ class AyudaEconomica extends React.Component {
                                                                     className="control-label col-md-2"> Máx </label>
                                                                 <div className="col-md-10">
                                                                     <input type="number"
-                                                                           className="form-control"></input>
+                                                                           className="form-control" onChange ={this.handleMontoMax}></input>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </Panel.Body>
                                                 </Panel>
                                             </div>
-                                            <div className="form-group">
-                                                <Panel>
-                                                    <Panel.Heading> Fecha </Panel.Heading>
-                                                    <Panel.Body>
-                                                        <div className="form-horizontal">
-                                                            <div className="form-group">
-                                                                <label
-                                                                    className="control-label col-md-2"> Mín </label>
-                                                                <div className="col-md-10">
-                                                                    <input type="date" className="form-control"></input>
-                                                                </div>
-                                                            </div>
-                                                            <div className="form-group">
-                                                                <label
-                                                                    className="control-label col-md-2"> Máx </label>
-                                                                <div className="col-md-10">
-                                                                    <input type="date" className="form-control"></input>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </Panel.Body>
-                                                </Panel>
-                                            </div>
+
+
+
                                             <div>
                                                 <button className="btn btn-primary btn-block" onClick={this.realizarFiltro}> Filtrar</button>
                                             </div>
@@ -426,7 +399,7 @@ class AyudaEconomica extends React.Component {
                                                             <span> {ayuda.motivo}</span>
                                                         </td>
                                                         <td className="v-middle text-center">
-                                                            <span className="text-md"> S/ 200.00 </span>
+                                                            <span className="text-md"> S/ {ayuda.monto_otorgado} </span>
                                                         </td>
                                                         <td className="v-middle text-center">
                                                             <span className={"label label-" + ({
