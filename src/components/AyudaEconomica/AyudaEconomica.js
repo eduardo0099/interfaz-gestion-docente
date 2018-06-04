@@ -39,6 +39,8 @@ class AyudaEconomica extends React.Component {
         super(props);
 
         this.state = {
+            montoMinVal:'',
+            montoMaxVal:'',
             investigacionSelect:-1,
             estadoSelect:-1,
             motivoSelect:-1,
@@ -192,11 +194,17 @@ class AyudaEconomica extends React.Component {
     }
 
     handleMontoMin(event) {
-        this.setState({montoMin: event.target.value});
+        this.setState({
+            montoMin: event.target.value,
+            montoMinVal:event.target.value
+        });
     }
 
     handleMontoMax(event) {
-        this.setState({montoMax: event.target.value});
+        this.setState({
+            montoMax: event.target.value,
+            montoMaxVal:event.target.value
+        });
     }
 
 
@@ -231,6 +239,26 @@ class AyudaEconomica extends React.Component {
             this.setState({ayudasMostrar: response.data.ayudaEconomica});
         }).catch(error => {
             console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`, error);
+        });
+    }
+
+    reestablecerFiltros =() =>{
+        this.setState({
+            investigacionSelect:-1,
+            estadoSelect:-1,
+            motivoSelect:-1,
+            seccionSelect:-1,
+            codigoProfesorSelect:-1,
+            codigoSelect:-1,
+            idCodigoSolSelect:-1,
+            montoMin:-1,
+            montoMax:-1,
+            fechaIni:-1,
+            fechaFin:-1,
+            montoMinVal:'',
+            montoMaxVal:'',
+            profesorSelect:'',
+            ayudasMostrar:this.state.ayudas
         });
     }
 
@@ -328,7 +356,7 @@ class AyudaEconomica extends React.Component {
                                                                     className="control-label col-md-2"> Mín </label>
                                                                 <div className="col-md-10">
                                                                     <input type="number"
-                                                                           className="form-control" onChange ={this.handleMontoMin}></input>
+                                                                           className="form-control" value={ this.state.montoMinVal } onChange ={this.handleMontoMin}></input>
                                                                 </div>
                                                             </div>
                                                             <div className="form-group">
@@ -336,7 +364,7 @@ class AyudaEconomica extends React.Component {
                                                                     className="control-label col-md-2"> Máx </label>
                                                                 <div className="col-md-10">
                                                                     <input type="number"
-                                                                           className="form-control" onChange ={this.handleMontoMax}></input>
+                                                                           className="form-control" value={ this.state.montoMaxVal } onChange ={this.handleMontoMax}></input>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -348,6 +376,10 @@ class AyudaEconomica extends React.Component {
 
                                             <div>
                                                 <button className="btn btn-primary btn-block" onClick={this.realizarFiltro}> Filtrar</button>
+                                            </div>
+                                            <br></br>
+                                            <div>
+                                                <button className="btn btn-block" onClick={this.reestablecerFiltros}> Reestablecer filtros</button>
                                             </div>
                                         </Panel.Body>
                                     </Panel>

@@ -152,7 +152,8 @@ class AyudaEconomicaNuevo extends Component {
 
     handleCloseSeleccionarInvestigacion() {
         this.setState({
-            showSeleccionarInvestigacion: false
+            showSeleccionarInvestigacion: false,
+            selectedId:''
             });
     }
 
