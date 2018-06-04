@@ -291,7 +291,7 @@ class AyudaEconomicaNuevo extends Component {
             })
                 .then(response => {
                     alert("Investigación registrada");
-                    //this.props.history.goBack();
+                    this.props.history.goBack();
                 })
                 .catch(error => {
                     alert("Error: No se pudo registrar la investigación");
