@@ -15,6 +15,7 @@ import AsignarCursos from "../components/AsignarCursos";
 import ConvocatoriasLista from "../components/convocatorias/ConvocatoriasLista";
 import 'react-select/dist/react-select.css';
 import AyudaEconomica from "../components/AyudaEconomica/AyudaEconomica";
+import AyudaEconomicaDetalle from "../components/AyudaEconomica/AyudaEconomicaDetalle";
 import SignUp from "../components/SignUp";
 import SignIn from "../components/SignIn";
 
@@ -55,6 +56,13 @@ class App extends Component {
     this.setState({auth:true});
   }
 
+  componentWillMount(){
+    /*
+    localStorage.removeItem('jwt');
+    localStorage.removeItem('user');
+    */
+  }
+
   render() {
     let sidebarContent = <SidebarContent handleMenu={this.onSetOpen}/>;
 
@@ -71,14 +79,13 @@ class App extends Component {
           <Header handleMenu={this.menuButtonClick}/>
           <div className="content">
             
-              {this.state.auth?
+              {( this.state.auth || localStorage.getItem('jwt') != null)?
                 <Switch>
                 <Route exact path="/" render={()=> <SignIn auth={this.state.auth} handleLogIn={this.handleLogIn}/>}/>
                 <Route path="/registrar" component={SignUp}/>
                 <Route path="/preferenciaCursos" component={PreferenciaCursos}/> 
                 <Route path="/home" render={ () => <Home/>} />
                 <Route path="/profesores" component={ListaProfesores}/>
-                <Route path="/convocatorias" component={ConvocatoriasLista}/>
                 <Route path="/carga" render={ () => <CargaDatos /> }/>
                 <Route path="/asignacionCursos" component={AsignarCursos}/>
                 <Route path="/ayudaeconomica" component={AyudaEconomica}/>
@@ -88,6 +95,8 @@ class App extends Component {
                 <Switch>
                 <Route exact path="/" render={()=> <SignIn auth={this.state.auth} handleLogIn={this.handleLogIn}/>}/>
                 <Route path="/registrar" component={SignUp}/>
+                <Route path="/convocatorias" component={ConvocatoriasLista}/>
+                <Route path="/ayudaeconomicadetalle" component={AyudaEconomicaDetalle}/>
                 <Route path="/preferenciaCursos" component={PreferenciaCursos}/>
                 <Route render={()=><div>La pagina que busca no existe o necesita iniciar sesión</div>} />
                 </Switch>

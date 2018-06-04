@@ -4,7 +4,7 @@ import axios from "axios/index";
 import BaseContainer from "../BaseContainer";
 import {Image} from 'react-bootstrap';
 import PerfilTabs from "./PerfilTabs";
-
+import API from '../../api'
 
 class ConvocatoriasPostulantePerfil extends Component {
 
@@ -12,42 +12,51 @@ class ConvocatoriasPostulantePerfil extends Component {
         super(props);
 
         this.state = {
-            info: {
-                "codigo": "",
-                "nombres": "",
-                "apellidoP": "",
-                "apellidoM": "",
-                "telefono": "",
-                "seccion": "",
-                "departamento": "",
-                "correo": ""
-            }
+            
+   "postulante":[  
+      {  
+         "id":2,
+         "nombres":"Darma",
+         "apellido_paterno":"FaseDos",
+         "apellido_materno":"YokoChan",
+         "correo":"darmasama@gmail.com",
+         "fecha_nacimiento":"1994-06-18",
+         "numero_documento":54132890,
+         "tipo_documento":"Documento Nacional de Identidad",
+         "sexo":"masculino",
+         "pais_nacimiento":"Japón",
+         "lugar_nacimiento":"America Mura ",
+         "direccion_domicilio":"Triangle park  - Osaka",
+         "pais_domicilio":"Japón",
+         "telefono":"(+51)111111111",
+         "celular":"(+51)1123581317",
+         "estado_postulante":"Pendiente",
+         "id_convocatoria":1
+      }
+   ],
+   "postulante_investigacion":[],
+   "postulante_experiencia":[],
+   "postulante_docencia_cargo":[],
+   "postulante_docencia_premio":[],
+   "postulante_docencia_asesoria":[],
+   "postulante_grado_titulo":[],
+   "postulante_grado_maestria":[],
+   "postulante_grado_doctorado":[],
+   "postulante_grado_diplomatura":[]
         }
     }
 
     componentDidMount() {
-        axios.get('http://200.16.7.151:8080/docente/docente/general', {
+        API.get('convocatoria/convocatoria/postulante/devolver', {
             params: {
-                codigo: this.props.match.params.codigo,
-                ciclo: "2018-1",
+                id_postulante: this.props.match.params.id,
             }
         }).then(response => {
-            this.setState({info: response.data});
+            this.setState(response.data);
         }).catch(error => {
             console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`, error);
         });
     }
-
-    /*
-      obtenerTipo() {
-        let id = `${this.state.info.descripcion}`;
-        if(id == "TPA"){
-          return "Tiempo Parcial por Asignaturas (TPA)";
-        }
-        else{
-          return "Tiempo Completo (TC)";
-        }
-        */
 
     obtenerTipo() {
         let id = `${this.state.info.descripcion}`;
@@ -57,10 +66,6 @@ class ConvocatoriasPostulantePerfil extends Component {
         else {
             return <span> Tiempo Completo <span className="label label-primary m-l-xs"> TC </span> </span>;
         }
-    }
-
-    obtenerMailTo() {
-        return ("mailto:" + this.state.info.correo_pucp);
     }
 
     render() {
@@ -73,7 +78,7 @@ class ConvocatoriasPostulantePerfil extends Component {
                                 <header className="page-header m-b-n">
                                     <a className="btn btn-default pull-right"
                                        onClick={this.props.history.goBack}> Volver </a>
-                                    <p className="h2"> Ruben Jordan RIP </p>
+                                    <p className="h2"> {this.state.postulante[0].nombres} </p>
                                 </header>
                             </div>
                             <div className="panel-body m-t-n">
@@ -81,67 +86,77 @@ class ConvocatoriasPostulantePerfil extends Component {
                                 <div className="row form-group">
                                     <div className="col-md-3">
                                         <label>Tipo Documento</label>
-                                        <span className="form-control"> Documento Nacional de Identidad </span>
+                                        <span className="form-control"> {this.state.postulante[0].tipo_documento} </span>
                                     </div>
                                     <div className="col-md-3">
                                         <label> Numero de Documento </label>
-                                        <span className="form-control"> 74059739 </span>
+                                        <span className="form-control"> {this.state.postulante[0].numero_documento} </span>
                                     </div>
                                 </div>
                                 <div className="row form-group">
                                     <div className="col-md-6">
                                         <label>Nombres </label>
-                                        <span className="form-control"> Ruben Jordan </span>
+                                        <span className="form-control">  {this.state.postulante[0].nombres}  </span>
                                     </div>
                                     <div className="col-md-6">
                                         <label> Apellidos </label>
-                                        <span className="form-control"> RIP EnPaz </span>
+                                        <span className="form-control"> {this.state.postulante[0].apellido_paterno}  {this.state.postulante[0].apellido_materno}  </span>
                                     </div>
                                 </div>
                                 <h4 className="m-t-lg"> Nacimiento </h4>
                                 <div className="row form-group">
                                     <div className="col-md-3">
                                         <label>Fecha</label>
-                                        <span className="form-control"> 06/06/06 </span>
+                                        <span className="form-control">  {this.state.postulante[0].fecha_nacimiento} </span>
                                     </div>
                                     <div className="col-md-3">
                                         <label>Pais</label>
-                                        <span className="form-control"> Peru </span>
+                                        <span className="form-control">  {this.state.postulante[0].pais_nacimiento}  </span>
                                     </div>
                                     <div className="col-md-6">
                                         <label>Lugar </label>
-                                        <span className="form-control"> En la clinica </span>
+                                        <span className="form-control">  {this.state.postulante[0].lugar_nacimiento}  </span>
                                     </div>
                                 </div>
                                 <h4 className="m-t-lg"> Domicilio </h4>
                                 <div className="row form-group">
                                     <div className="col-md-3">
                                         <label>Pais </label>
-                                        <span className="form-control"> Peru </span>
+                                        <span className="form-control">  {this.state.postulante[0].pais_domicilio}  </span>
                                     </div>
                                     <div className="col-md-9">
                                         <label>Direccion</label>
                                         <span
-                                            className="form-control"> Av. Universitaria 167 - San Miguel - Lima </span>
+                                            className="form-control">  {this.state.postulante[0].direccion_domicilio} </span>
                                     </div>
                                 </div>
                                 <h4 className="m-t-lg"> Contacto </h4>
                                 <div className="row form-group">
                                     <div className="col-md-3">
                                         <label>Telefono</label>
-                                        <span className="form-control"> (+51) 014244369 </span>
+                                        <span className="form-control">   {this.state.postulante[0].telefono}  </span>
                                     </div>
                                     <div className="col-md-3">
                                         <label>Celular</label>
-                                        <span className="form-control"> (+51) 991142846 </span>
+                                        <span className="form-control">  {this.state.postulante[0].celular}  </span>
                                     </div>
                                     <div className="col-md-6">
                                         <label>Correo Electronico</label>
-                                        <span className="form-control"> ruben.jordan@666.com </span>
+                                        <span className="form-control">  {this.state.postulante[0].correo} </span>
                                     </div>
                                 </div>
                                 <div className="m-t-lg">
-                                    <PerfilTabs/>
+                                    <PerfilTabs
+                                        asesorias={this.state.postulante_docencia_asesoria}
+                                        docencias={this.state.postulante_docencia_cargo}
+                                        premios={this.state.postulante_docencia_premio}
+                                        experiencias={this.state.postulante_experiencia}
+                                        diplomaturas={this.state.postulante_grado_diplomatura}
+                                        doctorados={this.state.postulante_grado_doctorado}
+                                        maestrias={this.state.postulante_grado_maestria}
+                                        titulos={this.state.postulante_grado_titulo}
+                                        investigaciones={this.state.postulante_investigacion}
+                                    />
                                 </div>
                             </div>
                         </div>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+import {Link, Route } from 'react-router-dom';
 import axios from "axios/index";
 import BaseContainer from "../BaseContainer";
 import Cursos from "../Cursos";
@@ -77,8 +77,8 @@ class ConvocatoriasListaPostulantes extends Component {
                                 </div>
                                 <div className="col-md-5">
                                     <h5> { this.state.fecha_limite } </h5>
-                                    <h5> { this.state.cantPostulantes } </h5>
-                                    <h5> { this.state.cantAceptados } </h5>
+                                    <h5> { this.state.cantidad_postulantes } </h5>
+                                    <h5> { this.state.cantidad_postulantes_aceptados } </h5>
                                     <h5></h5>
                                 </div>
 
@@ -87,11 +87,9 @@ class ConvocatoriasListaPostulantes extends Component {
                                 <table className="table table-striped">
                                     <thead>
                                     <tr>
-                                        <th className="v-middle col-md-1 text-center"> Código</th>
-                                        <th className="v-middle col-md-2"> Nombre</th>
-                                        <th className="v-middle col-md-3 text-center"> Fecha Postulacion</th>
-                                        <th className="v-middle col-md-3 text-center"> Estado Documentos</th>
-                                        <th className="v-middle col-md-3 text-center"> Estado Postulación</th>
+                                        <th className="v-middle col-md-4"> Nombre</th>
+                                        <th className="v-middle col-md-4 text-center"> Fecha Postulacion</th>
+                                        <th className="v-middle col-md-4 text-center"> Estado Postulación</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -99,17 +97,11 @@ class ConvocatoriasListaPostulantes extends Component {
                                         this.state.postulantes.map(item => {
                                             return (
                                                 <tr>
-                                                    <td className="v-middle text-center">
-                                                        <a className="block text-primary" href={ `${this.props.history.location.pathname}/postulante/${item.id}` }> { item.codigo } AC S</a>
-                                                    </td>
                                                     <td className="v-middle">
-                                                        <span className="block text-primary"> { item.nombre } </span>
+                                                        <Link to={`${this.props.history.location.pathname}/postulante/${item.codigo}`} className="block text-primary">{item.nombre}</Link>
                                                     </td>
                                                     <td className="v-middle text-center">
                                                         <span className="block"> { item.fecha_postulacion } </span>
-                                                    </td>
-                                                    <td className="v-middle text-center">
-                                                        { this.labelDocumento(item.estadoDocumentos) }
                                                     </td>
                                                     <td className="v-middle text-center">
                                                         { this.labelPostulacion(item.estado_postulacion) }
