@@ -363,7 +363,7 @@ class AyudaEconomica extends React.Component {
                                                                     <Glyphicon glyph="option-vertical"/>
                                                                 </Dropdown.Toggle>
                                                                 <Dropdown.Menu>
-                                                                    <MenuItem href={'/ayudaeconomica/' + ayuda.codigo_solicitud}>Ver
+                                                                    <MenuItem href={'/ayudaeconomica/' + ayuda.id + '/Detalle'}>Ver
                                                                         Detalle</MenuItem>
                                                                 </Dropdown.Menu>
                                                             </Dropdown>
@@ -380,7 +380,7 @@ class AyudaEconomica extends React.Component {
                     </BaseContainer>
                 }/>
                 <Route path={`${this.props.match.path}/nuevo`} component={AyudaEconomicaNuevo}/>
-                <Route path={`${this.props.match.path}/:idAyudaEconomica`} component={AyudaEconomicaDetalle}/>
+                <Route path={`${this.props.match.path}/:idAyudaEconomica/Detalle`} component={AyudaEconomicaDetalle}/>
             </div>
         );
     }
