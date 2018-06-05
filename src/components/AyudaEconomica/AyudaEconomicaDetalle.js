@@ -51,8 +51,13 @@ class AyudaEconomicaDetalle extends React.Component {
                 ]
             },
             isOpen: false,
-            tipoDocSeleccionado: "",
-            tipoDocumento: [{id: 1, descripcion: "Boleta"}, {id: 2, descripcion: "Factura"}]
+            tipoDocumento: [{id: 1, descripcion: "Boleta"}, {id: 2, descripcion: "Factura"}],
+            numDoc:"",
+            tipoDocSeleccionado: "---",
+            detalleDoc:"",
+            montoDoc:-1,
+            obsDoc:"",
+
         }
     }
 
@@ -82,6 +87,24 @@ class AyudaEconomicaDetalle extends React.Component {
         });
     }
 
+    handleDocSeleccionado= e =>{
+        if(e.target.value == "---") {
+            this.setState({
+                tipoDocSeleccionado: e.target.value
+            })
+        }
+        else{
+            this.setState({
+                tipoDocSeleccionado:e.target.value
+            })
+        }
+    }
+
+    handleNumDoc = e =>{
+        this.setState({
+            numDoc: e.target.value
+        })
+    }
     render() {
         return (
             <div>
@@ -165,20 +188,22 @@ class AyudaEconomicaDetalle extends React.Component {
                                         <BaseContainer>
                                             <div className="row-4">
                                                 <label>N° Documento:</label>
-                                                <span className="form-control"></span>
+                                                <span className="form-control" onChange={this.handleNumDoc}></span>
                                             </div>
                                             <div className="row-4">
                                                 <label>Tipo de documento:</label>
-                                                <span className="form-control"></span>
-                                            </div>
-                                            <div className="row-4">
-                                                <label>Detalle:</label>
                                                 <FormControl componentClass="select" placeholder="select"
+                                                             onChange={ this.handleDocSeleccionado }
                                                              value={ this.state.tipoDocSeleccionado }>
+                                                    <option value="---">---</option>
                                                     { this.state.tipoDocumento.map((item) => {
                                                         return <option key={ item.id } value={ item.descripcion }>{ item.descripcion }</option>
                                                     }) }
                                                 </FormControl>
+                                            </div>
+                                            <div className="row-4">
+                                                <label>Detalle:</label>
+                                                <span className="form-control"></span>
                                             </div>
                                             <div className="row-4">
                                                 <label>Monto:</label>
@@ -192,7 +217,7 @@ class AyudaEconomicaDetalle extends React.Component {
                                             </div>
                                             <div className="row-4">
                                                 <label>Fotografia del documento:</label>
-                                                Se podra subir el documento
+                                                
                                             </div>
                                         </BaseContainer>
                                     </Modal.Body>
