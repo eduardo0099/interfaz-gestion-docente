@@ -2,11 +2,37 @@ import React from 'react';
 import axios from 'axios';
 import {Route} from 'react-router-dom';
 import Select from 'react-select';
-import {Panel} from 'react-bootstrap';
+import {Panel,  Dropdown, Glyphicon, MenuItem} from 'react-bootstrap';
 import BaseContainer from "../BaseContainer";
 import ConvocatoriaNuevo from "../convocatorias/ConvocatoriasNuevo";
 import AyudaEconomicaNuevo from "./AyudaEconomicaNuevo";
 import API from "../../api";
+import AyudaEconomicaDetalle from "./AyudaEconomicaDetalle";
+
+function onlyUnique(array) {
+    var BreakException = {};
+    let aux=[];
+    array.forEach(entry => {
+        let repetido=0;
+        if(aux.length==0){
+            aux=[...aux,entry];
+        }
+
+        try{
+            aux.forEach(entry2=>{
+                if(JSON.stringify(entry)==JSON.stringify(entry2)){
+                    repetido=1;
+                    throw BreakException;
+                }
+            });
+            aux=[...aux,entry];
+        } catch (e) {
+            if (e !== BreakException) throw e;
+        }
+
+    });
+    return aux;
+}
 
 class AyudaEconomica extends React.Component {
 
@@ -14,12 +40,21 @@ class AyudaEconomica extends React.Component {
         super(props);
 
         this.state = {
-            investigacionSelect:'',
-            estadoSelect:'',
-            motivoSelect:'',
-            seccionSelect:'',
+            montoMinVal:'',
+            montoMaxVal:'',
+            investigacionSelect:-1,
+            estadoSelect:-1,
+            motivoSelect:-1,
+            seccionSelect:-1,
             profesorSelect:'',
-            codigoSelect:'',
+            codigoProfesorSelect:-1,
+            codigoSelect:-1,
+            idCodigoSolSelect:-1,
+            montoMin:-1,
+            montoMax:-1,
+            fechaIni:-1,
+            fechaFin:-1,
+
             ayudasMostrar:[],
             ciclos: [],
             cicloSeleccionado: "",
@@ -36,7 +71,7 @@ class AyudaEconomica extends React.Component {
                     codigo_solicitud: 'SOL001',
                     titulo: 'Investigando las Causas de las Investigaciones 1',
                     motivo: 'Compra de Materiales',
-                    montoOtorgado: 8000000.63,
+                    monto_otorgado: 8000000.63,
                     estado:'Aprobado',
                     fechaSolicitud: '12/12/12',
                     profesor: {
@@ -57,6 +92,8 @@ class AyudaEconomica extends React.Component {
         this.handleSeccion = this.handleSeccion.bind(this);
         this.handleProfesor = this.handleProfesor.bind(this);
         this.handleCodigo = this.handleCodigo.bind(this);
+        this.handleMontoMin = this.handleMontoMin.bind(this);
+        this.handleMontoMax = this.handleMontoMax.bind(this);
     }
 
     componentDidMount() {
@@ -80,6 +117,7 @@ class AyudaEconomica extends React.Component {
     }
 
     findAyudas(ciclo) {
+
         API.get('ayudasEconomicas/ayudasEconomicas/listar', {
             params: {
                 ciclo: ciclo,
@@ -91,23 +129,30 @@ class AyudaEconomica extends React.Component {
             let listaCBMotivo=[];
             let listaCBEstado=[];
             let listaCBCodigo=[];
+
             response.data.ayudaEconomica.forEach(function (entry) {
                 listaCBInvestigaciones=[...listaCBInvestigaciones,{titulo:entry.titulo}];
-                listaCBProfesor=[...listaCBProfesor,{nombres:entry.profesor.nombres}];
+                listaCBProfesor=[...listaCBProfesor,{codigo:entry.profesor.codigo_profesor,nombres:entry.profesor.nombres +" "+ entry.profesor.apellido_paterno +" "+ entry.profesor.apellido_materno}];
                 listaCBSeccion=[...listaCBSeccion,{seccion:entry.profesor.seccion}];
                 listaCBMotivo=[...listaCBMotivo,{motivo:entry.motivo}];
                 listaCBEstado=[...listaCBEstado,{estado:entry.estado}];
-                listaCBCodigo=[...listaCBCodigo,{codigo:entry.codigo_solicitud}];
+                listaCBCodigo=[...listaCBCodigo,{codigo:entry.codigo_solicitud,id:entry.id}];
             });
+            console.log('listaCBProfesor0:',listaCBProfesor[0]);
+            console.log('listaCBProfesor1:',listaCBProfesor[1]);
+            console.log('Prueba obj:');
+            if(JSON.stringify(listaCBProfesor[0])===JSON.stringify(listaCBProfesor[1])){
+                console.log('ala mrdd');
+            }
             this.setState({
                 ayudas: response.data.ayudaEconomica,
                 ayudasMostrar: response.data.ayudaEconomica,
-                listaCBInvestigaciones:listaCBInvestigaciones.filter( this.onlyUnique ),
-                listaCBProfesor:listaCBProfesor.filter( this.onlyUnique ),
-                listaCBSeccion:listaCBSeccion.filter( this.onlyUnique ),
-                listaCBMotivo:listaCBMotivo.filter( this.onlyUnique ),
-                listaCBEstado:listaCBEstado.filter( this.onlyUnique ),
-                listaCBCodigo:listaCBCodigo.filter( this.onlyUnique )
+                listaCBInvestigaciones:onlyUnique(listaCBInvestigaciones),
+                listaCBProfesor:onlyUnique(listaCBProfesor),
+                listaCBSeccion:onlyUnique(listaCBSeccion),
+                listaCBMotivo:onlyUnique(listaCBMotivo),
+                listaCBEstado:onlyUnique(listaCBEstado),
+                listaCBCodigo:onlyUnique(listaCBCodigo)
             })
         }).catch(error => {
             console.log("Error obteniendo la lista de las investigaciones", error);
@@ -137,78 +182,85 @@ class AyudaEconomica extends React.Component {
     }
 
     handleProfesor(obj) {
-        this.setState({ profesorSelect: obj.nombres })
+        this.setState({
+            codigoProfesorSelect: obj.codigo,
+            profesorSelect:obj.nombres})
     }
 
     handleCodigo(obj) {
-        this.setState({ codigoSelect: obj.codigo })
+        this.setState({
+            codigoSelect: obj.codigo,
+            idCodigoSolSelect:obj.id
+        })
     }
 
-    onlyUnique(value, index, self) {
-        return self.indexOf(value) === index;
+    handleMontoMin(event) {
+        this.setState({
+            montoMin: event.target.value,
+            montoMinVal:event.target.value
+        });
     }
+
+    handleMontoMax(event) {
+        this.setState({
+            montoMax: event.target.value,
+            montoMaxVal:event.target.value
+        });
+    }
+
 
     realizarFiltro=()=>{
-        let listaFiltro=[];
-        if(this.state.codigoSelect!=''){
-            let ayudas= this.state.ayudas;
-            let codigo=this.state.codigoSelect;
-            ayudas.forEach(entry => {
-                if(entry.codigo_solicitud===codigo){
-                    listaFiltro= [...listaFiltro, entry]
-                }
-            });
-        }
-        if(this.state.investigacionSelect!=''){
-            let ayudas= this.state.ayudas;
-            let investigacion=this.state.investigacionSelect;
-            ayudas.forEach(entry => {
-                if(entry.titulo===investigacion){
-                    listaFiltro= [...listaFiltro, entry]
-                }
-            });
-        }
-        if(this.state.profesorSelect!=''){
-            let ayudas= this.state.ayudas;
-            let profesor=this.state.profesorSelect;
-            ayudas.forEach(entry => {
-                if(entry.profesor.nombres===profesor){
-                    listaFiltro= [...listaFiltro, entry]
-                }
-            });
-        }
-        if(this.state.motivoSelect!=''){
-            let ayudas= this.state.ayudas;
-            let motivo=this.state.motivoSelect;
-            ayudas.forEach(entry => {
-                if(entry.motivo===motivo){
-                    listaFiltro= [...listaFiltro, entry]
-                }
-            });
-        }
-        if(this.state.seccionSelect!=''){
-            let ayudas= this.state.ayudas;
-            let seccion=this.state.seccionSelect;
-            ayudas.forEach(entry => {
-                if(entry.profesor.seccion===seccion){
-                    listaFiltro= [...listaFiltro, entry]
-                }
-            });
-        }
-        if(this.state.estadoSelect!=''){
-            let ayudas= this.state.ayudas;
-            let estado=this.state.estadoSelect;
-            ayudas.forEach(entry => {
-                if(entry.estado===estado){
-                    listaFiltro= [...listaFiltro, entry]
-                }
-            });
-        }
-        var unique = listaFiltro.filter( this.onlyUnique );
-        this.setState(() => ({
-            ayudasMostrar: unique
-        }));
-        console.log('listaFiltro:',unique);
+        console.log('investigacionSelect:',this.state.investigacionSelect);
+        console.log('estadoSelect:',this.state.estadoSelect);
+        console.log('motivoSelect:',this.state.motivoSelect);
+        console.log('seccionSelect:',this.state.seccionSelect);
+        console.log('profesorSelect:',this.state.codigoProfesorSelect);
+        console.log('codigoSelect:',this.state.idCodigoSolSelect);
+        console.log('montoMin:',this.state.montoMin);
+        console.log('montoMax:',this.state.montoMax);
+
+
+        API.get('ayudasEconomicas/ayudasEconomicas/filtrar', {
+            params: {
+                ciclo:this.state.cicloSeleccionado,
+                codigo_ayuda:this.state.idCodigoSolSelect,
+                codigo_inv:-1,
+                titulo:this.state.investigacionSelect,
+                codigo_profesor:this.state.codigoProfesorSelect,
+                seccion:this.state.seccionSelect,
+                motivo:this.state.motivoSelect,
+                estado:this.state.estadoSelect,
+                montoMin:this.state.montoMin,
+                montoMax:this.state.montoMax,
+                fecha_inicio:-1,
+                fecha_fin:-1
+            }
+        }).then(response => {
+            console.log('response:',response);
+            this.setState({ayudasMostrar: response.data.ayudaEconomica});
+        }).catch(error => {
+            console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`, error);
+        });
+    }
+
+    reestablecerFiltros =() =>{
+        this.setState({
+            investigacionSelect:-1,
+            estadoSelect:-1,
+            motivoSelect:-1,
+            seccionSelect:-1,
+            codigoProfesorSelect:-1,
+            codigoSelect:-1,
+            idCodigoSolSelect:-1,
+            montoMin:-1,
+            montoMax:-1,
+            fechaIni:-1,
+            fechaFin:-1,
+            montoMinVal:'',
+            montoMaxVal:'',
+            profesorSelect:'',
+            ayudasMostrar:this.state.ayudas
+        });
     }
 
     render() {
@@ -294,8 +346,41 @@ class AyudaEconomica extends React.Component {
                                                     clearable={ false }
                                                 />
                                             </div>
+
+                                            <div className="form-group">
+                                                <Panel>
+                                                    <Panel.Heading> Monto </Panel.Heading>
+                                                    <Panel.Body>
+                                                        <div className="form-horizontal">
+                                                            <div className="form-group">
+                                                                <label
+                                                                    className="control-label col-md-2"> Mín </label>
+                                                                <div className="col-md-10">
+                                                                    <input type="number"
+                                                                           className="form-control" value={ this.state.montoMinVal } onChange ={this.handleMontoMin}></input>
+                                                                </div>
+                                                            </div>
+                                                            <div className="form-group">
+                                                                <label
+                                                                    className="control-label col-md-2"> Máx </label>
+                                                                <div className="col-md-10">
+                                                                    <input type="number"
+                                                                           className="form-control" value={ this.state.montoMaxVal } onChange ={this.handleMontoMax}></input>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </Panel.Body>
+                                                </Panel>
+                                            </div>
+
+
+
                                             <div>
                                                 <button className="btn btn-primary btn-block" onClick={this.realizarFiltro}> Filtrar</button>
+                                            </div>
+                                            <br></br>
+                                            <div>
+                                                <button className="btn btn-block" onClick={this.reestablecerFiltros}> Reestablecer filtros</button>
                                             </div>
                                         </Panel.Body>
                                     </Panel>
@@ -347,7 +432,7 @@ class AyudaEconomica extends React.Component {
                                                             <span> {ayuda.motivo}</span>
                                                         </td>
                                                         <td className="v-middle text-center">
-                                                            <span className="text-md"> S/ 200.00 </span>
+                                                            <span className="text-md"> S/ {ayuda.monto_otorgado} </span>
                                                         </td>
                                                         <td className="v-middle text-center">
                                                             <span className={"label label-" + ({
@@ -355,6 +440,17 @@ class AyudaEconomica extends React.Component {
                                                                 'Pendiente': 'warning',
                                                                 'Rechazado': 'danger'
                                                             }[ayuda.estado])}> {ayuda.estado} </span>
+                                                        </td>
+                                                        <td className="v-middle">
+                                                            <Dropdown className="dropdown-options" pullRight>
+                                                                <Dropdown.Toggle className="dropdown-options" noCaret="true">
+                                                                    <Glyphicon glyph="option-vertical"/>
+                                                                </Dropdown.Toggle>
+                                                                <Dropdown.Menu>
+                                                                    <MenuItem href={'/ayudaeconomica/cod/' + ayuda.codigo_solicitud}>Ver
+                                                                        Detalle</MenuItem>
+                                                                </Dropdown.Menu>
+                                                            </Dropdown>
                                                         </td>
                                                     </tr>
                                                 )
@@ -368,6 +464,7 @@ class AyudaEconomica extends React.Component {
                     </BaseContainer>
                 }/>
                 <Route path={`${this.props.match.path}/nuevo`} component={AyudaEconomicaNuevo}/>
+                <Route path={`${this.props.match.path}/cod/:idAyudaEconomica`} component={AyudaEconomicaDetalle}/>
             </div>
         );
     }

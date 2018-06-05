@@ -94,7 +94,7 @@ class RegistroInvestigación extends Component{
                     alert("Error: No se pudo registrar la investigación");
                 })
         }else {
-            if ( this.state.fecha_fin !== null && this.state.fecha_fin !== null ){
+            if ( this.state.fecha_fin !== null && this.state.fecha_inicio !== null ){
                 if (!this.validDates(this.state.fecha_fin,this.state.fecha_inicio)){
                     alert("La fecha de fin es menor a la fecha de inicio!");
                 }
