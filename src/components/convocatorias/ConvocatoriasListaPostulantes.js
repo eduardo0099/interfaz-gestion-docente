@@ -19,18 +19,16 @@ class ConvocatoriasListaPostulantes extends Component {
             fecha_limite: '',
             postulantes: []
         }
-
     }
 
     componentWillMount() {
-        // search();
         this.search();
     }
 
     search() {
         API.get('convocatoria/convocatoria/detalle', {
             params: {
-                id: this.props.match.params.codigoConv
+                id: this.props.match.params.id_convocatoria
             }
         }).then(response => {
             this.setState(response.data[0]);
@@ -82,7 +80,7 @@ class ConvocatoriasListaPostulantes extends Component {
                                     <h5></h5>
                                 </div>
 
-                                <a className="btn btn-default pull-right" href={ `${this.props.history.location.pathname}/link` }> URL </a>
+                                <Link className="btn btn-default pull-right" to={ `${this.props.history.location.pathname}/link` }> URL </Link>
 
                                 <table className="table table-striped">
                                     <thead>
@@ -96,7 +94,7 @@ class ConvocatoriasListaPostulantes extends Component {
                                     {
                                         this.state.postulantes.map(item => {
                                             return (
-                                                <tr>
+                                                <tr key={item.codigo}>
                                                     <td className="v-middle">
                                                         <Link to={`${this.props.history.location.pathname}/postulante/${item.codigo}`} className="block text-primary">{item.nombre}</Link>
                                                     </td>
