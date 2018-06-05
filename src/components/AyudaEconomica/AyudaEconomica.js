@@ -2,11 +2,13 @@ import React from 'react';
 import axios from 'axios';
 import {Route} from 'react-router-dom';
 import Select from 'react-select';
-import {Panel} from 'react-bootstrap';
+import {Panel,  Dropdown, Glyphicon, MenuItem} from 'react-bootstrap';
 import BaseContainer from "../BaseContainer";
 import ConvocatoriaNuevo from "../convocatorias/ConvocatoriasNuevo";
 import AyudaEconomicaNuevo from "./AyudaEconomicaNuevo";
 import API from "../../api";
+import AyudaEconomicaDetalle from "./AyudaEconomicaDetalle";
+import AyudaEconomicaJD from "./AyudaEconomicaJD";
 
 class AyudaEconomica extends React.Component {
 
@@ -356,6 +358,17 @@ class AyudaEconomica extends React.Component {
                                                                 'Rechazado': 'danger'
                                                             }[ayuda.estado])}> {ayuda.estado} </span>
                                                         </td>
+                                                        <td className="v-middle">
+                                                            <Dropdown className="dropdown-options" pullRight>
+                                                                <Dropdown.Toggle className="dropdown-options" noCaret="true">
+                                                                    <Glyphicon glyph="option-vertical"/>
+                                                                </Dropdown.Toggle>
+                                                                <Dropdown.Menu>
+                                                                    <MenuItem href={'/ayudaeconomica/' + ayuda.id + '/Detalle'}>Ver
+                                                                        Detalle</MenuItem>
+                                                                </Dropdown.Menu>
+                                                            </Dropdown>
+                                                        </td>
                                                     </tr>
                                                 )
                                             })}
@@ -368,6 +381,7 @@ class AyudaEconomica extends React.Component {
                     </BaseContainer>
                 }/>
                 <Route path={`${this.props.match.path}/nuevo`} component={AyudaEconomicaNuevo}/>
+                <Route path={`${this.props.match.path}/:idAyudaEconomica`} component={AyudaEconomicaJD}/>
             </div>
         );
     }
