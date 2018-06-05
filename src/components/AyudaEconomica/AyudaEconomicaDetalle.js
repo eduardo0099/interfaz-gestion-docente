@@ -15,27 +15,12 @@ class AyudaEconomicaDetalle extends React.Component {
 
         this.state = {
             solicitudEconomica: {
-                id: this.props.match.params.idAyudaEconomica,
-                motivo: '',
-                monto_otorgado: '',
-                fecha_solicitud: '',
-                fecha_inicio: '',
-                fecha_fin: '',
-                comentarios_adicionales: '',
-                servicio_boletos: '',
-                servicio_costo_maestria: '',
-                servicio_inscripcion: '',
-                servicio_viaticos: '',
-                profesor: {
-                    codigo_profesor: '',
-                    nombres: '',
-                    apellido_paterno: '',
-                    apellido_materno: '',
-                    correo_pucp: '',
-                    seccion: ''
-                },
+                id: 2,
+                codigo: 'AYU001',
                 investigacion: 'Investigando React',
                 docenteSolicitante: 'Ruben Jordan',
+                motivo: 'Motivo 1',
+                monto: 350000,
                 gastos: [
                     {id: 1, numero:'001-23020', tipo: 'Boleta', detalle: 'Impresiones y copias', monto: 35.00, observaciones: 'algo'},
                     {id: 2, numero:'001-23022', tipo: 'Boleta', detalle: 'Impresiones y copiasA', monto: 350.00, observaciones: 'algo2'},
@@ -45,30 +30,8 @@ class AyudaEconomicaDetalle extends React.Component {
         }
     }
 
-    componentDidMount(){
-        this.findSolicitud();
-        console.log(this.state.ayudasEconomica);
-        console.log(this.state.ayudasEconomica);
-        console.log(this.state.ayudasEconomica);
-        console.log(this.state.ayudasEconomica);
-        console.log(this.state.ayudasEconomica);
-        console.log(this.state.ayudasEconomica);
-        console.log(this.state.ayudasEconomica);
-    }
-
     findSolicitud(){
-        API.get('ayudasEconomicas/ayudasEconomicas/detallar', {
-            params: {
-                id: this.props.match.params.idAyudaEconomica,
-            }
-        })
-            .then(response => {
-                console.log(response);
-                this.setState({ solicitudEconomica: response.data });
-            })
-            .catch(error => {
-                console.log("Error obteniendo la investigacion", error);
-            });
+        // aun no hay back
     }
 
     modificarGasto(gasto, e){
@@ -92,16 +55,16 @@ class AyudaEconomicaDetalle extends React.Component {
                                     <a className="btn btn-default pull-right"
                                        onClick={this.props.history.goBack}> Volver </a>
                                     <p className="h2 m-b-sm"> Solicitud
-                                        Economica {this.state.solicitudEconomica.id} </p>
+                                        Economica {this.state.solicitudEconomica.codigo} </p>
                                 </header>
                             </div>
                             <div className="panel-body">
-                                <h5> Informacion General de Docente</h5>
+                                <h5> Informacion General </h5>
                                 <hr/>
                                 <div className="row form-group">
                                     <div className="col-md-4">
                                         <label> Codigo </label>
-                                        <span className="form-control"> {this.state.solicitudEconomica.profesor.codigo_profesor} </span>
+                                        <span className="form-control"> {this.state.solicitudEconomica.codigo} </span>
                                     </div>
                                     <div className="col-md-4">
                                         <label> Profesor Solicitante </label>
@@ -120,7 +83,39 @@ class AyudaEconomicaDetalle extends React.Component {
                                         <span className="form-control"> {this.state.solicitudEconomica.monto} </span>
                                     </div>
                                 </div>
-                        
+                                <h5> Gastos Financieros Declarados </h5>
+                                <hr/>
+                                <table className="table table-striped table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th className="col-md-3">Documento</th>
+                                        <th className="col-md-3">Detalle</th>
+                                        <th className="col-md-3">Monto (S/)</th>
+                                        <th className="col-md-3">Observaciones</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {this.state.solicitudEconomica.gastos.map(gasto => {
+                                        return (
+                                            <tr key={gasto.id} onClick={this.modificarGasto.bind(this, gasto)}>
+                                                <td className="v-middle">
+                                                    <span className="block text-muted m-t-xs"> {gasto.tipo}</span>
+                                                    <span className="block text-primary m-b-xs"> {gasto.numero}</span>
+                                                </td>
+                                                <td className="v-middle">
+                                                    <span> {gasto.detalle}</span>
+                                                </td>
+                                                <td className="v-middle">
+                                                    <span> {gasto.monto}</span>
+                                                </td>
+                                                <td className="v-middle">
+                                                    <span> {gasto.observaciones}</span>
+                                                </td>
+                                            </tr>
+                                        )})
+                                    }
+                                    </tbody>
+                                </table>
                             </div>
                             <div className="panel-footer text-right">
                                 <button className="btn btn-primary" onClick={ this.agregarGasto()}> Agregar Gasto </button>
