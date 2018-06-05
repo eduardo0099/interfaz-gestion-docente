@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import {Route} from 'react-router-dom';
 import Select from 'react-select';
-import {Panel,Modal} from 'react-bootstrap';
+import {Panel,Modal,FormGroup,FormControl} from 'react-bootstrap';
 import BaseContainer from "../BaseContainer";
 import ConvocatoriaNuevo from "../convocatorias/ConvocatoriasNuevo";
 import AyudaEconomicaNuevo from "./AyudaEconomicaNuevo";
@@ -12,6 +12,8 @@ class AyudaEconomicaDetalle extends React.Component {
 
     constructor(props) {
         super(props);
+        this.handleOpen = this.handleOpen.bind(this);
+        this.handleClose = this.handleClose.bind(this);
 
         this.state = {
             solicitudEconomica: {
@@ -22,13 +24,35 @@ class AyudaEconomicaDetalle extends React.Component {
                 motivo: 'Motivo 1',
                 monto: 350000,
                 gastos: [
-                    {id: 1, numero:'001-23020', tipo: 'Boleta', detalle: 'Impresiones y copias', monto: 35.00, observaciones: 'algo'},
-                    {id: 2, numero:'001-23022', tipo: 'Boleta', detalle: 'Impresiones y copiasA', monto: 350.00, observaciones: 'algo2'},
-                    {id: 3, numero:'001-23023', tipo: 'Boleta', detalle: 'Impresiones y copiasB', monto: 3500.00, observaciones: 'algo3'}
+                    {
+                        id: 1,
+                        numero: '001-23020',
+                        tipo: 'Boleta',
+                        detalle: 'Impresiones y copias',
+                        monto: 35.00,
+                        observaciones: 'algo'
+                    },
+                    {
+                        id: 2,
+                        numero: '001-23022',
+                        tipo: 'Boleta',
+                        detalle: 'Impresiones y copiasA',
+                        monto: 350.00,
+                        observaciones: 'algo2'
+                    },
+                    {
+                        id: 3,
+                        numero: '001-23023',
+                        tipo: 'Boleta',
+                        detalle: 'Impresiones y copiasB',
+                        monto: 3500.00,
+                        observaciones: 'algo3'
+                    }
                 ]
             },
-            showModal:false,
-            aux:1
+            isOpen: false,
+            tipoDocSeleccionado: "",
+            tipoDocumento: [{id: 1, descripcion: "Boleta"}, {id: 2, descripcion: "Factura"}]
         }
     }
 
@@ -42,14 +66,22 @@ class AyudaEconomicaDetalle extends React.Component {
         //este metodo se llama cada vez que se hace click en una fila de la tabla
     }
 
-    agregarGasto = () =>{
+    agregarGasto () {
         //Johana en este metodo deberias abrir el modal vacio para registrar
-        this.setState({showModal:true})
+
     }
 
-    handleClose=()=>{
-        this.setState({showModal:false})
+    handleOpen(){
+        this.setState({
+            isOpen: true
+        });
     }
+    handleClose(){
+        this.setState({
+            isOpen: false
+        });
+    }
+
     render() {
         return (
             <div>
@@ -124,15 +156,51 @@ class AyudaEconomicaDetalle extends React.Component {
                                 </table>
                             </div>
                             <div className="panel-footer text-right">
-                                <button className="btn btn-primary" onClick={ this.agregarGasto()}> Agregar Gasto </button>
-                                {this.state.aux != 0 ?
-                                    <Modal onHide={this.handleClose()}>
-                                        <Modal.Header>
-                                        </Modal.Header>
-                                        <Modal.Body>
-                                        </Modal.Body>
-                                    </Modal>
-                                :<span/>}
+                                <button type="button" className="btn btn-primary" onClick={ this.handleOpen}>Agregar Gasto</button>
+                                <Modal show={this.state.isOpen} onClose={this.handleClose}>
+                                    <Modal.Header closeButton>
+                                        <Modal.Title>Agregar nuevo gasto</Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                        <BaseContainer>
+                                            <div className="row-4">
+                                                <label>N° Documento:</label>
+                                                <span className="form-control"></span>
+                                            </div>
+                                            <div className="row-4">
+                                                <label>Tipo de documento:</label>
+                                                <span className="form-control"></span>
+                                            </div>
+                                            <div className="row-4">
+                                                <label>Detalle:</label>
+                                                <FormControl componentClass="select" placeholder="select"
+                                                             value={ this.state.tipoDocSeleccionado }>
+                                                    { this.state.tipoDocumento.map((item) => {
+                                                        return <option key={ item.id } value={ item.descripcion }>{ item.descripcion }</option>
+                                                    }) }
+                                                </FormControl>
+                                            </div>
+                                            <div className="row-4">
+                                                <label>Monto:</label>
+                                                <span className="form-control"></span>
+                                            </div>
+                                            <div className="row-sm-4">
+                                                <label>Observaciones:</label>
+                                                <FormGroup controlId="formControlsTextarea">
+                                                    <FormControl componentClass="textarea" />
+                                                </FormGroup>
+                                            </div>
+                                            <div className="row-4">
+                                                <label>Fotografia del documento:</label>
+                                                Se podra subir el documento
+                                            </div>
+                                        </BaseContainer>
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                        <button type="button" className="btn btn-primary" onClick={this.agregarGasto()}>Aceptar</button>
+                                        <button type="button" className="btn btn-primary" onClick={this.handleClose}>Cancelar</button>
+                                    </Modal.Footer>
+                                </Modal>
                             </div>
                         </div>
                     </BaseContainer>
