@@ -20,7 +20,7 @@ class AyudaEconomicaDetalle extends React.Component {
                 investigacion: 'Investigando React',
                 docenteSolicitante: 'Ruben Jordan',
                 motivo: 'Motivo 1',
-                monto: 350000,
+                monto_otorgado: 350000,
                 gastos: [
                     {id: 1, numero:'001-23020', tipo: 'Boleta', detalle: 'Impresiones y copias', monto: 35.00, observaciones: 'algo'},
                     {id: 2, numero:'001-23022', tipo: 'Boleta', detalle: 'Impresiones y copiasA', monto: 350.00, observaciones: 'algo2'},
@@ -30,8 +30,28 @@ class AyudaEconomicaDetalle extends React.Component {
         }
     }
 
+    componentWillMount() {
+        this.findSolicitud();
+    }
     findSolicitud(){
-        // aun no hay back
+       API.get('ayudasEconomicas/ayudasEconomicas/devuelveJustificacion', {
+           params: {
+               id:  this.props.match.params.idAyudaEconomica
+           }
+       }).then(response => {
+           const ae = response.data.ayudaEconomica;
+           this.setState({
+               solicitudEconomica: {
+                   id: ae.id,
+                   gastos: ae.justificacion,
+                   motivo: ae.motivo,
+                   monto_otorgado: ae.monto_otorgado,
+                   docenteSolicitante: ae.docenteSolicitante.nombres,
+                   codigo: ae.codigo,
+                   investigacion: ae.investigacion.titulo
+               }
+           });
+       })
     }
 
     modificarGasto(gasto, e){
@@ -73,6 +93,12 @@ class AyudaEconomicaDetalle extends React.Component {
                                 </div>
                                 <div className="row form-group">
                                     <div className="col-md-8">
+                                        <label> Investigación </label>
+                                        <span className="form-control"> {this.state.solicitudEconomica.investigacion} </span>
+                                    </div>
+                                </div>
+                                <div className="row form-group">
+                                    <div className="col-md-8">
                                         <label> Motivo </label>
                                         <span className="form-control"> {this.state.solicitudEconomica.motivo} </span>
                                     </div>
@@ -80,7 +106,7 @@ class AyudaEconomicaDetalle extends React.Component {
                                 <div className="row form-group">
                                     <div className="col-md-4">
                                         <label> Monto Solicitado </label>
-                                        <span className="form-control"> {this.state.solicitudEconomica.monto} </span>
+                                        <span className="form-control"> {this.state.solicitudEconomica.monto_otorgado} </span>
                                     </div>
                                 </div>
                                 <h5> Gastos Financieros Declarados </h5>

@@ -22,8 +22,7 @@ class SignIn extends Component {
   	handleLogIn= e => {
   		e.preventDefault();
   		if(this.state.codUser!="" && this.state.contrasena!=""){
-  			//login;
-  			API.post('auth/login',{
+  			axios.post('http://localhost:8080/auth/login',{
   				codigo: parseInt(this.state.codUser),
   				password: this.state.contrasena
   			}).then(resp => {
