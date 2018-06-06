@@ -163,6 +163,7 @@ class AyudaEconomica extends React.Component {
         let ciclo = obj.descripcion;
         this.setState({ cicloSeleccionado: ciclo })
         this.findAyudas(ciclo);
+        this.reestablecerFiltros();
     };
 
     handleInvestigacion(obj) {
