@@ -58,6 +58,24 @@ class ConvocatoriasPostulantePerfil extends Component {
         this.confirmationRechazar.current.open();
     }
 
+    aceptar = () => {
+        API.put('convocatoria/convocatoria/postulante/modificar', {
+            id: this.props.match.params.id,
+            estado_postulante: 2
+        }).then(response => {
+            this.confirmationAceptar.current.close();
+        })
+    }
+
+    rechazar = () => {
+        API.put('convocatoria/convocatoria/postulante/modificar', {
+            id: this.props.match.params.id,
+            estado_postulante: 3
+        }).then(response => {
+          this.confirmationRechazar.current.close();
+        })
+    }
+
     componentDidMount() {
         API.get('convocatoria/convocatoria/postulante/devolver', {
             params: {
@@ -85,8 +103,8 @@ class ConvocatoriasPostulantePerfil extends Component {
             <div>
                 <Route exact path={`${this.props.match.path}`} render={() =>
                     <BaseContainer>
-                        <ConfirmationModal ref={this.confirmationAceptar} message={"Seguro que desea aceptar al postulante?"}/>
-                        <ConfirmationModal ref={this.confirmationRechazar} message={"Serguro que desea rechazar al postulante?"}/>
+                        <ConfirmationModal ref={this.confirmationAceptar} message={"Seguro que desea aceptar al postulante?"} okaction = { this.aceptar.bind(this) }/>
+                        <ConfirmationModal ref={this.confirmationRechazar} message={"Serguro que desea rechazar al postulante?"} okaction={ this.rechazar.bind(this) }/>
                         <div className="panel col-lg-offset-2 col-lg-8 col-md-12 col-sm-12">
                             <div className="panel-heading m-b-n">
                                 <header className="page-header m-b-n">
