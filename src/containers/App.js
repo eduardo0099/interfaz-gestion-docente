@@ -25,8 +25,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      open: false,
-      auth: false
+      open: false
     };
 
     this.onSetOpen = this.onSetOpen.bind(this);
@@ -72,35 +71,29 @@ class App extends Component {
       onSetOpen: this.onSetOpen,
       sidebarClassName: "sidebar",
     };
-
+    /*
+    var usuario = JSON.parse(localStorage.getItem('user'));
+    var tipoUser = usuario.tipo_usuario;
+    */
     return (
       <BrowserRouter>
         <Sidebar {...sidebarProps}>
           <Header handleMenu={this.menuButtonClick}/>
           <div className="content">
-            
-              {( this.state.auth || localStorage.getItem('jwt') != null)?
                 <Switch>
                 <Route exact path="/" render={()=> <SignIn auth={this.state.auth} handleLogIn={this.handleLogIn}/>}/>
                 <Route path="/registrar" component={SignUp}/>
                 <Route path="/preferenciaCursos" component={PreferenciaCursos}/> 
+
                 <Route path="/home" render={ () => <Home/>} />
+                <Route path="/convocatorias" component={ConvocatoriasLista}/>
                 <Route path="/profesores" component={ListaProfesores}/>
                 <Route path="/carga" render={ () => <CargaDatos /> }/>
+                <Route path="/ayudaeconomicadetalle" component={AyudaEconomicaDetalle}/>
                 <Route path="/asignacionCursos" component={AsignarCursos}/>
                 <Route path="/ayudaeconomica" component={AyudaEconomica}/>
                 <Route render={()=><div>La pagina que busca no existe</div>} />
                 </Switch>
-                :
-                <Switch>
-                <Route exact path="/" render={()=> <SignIn auth={this.state.auth} handleLogIn={this.handleLogIn}/>}/>
-                <Route path="/registrar" component={SignUp}/>
-                <Route path="/convocatorias" component={ConvocatoriasLista}/>
-                <Route path="/ayudaeconomicadetalle" component={AyudaEconomicaDetalle}/>
-                <Route path="/preferenciaCursos" component={PreferenciaCursos}/>
-                <Route render={()=><div>La pagina que busca no existe o necesita iniciar sesión</div>} />
-                </Switch>
-               }
           </div>
         </Sidebar>
       </BrowserRouter>
