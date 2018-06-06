@@ -71,8 +71,27 @@ class AyudaEconomicaDetalle extends React.Component {
         //este metodo se llama cada vez que se hace click en una fila de la tabla
     }
 
-    agregarGasto () {
+    agregarGasto=()=> {
         //Johana en este metodo deberias abrir el modal vacio para registrar
+        if(this.state.tipoDocSeleccionado!="---" &&  this.state.numDoc!="" && this.state.detalleDoc!="" && this.state.montoDoc!=-1 && this.state.obsDoc!=""){
+            API.post("/ayudasEconomicas/ayudasEconomicas/DocumentoGasto/registrar",{
+                id_ayuda_economica:this.state.solicitudEconomica.id,
+                numero_documento:this.state.numDoc,
+                detalle:this.state.detalleDoc,
+                monto_justificacion:this.state.montoDoc,
+                observaciones:this.state.obsDoc,
+                tipo_documento:this.state.tipoDocSeleccionado,
+            }).then(res => {
+                alert("Se ha registrado correctamente");
+            }).catch(error => {
+                alert("Ha ocurrido un error, intentelo luego");
+                console.log(error);
+            });
+        }
+        else{
+            //Mostrar campos errados
+            alert("Falta agregar datos")
+        }
 
     }
 
@@ -103,6 +122,21 @@ class AyudaEconomicaDetalle extends React.Component {
     handleNumDoc = e =>{
         this.setState({
             numDoc: e.target.value
+        })
+    }
+    handleMonto = e =>{
+        this.setState({
+            montoDoc:e.target.value
+        })
+    }
+    handleDetalle = e =>{
+        this.setState({
+            detalleDoc:e.target.value
+        })
+    }
+    handleObs = e =>{
+        this.setState({
+            obsDoc:e.target.value
         })
     }
     render() {
@@ -186,11 +220,11 @@ class AyudaEconomicaDetalle extends React.Component {
                                     </Modal.Header>
                                     <Modal.Body>
                                         <BaseContainer>
-                                            <div className="row-4">
+                                            <div className="row form-group">
                                                 <label>N° Documento:</label>
-                                                <span className="form-control" onChange={this.handleNumDoc}></span>
+                                                <input className="form-control" onChange={this.handleNumDoc}></input>
                                             </div>
-                                            <div className="row-4">
+                                            <div className="row form-group">
                                                 <label>Tipo de documento:</label>
                                                 <FormControl componentClass="select" placeholder="select"
                                                              onChange={ this.handleDocSeleccionado }
@@ -201,28 +235,28 @@ class AyudaEconomicaDetalle extends React.Component {
                                                     }) }
                                                 </FormControl>
                                             </div>
-                                            <div className="row-4">
+                                            <div className="row form-group">
                                                 <label>Detalle:</label>
-                                                <span className="form-control"></span>
+                                                <input className="form-control" onChange={this.handleDetalle}></input>
                                             </div>
-                                            <div className="row-4">
+                                            <div className="row form-group">
                                                 <label>Monto:</label>
-                                                <span className="form-control"></span>
+                                                <input className="form-control" type="number" pattern="[0-9]*" onChange={this.handleMonto}></input>
                                             </div>
-                                            <div className="row-sm-4">
+                                            <div className="row form-group">
                                                 <label>Observaciones:</label>
                                                 <FormGroup controlId="formControlsTextarea">
-                                                    <FormControl componentClass="textarea" />
+                                                    <input className="form-control" componentClass="textarea" onChange={this.handleObs}/>
                                                 </FormGroup>
                                             </div>
-                                            <div className="row-4">
+                                            <div className="row form-group">
                                                 <label>Fotografia del documento:</label>
-                                                
+
                                             </div>
                                         </BaseContainer>
                                     </Modal.Body>
                                     <Modal.Footer>
-                                        <button type="button" className="btn btn-primary" onClick={this.agregarGasto()}>Aceptar</button>
+                                        <button type="button" className="btn btn-primary" onClick={this.agregarGasto}>Aceptar</button>
                                         <button type="button" className="btn btn-primary" onClick={this.handleClose}>Cancelar</button>
                                     </Modal.Footer>
                                 </Modal>
