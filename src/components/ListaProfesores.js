@@ -2,8 +2,9 @@ import React, {Component} from 'react';
 import {Route,Link} from 'react-router-dom';
 import DetalleDocente from "./DetalleDocente";
 import BaseContainer from "./BaseContainer";
+import Collapsible from 'react-collapsible';
 import axios from "axios/index";
-import {Glyphicon, Dropdown, MenuItem, Col, FormControl, Form, FormGroup, ControlLabel} from 'react-bootstrap';
+import {Glyphicon, Dropdown, MenuItem, Col, FormControl, Form, FormGroup, ControlLabel, Panel, Button, Radio} from 'react-bootstrap';
 import API from '../api';
 
 class ListaProfesores extends Component {
@@ -19,7 +20,9 @@ class ListaProfesores extends Component {
             profeText: '',
             codigoText: '',
             filtroSeccionKey: "Todos",
-            filtro1: -1
+            filtro1: -1,
+            open: false,
+            secciones: [],
         }
     }
 
@@ -34,8 +37,15 @@ class ListaProfesores extends Component {
                     loading: false
                 });
             });
+        this.allSecciones();
     }
 
+    allSecciones() {
+        API.get('general/listaSecciones')
+            .then(response => {
+                this.setState({ secciones: response.data.secciones })
+            })
+    }
     /*
     handleFiltroSeccionkey = e => {
         if (e.target.value === "Todos") {
@@ -119,6 +129,32 @@ class ListaProfesores extends Component {
                                                          onChange={ this.busquedaNombreProfesor.bind(this) }/>
                                         </Col>
 
+                                        <Col sm={ 6 }>
+                                            <Button onClick={() => this.setState({ open: !this.state.open })}>
+                                                Búsqueda avanzada
+                                            </Button>
+                                            <br />
+                                            <Panel id="collapsible-panel-example-1" expanded={this.state.open}>
+                                                <Panel.Collapse>
+                                                    <Panel.Body>
+                                                        <FormGroup>
+                                                            <label> Secciones </label>
+                                                            <p> </p>
+                                                            <Radio name="radioGroup" inline>
+                                                                1
+                                                            </Radio>{' '}
+                                                            <Radio name="radioGroup" inline>
+                                                                2
+                                                            </Radio>{' '}
+                                                            <Radio name="radioGroup" inline>
+                                                                3
+                                                            </Radio>
+
+                                                        </FormGroup>
+                                                    </Panel.Body>
+                                                </Panel.Collapse>
+                                            </Panel>
+                                        </Col>
 
 
 
