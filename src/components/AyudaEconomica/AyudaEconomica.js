@@ -363,7 +363,7 @@ class AyudaEconomica extends React.Component {
                                                                     <Glyphicon glyph="option-vertical"/>
                                                                 </Dropdown.Toggle>
                                                                 <Dropdown.Menu>
-                                                                    <MenuItem href={'/ayudaeconomica/' + ayuda.codigo_solicitud}>Ver
+                                                                    <MenuItem href={'/ayudaeconomica/' + ayuda.id}>Ver
                                                                         Detalle</MenuItem>
                                                                 </Dropdown.Menu>
                                                             </Dropdown>

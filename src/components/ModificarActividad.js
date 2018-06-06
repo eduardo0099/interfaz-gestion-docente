@@ -51,7 +51,7 @@ class ModificarActividad extends Component {
 
     componentDidMount() {
 		this.listarTipo();
-        //this.obtenerDatosActividad();
+        this.obtenerDatosActividad();
     }
 
     listarTipo(){
@@ -62,7 +62,15 @@ class ModificarActividad extends Component {
     }
 
     obtenerDatosActividad(){
-        
+        API.get('docente/actividad/mostrar', {
+            params: {
+                id_actividad: this.props.match.params.idActividad,
+            }
+        }).then(response => {
+            this.setState({ infoDocente: response.data });
+        }).catch(error => {
+            console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`, error);
+        });
     }
 
     handleTitulo(event) {
