@@ -35,17 +35,6 @@ class ConvocatoriasListaPostulantes extends Component {
         })
     }
 
-    labelDocumento(estado) {
-        switch (estado) {
-            case 'Verificados':
-                return <span className="label label-success"> Verificados </span>;
-            case 'Inconsistentes':
-                return <span className="label label-danger"> Inconsistentes </span>;
-            case 'Sin Verificar':
-                return <span className="label label-danger"> Sin Verificar </span>;
-        }
-    }
-
     labelPostulacion(estado) {
         switch (estado) {
             case 'Aceptado':
@@ -53,7 +42,7 @@ class ConvocatoriasListaPostulantes extends Component {
             case 'Rechazado':
                 return <span className="label label-danger"> Rechazado </span>;
             case 'Pendiente':
-                return <span className="label label-warning"> Sin Verificar </span>;
+                return <span className="label label-warning"> Pendiente </span>;
         }
     }
 
@@ -87,7 +76,7 @@ class ConvocatoriasListaPostulantes extends Component {
                                     <tr>
                                         <th className="v-middle col-md-4"> Nombre</th>
                                         <th className="v-middle col-md-4 text-center"> Fecha Postulacion</th>
-                                        <th className="v-middle col-md-4 text-center"> Estado Postulación</th>
+                                        <th className="v-middle col-md-4 text-center"> Estado</th>
                                     </tr>
                                     </thead>
                                     <tbody>
