@@ -14,6 +14,7 @@ class AyudaEconomicaDetalle extends React.Component {
         super(props);
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
+        this.handleOpenMod=this.handleOpenMod.bind(this);
 
         this.state = {
             solicitudEconomica: {
@@ -26,32 +27,15 @@ class AyudaEconomicaDetalle extends React.Component {
                 gastos: [
                     {
                         id: 1,
-                        numero: '001-23020',
-                        tipo: 'Boleta',
+                        numero_documento: '001-23020',
+                        tipo_documento: 'Boleta',
                         detalle: 'Impresiones y copias',
-                        monto: 35.00,
+                        monto_justificacion: 35.00,
                         observaciones: 'algo'
-                    },
-                    {
-                        id: 2,
-                        numero: '001-23022',
-                        tipo: 'Boleta',
-                        detalle: 'Impresiones y copiasA',
-                        monto: 350.00,
-                        observaciones: 'algo2'
-                    },
-                    {
-                        id: 3,
-                        numero: '001-23023',
-                        tipo: 'Boleta',
-                        detalle: 'Impresiones y copiasB',
-                        monto: 3500.00,
-                        observaciones: 'algo3'
-                    }
-                ]
+                    }]
             },
             isOpen: false,
-            tipoDocumento: [{id: 1, descripcion: "Boleta"}, {id: 2, descripcion: "Factura"}],
+            tipoDocumento: [{id: 1, descripcion: "Documento Nacional de Identidad"}, {id: 2, descripcion: "Factura"}],
             numDoc:"",
             tipoDocSeleccionado: "---",
             detalleDoc:"",
@@ -87,11 +71,16 @@ class AyudaEconomicaDetalle extends React.Component {
     }
 
     modificarGasto(gasto, e){
-        console.log(JSON.stringify(gasto, null, 2));
+        //console.log(JSON.stringify(gasto, null, 2));
         //Johana en este metodo deberias abrir el modal en bsse al objeto gasto que te estoy mandando
         //este metodo se llama cada vez que se hace click en una fila de la tabla
     }
 
+    handleOpenMod(){
+        this.setState({
+            modificarOpen:true
+        })
+    }
 
     agregarGasto=()=> {
         //Johana en este metodo deberias abrir el modal vacio para registrar
@@ -109,6 +98,9 @@ class AyudaEconomicaDetalle extends React.Component {
                 alert("Ha ocurrido un error, intentelo luego");
                 console.log(error);
             });
+            this.setState({
+                isOpen:false
+            })
         }
         else{
             //Mostrar campos errados
@@ -220,7 +212,7 @@ class AyudaEconomicaDetalle extends React.Component {
                                     <tbody>
                                     {this.state.solicitudEconomica.gastos.map(gasto => {
                                         return (
-                                            <tr key={gasto.id} onClick={this.modificarGasto(this,gasto)}>
+                                            <tr key={gasto.id} >
                                                 <td className="v-middle">
                                                     <span className="block text-muted m-t-xs"> {gasto.tipo}</span>
                                                     <span className="block text-primary m-b-xs"> {gasto.numero}</span>
@@ -241,9 +233,6 @@ class AyudaEconomicaDetalle extends React.Component {
                                 </table>
                             </div>
 
-                            <Modal show={this.state.modificarOpen}>
-
-                            </Modal>
 
                             <div className="panel-footer text-right">
                                 <button type="button" className="btn btn-primary" onClick={ this.handleOpen}>Agregar Gasto</button>
@@ -252,6 +241,7 @@ class AyudaEconomicaDetalle extends React.Component {
                                         <Modal.Title>Agregar nuevo gasto</Modal.Title>
                                     </Modal.Header>
                                     <Modal.Body>
+                                        <BaseContainer>
                                             <div className="row form-group">
                                                 <label>N° Documento:</label>
                                                 <input className="form-control" onChange={this.handleNumDoc}></input>
@@ -285,6 +275,7 @@ class AyudaEconomicaDetalle extends React.Component {
                                                 <label>Fotografia del documento:</label>
 
                                             </div>
+                                        </BaseContainer>
                                     </Modal.Body>
                                     <Modal.Footer>
                                         <button type="button" className="btn btn-primary" onClick={this.agregarGasto}>Aceptar</button>
