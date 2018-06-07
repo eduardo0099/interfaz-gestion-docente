@@ -129,33 +129,7 @@ class ListaProfesores extends Component {
                                                          onChange={ this.busquedaNombreProfesor.bind(this) }/>
                                         </Col>
 
-                                        <Col sm={ 6 }>
-                                            <Button onClick={() => this.setState({ open: !this.state.open })}>
-                                                Búsqueda avanzada
-                                            </Button>
-                                            <br />
-                                            <Panel id="collapsible-panel-example-1" expanded={this.state.open}>
-                                                <Panel.Collapse>
-                                                    <Panel.Body>
-                                                        <FormGroup>
-                                                            <label> Secciones </label>
-                                                            <p> </p>
-                                                            <Radio name="radioGroup" inline>
-                                                                1
-                                                            </Radio>{' '}
-                                                            <Radio name="radioGroup" inline>
-                                                                2
-                                                            </Radio>{' '}
-                                                            <Radio name="radioGroup" inline>
-                                                                3
-                                                            </Radio>
-
-                                                        </FormGroup>
-                                                    </Panel.Body>
-                                                </Panel.Collapse>
-                                            </Panel>
-                                        </Col>
-
+                                        
 
 
                                     </FormGroup>
