@@ -15,9 +15,11 @@ class Home extends Component{
       window.location.href = "/";
     }else{
       API.get('/auth/verificaPermiso',{
+        /*
         headers:{
           'x-access-token' : localStorage.getItem('jwt'),
         },
+        */
         params:{
           ruta:"/home"
         }
