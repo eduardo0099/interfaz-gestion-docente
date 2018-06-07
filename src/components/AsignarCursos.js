@@ -4,6 +4,7 @@ import BaseContainer from './BaseContainer';
 import BootstrapTable from 'react-bootstrap-table-next';
 import axios from 'axios';
 import API from '../api';
+import {Redirect} from 'react-router-dom';
 
 class AsignarCursos extends Component {
     constructor(props) {
@@ -12,6 +13,8 @@ class AsignarCursos extends Component {
         this.totalCursosXciclo = [];
 
         this.state = {
+            auth:false,
+            verAuth:false,
             cursos: [],
             listaSeccioneskey1: [],
             filtroSeccionkey1: "todos",
@@ -52,6 +55,27 @@ class AsignarCursos extends Component {
         };
     }
 
+    componentWillMount() {
+        if (localStorage.getItem('jwt') == null) {
+            window.location.href = "/";
+        } else {
+            API.get('/auth/verificaPermiso', {
+                /*
+                headers:{
+                  'x-access-token' : localStorage.getItem('jwt'),
+                },
+                */
+                params: {
+                    ruta: "/asignacionCursos"
+                }
+            }).then(resp => {
+                console.log("resp asignar", resp.data);
+                this.setState({ auth: resp.data.permiso,verAuth:true });
+            }).catch(err => {
+                console.log("err", err);
+            })
+        }
+    }
 
     componentDidMount() {
         API.get('asignacionHorarios/listaCursosDisponible', { params: { ciclo: this.state.filtroCiclo } })
@@ -513,7 +537,11 @@ class AsignarCursos extends Component {
             hideSelectColumn: true,
             bgColor: '#edeaea'
         };
-
+        if(!this.state.auth && this.state.verAuth){
+            return(<Redirect to="/home"/>);
+        }else if (!this.state.verAuth){
+            return(<div/>);
+        }
         return (
             <BaseContainer>
                 <div className="panel col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
