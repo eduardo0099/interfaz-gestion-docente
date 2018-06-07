@@ -15,6 +15,7 @@ class AyudaEconomicaDetalle extends React.Component {
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleOpenMod=this.handleOpenMod.bind(this);
+        this.handleCloseMod=this.handleCloseMod.bind(this);
 
         this.state = {
             solicitudEconomica: {
@@ -35,14 +36,14 @@ class AyudaEconomicaDetalle extends React.Component {
                     }]
             },
             isOpen: false,
-            tipoDocumento: [{id: 1, descripcion: "Documento Nacional de Identidad"}, {id: 2, descripcion: "Factura"}],
+            tipoDocumento: [{id: 1, descripcion: "Boletaf"}, {id: 2, descripcion: "Factura"}],
             numDoc:"",
             tipoDocSeleccionado: "---",
             detalleDoc:"",
             montoDoc:-1,
             obsDoc:"",
             modificarOpen:false,
-
+            gastoSelecc:[]
         }
     }
 
@@ -72,13 +73,23 @@ class AyudaEconomicaDetalle extends React.Component {
 
     modificarGasto(gasto, e){
         //console.log(JSON.stringify(gasto, null, 2));
-        //Johana en este metodo deberias abrir el modal en bsse al objeto gasto que te estoy mandando
-        //este metodo se llama cada vez que se hace click en una fila de la tabla
+        this.setState({
+            montoDoc:gasto.monto_justificacion
+
+        },()=>{
+            this.handleOpenMod;
+        })
     }
 
     handleOpenMod(){
         this.setState({
             modificarOpen:true
+        })
+    }
+
+    handleCloseMod(){
+        this.setState({
+            modificarOpen:false
         })
     }
 
@@ -212,16 +223,16 @@ class AyudaEconomicaDetalle extends React.Component {
                                     <tbody>
                                     {this.state.solicitudEconomica.gastos.map(gasto => {
                                         return (
-                                            <tr key={gasto.id} >
+                                            <tr key={gasto.id} onClick={this.modificarGasto.bind(this,gasto)} >
                                                 <td className="v-middle">
-                                                    <span className="block text-muted m-t-xs"> {gasto.tipo}</span>
-                                                    <span className="block text-primary m-b-xs"> {gasto.numero}</span>
+                                                    <span className="block text-muted m-t-xs"> Factura</span>
+                                                    <span className="block text-primary m-b-xs"> {gasto.numero_documento}</span>
                                                 </td>
                                                 <td className="v-middle">
                                                     <span> {gasto.detalle}</span>
                                                 </td>
                                                 <td className="v-middle">
-                                                    <span> {gasto.monto}</span>
+                                                    <span> {gasto.monto_justificacion}</span>
                                                 </td>
                                                 <td className="v-middle">
                                                     <span> {gasto.observaciones}</span>
@@ -232,7 +243,27 @@ class AyudaEconomicaDetalle extends React.Component {
                                     </tbody>
                                 </table>
                             </div>
-
+                            <Modal show={this.state.modificarOpen} onClose={this.handleCloseMod}>
+                                <Modal.Header closeButton>
+                                    <Modal.Title>Moficar gasto</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>
+                                    <BaseContainer>
+                                        <div className="row form-group">
+                                            <label>Numero de documento:</label>
+                                            <input>{this.state.numDoc}</input>
+                                        </div>
+                                        <div className="row form-group">
+                                            <label>Monto:</label>
+                                            <input>{this.state.montoDoc}</input>
+                                        </div>
+                                        <div className="row form-group">
+                                            <label>Observaciones:</label>
+                                            <input>{this.state.obsDoc}</input>
+                                        </div>
+                                    </BaseContainer>
+                                </Modal.Body>
+                            </Modal>
 
                             <div className="panel-footer text-right">
                                 <button type="button" className="btn btn-primary" onClick={ this.handleOpen}>Agregar Gasto</button>
