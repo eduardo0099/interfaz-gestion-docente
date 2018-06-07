@@ -8,6 +8,7 @@ import ConvocatoriaNuevo from "../convocatorias/ConvocatoriasNuevo";
 import AyudaEconomicaNuevo from "./AyudaEconomicaNuevo";
 import API from "../../api";
 import AyudaEconomicaDetalle from "./AyudaEconomicaDetalle";
+import AyudaEconomicaAprobar from "./AyudaEconomicaAprobar";
 
 function onlyUnique(array) {
     var BreakException = {};
@@ -448,9 +449,11 @@ class AyudaEconomica extends React.Component {
                                                                     <Glyphicon glyph="option-vertical"/>
                                                                 </Dropdown.Toggle>
                                                                 <Dropdown.Menu>
-                                                                    <MenuItem href={'/ayudaeconomica/' + ayuda.id}>Ver
-                                                                        Detalle</MenuItem>
-                                                                </Dropdown.Menu>
+                                                                    <MenuItem href={'/ayudaeconomica/id/' + ayuda.id}>Ver
+                                                                    Detalle</MenuItem>
+                                                                    <MenuItem href={'/ayudaeconomica/' + ayuda.id + '/Detalle'}>Ver
+                                                                        Detalle JD</MenuItem>
+                                                               </Dropdown.Menu>
                                                             </Dropdown>
                                                         </td>
                                                     </tr>
@@ -465,7 +468,8 @@ class AyudaEconomica extends React.Component {
                     </BaseContainer>
                 }/>
                 <Route path={`${this.props.match.path}/nuevo`} component={AyudaEconomicaNuevo}/>
-                <Route path={`${this.props.match.path}/:idAyudaEconomica`} component={AyudaEconomicaDetalle}/>
+                <Route path={`${this.props.match.path}/:idAyudaEconomica/Detalle`} component={AyudaEconomicaAprobar}/>
+                <Route path={`${this.props.match.path}/id/:idAyudaEconomica`} component={AyudaEconomicaDetalle}/>
             </div>
         );
     }
