@@ -84,7 +84,7 @@ class AyudaEconomicaAprobar extends React.Component {
             estado_ayuda: 2
         }).then(response => {
             this.confirmationAceptar.current.close();
-            this.props.history.goBack;
+            this.props.history.goBack();
         })
     }
 
@@ -96,6 +96,7 @@ class AyudaEconomicaAprobar extends React.Component {
             estado_ayuda: 3
         }).then(response => {
             this.confirmationRechazar.current.close();
+            this.props.history.goBack();
         }).catch(err =>{
             console.log(err);
         })

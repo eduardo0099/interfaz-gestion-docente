@@ -411,6 +411,7 @@ class AyudaEconomica extends React.Component {
                                                 <th className="col-md-2"> Motivo</th>
                                                 <th className="col-md-2 text-center"> Monto</th>
                                                 <th className="col-md-1 text-center"> Estado</th>
+                                                <th></th>
                                             </tr>
                                             </thead>
                                             <tbody>
