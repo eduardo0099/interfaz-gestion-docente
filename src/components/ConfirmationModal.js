@@ -1,25 +1,33 @@
 import React, {Component} from 'react';
+import {Modal} from 'react-bootstrap';
 
 class ConfirmationModal extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
+        this.state = {
+            show: false
+        }
     }
 
-    render(){
-        return(
-            <Modal
-                {...this.props}
-                bsSize="small"
-                aria-labelledby="contained-modal-title-sm"
-            >
-                <Modal.Body>
-                    Seguro que desea eliminar el registro ?
-                </Modal.Body>
-                <Modal.Footer>
-                    <button className="btn btn-primary" onClick={this.props.onHide}>ok</button>
-                    <button className="btn btn-link" onClick={this.props.onHide}>cancelar</button>
-                </Modal.Footer>
+    open = () => {
+        this.setState({show: true});
+    }
+
+    close = () => {
+        this.setState({show: false});
+    }
+
+    render() {
+        return (
+            <Modal show={this.state.show}>
+                <div className="modal-body">
+                    { this.props.message }
+                </div>
+                <div className="modal-footer">
+                    <button className="btn btn-link" onClick={ this.close }>Cancelar</button>
+                    <button className="btn btn-success" onClick={ this.props.okaction }>Si, seguro</button>
+                </div>
             </Modal>
         )
 

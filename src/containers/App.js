@@ -89,9 +89,9 @@ class App extends Component {
                 <Route path="/convocatorias" component={ConvocatoriasLista}/>
                 <Route path="/profesores" component={ListaProfesores}/>
                 <Route path="/carga" render={ () => <CargaDatos /> }/>
-                <Route path="/ayudaeconomicadetalle" component={AyudaEconomicaDetalle}/>
                 <Route path="/asignacionCursos" component={AsignarCursos}/>
                 <Route path="/ayudaeconomica" component={AyudaEconomica}/>
+                <Route path="/convocatorias" component={ConvocatoriasLista}/>
                 <Route render={()=><div>La pagina que busca no existe</div>} />
                 </Switch>
           </div>

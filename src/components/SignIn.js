@@ -15,6 +15,11 @@ class SignIn extends Component {
 		}
 	};
 	/*
+	componentDidMount(){
+		ReactDOM.findDOMNode(this).addEventListener('keypress', this.handleNVFocus);
+	}
+	*/
+	/*
 	componentWillMount(){
 		
     API.get('/auth/verificaPermiso',{
@@ -38,8 +43,7 @@ class SignIn extends Component {
   	handleLogIn= e => {
   		e.preventDefault();
   		if(this.state.codUser!="" && this.state.contrasena!=""){
-				//login;
-				console.log("logueando");
+				//login
   			API.post('auth/login',{
   				codigo: parseInt(this.state.codUser),
   				password: this.state.contrasena

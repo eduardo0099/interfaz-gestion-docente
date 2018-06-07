@@ -3,6 +3,7 @@ import {Route} from 'react-router-dom';
 import BaseContainer from "./BaseContainer";
 import axios from "axios/index";
 import {Button} from 'react-bootstrap';
+import API from '../api'
 
 class PreferenciaCursos extends Component {
 
@@ -77,7 +78,7 @@ class PreferenciaCursos extends Component {
 	}
 
 	componentDidMount() {
-		axios.get('http://200.16.7.151:8080/asignacionHorarios/listaCursosPreferencia')
+		API.get('asignacionHorarios/listaCursosPreferencia')
 			.then(response => {
 				this.setState({loading: false, cursosObl: response.data.obligatorios, cursosElec: response.data.electivos});
 			})
@@ -120,7 +121,7 @@ class PreferenciaCursos extends Component {
 				str = str + "¿Está seguro de enviar su preferencia?"
 				let r = window.confirm(str);
 				if(r == true){
-					axios.post('http://200.16.7.151:8080/asignacionHorarios/enviarPreferenciaProfesor', {
+					API.post('asignacionHorarios/enviarPreferenciaProfesor', {
 						codigoProf: this.state.codigoProfe,
 						cursos: this.state.cursosPref,
 					})
@@ -151,12 +152,12 @@ class PreferenciaCursos extends Component {
 			//console.log(this.state);
 		return (
 			<BaseContainer>
-                    <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
+                    <div className="panel col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
 
 				<Route exact path={`${this.props.match.path}`} render={() =>
 					<div>
 						<div className="panel-heading">
-							<header className="page-header m-b-lg text-center">
+							<header className="page-header m-b-md text-center">
                                     <p className="h2 m-b-lg"> PREFERENCIAS DE CURSOS </p>
                             </header>
 						</div>
