@@ -7,20 +7,29 @@ import BaseContainer from "../BaseContainer";
 import ConvocatoriaNuevo from "../convocatorias/ConvocatoriasNuevo";
 import AyudaEconomicaNuevo from "./AyudaEconomicaNuevo";
 import API from "../../api";
+import ConfirmationModal from "../ConfirmationModal";
 
 class AyudaEconomicaAprobar extends React.Component {
 
     constructor(props) {
         super(props);
-
+        this.confirmationAceptar = React.createRef();
+        this.confirmationRechazar = React.createRef();
         this.state = {
+
             solicitudEconomica: {
                 id: 2,
                 codigo: 'AYU001',
                 investigacion: 'Investigando React',
-                docenteSolicitante: 'Ruben Jordan',
+                nombreDocente: 'Ruben Jordan',
+                correo_pucp: '',
+                seccion: '',
                 motivo: 'Motivo 1',
-                monto: 350000,
+                monto_otorgado: 350000,
+                fecha_solicitud: '',
+                fecha_inicio: '',
+                comentarios_adicionales: '',
+                fecha_fin: '',
                 gastos: [
                     {id: 1, numero:'001-23020', tipo: 'Boleta', detalle: 'Impresiones y copias', monto: 35.00, observaciones: 'algo'},
                     {id: 2, numero:'001-23022', tipo: 'Boleta', detalle: 'Impresiones y copiasA', monto: 350.00, observaciones: 'algo2'},
@@ -30,18 +39,65 @@ class AyudaEconomicaAprobar extends React.Component {
         }
     }
 
+    componentWillMount() {
+        this.findSolicitud();
+    }
     findSolicitud(){
-        // aun no hay back
+        API.get('ayudasEconomicas/ayudasEconomicas/devuelveJustificacion', {
+            params: {
+                id:  this.props.match.params.idAyudaEconomica
+            }
+        }).then(response => {
+            const ae = response.data.ayudaEconomica;
+            this.setState({
+                solicitudEconomica: {
+                    id: ae.id,
+                    gastos: ae.justificacion,
+                    motivo: ae.motivo,
+                    monto_otorgado: ae.monto_otorgado,
+                    nombreDocente: ae.docenteSolicitante.nombres,
+                    correo_pucp: ae.docenteSolicitante.correo_pucp,
+                    codigo: ae.codigo,
+                    seccion: ae.docenteSolicitante.seccion,
+                    investigacion: ae.investigacion.titulo,
+                    fecha_solicitud: ae.fecha_solicitud,
+                    fecha_inicio: ae.fecha_inicio,
+                    fecha_fin: ae.fecha_fin,
+                    comentarios_adicionales: ae.comentarios_adicionales,
+                }
+            });
+        })
     }
 
-    modificarGasto(gasto, e){
-        console.log(JSON.stringify(gasto, null, 2));
-        //Johana en este metodo deberias abrir el modal en bsse al objeto gasto que te estoy mandando
-        //este metodo se llama cada vez que se hace click en una fila de la tabla
+    openConfirmationAceptar = () => {
+        this.confirmationAceptar.current.open();
     }
 
-    agregarGasto(e){
-        //Johana en este metodo deberias abrir el modal vacio para registrar
+    openConfirmationRechazar = () => {
+        this.confirmationRechazar.current.open();
+    }
+
+    aprobarSolicitud(e){
+        ///ayudasEconomicas/ayudasEconomicas/modificar
+        API.put('ayudasEconomicas/ayudasEconomicas/modificar', {
+            id: this.state.solicitudEconomica.id,
+            estado_ayuda: 2
+        }).then(response => {
+            this.confirmationAceptar.current.close();
+        })
+    }
+
+    rechazarSolicitud(e){
+        console.log("rechaza");
+        ///ayudasEconomicas/ayudasEconomicasAsistente/rechazar
+        API.put('ayudasEconomicas/ayudasEconomicas/modificar', {
+            id: this.state.solicitudEconomica.id,
+            estado_ayuda: 3
+        }).then(response => {
+            this.confirmationRechazar.current.close();
+        }).catch(err =>{
+            console.log(err);
+        })
     }
 
     render() {
@@ -49,6 +105,8 @@ class AyudaEconomicaAprobar extends React.Component {
             <div>
                 <Route exact path={`${this.props.match.path}`} render={() =>
                     <BaseContainer>
+                        <ConfirmationModal ref={this.confirmationAceptar} message={"Seguro que desea aceptar la ayuda economica?"} okaction = { this.aprobarSolicitud.bind(this) }/>
+                        <ConfirmationModal ref={this.confirmationRechazar} message={"Serguro que desea rechazar la ayuda economica?"} okaction={ this.rechazarSolicitud.bind(this) }/>
                         <div className="panel col-lg-offset-2 col-lg-8 col-md-12 col-sm-12">
                             <div className="panel-heading">
                                 <header className="page-header">
@@ -59,7 +117,7 @@ class AyudaEconomicaAprobar extends React.Component {
                                 </header>
                             </div>
                             <div className="panel-body">
-                                <h5> Informacion General </h5>
+                                <h5> Informacion General del docente</h5>
                                 <hr/>
                                 <div className="row form-group">
                                     <div className="col-md-4">
@@ -68,57 +126,51 @@ class AyudaEconomicaAprobar extends React.Component {
                                     </div>
                                     <div className="col-md-4">
                                         <label> Profesor Solicitante </label>
-                                        <span className="form-control"> {this.state.solicitudEconomica.docenteSolicitante} </span>
+                                        <span className="form-control"> {this.state.solicitudEconomica.nombreDocente} </span>
+                                    </div>
+                                    <div className="col-md-4">
+                                        <label> Correo PUCP </label>
+                                        <span className="form-control"> {this.state.solicitudEconomica.correo_pucp} </span>
+                                    </div>
+                                    <div className="col-md-4">
+                                        <label> Seccion </label>
+                                        <span className="form-control"> {this.state.solicitudEconomica.seccion} </span>
                                     </div>
                                 </div>
+                                <h5> Detalle de la Solicitud </h5>
+                                <hr/>
                                 <div className="row form-group">
-                                    <div className="col-md-8">
+                                    <div className="col-md-4">
                                         <label> Motivo </label>
                                         <span className="form-control"> {this.state.solicitudEconomica.motivo} </span>
                                     </div>
-                                </div>
-                                <div className="row form-group">
                                     <div className="col-md-4">
-                                        <label> Monto Solicitado </label>
-                                        <span className="form-control"> {this.state.solicitudEconomica.monto} </span>
+                                        <label> Monto </label>
+                                        <span className="form-control"> {this.state.solicitudEconomica.monto_otorgado} </span>
+                                    </div>
+                                    <div className="col-md-4">
+                                        <label> Fecha Registro de Solicitud </label>
+                                        <span className="form-control"> {this.state.solicitudEconomica.fecha_solicitud} </span>
+                                    </div>
+                                    <div className="col-md-4">
+                                        <label> Fecha Inicio </label>
+                                        <span className="form-control"> {this.state.solicitudEconomica.fecha_inicio} </span>
+                                    </div>
+                                    <div className="col-md-4">
+                                        <label> Fecha Fin </label>
+                                        <span className="form-control"> {this.state.solicitudEconomica.fecha_fin} </span>
+                                    </div>
+                                    <div className="col-md-4">
+                                        <label> Comentarios Adicionales </label>
+                                        <spam className="form-control"> {this.state.solicitudEconomica.comentarios_adicionales} </spam>
                                     </div>
                                 </div>
-                                <h5> Gastos Financieros Declarados </h5>
-                                <hr/>
-                                <table className="table table-striped table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th className="col-md-3">Documento</th>
-                                        <th className="col-md-3">Detalle</th>
-                                        <th className="col-md-3">Monto (S/)</th>
-                                        <th className="col-md-3">Observaciones</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {this.state.solicitudEconomica.gastos.map(gasto => {
-                                        return (
-                                            <tr key={gasto.id} onClick={this.modificarGasto.bind(this, gasto)}>
-                                                <td className="v-middle">
-                                                    <span className="block text-muted m-t-xs"> {gasto.tipo}</span>
-                                                    <span className="block text-primary m-b-xs"> {gasto.numero}</span>
-                                                </td>
-                                                <td className="v-middle">
-                                                    <span> {gasto.detalle}</span>
-                                                </td>
-                                                <td className="v-middle">
-                                                    <span> {gasto.monto}</span>
-                                                </td>
-                                                <td className="v-middle">
-                                                    <span> {gasto.observaciones}</span>
-                                                </td>
-                                            </tr>
-                                        )})
-                                    }
-                                    </tbody>
-                                </table>
                             </div>
-                            <div className="panel-footer text-right">
-                                <button className="btn btn-primary" onClick={ this.agregarGasto()}> Agregar Gasto </button>
+                            <div className="panel-footer">
+                                <div className="text-center">
+                                    <button className="btn btn-danger m-r-sm btn-lg" onClick={this.openConfirmationRechazar.bind(this)}> Rechazar </button>
+                                    <button className="btn btn-success btn-lg" onClick={this.openConfirmationAceptar.bind(this)}> Aprobar </button>
+                                </div>
                             </div>
                         </div>
                     </BaseContainer>

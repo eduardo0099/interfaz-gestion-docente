@@ -8,6 +8,7 @@ import ConvocatoriaNuevo from "../convocatorias/ConvocatoriasNuevo";
 import AyudaEconomicaNuevo from "./AyudaEconomicaNuevo";
 import API from "../../api";
 import AyudaEconomicaDetalle from "./AyudaEconomicaDetalle";
+import AyudaEconomicaAprobar from "./AyudaEconomicaAprobar";
 
 function onlyUnique(array) {
     var BreakException = {};
@@ -449,7 +450,9 @@ class AyudaEconomica extends React.Component {
                                                                 </Dropdown.Toggle>
                                                                 <Dropdown.Menu>
                                                                     <MenuItem href={'/ayudaeconomica/' + ayuda.id}>Ver
-                                                                        Detalle</MenuItem>
+                                                                    Detalle</MenuItem>
+                                                                    <MenuItem href={'/ayudaeconomica/' + ayuda.id + '/Detalle'}>Ver
+                                                                        Detalle JD</MenuItem>
                                                                 </Dropdown.Menu>
                                                             </Dropdown>
                                                         </td>
@@ -466,6 +469,7 @@ class AyudaEconomica extends React.Component {
                 }/>
                 <Route path={`${this.props.match.path}/nuevo`} component={AyudaEconomicaNuevo}/>
                 <Route path={`${this.props.match.path}/:idAyudaEconomica`} component={AyudaEconomicaDetalle}/>
+                <Route path={`${this.props.match.path}/:idAyudaEconomica/Detalle`} component={AyudaEconomicaAprobar}/>
             </div>
         );
     }
