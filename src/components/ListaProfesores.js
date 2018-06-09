@@ -6,6 +6,7 @@ import Collapsible from 'react-collapsible';
 import axios from "axios/index";
 import {Glyphicon, Dropdown, MenuItem, Col, FormControl, Form, FormGroup, ControlLabel, Panel, Button, Radio} from 'react-bootstrap';
 import API from '../api';
+import {Role, currentRole} from '../auth';
 
 class ListaProfesores extends Component {
 
@@ -129,7 +130,7 @@ class ListaProfesores extends Component {
                                                          onChange={ this.busquedaNombreProfesor.bind(this) }/>
                                         </Col>
 
-                                        
+
 
 
                                     </FormGroup>
