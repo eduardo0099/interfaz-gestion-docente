@@ -31,7 +31,8 @@ class Dashboard extends Component {
                             </div>
                             <div className="panel-body m-t-n">
                                 <div className="m-t-lg">
-                                    <DashboardTabs/>
+                                    <DashboardTabs
+                                        ruta={this.props.match.path}/>
                                 </div>
                             </div>
                         </div>
