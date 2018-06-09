@@ -27,7 +27,7 @@ class ConvocatoriasLista extends Component {
                 },
                 */
                 params: {
-                    ruta: "/home"
+                    ruta: "/convocatorias"
                 }
             }).then(resp => {
                 console.log("resp", resp.data);
