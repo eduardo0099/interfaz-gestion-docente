@@ -6,6 +6,8 @@ import Collapsible from 'react-collapsible';
 import axios from "axios/index";
 import {Glyphicon, Dropdown, MenuItem, Col, FormControl, Form, FormGroup, ControlLabel, Panel, Button, Radio} from 'react-bootstrap';
 import API from '../api';
+import { EmailShareButton, ViberIcon, EmailIcon } from 'react-share';
+
 
 class ListaProfesores extends Component {
 
@@ -115,23 +117,14 @@ class ListaProfesores extends Component {
                             <div className="panel-heading">
                                 <h2> Profesores </h2>
                             </div>
-
                             <Col md={ 10 }>
                                 <Form horizontal>
                                     <FormGroup controlId="formHorizontalSeccion">
-
-
-
-
                                         <Col sm={ 4 }>
                                             <FormControl type="text" placeholder="Buscar Nombre Profesor"
                                                          value={ this.state.profeText}
                                                          onChange={ this.busquedaNombreProfesor.bind(this) }/>
                                         </Col>
-
-                                        
-
-
                                     </FormGroup>
                                 </Form>
                             </Col>
@@ -142,9 +135,14 @@ class ListaProfesores extends Component {
                                     {this.state.profesores.map(profesor => {
                                         return (
                                             <tr className="pointer">
-                                                <td className="col-md-12">
+                                                <td className="col-md-2">
                                                     <span className="block text-primary"><Link to={"/profesores/"+profesor.codigo}> {profesor.nombre}</Link> </span>
-                                                    <small className="block text-muted"> {profesor.codigo} </small>
+                                                    <small className="block text-muted"> Codigo: {profesor.codigo} </small>
+                                                </td>
+                                                <td>
+                                                    <EmailShareButton body="xxxxxx" children={<EmailIcon size={16} round={true} />} />
+                                                    <ViberIcon size={16} round={true}/>
+                                                    <ViberIcon size={16} round={true}/>
                                                 </td>
                                                 <td className="v-middle">
                                                     <Dropdown className="dropdown-options" pullRight>
