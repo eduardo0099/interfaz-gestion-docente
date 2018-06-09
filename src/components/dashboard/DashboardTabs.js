@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import DashboardCursos from './DashboardCursos';
 
 class DashboardTabs extends Component {
 
@@ -17,7 +18,8 @@ class DashboardTabs extends Component {
 
                     </div>
                     <div className="tab-pane" id="2">
-
+                        <DashboardCursos
+                        ruta={this.props.ruta}/>
                     </div>
                     <div className="tab-pane" id="3">
 

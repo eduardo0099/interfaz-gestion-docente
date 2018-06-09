@@ -51,8 +51,9 @@ class Dashboard extends Component {
                                         />
                                     </div>
                                 </div>
-                                <div className="form-group">
-                                    <DashboardTabs seccion={this.state.seccion}/>
+                                <div className="m-t-lg">
+                                    <DashboardTabs
+                                        ruta={this.props.match.path} seccion={this.state.seccion}/>
                                 </div>
                             </div>
                         </div>
