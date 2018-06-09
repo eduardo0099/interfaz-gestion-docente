@@ -5,10 +5,10 @@ import Select from 'react-select';
 import {Panel,  Dropdown, Glyphicon, MenuItem} from 'react-bootstrap';
 import BaseContainer from "../BaseContainer";
 import ConvocatoriaNuevo from "../convocatorias/ConvocatoriasNuevo";
-import AyudaEconomicaNuevo from "./AyudaEconomicaNuevo";
+import AyudaEconomicaNuevo from "../AyudaEconomica/AyudaEconomicaNuevo";
 import API from "../../api";
-import AyudaEconomicaDetalle from "./AyudaEconomicaDetalle";
-import AyudaEconomicaAprobar from "./AyudaEconomicaAprobar";
+import AyudaEconomicaDetalle from "../AyudaEconomica/AyudaEconomicaDetalle";
+import AyudaEconomicaAprobar from "../AyudaEconomica/AyudaEconomicaAprobar";
 
 function onlyUnique(array) {
     var BreakException = {};
@@ -35,38 +35,13 @@ function onlyUnique(array) {
     return aux;
 }
 
-class AyudaEconomica extends React.Component {
+class DashboardCursos extends React.Component {
 
     constructor(props){
         super(props);
 
         this.state = {
-            montoMinVal:'',
-            montoMaxVal:'',
-            investigacionSelect:-1,
-            estadoSelect:-1,
-            motivoSelect:-1,
-            seccionSelect:-1,
-            profesorSelect:'',
-            codigoProfesorSelect:-1,
-            codigoSelect:-1,
-            idCodigoSolSelect:-1,
-            montoMin:-1,
-            montoMax:-1,
-            fechaIni:-1,
-            fechaFin:-1,
-
-            ayudasMostrar:[],
-            ciclos: [],
-            cicloSeleccionado: "",
-            listaFiltro:[],
-            listaCBInvestigaciones:[],
-            listaCBProfesor:[],
-            listaCBSeccion:[],
-            listaCBMotivo:[],
-            listaCBEstado:[],
-            listaCBCodigo:[],
-            ayudas: [
+            cursos: [
                 {
                     id: 20,
                     codigo_solicitud: 'SOL001',
@@ -86,15 +61,6 @@ class AyudaEconomica extends React.Component {
                     },
                 }]
         }
-
-        this.handleInvestigacion = this.handleInvestigacion.bind(this);
-        this.handleEstado = this.handleEstado.bind(this);
-        this.handleMotivo = this.handleMotivo.bind(this);
-        this.handleSeccion = this.handleSeccion.bind(this);
-        this.handleProfesor = this.handleProfesor.bind(this);
-        this.handleCodigo = this.handleCodigo.bind(this);
-        this.handleMontoMin = this.handleMontoMin.bind(this);
-        this.handleMontoMax = this.handleMontoMax.bind(this);
     }
 /*
     componentDidMount() {
@@ -167,241 +133,18 @@ class AyudaEconomica extends React.Component {
         this.reestablecerFiltros();
     };
 
-    handleInvestigacion(obj) {
-        this.setState({ investigacionSelect: obj.titulo })
-    }
-
-    handleEstado(obj) {
-        this.setState({ estadoSelect: obj.estado })
-    }
-
-    handleMotivo(obj) {
-        this.setState({ motivoSelect: obj.motivo })
-    }
-
-    handleSeccion(obj) {
-        this.setState({ seccionSelect: obj.seccion })
-    }
-
-    handleProfesor(obj) {
-        this.setState({
-            codigoProfesorSelect: obj.codigo,
-            profesorSelect:obj.nombres})
-    }
-
-    handleCodigo(obj) {
-        this.setState({
-            codigoSelect: obj.codigo,
-            idCodigoSolSelect:obj.id
-        })
-    }
-
-    handleMontoMin(event) {
-        this.setState({
-            montoMin: event.target.value,
-            montoMinVal:event.target.value
-        });
-    }
-
-    handleMontoMax(event) {
-        this.setState({
-            montoMax: event.target.value,
-            montoMaxVal:event.target.value
-        });
-    }
-
-
-    realizarFiltro=()=>{
-        console.log('investigacionSelect:',this.state.investigacionSelect);
-        console.log('estadoSelect:',this.state.estadoSelect);
-        console.log('motivoSelect:',this.state.motivoSelect);
-        console.log('seccionSelect:',this.state.seccionSelect);
-        console.log('profesorSelect:',this.state.codigoProfesorSelect);
-        console.log('codigoSelect:',this.state.idCodigoSolSelect);
-        console.log('montoMin:',this.state.montoMin);
-        console.log('montoMax:',this.state.montoMax);
-
-
-        API.get('ayudasEconomicas/ayudasEconomicas/filtrar', {
-            params: {
-                ciclo:this.state.cicloSeleccionado,
-                codigo_ayuda:this.state.idCodigoSolSelect,
-                codigo_inv:-1,
-                titulo:this.state.investigacionSelect,
-                codigo_profesor:this.state.codigoProfesorSelect,
-                seccion:this.state.seccionSelect,
-                motivo:this.state.motivoSelect,
-                estado:this.state.estadoSelect,
-                montoMin:this.state.montoMin,
-                montoMax:this.state.montoMax,
-                fecha_inicio:-1,
-                fecha_fin:-1
-            }
-        }).then(response => {
-            console.log('response:',response);
-            this.setState({ayudasMostrar: response.data.ayudaEconomica});
-        }).catch(error => {
-            console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`, error);
-        });
-    }
-
-    reestablecerFiltros =() =>{
-        this.setState({
-            investigacionSelect:-1,
-            estadoSelect:-1,
-            motivoSelect:-1,
-            seccionSelect:-1,
-            codigoProfesorSelect:-1,
-            codigoSelect:-1,
-            idCodigoSolSelect:-1,
-            montoMin:-1,
-            montoMax:-1,
-            fechaIni:-1,
-            fechaFin:-1,
-            montoMinVal:'',
-            montoMaxVal:'',
-            profesorSelect:'',
-            ayudasMostrar:this.state.ayudas
-        });
-    }
-
     render() {
         return (
             <div>
-                <Route exact path={`${this.props.match.path}`} render={() =>
+                <Route exact path={`${this.props.ruta}`} render={() =>
                     <BaseContainer>
                         <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
                             <div className="panel-heading">
-                                <a className="btn btn-sm btn-primary pull-right m-t-md"
-                                   href={`${this.props.match.url}/nuevo`}> Nueva </a>
                                 <h2> Ayudas Económicas </h2>
                             </div>
                             <div className="panel-body row">
-
-                                <div className="col-md-3">
+                                <div className="col-md-12">
                                     <Panel>
-                                        <Panel.Heading> Búsqueda </Panel.Heading>
-                                        <Panel.Body>
-                                            <div className="form-group">
-                                                <label> Código </label>
-                                                <Select
-                                                    value={ this.state.codigoSelect }
-                                                    onChange={ this.handleCodigo }
-                                                    valueKey={ "codigo" }
-                                                    labelKey={ "codigo" }
-                                                    options={ this.state.listaCBCodigo }
-                                                    clearable={ false }
-                                                />
-                                            </div>
-                                            <div className="form-group">
-                                                <label> Investigación </label>
-                                                <Select
-                                                    value={ this.state.investigacionSelect }
-                                                    onChange={ this.handleInvestigacion }
-                                                    valueKey={ "titulo" }
-                                                    labelKey={ "titulo" }
-                                                    options={ this.state.listaCBInvestigaciones }
-                                                    clearable={ false }
-                                                />
-                                            </div>
-                                            <div className="form-group">
-                                                <label> Profesor </label>
-                                                <Select
-                                                    value={ this.state.profesorSelect }
-                                                    onChange={ this.handleProfesor }
-                                                    valueKey={ "nombres" }
-                                                    labelKey={ "nombres" }
-                                                    options={ this.state.listaCBProfesor }
-                                                    clearable={ false }
-                                                />
-                                            </div>
-                                            <div className="form-group">
-                                                <label> Sección </label>
-                                                <Select
-                                                    value={ this.state.seccionSelect }
-                                                    onChange={ this.handleSeccion }
-                                                    valueKey={ "seccion" }
-                                                    labelKey={ "seccion" }
-                                                    options={ this.state.listaCBSeccion }
-                                                    clearable={ false }
-                                                />
-                                            </div>
-                                            <div className="form-group">
-                                                <label> Motivo </label>
-                                                <Select
-                                                    value={ this.state.motivoSelect }
-                                                    onChange={ this.handleMotivo }
-                                                    valueKey={ "motivo" }
-                                                    labelKey={ "motivo" }
-                                                    options={ this.state.listaCBMotivo }
-                                                    clearable={ false }
-                                                />
-                                            </div>
-                                            <div className="form-group">
-                                                <label> Estado </label>
-                                                <Select
-                                                    value={ this.state.estadoSelect }
-                                                    onChange={ this.handleEstado }
-                                                    valueKey={ "estado" }
-                                                    labelKey={ "estado" }
-                                                    options={ this.state.listaCBEstado }
-                                                    clearable={ false }
-                                                />
-                                            </div>
-
-                                            <div className="form-group">
-                                                <Panel>
-                                                    <Panel.Heading> Monto </Panel.Heading>
-                                                    <Panel.Body>
-                                                        <div className="form-horizontal">
-                                                            <div className="form-group">
-                                                                <label
-                                                                    className="control-label col-md-2"> Mín </label>
-                                                                <div className="col-md-10">
-                                                                    <input type="number"
-                                                                           className="form-control" value={ this.state.montoMinVal } onChange ={this.handleMontoMin}></input>
-                                                                </div>
-                                                            </div>
-                                                            <div className="form-group">
-                                                                <label
-                                                                    className="control-label col-md-2"> Máx </label>
-                                                                <div className="col-md-10">
-                                                                    <input type="number"
-                                                                           className="form-control" value={ this.state.montoMaxVal } onChange ={this.handleMontoMax}></input>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </Panel.Body>
-                                                </Panel>
-                                            </div>
-
-
-
-                                            <div>
-                                                <button className="btn btn-primary btn-block" onClick={this.realizarFiltro}> Filtrar</button>
-                                            </div>
-                                            <br></br>
-                                            <div>
-                                                <button className="btn btn-block" onClick={this.reestablecerFiltros}> Reestablecer filtros</button>
-                                            </div>
-                                        </Panel.Body>
-                                    </Panel>
-                                </div>
-                                <div className="col-md-9">
-                                    <Panel>
-                                        <div>
-                                            <div className="form-group col-md-2 row ">
-                                                <label> Ciclo </label>
-                                                <Select
-                                                    value={ this.state.cicloSeleccionado }
-                                                    onChange={ this.cambioCiclo }
-                                                    valueKey={ "descripcion" }
-                                                    labelKey={ "descripcion" }
-                                                    options={ this.state.ciclos }
-                                                    clearable={ false }
-                                                />
-                                            </div>
-                                        </div>
                                         <table className="table table-striped">
                                             <thead>
                                             <tr>
@@ -415,7 +158,7 @@ class AyudaEconomica extends React.Component {
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            {this.state.ayudasMostrar.map(ayuda => {
+                                            {this.state.cursos.map(ayuda => {
                                                 return (
                                                     <tr>
                                                         <td className="v-middle text-center">
@@ -468,12 +211,11 @@ class AyudaEconomica extends React.Component {
                         </div>
                     </BaseContainer>
                 }/>
-                <Route path={`${this.props.match.path}/nuevo`} component={AyudaEconomicaNuevo}/>
-                <Route path={`${this.props.match.path}/:idAyudaEconomica/Detalle`} component={AyudaEconomicaAprobar}/>
-                <Route path={`${this.props.match.path}/id/:idAyudaEconomica`} component={AyudaEconomicaDetalle}/>
+                <Route path={`${this.props.ruta}/:idAyudaEconomica/Detalle`} component={AyudaEconomicaAprobar}/>
+                <Route path={`${this.props.ruta}/id/:idAyudaEconomica`} component={AyudaEconomicaDetalle}/>
             </div>
         );
     }
 }
 
-export default AyudaEconomica;
+export default DashboardCursos;
