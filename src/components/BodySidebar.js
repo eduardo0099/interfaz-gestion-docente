@@ -7,7 +7,7 @@ class BodySidebar extends Component {
     super(props);
 
   }
-  
+
 
   render(){
     var tipoUser = 0;
@@ -15,13 +15,15 @@ class BodySidebar extends Component {
       var usuario = JSON.parse(atob(localStorage.getItem('u')));
       tipoUser = usuario.tipo_usuario;
     }
-    
+
     if(tipoUser==3){
       //Jefe departamento
       return(
         <div className="bodySidebar">
         <Link to="/home" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Inicio</Link>
         <div className="divider"/>
+            <Link to="/dashboard" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Dashboard</Link>
+            <div className="divider"/>
         <Link to="/profesores" onClick={() => this.props.handleMenu(false)}  className="link-body-sidebar">Profesores</Link>
         <div className="divider"/>
         <Link to="/convocatorias" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Convocatorias</Link>
@@ -55,6 +57,8 @@ class BodySidebar extends Component {
       return(
         <div className="bodySidebar">
         <Link to="/home" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Inicio</Link>
+        <div className="divider"/>
+        <Link to="/dashboard" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Inicio</Link>
         <div className="divider"/>
         <Link to="/profesores" onClick={() => this.props.handleMenu(false)}  className="link-body-sidebar">Profesores</Link>
         <div className="divider"/>
