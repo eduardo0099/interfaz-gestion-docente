@@ -1,133 +1,164 @@
 import React from 'react';
-import ReactTable from 'react-table';
-import 'react-table/react-table.css';
-import axios from "axios/index";
-import BootstrapTable from 'react-bootstrap-table-next';
 import BaseContainer from "./BaseContainer";
+import API from "../api";
+import Select from 'react-select';
 
 export class Cursos extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            infoCursos: [
-                {
-                    "tipo": "pregrado",
-                    "listaCursos": []
-                },
-                {
-                    "tipo": "posgrado",
-                    "listaCursos": []
-                },
-                {
-                    "tipo": "otros",
-                    "listaCursos": []
-                }
-            ],
+            infoCursos: [],
             ciclos: [],
-            cicloSeleccionado: ""
+            cicloSeleccionado: "",
+            infoDocente: {},
+            tipoCursos:[{id:"1",descripcion:"pregrado"},
+                {id:"2",descripcion:"posgrado"},
+                {id:"3",descripcion:"otros"}],
+            tipoSeleccionado:"pregrado",
         }
     }
 
     componentDidMount() {
-
-        axios.all([
-            axios.get('http://200.16.7.151:8080/general/cicloActual'),
-            axios.get('http://200.16.7.151:8080/general/listaCiclos'),
-        ]).then(axios.spread((respCicloAct, resplistaCiclos) => {
-            this.setState({
-                cicloSeleccionado: respCicloAct.data.cicloActual,
-                ciclos: resplistaCiclos.data.ciclos
-            });
-            return axios.get('http://200.16.7.151:8080/docente/docente/curDocente', {
-                params: {
-                    codigo: this.props.match.params.codigo,
-                    ciclo: this.state.cicloSeleccionado,
-                }
-            });
-        })).then((respcursos) => {
-                this.setState({
-                    infoCursos: respcursos.data.cursos
-                })
-            }
-        ).catch(error => {
-            console.log(`Error al obtener datos de la pantalla cursos`, error);
-        });
-
+        this.allCiclos();
+        this.findCicloActual();
     }
 
-    cambioCiclo = (event) => {
-        let nuevoCiclo = event.target.value;
-        axios.get('http://200.16.7.151:8080/docente/docente/curDocente', {
+    findCicloActual() {
+        API.get('general/cicloActual')
+            .then(response => {
+                this.setState({ cicloSeleccionado: response.data.cicloActual })
+                this.findCursos(response.data.cicloActual);
+                this.findDocente(response.data.cicloActual);
+            })
+    }
+
+    allCiclos() {
+        API.get('general/listaCiclos')
+            .then(response => {
+                this.setState({ ciclos: response.data.ciclos })
+            })
+    }
+
+    findCursos(ciclo) {
+        API.get('docente/docente/curDocente', {
             params: {
                 codigo: this.props.match.params.codigo,
-                ciclo: nuevoCiclo,
+                ciclo: ciclo,
             }
+        }).then(response => {
+            this.setState({ infoCursos: response.data.cursos[0].listaCursos})
         })
-            .then((respcursos) => {
-                this.setState({
-                    infoCursos: respcursos.data.cursos,
-                    cicloSeleccionado: nuevoCiclo
-                })
-            })
-            .catch(error => {
-                console.log(`Error al obtener datos de la pantalla cursos`, error);
-            });
+    }
+
+
+    findDocente(ciclo) {
+        API.get('docente/docente/general', {
+            params: {
+                codigo: this.props.match.params.codigo,
+                ciclo: ciclo,
+            }
+        }).then(response => {
+            this.setState({ infoDocente: response.data });
+        }).catch(error => {
+        });
+    }
+
+    cambioCiclo = (obj) => {
+        let ciclo = obj.descripcion;
+        this.setState({ cicloSeleccionado: ciclo ,tipoSeleccionado: "pregrado"});
+        this.findCursos(ciclo);
     };
 
+    findCursosXTipo(ciclo){
+        API.get('docente/docente/curDocente', {
+            params: {
+                codigo: this.props.match.params.codigo,
+                ciclo: ciclo,
+            }
+        }).then(response => {
+            if(this.state.tipoSeleccionado === "pregrado")
+                this.setState({ infoCursos: response.data.cursos[0].listaCursos})
+            if(this.state.tipoSeleccionado === "posgrado")
+                this.setState({ infoCursos: response.data.cursos[1].listaCursos})
+            if(this.state.tipoSeleccionado === "otros")
+                this.setState({ infoCursos: response.data.cursos[2].listaCursos})
+        })
+    }
+
+    cambioTipoCurso = (obj) => {
+        let tipo = obj.descripcion;
+        this.setState({tipoSeleccionado : tipo})
+        this.findCursosXTipo(this.state.cicloSeleccionado);
+    }
+
     render() {
-        let listaCursos = [];
-        let tipoCursos = ["pregrado", "postgrado", "otros"];
-        for (let i = 0; i < this.state.infoCursos.length; i++) {
-            for (let j = 0; j < this.state.infoCursos[i].listaCursos.length; j++) {
-                listaCursos.push({
-                    codigo: this.state.infoCursos[i].listaCursos[j].codigo,
-                    nombre: this.state.infoCursos[i].listaCursos[j].nombre,
-                    horario: this.state.infoCursos[i].listaCursos[j].horario,
-                    unidad: this.state.infoCursos[i].listaCursos[j].unidad,
-                    horas: this.state.infoCursos[i].listaCursos[j].horas,
-                    creditos: this.state.infoCursos[i].listaCursos[j].creditos,
-                    tipo: tipoCursos[i],
-                })
-            }
-        }
-        const columnas = [
-            {
-                text: 'Codigo',
-                dataField: 'codigo'
-            },
-            {
-                text: 'Nombre',
-                dataField: 'nombre'
-            },
-            {
-                text: 'Creditos',
-                dataField: 'creditos'
-            }, {
-                text: 'Horario',
-                dataField: 'horario'
-            }, {
-                text: 'Horas Semanales',
-                dataField: 'horas'
-            }
-        ];
-
-
         return (
             <div>
                 <BaseContainer>
-                    <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
+                    <div className="panel col-lg-offset-2 col-lg-8 col-md-12 col-sm-12">
                         <div className="panel-heading">
-                            <a className="btn btn-default pull-right m-t-md" onClick={this.props.history.goBack}> Volver al Perfil </a>
-                            <h2> Cursos </h2>
+                            <header className="page-header">
+                                <a className="btn btn-default pull-right"
+                                   onClick={ this.props.history.goBack }> Volver al Perfil </a>
+                                <p className="h2 m-b-sm"> { this.state.infoDocente.nombres } { this.state.infoDocente.apellido_paterno } { this.state.infoDocente.apellido_materno }
+                                    <small className="block m-t-xs"> Cursos </small>
+                                </p>
+                            </header>
                         </div>
                         <div className="panel-body">
-                        <select ref="selectorCiclos" onChange={this.cambioCiclo}>
-                            {this.state.ciclos.map((item, i) => {
-                                return <option key={i} value={item.descripcion}>{item.descripcion}</option>
-                            })}
-                        </select>
-                        <BootstrapTable keyField='id' data={listaCursos} columns={columnas}/>
+                            <div>
+                                <div className="form-group col-md-2 row ">
+                                    <label> Ciclo </label>
+                                    <Select
+                                        value={ this.state.cicloSeleccionado }
+                                        onChange={ this.cambioCiclo }
+                                        valueKey={ "descripcion" }
+                                        labelKey={ "descripcion" }
+                                        options={ this.state.ciclos }
+                                        clearable={ false }
+                                    />
+                                </div>
+                                <div className="form-group col-md-2 row ">
+                                    <label> Tipo </label>
+                                    <Select
+                                        value={ this.state.tipoSeleccionado }
+                                        onChange={ this.cambioTipoCurso }
+                                        valueKey={ "descripcion" }
+                                        labelKey={ "descripcion" }
+                                        options={ this.state.tipoCursos }
+                                        clearable={ false }
+                                    />
+                                </div>
+                            </div>
+                            <table className="table table-striped">
+                                <thead>
+                                <th className="v-middle col-md-4"> Curso</th>
+                                <th className="v-middle col-md-4"></th>
+                                <th className="v-middle col-md-4"></th>
+                                </thead>
+                                <tbody>
+                                { this.state.infoCursos.map(item => {
+                                    return (
+                                        <tr>
+                                            <td className="v-middle">
+                                                <span className="block text-primary"> { item.nombre } </span>
+                                                <small className="block text-muted"> { item.codigo } </small>
+                                                <small className="block text-muted"> Horario { item.horario } </small>
+                                            </td>
+                                            <td className="v-middle text-center">
+                                                <span className="badge badge-blue"> { item.creditos } </span>
+                                                <small className="block text-muted m-t-xs"> créditos</small>
+                                            </td>
+                                            <td className="v-middle text-center">
+                                                <span className="badge badge-blue"> { item.horas } </span>
+                                                <small className="block text-muted m-t-xs"> horas semanales </small>
+                                            </td>
+                                        </tr>
+                                    )
+                                }) }
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </BaseContainer>

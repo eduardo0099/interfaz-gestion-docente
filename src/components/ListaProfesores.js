@@ -1,9 +1,12 @@
 import React, {Component} from 'react';
-import {Route} from 'react-router-dom';
+import {Route,Link} from 'react-router-dom';
 import DetalleDocente from "./DetalleDocente";
 import BaseContainer from "./BaseContainer";
+import Collapsible from 'react-collapsible';
 import axios from "axios/index";
-import {Glyphicon, Dropdown, MenuItem} from 'react-bootstrap';
+import {Glyphicon, Dropdown, MenuItem, Col, FormControl, Form, FormGroup, ControlLabel, Panel, Button, Radio} from 'react-bootstrap';
+import API from '../api';
+import {Role, currentRole} from '../auth';
 
 class ListaProfesores extends Component {
 
@@ -13,14 +16,21 @@ class ListaProfesores extends Component {
         this.state = {
             loading: 'true',
             error: '',
-            profesores: []
+            profesores: [],
+            profesoresAux: [],
+            profeText: '',
+            codigoText: '',
+            filtroSeccionKey: "Todos",
+            filtro1: -1,
+            open: false,
+            secciones: [],
         }
     }
 
     componentDidMount() {
-        axios.get('http://200.16.7.151:8080/general/listaDocente')
+        API.get('general/listaDocente')
             .then(response => {
-                this.setState({loading: false, profesores: response.data.docentes});
+                this.setState({loading: false, profesores: response.data.docentes, profesoresAux: response.data.docentes});
             })
             .catch(error => {
                 this.setState({
@@ -28,7 +38,74 @@ class ListaProfesores extends Component {
                     loading: false
                 });
             });
+        this.allSecciones();
     }
+
+    allSecciones() {
+        API.get('general/listaSecciones')
+            .then(response => {
+                this.setState({ secciones: response.data.secciones })
+            })
+    }
+    /*
+    handleFiltroSeccionkey = e => {
+        if (e.target.value === "Todos") {
+            this.setState({
+                filtroSeccionkey: e.target.value,
+                filtro1: -1
+            })
+        } else {
+            this.setState({
+                filtroSeccionkey1: e.target.value,
+                listaProfesoresParcial: this.state.listaProfesoresTotal.filter(c => c.seccion === e.target.value),
+                filtro1: 1,
+                listaFiltrada1: this.state.listaProfesoresParcial
+            })
+        }
+    }
+    */
+
+    busquedaNombreProfesor = e => {
+        this.setState({
+            profeText: e.target.value,
+        })
+
+        if (this.state.profeText == '') {//la lista no esta filtrada
+            var aux = this.state.profesores.filter((d) => {
+                return d.nombre.toUpperCase().indexOf(e.target.value.toUpperCase()) !== -1
+            });
+        }
+        else {//el filtro tiene algo
+            var aux = this.state.profesoresAux.filter((d) => {
+                return d.nombre.toUpperCase().indexOf(e.target.value.toUpperCase()) !== -1
+            });
+        }
+        this.setState({
+            profesores: aux
+        })
+    }
+
+
+    busquedaCodigoProfesor = e => {
+        this.setState({
+            codigoText: e.target.value
+        })
+
+        if (this.state.codigoText == '') {//la lista no esta filtrada
+            var aux = this.state.profesores.filter((d) => {
+                return d.codigo.indexOf(e.target.value) !== -1
+            });
+        }
+        else {//el filtro tiene algo
+            var aux = this.state.profesoresAux.filter((d) => {
+                return d.codigo.indexOf(e.target.value) !== -1
+            });
+        }
+        this.setState({
+            profesores: aux
+        })
+    }
+
 
     render() {
         return (
@@ -39,6 +116,27 @@ class ListaProfesores extends Component {
                             <div className="panel-heading">
                                 <h2> Profesores </h2>
                             </div>
+
+                            <Col md={ 10 }>
+                                <Form horizontal>
+                                    <FormGroup controlId="formHorizontalSeccion">
+
+
+
+
+                                        <Col sm={ 4 }>
+                                            <FormControl type="text" placeholder="Buscar Nombre Profesor"
+                                                         value={ this.state.profeText}
+                                                         onChange={ this.busquedaNombreProfesor.bind(this) }/>
+                                        </Col>
+
+
+
+
+                                    </FormGroup>
+                                </Form>
+                            </Col>
+
                             <div className="panel-body">
                                 <table className="table table-striped table-hover">
                                     <tbody>
@@ -46,7 +144,7 @@ class ListaProfesores extends Component {
                                         return (
                                             <tr className="pointer">
                                                 <td className="col-md-12">
-                                                    <span className="block text-primary"> {profesor.nombre} </span>
+                                                    <span className="block text-primary"><Link to={"/profesores/"+profesor.codigo}> {profesor.nombre}</Link> </span>
                                                     <small className="block text-muted"> {profesor.codigo} </small>
                                                 </td>
                                                 <td className="v-middle">

@@ -2,45 +2,82 @@ import React from 'react';
 import 'react-table/react-table.css';
 import axios from "axios/index";
 import '../styles/Actividades.css';
-import {Button, Col, Grid} from 'react-bootstrap';
+import {Button} from 'react-bootstrap';
+import { Route } from 'react-router-dom';
 import BootstrapTable from 'react-bootstrap-table-next';
-import {Route} from 'react-router-dom';
-import SkyLight from 'react-skylight';
-import DatePicker from 'react-date-picker'
 import BaseContainer from "./BaseContainer";
+import RegistroActividad from "./RegistroActividad";
+import ModificarActividad from "./ModificarActividad";
+import API from "../api";
+import Select from 'react-select';
 
 export class Actividades extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             selectedId: -1,
-            actividades: [
-                {
-                    id: "",
-                    titulo: "",
-                    tipo: "",
-                    fecha_inicio: "",
-                    fecha_fin: "",
-                    estado: "",
-                }
-            ],
+            actividades: [],
             ciclos: [],
             cicloSeleccionado: "",
+            infoDocente: {},
             dateInit: new Date(),
             dateFin: new Date(),
         }
     }
 
     componentDidMount() {
-        axios.get('http://200.16.7.151:8080/docente/docente/actDocente?codigo=' + this.props.match.params.codigo + '&ciclo=2018-1')
+        this.findCicloActual();
+        this.allCiclos();
+    }
+
+    findDocente(ciclo) {
+        API.get('docente/docente/general', {
+            params: {
+                codigo: this.props.match.params.codigo,
+                ciclo: ciclo,
+            }
+        }).then(response => {
+            this.setState({ infoDocente: response.data });
+        }).catch(error => {
+            console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`, error);
+        });
+    }
+
+    findCicloActual(){
+        API.get('general/cicloActual')
             .then(response => {
-                this.setState({
-                    actividades: response.data.actividades
-                })
+                this.setState({cicloSeleccionado: response.data.cicloActual})
+                this.findActividades(response.data.cicloActual);
+                this.findDocente(response.data.cicloActual);
             })
-            .catch(error => {
-                console.log(`Error al obtener datos de la actividad ${this.props.match.params.codigo}`, error);
+    }
+
+    allCiclos() {
+        API.get('general/listaCiclos')
+            .then(response => {
+                this.setState({ ciclos: response.data.ciclos })
             })
+    }
+
+    cambioCiclo = (obj) => {
+        let ciclo = obj.descripcion;
+        this.setState({ cicloSeleccionado: ciclo })
+        this.findActividades(ciclo);
+    };
+
+    findActividades(ciclo) {
+        API.get('/docente/docente/actDocente', {
+            params: {
+                codigo: this.props.match.params.codigo,
+                ciclo: ciclo,
+            }
+        }).then(response => {
+            this.setState({
+                actividades: response.data.actividades
+            })
+        }).catch(error => {
+            console.log("Error obteniendo la lista de las investigaciones", error);
+        });
     }
 
     guardar = () => {
@@ -50,27 +87,31 @@ export class Actividades extends React.Component {
     }
 
     eliminar = () => {
-        if (this.state.selectedId != -1) {
-            if (window.confirm('Seguro que deseas eliminar esta actividad?')) {
-                // Save it!
-                axios.delete('http://200.16.7.151:8080/docente/actividad/eliminar', {
-                    data: {
-                        id: this.state.selectedId
-                    }
+        if (window.confirm('Seguro que deseas eliminar esta investigacion?')) {
+            // Save it!
+            let selectedId = this.state.selectedId;
+            axios.delete('http://200.16.7.151:8080/docente/actividad/eliminar', {
+                data: {
+                    id: this.state.selectedId
+                }
+            })
+                .then(function (response) {
+                    alert("Investigación eliminada");
                 })
-                    .then(function (response) {
-                        alert("Actividad eliminada");
-                    })
-                    .catch(function (error) {
-                        alert("Error: No se pudo eliminar la actividad");
-                    })
-            } else {
-                // Do nothing!
-            }
+                .catch(function (error) {
+                    alert("Error: No se pudo eliminar la investigación");
+                })
+
+            this.setState({
+                actividades: this.state.actividades.filter(function (el) {
+                    return el.id !== selectedId;
+                })
+            })
         } else {
-            alert(`Seleccionar una actividad!`);
+            // Do nothing!
         }
     }
+
     onChange = date => this.setState({date})
 
     render() {
@@ -100,15 +141,19 @@ export class Actividades extends React.Component {
         ];
         const selectRow = {
             mode: 'radio',
-            clickToSelect: true
+            clickToSelect: true,
+            hideSelectColumn: true,
+            bgColor: '#93a3b5',
+            selected: [this.state.selectedId]
         };
 
         const rowEvents = {
-            onClick: (e, row) => {
+            onClick: (e, row, rowIndex) => {
+                console.log(rowIndex)
+                console.log(row)
                 this.setState({
-                    selectedId: row.id
-                });
-                //alert(`clicked on row with index: ${this.state.selectedId}`);
+                    selectedId: row.id,
+                })
             }
         };
 
@@ -120,72 +165,70 @@ export class Actividades extends React.Component {
 
         let myComponent;
         if (this.state.selectedId !== -1) {
-            //myComponent = <Link to={`${this.props.match.url}/${this.state.selectedId}/ModificarActividad`}>Modificar</Link>
+            myComponent = <Button disabled={false} href={`${this.props.match.url}/${this.state.selectedId}/ModificarActividad`}>Modificar</Button>
         } else {
-            myComponent = <label onClick={this.modificar}>Modificar</label>
+            myComponent = <Button disabled={true}>Modificar</Button>
         }
+
+        let eliminar;
+        if (this.state.selectedId !== -1) {
+            eliminar = <Button disabled={false} onClick={this.eliminar}>Eliminar</Button>
+        } else {
+            eliminar = <Button disabled={true}>Eliminar</Button>
+        }
+
+        console.log(this.props)
 
         return (
             <div>
-                <BaseContainer>
-                    <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
-                        <h2>Actividades</h2>
-                        <Route exact path={`${this.props.match.path}`} render={() =>
-                            <Grid>
-                                <Col md={12}>
-                                    <Col md={12}>
-                                        <BootstrapTable keyField='id' data={this.state.actividades} columns={columns}
-                                                        selectRow={selectRow} rowEvents={rowEvents}/>
-
-                                    </Col>
-                                    <Col md={2}>
-                                        <div className="col-md-2">
-                                            <button className="btn btn-primary"
-                                                    onClick={() => this.refs.simpleDialog.show()}>Nueva Actividad
-                                            </button>
-                                        </div>
-                                        <Button onClick={this.eliminar}>Eliminar</Button>
-                                        {myComponent}
-                                    </Col>
-                                </Col>
-                            </Grid>
-                        }/>
-
-                        <SkyLight hideOnOverlayClicked ref="simpleDialog">
-                            <div className="panel panel-default">
-                                <div className="panel-heading">Registrar Nueva Actividad</div>
-                                <div className="panel-body">
-                                    <label>
-                                        Título:
-                                        <input type="text" placeholder="Título" className="form-control"
-                                               name="titulo" onChange={this.handleChange}/>
-                                    </label>
-                                    <p></p>
-                                    <label>
-                                        <select className="form-control">
-                                            <option>Congreso</option>
-                                            <option>Taller</option>
-                                            <option>Visita</option>
-                                            <option>Capacitacion</option>
-                                        </select>
-                                    </label>
-                                    <p></p>
-                                    <label>
-                                        <DatePicker onChange={this.onChange} value={this.state.dateInit}/>
-                                    </label>
-                                    <p></p>
-                                    <label>
-                                        <DatePicker onChange={this.onChange} value={this.state.dateFin}/>
-                                    </label>
-                                    <button className="btn btn-primary" onClick={this.guardar}>Guardar</button>
+                <Route exact path={ `${this.props.match.path}` } render={ () =>
+                    <BaseContainer>
+                        <div className="panel col-lg-offset-2 col-lg-8 col-md-12 col-sm-12">
+                            <div className="panel-heading">
+                                <header className="page-header">
+                                    <a className="btn btn-default pull-right"
+                                       onClick={ this.props.history.goBack }> Volver al Perfil </a>
+                                    <p className="h2 m-b-sm"> { this.state.infoDocente.nombres } { this.state.infoDocente.apellido_paterno } { this.state.infoDocente.apellido_materno }
+                                        <small className="block m-t-xs"> Actividades</small>
+                                    </p>
+                                </header>
+                            </div>
+                            <div className="panel-body">
+                                <div>
+                                    <div className="form-group col-md-2 row ">
+                                        <label> Ciclo </label>
+                                        <Select
+                                            value={ this.state.cicloSeleccionado }
+                                            onChange={ this.cambioCiclo }
+                                            valueKey={ "descripcion" }
+                                            labelKey={ "descripcion" }
+                                            options={ this.state.ciclos }
+                                            clearable={ false }
+                                        />
+                                    </div>
+                                </div>
+                                <div className="m-t-md">
+                                    <BootstrapTable keyField='id' data={ this.state.actividades } columns={ columns } rowEvents={ rowEvents } selectRow={ selectRow }/>
+                                </div>
+                                <div className="m-t-md">
+                                    <a className="btn btn-primary" href={ `${this.props.match.url}/RegistroActividad` }>Registrar</a>
+                                    <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
+                                    { eliminar }
+                                    <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
+                                    { myComponent }
                                 </div>
                             </div>
-                        </SkyLight>
-                    </div>
-                </BaseContainer>
+                        </div>
+                    </BaseContainer>
+                }/>
+
+                <Route path={`${this.props.match.path}/RegistroActividad`} component={RegistroActividad}/>
+                <Route path={`${this.props.match.path}/:idActividad/ModificarActividad`} component={ModificarActividad}/>
+
             </div>
         );
     }
 }
 
 export default Actividades;
+    

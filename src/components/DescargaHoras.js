@@ -1,113 +1,169 @@
-import React, {Component} from 'react';
-import {Grid, Row, Button, Glyphicon, Col} from 'react-bootstrap';
+import React, { Component } from 'react';
+import { Grid, Row, Button, Col, FormControl, FormGroup, ControlLabel, Form } from 'react-bootstrap';
 import axios from "axios/index";
 import Detalle_DescargaHoras from "./Detalle_DescargaHoras";
-import {Route,Link} from 'react-router-dom';
-import BootstrapTable from 'react-bootstrap-table-next';
 import BaseContainer from "./BaseContainer";
+import API from "../api";
+import Select from 'react-select';
 
-class DescargaHoras extends React.Component{
-    constructor(props){
+class DescargaHoras extends React.Component {
+    constructor(props) {
         super(props);
         this.state = {
-            descargas:[{"nombre":"",
-                        "codigo":"",
-                        "hDescargaTotal":"",
-                        "semana":[]}],
-            listaCiclos:[],
-            cicloSelect:"",
+            descargas: [{
+                nombre: "",
+                codigo: "",
+                hDescargaTotal: "",
+                semana: []
+            }],
+            ciclos: [],
+            cicloSelect: "",
+            selectedId: -1,
+            verDetalle: false,
+            infoDocente: {}
         }
     }
 
-    componentDidMount(){
-        let cicloSeleccionado = "";
-        let listaCi = [];
-        axios.all([
-            axios.get('http://200.16.7.151:8080/general/cicloActual'),
-            axios.get('http://200.16.7.151:8080/general/listaCiclos'),
-        ]).then(axios.spread((respCicloAct,resplistaCiclos)=>{
-            cicloSeleccionado = respCicloAct.data.cicloActual;
-            listaCi = resplistaCiclos.data.ciclos;
-            return axios.get('http://200.16.7.151:8080/docente/docente/horaDescDocente', {
-                params: {
-                    codigo: this.props.match.params.codigo,
-                    ciclo: cicloSeleccionado
-                }
-            });
-        }))
-            .then(response => {
-                this.setState({
-                    descargas: response.data.descargas,
-                    cicloSelect: cicloSeleccionado,
-                    listaCiclos: listaCi,
-                });
-            })
-            .catch(error => {
-                console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`,error);
-            });
+    componentDidMount() {
+        this.findCicloActual();
+        this.allCiclos();
     }
 
-    render(){
-        const columnas=[
-            {text:'Nombre del curso',dataField:'nombre'},
-            {text:'Codigo',dataField:'codigo'},
-            {text:'Horas Descarga',dataField:'hDescargaTotal'}
-        ];
+    findCicloActual() {
+        API.get('general/cicloActual')
+            .then(response => {
+                this.setState({ cicloSeleccionado: response.data.cicloActual })
+                this.findDescargas(response.data.cicloActual);
+                this.findDocente(response.data.cicloActual);
+            })
+    }
 
-        const selectRow ={
-            mode: 'checkbox',
-            clickToSelect: true,
-            hideSelectColumn: true,
-            bgColor: '#00BFFF'
-        };
+    findDocente(ciclo) {
+        API.get('docente/docente/general', {
+            params: {
+                codigo: this.props.match.params.codigo,
+                ciclo: ciclo,
+            }
+        }).then(response => {
+            this.setState({ infoDocente: response.data });
+        }).catch(error => {
+            console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`, error);
+        });
+    }
 
-        return(
+    allCiclos() {
+        API.get('general/listaCiclos')
+            .then(response => {
+                this.setState({ ciclos: response.data.ciclos })
+            })
+    }
+
+    findDescargas(ciclo) {
+        API.get('docente/docente/horaDescDocente', {
+            params: {
+                codigo: this.props.match.params.codigo,
+                ciclo: ciclo,
+            }
+        }).then((response) => {
+            this.setState({
+                // descargas: response.data.descargas,
+                descargas: []
+            })
+        }).catch(error => {
+            console.log(`Error al obtener datos de la pantalla cursos`, error);
+        });
+    }
+
+    cambioCiclo = (obj) => {
+        let ciclo = obj.descripcion;
+        this.setState({ cicloSeleccionado: ciclo });
+        this.findDescargas(ciclo);
+    };
+
+    regresarListaEncuesta = () => {
+        this.setState({
+            selectedId: -1,
+            verDetalle: false,
+        });
+    };
+
+    mostarComentarios = (index) => {
+        this.setState({
+            selectedId: index,
+            verDetalle: true,
+        });
+    };
+
+
+    render() {
+        if (!this.state.verDetalle) {
+            return (
                 <div>
                     <BaseContainer>
-                        <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
-                        <Grid>
-                        <Row className="back-bar">
-                            <Col md={12}>
-                                <Button onClick={this.props.history.goBack}><Glyphicon
-                                    glyph="arrow-left"></Glyphicon></Button>
-                                <span
-                                    className="professor-name"> Regresar a perfil docente </span>
-                            </Col>
-                        </Row>
-                        <Row><h1>Descarga de Horas</h1></Row>
-                        <Row>
-                            <Col md={12}>
-                                <p>Ciclo :
-                                    <select ref="selectorCiclos" onChange={this.state.cicloSelect}>
-                                        {this.state.listaCiclos.map((item, i) => {
-                                            return <option key={i} value={item.descripcion}>{item.descripcion}</option>
-                                        })}
-                                    </select>
-                                </p>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col md={12}>
-                                <BootstrapTable
-                                    keyField='id'
-                                    data={this.state.descargas}
-                                    columns={columnas}
-                                    selectRow={selectRow}/>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col md={10}>
-                            </Col>
-                            <Col md={2}>
-                                <Link to={`${this.props.match.url}/Detalle_DescargaHoras`}>Detalle</Link>
-                            </Col>
-                        </Row>
-                    </Grid>
+                        <div className="panel col-lg-offset-2 col-lg-8 col-md-12 col-sm-12">
+                            <div className="panel-heading">
+                                <header className="page-header">
+                                    <a className="btn btn-default pull-right"
+                                       onClick={ this.props.history.goBack }> Volver al Perfil </a>
+                                    <p className="h2 m-b-sm"> { this.state.infoDocente.nombres } { this.state.infoDocente.apellido_paterno } { this.state.infoDocente.apellido_materno }
+                                        <small className="block m-t-xs"> Descarga de Horas </small>
+                                    </p>
+                                </header>
+                            </div>
+                            <div className="panel-body">
+                                <div>
+                                    <div className="form-group col-md-2 row ">
+                                        <label> Ciclo </label>
+                                        <Select
+                                            value={ this.state.cicloSeleccionado }
+                                            onChange={ this.cambioCiclo }
+                                            valueKey={ "descripcion" }
+                                            labelKey={ "descripcion" }
+                                            options={ this.state.ciclos }
+                                            clearable={ false }
+                                        />
+                                    </div>
+                                </div>
+                                <table className="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th className="col-md-3">Curso</th>
+                                        <th className="col-md-2 text-center">Codigo</th>
+                                        <th className="col-md-2 text-center">Horas de descarga</th>
+                                        <th className="col-md-2 text-center">Detalle</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    { this.state.descargas.map((item, i) => {
+                                        return <tr key={ i }>
+                                            <td className="v-middle">
+                                                <span className="block text-primary"> { item.nombre } </span>
+                                            </td>
+                                            <td className="v-middle text-center">{ item.codigo }</td>
+                                            <td className="v-middle text-center">{ item.hDescargaTotal }</td>
+                                            <td className="v-middle"><Button
+                                                onClick={ () => this.mostarComentarios(i) }>Ver
+                                                Detalle</Button>
+                                            </td>
+                                        </tr>
+                                    }) }
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </BaseContainer>
-                    <Route path={`${this.props.match.path}/Detalle_DescargaHoras`} component={Detalle_DescargaHoras}/>
                 </div>
-        );
+            );
+        }
+        else {
+            return (
+                <Detalle_DescargaHoras
+                    volverLista={ this.regresarListaEncuesta }
+                    semana={ this.state.descargas[this.state.selectedId].semana }
+                />
+            );
+        }
     }
 }
 
