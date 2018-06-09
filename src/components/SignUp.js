@@ -38,7 +38,7 @@ class SignUp extends Component {
 			this.state.id_departamento!=0){
 			if(this.state.id_tipo_usuario==2 || this.state.id_tipo_usuario==4){
 				if(this.state.id_seccion!=0){
-					API.post('auth/register',{
+					axios.post('http://200.16.7.151:8080/auth/register',{
 						nombres: this.state.nombres,
 						apellido_materno: this.state.apellido_materno,
 						apellido_paterno: this.state.apellido_paterno,

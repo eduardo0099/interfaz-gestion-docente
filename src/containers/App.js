@@ -18,6 +18,7 @@ import AyudaEconomica from "../components/AyudaEconomica/AyudaEconomica";
 import AyudaEconomicaDetalle from "../components/AyudaEconomica/AyudaEconomicaDetalle";
 import SignUp from "../components/SignUp";
 import SignIn from "../components/SignIn";
+import Dashboard from "../components/dashboard/Dashboard";
 
 class App extends Component {
 
@@ -25,8 +26,10 @@ class App extends Component {
     super(props);
 
     this.state = {
+
       open: false,
       auth: false
+
     };
 
     this.onSetOpen = this.onSetOpen.bind(this);
@@ -72,35 +75,29 @@ class App extends Component {
       onSetOpen: this.onSetOpen,
       sidebarClassName: "sidebar",
     };
-
+    /*
+    var usuario = JSON.parse(localStorage.getItem('user'));
+    var tipoUser = usuario.tipo_usuario;
+    */
     return (
       <BrowserRouter>
         <Sidebar {...sidebarProps}>
           <Header handleMenu={this.menuButtonClick}/>
           <div className="content">
-
-                <Route path="/ayudaeconomicadetalle" component={AyudaEconomicaDetalle}/>
-              {( this.state.auth || localStorage.getItem('jwt') != null)?
                 <Switch>
                 <Route exact path="/" render={()=> <SignIn auth={this.state.auth} handleLogIn={this.handleLogIn}/>}/>
                 <Route path="/registrar" component={SignUp}/>
-                <Route path="/preferenciaCursos" component={PreferenciaCursos}/>
+                <Route path="/preferenciaCursos" component={PreferenciaCursos}/> 
                 <Route path="/home" render={ () => <Home/>} />
+                <Route path="/convocatorias" component={ConvocatoriasLista}/>
                 <Route path="/profesores" component={ListaProfesores}/>
+                <Route path="/dashboard" component={Dashboard}/>
                 <Route path="/carga" render={ () => <CargaDatos /> }/>
                 <Route path="/asignacionCursos" component={AsignarCursos}/>
                 <Route path="/ayudaeconomica" component={AyudaEconomica}/>
                 <Route path="/convocatorias" component={ConvocatoriasLista}/>
                 <Route render={()=><div>La pagina que busca no existe</div>} />
                 </Switch>
-                :
-                <Switch>
-                <Route exact path="/" render={()=> <SignIn auth={this.state.auth} handleLogIn={this.handleLogIn}/>}/>
-                <Route path="/registrar" component={SignUp}/>
-                <Route path="/preferenciaCursos" component={PreferenciaCursos}/>
-                <Route render={()=><div>La pagina que busca no existe o necesita iniciar sesión</div>} />
-                </Switch>
-               }
           </div>
         </Sidebar>
       </BrowserRouter>

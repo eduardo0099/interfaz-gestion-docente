@@ -19,6 +19,7 @@ class ModificarActividad extends Component {
         this.validator = new SimpleReactValidator();
         this.state = {
 			id_actividad: this.props.match.params.idActividad,
+            actividadBuscada : [],
             titulo: "Hola",
             tipo: "Congreso",
             fecha_inicio: '',
@@ -51,7 +52,7 @@ class ModificarActividad extends Component {
 
     componentDidMount() {
 		this.listarTipo();
-        //this.obtenerDatosActividad();
+        this.obtenerDatosActividad();
     }
 
     listarTipo(){
@@ -62,7 +63,15 @@ class ModificarActividad extends Component {
     }
 
     obtenerDatosActividad(){
-        
+        API.get('docente/actividad/mostrar', {
+            params: {
+                id_actividad: this.props.match.params.idActividad,
+            }
+        }).then(response => {
+            this.setState({ actividadBuscada: response.data });
+        }).catch(error => {
+            console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`, error);
+        });
     }
 
     handleTitulo(event) {
@@ -281,7 +290,6 @@ class ModificarActividad extends Component {
     };
 
     render() {
-        console.log('autores:', this.state.autor)
 
         const columns = [{
             dataField: 'codigo',
@@ -309,7 +317,11 @@ class ModificarActividad extends Component {
         };
 
 
-        //console.log(this.props.match.params.idInvestigacion);
+        console.log(this.state.actividadBuscada[0]);
+        console.log(this.state.actividadBuscada[0]);
+        console.log(this.state.actividadBuscada[0]);
+        console.log(this.state.actividadBuscada[0]);
+        console.log(this.state.actividadBuscada[0]);
         //console.log(moment(this.state.fecha_inicio));
         return (
             <BaseContainer>
@@ -323,7 +335,7 @@ class ModificarActividad extends Component {
                     <div className="panel-body">
                         <div className="form-group">
                             <label> Título </label>
-                            <input type="text" className="form-control" value={this.state.titulo} onChange={this.handleTitulo}></input>
+                            <input type="text" className="form-control" value={this.state.actividadBuscada[0].titulo} onChange={this.handleTitulo}></input>
                             {this.validator.message('titulo', this.state.titulo, 'required|max:100', false, {required: 'Este campo es obligatorio', max: 'El número máximo de caracteres es 20'})}
                         </div>
 

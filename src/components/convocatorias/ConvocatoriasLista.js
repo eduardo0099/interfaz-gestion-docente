@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Route, Link} from 'react-router-dom';
+import {Route, Link,Redirect} from 'react-router-dom';
 import BaseContainer from "../BaseContainer";
 import ConvocatoriaNuevo from "./ConvocatoriasNuevo";
 import ConvocatoriasListaPostulantes from "./ConvocatoriasListaPostulantes";
@@ -12,9 +12,31 @@ class ConvocatoriasLista extends Component {
         super(props);
         this.state = {
             convocatorias: [],
+            auth: false,
+            verAuth:false
         }
     }
-
+    componentWillMount() {
+        if (localStorage.getItem('jwt') == null) {
+            window.location.href = "/";
+        } else {
+            API.get('/auth/verificaPermiso', {
+                /*
+                headers:{
+                  'x-access-token' : localStorage.getItem('jwt'),
+                },
+                */
+                params: {
+                    ruta: "/home"
+                }
+            }).then(resp => {
+                console.log("resp", resp.data);
+                this.setState({ auth: resp.data.permiso,verAuth:true });
+            }).catch(err => {
+                console.log("err", err);
+            })
+        }
+    }
     componentWillMount() {
         this.search();
     }
@@ -46,6 +68,11 @@ class ConvocatoriasLista extends Component {
 
 
     render() {
+        if(!this.state.auth && this.state.verAuth){
+            return(<Redirect to="/home"/>);
+        }else if (!this.state.verAuth){
+            return(<div/>);
+        }
         return (
             <div>
                 <Route exact path={`${this.props.match.path}`} render={() =>

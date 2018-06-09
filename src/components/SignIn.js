@@ -11,8 +11,29 @@ class SignIn extends Component {
 		this.state={
 			codUser: "",
 			contrasena: "",
+			auth:false,
 		}
 	};
+	/*
+	componentDidMount(){
+		ReactDOM.findDOMNode(this).addEventListener('keypress', this.handleNVFocus);
+	}
+	*/
+	/*
+	componentWillMount(){
+		
+    API.get('/auth/verificaPermiso',{
+      token: localStorage.getItem('jwt'),
+      ruta: "/home"
+    }).then(resp => {
+
+		}).catch(err =>{
+			alert("Error: no tiene los permisos para acceder");
+		});
+    
+	}
+	*/
+
 	handleChangeCodUser = e => {
     	this.setState({ codUser: e.target.value });
   	};
@@ -26,10 +47,13 @@ class SignIn extends Component {
   				codigo: parseInt(this.state.codUser),
   				password: this.state.contrasena
   			}).then(resp => {
+					console.log(resp.data);
   				if(resp.data.auth){
+						
   					this.props.handleLogIn();
   					localStorage.setItem('jwt',resp.data.token);
-  					localStorage.setItem('user',JSON.stringify(resp.data.user));
+						localStorage.setItem('u',btoa(JSON.stringify(resp.data.user)));
+						this.setState({auth:true});
   				}else{
   					alert("Ingrese sus datos nuevamente");
   				}
@@ -45,10 +69,10 @@ class SignIn extends Component {
   	
 
 	render(){
-		if(this.props.auth){
+		if(this.state.auth == true || localStorage.getItem('jwt')!= null){
 			//ME DIRIJA A /HOME
-			return(<Redirect to='/home'/>);
-		}else{
+			window.location.href = "/home";
+		}
 			return (
 				<div>
 					<BaseContainer>
@@ -86,7 +110,7 @@ class SignIn extends Component {
 					</BaseContainer>
 				</div>
 			);
-		}
+		
 	}
 }
 

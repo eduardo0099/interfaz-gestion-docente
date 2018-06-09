@@ -4,15 +4,39 @@ import Papa from 'papaparse';
 import axios from 'axios';
 import BaseContainer from "./BaseContainer";
 import API from '../api';
+import {Redirect} from 'react-router-dom';
 
 class CargaDatos extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      cantidadFilas: 1
+      cantidadFilas: 1,
+      auth:false
     }
   };
+
+  componentWillMount() {
+    if (localStorage.getItem('jwt') == null) {
+        window.location.href = "/";
+    } else {
+        API.get('/auth/verificaPermiso', {
+            /*
+            headers:{
+              'x-access-token' : localStorage.getItem('jwt'),
+            },
+            */
+            params: {
+                ruta: "/carga"
+            }
+        }).then(resp => {
+            console.log("resp", resp.data);
+            this.setState({ auth: resp.data.permiso });
+        }).catch(err => {
+            console.log("err", err);
+        })
+    }
+}
 
   obtenerTipoFile= nombreFile => {
     let t = document.getElementsByTagName( 'select' );
@@ -95,6 +119,9 @@ class CargaDatos extends Component {
                 </td>
                 <td><Button>x</Button></td>
             </tr>;
+            if(!this.state.auth){
+                return(<Redirect to="/home"/>);
+              }
         return (
 
             <BaseContainer>
