@@ -4,6 +4,8 @@ import PerfilDocencia from "./PerfilDocencia";
 import PerfilTesis from "./PerfilTesis";
 import PerfilCursos from "./PerfilCursos";
 import PerfilPremiosDocencia from "./PerfilPremiosDocencia";
+import PerfilExperiencia from "./PerfilExperiencia";
+import PerfilInvestigacion from "./PerfilInvestigacion";
 
 class PerfilTabs extends Component {
 
@@ -74,8 +76,14 @@ class PerfilTabs extends Component {
                         </div>
                     </div>
                     <div className="tab-pane" id="3">
+                        { this.props.experiencias.map( experiencia => {
+                            return <PerfilExperiencia item={experiencia}/>
+                        })}
                     </div>
                     <div className="tab-pane" id="4">
+                        { this.props.investigaciones.map( investigacion => {
+                            return <PerfilInvestigacion item={investigacion}/>
+                        })}
                     </div>
                 </div>
             </div>

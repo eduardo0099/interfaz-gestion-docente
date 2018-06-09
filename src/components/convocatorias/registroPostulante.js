@@ -244,7 +244,7 @@ class registroPostulante extends Component {
     findConvocatoria() {
         API.get('convocatoria/convocatoria/devolver', {
             params: {
-                id: this.props.match.params.codigoConv,
+                id: this.props.match.params.id_convocatoria,
             }
         }).then(response => {
             let infoConv=response.data[0];
@@ -295,7 +295,7 @@ class registroPostulante extends Component {
                 });
             }
         }).catch(error => {
-            console.log(`Error al obtener datos de convocatoria ${this.props.match.params.codigoConv}`, error);
+            console.log(`Error al obtener datos de convocatoria ${this.props.match.params.id_convocatoria}`, error);
         });
     }
 
@@ -796,7 +796,7 @@ class registroPostulante extends Component {
                     telefono: this.state.telefono,
                     celular: this.state.celular
                 },
-            id_convocatoria:this.props.match.params.codigoConv,
+            id_convocatoria:this.props.match.params.id_convocatoria,
             postulante_experiencia:experiencia,
             postulante_investigacion:investigaciones,
             postulante_docencia_cargo:cargos,

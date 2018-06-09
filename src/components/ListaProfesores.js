@@ -2,9 +2,11 @@ import React, {Component} from 'react';
 import {Route,Link} from 'react-router-dom';
 import DetalleDocente from "./DetalleDocente";
 import BaseContainer from "./BaseContainer";
+import Collapsible from 'react-collapsible';
 import axios from "axios/index";
-import {Glyphicon, Dropdown, MenuItem, Col, FormControl, Form, FormGroup, ControlLabel} from 'react-bootstrap';
+import {Glyphicon, Dropdown, MenuItem, Col, FormControl, Form, FormGroup, ControlLabel, Panel, Button, Radio} from 'react-bootstrap';
 import API from '../api';
+import {Role, currentRole} from '../auth';
 
 class ListaProfesores extends Component {
 
@@ -19,7 +21,9 @@ class ListaProfesores extends Component {
             profeText: '',
             codigoText: '',
             filtroSeccionKey: "Todos",
-            filtro1: -1
+            filtro1: -1,
+            open: false,
+            secciones: [],
         }
     }
 
@@ -34,8 +38,15 @@ class ListaProfesores extends Component {
                     loading: false
                 });
             });
+        this.allSecciones();
     }
 
+    allSecciones() {
+        API.get('general/listaSecciones')
+            .then(response => {
+                this.setState({ secciones: response.data.secciones })
+            })
+    }
     /*
     handleFiltroSeccionkey = e => {
         if (e.target.value === "Todos") {

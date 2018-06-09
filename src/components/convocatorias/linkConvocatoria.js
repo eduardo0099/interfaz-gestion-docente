@@ -39,12 +39,12 @@ class linkConvocatoria extends Component {
     findConvocatoria() {
         API.get('convocatoria/convocatoria/devolver', {
             params: {
-                id: this.props.match.params.codigoConv,
+                id: this.props.match.params.id_convocatoria,
             }
         }).then(response => {
             this.setState({ infoConvocatoria: response.data[0] });
         }).catch(error => {
-            console.log(`Error al obtener datos de convocatoria ${this.props.match.params.codigoConv}`, error);
+            console.log(`Error al obtener datos de convocatoria ${this.props.match.params.id_convocatoria}`, error);
         });
     }
 

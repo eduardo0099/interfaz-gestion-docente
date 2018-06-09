@@ -19,33 +19,20 @@ class ConvocatoriasListaPostulantes extends Component {
             fecha_limite: '',
             postulantes: []
         }
-
     }
 
     componentWillMount() {
-        // search();
         this.search();
     }
 
     search() {
         API.get('convocatoria/convocatoria/detalle', {
             params: {
-                id: this.props.match.params.codigoConv
+                id: this.props.match.params.id_convocatoria
             }
         }).then(response => {
             this.setState(response.data[0]);
         })
-    }
-
-    labelDocumento(estado) {
-        switch (estado) {
-            case 'Verificados':
-                return <span className="label label-success"> Verificados </span>;
-            case 'Inconsistentes':
-                return <span className="label label-danger"> Inconsistentes </span>;
-            case 'Sin Verificar':
-                return <span className="label label-danger"> Sin Verificar </span>;
-        }
     }
 
     labelPostulacion(estado) {
@@ -55,7 +42,7 @@ class ConvocatoriasListaPostulantes extends Component {
             case 'Rechazado':
                 return <span className="label label-danger"> Rechazado </span>;
             case 'Pendiente':
-                return <span className="label label-warning"> Sin Verificar </span>;
+                return <span className="label label-warning"> Pendiente </span>;
         }
     }
 
@@ -82,21 +69,21 @@ class ConvocatoriasListaPostulantes extends Component {
                                     <h5></h5>
                                 </div>
 
-                                <a className="btn btn-default pull-right" href={ `${this.props.history.location.pathname}/link` }> URL </a>
+                                <Link className="btn btn-default pull-right" to={ `${this.props.history.location.pathname}/link` }> URL </Link>
 
                                 <table className="table table-striped">
                                     <thead>
                                     <tr>
                                         <th className="v-middle col-md-4"> Nombre</th>
                                         <th className="v-middle col-md-4 text-center"> Fecha Postulacion</th>
-                                        <th className="v-middle col-md-4 text-center"> Estado Postulación</th>
+                                        <th className="v-middle col-md-4 text-center"> Estado</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     {
                                         this.state.postulantes.map(item => {
                                             return (
-                                                <tr>
+                                                <tr key={item.codigo}>
                                                     <td className="v-middle">
                                                         <Link to={`${this.props.history.location.pathname}/postulante/${item.codigo}`} className="block text-primary">{item.nombre}</Link>
                                                     </td>
