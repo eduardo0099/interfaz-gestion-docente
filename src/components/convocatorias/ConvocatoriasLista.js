@@ -5,6 +5,7 @@ import ConvocatoriaNuevo from "./ConvocatoriasNuevo";
 import ConvocatoriasListaPostulantes from "./ConvocatoriasListaPostulantes";
 import API from '../../api.js';
 import ConfirmationModal from "../ConfirmationModal";
+import axios from 'axios';
 
 class ConvocatoriasLista extends Component {
 
@@ -13,7 +14,7 @@ class ConvocatoriasLista extends Component {
         this.state = {
             convocatorias: [],
             auth: false,
-            verAuth:false
+            verAuth:false,
         }
     }
     componentWillMount() {
@@ -27,17 +28,18 @@ class ConvocatoriasLista extends Component {
                 },
                 */
                 params: {
-                    ruta: "/home"
+                    ruta: "/convocatorias"
                 }
             }).then(resp => {
-                console.log("resp", resp.data);
-                this.setState({ auth: resp.data.permiso,verAuth:true });
+                console.log("resp convocatoria",typeof resp.data.permiso,resp.data.permiso);
+                this.setState({ auth: resp.data.permiso, verAuth:true });
             }).catch(err => {
                 console.log("err", err);
             })
         }
     }
-    componentWillMount() {
+    
+    componentDidMount() {
         this.search();
     }
 
