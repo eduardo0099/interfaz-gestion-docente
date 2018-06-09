@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { Tabs, Tab, Col, Grid, Row, FormGroup, ControlLabel, FormControl, Form, Button, Checkbox, Modal } from 'react-bootstrap';
 import BaseContainer from './BaseContainer';
 import BootstrapTable from 'react-bootstrap-table-next';
-import axios from 'axios';
-import API from '../api';
+git import API from '../api';
 import {Redirect} from 'react-router-dom';
 
 class AsignarCursos extends Component {
@@ -388,7 +387,7 @@ class AsignarCursos extends Component {
     }
 
     handleVerDetalles = () => {
-        axios.get('http://200.16.7.151:8080/asignacionHorarios/detalleCargaDocenteAsignado', {
+        API.get('asignacionHorarios/detalleCargaDocenteAsignado', {
             params: {
                 codDocente: this.state.resSeleccionado[0],
                 ciclo: this.state.filtroCicloRes
