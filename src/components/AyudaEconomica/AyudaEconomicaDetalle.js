@@ -36,7 +36,7 @@ class AyudaEconomicaDetalle extends React.Component {
                     }]
             },
             isOpen: false,
-            tipoDocumento: [{id: 1, descripcion: "Boletaf"}, {id: 2, descripcion: "Factura"}],
+            tipoDocumento: [{id: 1, descripcion: "Boleta"}, {id: 2, descripcion: "Factura"}],
             numDoc:"",
             tipoDocSeleccionado: "---",
             detalleDoc:"",
