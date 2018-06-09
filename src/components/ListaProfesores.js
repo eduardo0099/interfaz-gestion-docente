@@ -115,7 +115,6 @@ class ListaProfesores extends Component {
                         <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
                             <div className="panel-heading">
                                 <h2> Profesores </h2>
-                                { currentRole() === Role.JEFE_DEPARTAMENTO ? <span> ES JEFE DEPARTAMENTO </span> : <span> NO ES JEFE </span> }
                             </div>
 
                             <Col md={ 10 }>
@@ -131,7 +130,7 @@ class ListaProfesores extends Component {
                                                          onChange={ this.busquedaNombreProfesor.bind(this) }/>
                                         </Col>
 
-                                        
+
 
 
                                     </FormGroup>
