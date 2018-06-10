@@ -12,7 +12,8 @@ class CargaDatos extends Component {
     super(props);
     this.state = {
       cantidadFilas: 1,
-      auth:false
+      auth:false,
+      verAuth:false,
     }
   };
 
@@ -31,7 +32,7 @@ class CargaDatos extends Component {
             }
         }).then(resp => {
             console.log("resp", resp.data);
-            this.setState({ auth: resp.data.permiso });
+            this.setState({ auth: resp.data.permiso, verAuth:true });
         }).catch(err => {
             console.log("err", err);
         })
@@ -119,9 +120,11 @@ class CargaDatos extends Component {
                 </td>
                 <td><Button>x</Button></td>
             </tr>;
-            if(!this.state.auth){
+            if(!this.state.auth && this.state.verAuth){
                 return(<Redirect to="/home"/>);
-              }
+            }else if (!this.state.verAuth){
+                return(<div/>);
+            }
         return (
 
             <BaseContainer>

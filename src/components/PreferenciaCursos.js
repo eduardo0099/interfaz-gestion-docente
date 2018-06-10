@@ -24,18 +24,12 @@ class PreferenciaCursos extends Component {
 
 	handleProfCode(event) {
 		this.setState({codigoProfe: event.target.value});
-		/*
-		//Servicio donde se envia el código del profesor
-		axios.post('http://200.16.7.151:8080/asignacionHorarios/enviarCodigoProfe', {
-			codigoProfe: this.state.codigoProfe,
-		})
-			.then(response => {
-			})
-			.catch(error => {
-			})
 		//Servicio que recoge el nombre del profesor
-		axios.get('http://demo4106552.mockable.io/asignacionHorarios/nombreProfeReferenciado')
-			.then(response => {
+		API.get('asignacionHorarios/nombreProfeReferenciado', {
+            params: {
+                id: this.state.codigoProfe
+            }
+        }).then(response => {
 				this.setState({nombreProfe: response.data.nombreProfe});
 			})
 			.catch(error => {
@@ -47,7 +41,6 @@ class PreferenciaCursos extends Component {
 		else{
 			document.getElementsByName("codigoProfe")[0].value=this.state.nombreProfe;
 		}
-		*/
 	}
 
 

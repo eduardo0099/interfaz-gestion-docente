@@ -7,6 +7,7 @@ import BaseContainer from "../BaseContainer";
 import ConvocatoriaNuevo from "../convocatorias/ConvocatoriasNuevo";
 import AyudaEconomicaNuevo from "./AyudaEconomicaNuevo";
 import API from "../../api";
+import {Role, currentRole} from "../../auth";
 
 class AyudaEconomicaDetalle extends React.Component {
 
@@ -43,6 +44,7 @@ class AyudaEconomicaDetalle extends React.Component {
             montoDoc:-1,
             obsDoc:"",
             modificarOpen:false,
+            idNew: 1,
             gastoSelecc:[]
         }
     }
@@ -103,7 +105,8 @@ class AyudaEconomicaDetalle extends React.Component {
                 monto_justificacion:this.state.montoDoc,
                 observaciones:this.state.obsDoc,
                 tipo_documento:this.state.tipoDocSeleccionado,
-            }).then(res => {
+            }).then(res => { 
+                this.setState({idNew: res.data.nuevo_id});
                 alert("Se ha registrado correctamente");
             }).catch(error => {
                 alert("Ha ocurrido un error, intentelo luego");
@@ -165,161 +168,173 @@ class AyudaEconomicaDetalle extends React.Component {
         })
     }
     render() {
-        return (
-            <div>
-                <Route exact path={`${this.props.match.path}`} render={() =>
-                    <BaseContainer>
-                        <div className="panel col-lg-offset-2 col-lg-8 col-md-12 col-sm-12">
-                            <div className="panel-heading">
-                                <header className="page-header">
-                                    <a className="btn btn-default pull-right"
-                                       onClick={this.props.history.goBack}> Volver </a>
-                                    <p className="h2 m-b-sm"> Solicitud
-                                        Economica {this.state.solicitudEconomica.codigo} </p>
-                                </header>
-                            </div>
-                            <div className="panel-body">
-                                <h5> Informacion General </h5>
-                                <hr/>
-                                <div className="row form-group">
-                                    <div className="col-md-4">
-                                        <label> Codigo </label>
-                                        <span className="form-control"> {this.state.solicitudEconomica.codigo} </span>
-                                    </div>
-                                    <div className="col-md-4">
-                                        <label> Profesor Solicitante </label>
-                                        <span className="form-control"> {this.state.solicitudEconomica.docenteSolicitante} </span>
-                                    </div>
+        if(currentRole() != Role.JEFE_DEPARTAMENTO){
+            return (
+                <div>
+                    <Route exact path={`${this.props.match.path}`} render={() =>
+                        <BaseContainer>
+                            <div className="panel col-lg-offset-2 col-lg-8 col-md-12 col-sm-12">
+                                <div className="panel-heading">
+                                    <header className="page-header">
+                                        <a className="btn btn-default pull-right"
+                                           onClick={this.props.history.goBack}> Volver </a>
+                                        <p className="h2 m-b-sm"> Solicitud
+                                            Economica {this.state.solicitudEconomica.codigo} </p>
+                                    </header>
                                 </div>
-                                <div className="row form-group">
-                                    <div className="col-md-8">
-                                        <label> Investigación </label>
-                                        <span className="form-control"> {this.state.solicitudEconomica.investigacion} </span>
-                                    </div>
-                                </div>
-                                <div className="row form-group">
-                                    <div className="col-md-8">
-                                        <label> Motivo </label>
-                                        <span className="form-control"> {this.state.solicitudEconomica.motivo} </span>
-                                    </div>
-                                </div>
-                                <div className="row form-group">
-                                    <div className="col-md-4">
-                                        <label> Monto Solicitado </label>
-                                        <span className="form-control"> {this.state.solicitudEconomica.monto_otorgado} </span>
-                                    </div>
-                                </div>
-                                <h5> Gastos Financieros Declarados </h5>
-                                <hr/>
-                                <table className="table table-striped table-hover" >
-                                    <thead>
-                                    <tr>
-                                        <th className="col-md-3">Documento</th>
-                                        <th className="col-md-3">Detalle</th>
-                                        <th className="col-md-3">Monto (S/)</th>
-                                        <th className="col-md-3">Observaciones</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {this.state.solicitudEconomica.gastos.map(gasto => {
-                                        return (
-                                            <tr key={gasto.id} onClick={this.modificarGasto.bind(this,gasto)} >
-                                                <td className="v-middle">
-                                                    <span className="block text-muted m-t-xs"> Factura</span>
-                                                    <span className="block text-primary m-b-xs"> {gasto.numero_documento}</span>
-                                                </td>
-                                                <td className="v-middle">
-                                                    <span> {gasto.detalle}</span>
-                                                </td>
-                                                <td className="v-middle">
-                                                    <span> {gasto.monto_justificacion}</span>
-                                                </td>
-                                                <td className="v-middle">
-                                                    <span> {gasto.observaciones}</span>
-                                                </td>
-                                            </tr>
-                                        )})
-                                    }
-                                    </tbody>
-                                </table>
-                            </div>
-                            <Modal show={this.state.modificarOpen} onClose={this.handleCloseMod}>
-                                <Modal.Header closeButton>
-                                    <Modal.Title>Moficar gasto</Modal.Title>
-                                </Modal.Header>
-                                <Modal.Body>
-                                    <BaseContainer>
-                                        <div className="row form-group">
-                                            <label>Numero de documento:</label>
-                                            <input>{this.state.numDoc}</input>
+                                <div className="panel-body">
+                                    <h5> Informacion General </h5>
+                                    <hr/>
+                                    <div className="row form-group">
+                                        <div className="col-md-4">
+                                            <label> Codigo </label>
+                                            <span className="form-control"> {this.state.solicitudEconomica.codigo} </span>
                                         </div>
-                                        <div className="row form-group">
-                                            <label>Monto:</label>
-                                            <input>{this.state.montoDoc}</input>
+                                        <div className="col-md-4">
+                                            <label> Profesor Solicitante </label>
+                                            <span className="form-control"> {this.state.solicitudEconomica.docenteSolicitante} </span>
                                         </div>
-                                        <div className="row form-group">
-                                            <label>Observaciones:</label>
-                                            <input>{this.state.obsDoc}</input>
+                                    </div>
+                                    <div className="row form-group">
+                                        <div className="col-md-8">
+                                            <label> Investigación </label>
+                                            <span className="form-control"> {this.state.solicitudEconomica.investigacion} </span>
                                         </div>
-                                    </BaseContainer>
-                                </Modal.Body>
-                            </Modal>
-
-                            <div className="panel-footer text-right">
-                                <button type="button" className="btn btn-primary" onClick={ this.handleOpen}>Agregar Gasto</button>
-                                <Modal show={this.state.isOpen} onClose={this.handleClose}>
+                                    </div>
+                                    <div className="row form-group">
+                                        <div className="col-md-8">
+                                            <label> Motivo </label>
+                                            <span className="form-control"> {this.state.solicitudEconomica.motivo} </span>
+                                        </div>
+                                    </div>
+                                    <div className="row form-group">
+                                        <div className="col-md-4">
+                                            <label> Monto Solicitado </label>
+                                            <span className="form-control"> {this.state.solicitudEconomica.monto_otorgado} </span>
+                                        </div>
+                                    </div>
+                                    <h5> Gastos Financieros Declarados </h5>
+                                    <hr/>
+                                    <table className="table table-striped table-hover" >
+                                        <thead>
+                                        <tr>
+                                            <th className="col-md-3">Documento</th>
+                                            <th className="col-md-3">Detalle</th>
+                                            <th className="col-md-3">Monto (S/)</th>
+                                            <th className="col-md-3">Observaciones</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {this.state.solicitudEconomica.gastos.map(gasto => {
+                                            return (
+                                                <tr key={gasto.id} onClick={this.modificarGasto.bind(this,gasto)} >
+                                                    <td className="v-middle">
+                                                        <span className="block text-muted m-t-xs"> Factura</span>
+                                                        <span className="block text-primary m-b-xs"> {gasto.numero_documento}</span>
+                                                    </td>
+                                                    <td className="v-middle">
+                                                        <span> {gasto.detalle}</span>
+                                                    </td>
+                                                    <td className="v-middle">
+                                                        <span> {gasto.monto_justificacion}</span>
+                                                    </td>
+                                                    <td className="v-middle">
+                                                        <span> {gasto.observaciones}</span>
+                                                    </td>
+                                                </tr>
+                                            )})
+                                        }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <Modal show={this.state.modificarOpen} onClose={this.handleCloseMod}>
                                     <Modal.Header closeButton>
-                                        <Modal.Title>Agregar nuevo gasto</Modal.Title>
+                                        <Modal.Title>Modificar gasto</Modal.Title>
                                     </Modal.Header>
                                     <Modal.Body>
                                         <BaseContainer>
                                             <div className="row form-group">
-                                                <label>N° Documento:</label>
-                                                <input className="form-control" onChange={this.handleNumDoc}></input>
-                                            </div>
-                                            <div className="row form-group">
-                                                <label>Tipo de documento:</label>
-                                                <FormControl componentClass="select" placeholder="select"
-                                                             onChange={ this.handleDocSeleccionado }
-                                                             value={ this.state.tipoDocSeleccionado }>
-                                                    <option value="---">---</option>
-                                                    { this.state.tipoDocumento.map((item) => {
-                                                        return <option key={ item.id } value={ item.descripcion }>{ item.descripcion }</option>
-                                                    }) }
-                                                </FormControl>
-                                            </div>
-                                            <div className="row form-group">
-                                                <label>Detalle:</label>
-                                                <input className="form-control" onChange={this.handleDetalle}></input>
+                                                <label>Numero de documento:</label>
+                                                <input>{this.state.numDoc}</input>
                                             </div>
                                             <div className="row form-group">
                                                 <label>Monto:</label>
-                                                <input className="form-control" type="number" pattern="[0-9]*" onChange={this.handleMonto}></input>
+                                                <input>{this.state.montoDoc}</input>
                                             </div>
                                             <div className="row form-group">
                                                 <label>Observaciones:</label>
-                                                <FormGroup controlId="formControlsTextarea">
-                                                    <input className="form-control" componentClass="textarea" onChange={this.handleObs}/>
-                                                </FormGroup>
-                                            </div>
-                                            <div className="row form-group">
-                                                <label>Fotografia del documento:</label>
-
+                                                <input>{this.state.obsDoc}</input>
                                             </div>
                                         </BaseContainer>
                                     </Modal.Body>
-                                    <Modal.Footer>
-                                        <button type="button" className="btn btn-primary" onClick={this.agregarGasto}>Aceptar</button>
-                                        <button type="button" className="btn btn-primary" onClick={this.handleClose}>Cancelar</button>
-                                    </Modal.Footer>
                                 </Modal>
+
+                                <div className="panel-footer text-right">
+                                    <button type="button" className="btn btn-primary" onClick={ this.handleOpen}>Agregar Gasto</button>
+                                    <Modal show={this.state.isOpen} onClose={this.handleClose}>
+                                        <Modal.Header closeButton>
+                                            <Modal.Title>Agregar nuevo gasto</Modal.Title>
+                                        </Modal.Header>
+                                        <Modal.Body>
+                                            <BaseContainer>
+                                                <div className="row form-group">
+                                                    <label>N° Documento:</label>
+                                                    <input className="form-control" onChange={this.handleNumDoc}></input>
+                                                </div>
+                                                <div className="row form-group">
+                                                    <label>Tipo de documento:</label>
+                                                    <FormControl componentClass="select" placeholder="select"
+                                                                 onChange={ this.handleDocSeleccionado }
+                                                                 value={ this.state.tipoDocSeleccionado }>
+                                                        <option value="---">---</option>
+                                                        { this.state.tipoDocumento.map((item) => {
+                                                            return <option key={ item.id } value={ item.descripcion }>{ item.descripcion }</option>
+                                                        }) }
+                                                    </FormControl>
+                                                </div>
+                                                <div className="row form-group">
+                                                    <label>Detalle:</label>
+                                                    <input className="form-control" onChange={this.handleDetalle}></input>
+                                                </div>
+                                                <div className="row form-group">
+                                                    <label>Monto:</label>
+                                                    <input className="form-control" type="number" pattern="[0-9]*" onChange={this.handleMonto}></input>
+                                                </div>
+                                                <div className="row form-group">
+                                                    <label>Observaciones:</label>
+                                                    <FormGroup controlId="formControlsTextarea">
+                                                        <input className="form-control" componentClass="textarea" onChange={this.handleObs}/>
+                                                    </FormGroup>
+                                                </div>
+                                                <div className="row form-group">
+                                                    <label>Fotografia del documento:</label>
+
+                                                </div>
+                                            </BaseContainer>
+                                        </Modal.Body>
+                                        <Modal.Footer>
+                                            <button type="button" className="btn btn-primary" onClick={this.agregarGasto}>Aceptar</button>
+                                            <button type="button" className="btn btn-primary" onClick={this.handleClose}>Cancelar</button>
+                                        </Modal.Footer>
+                                    </Modal>
+                                </div>
                             </div>
-                        </div>
-                    </BaseContainer>
-                }/>
-                <Route path={`${this.props.match.path}/nuevo`} component={AyudaEconomicaNuevo}/>
-            </div>
-        );
+                        </BaseContainer>
+                    }/>
+                    <Route path={`${this.props.match.path}/nuevo`} component={AyudaEconomicaNuevo}/>
+                </div>
+            );
+        }else{
+            return(
+                <div>
+                    <label>
+                        Lo sentimos. Al parecer la dirección está mal escrita o no tiene permiso para entrar en esta página. Por favor, contacte con los administradores del sistema.
+                    </label>
+                    <br></br>   
+                    <a className="btn btn-default pull-right"onClick={this.props.history.goBack}> Volver </a>
+                </div>
+            );
+        }
     }
 }
 
