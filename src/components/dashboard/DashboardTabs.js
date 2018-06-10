@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import DashboardCursos from './DashboardCursos';
 import DashboardInvestigaciones from "./DashboardInvestigaciones";
+import DashboardAyudaEconomica from "./DashboardAyudaEconomica";
 
 class DashboardTabs extends Component {
 
@@ -26,7 +27,7 @@ class DashboardTabs extends Component {
                         <DashboardInvestigaciones/>
                     </div>
                     <div className="tab-pane" id="4">
-
+                        <DashboardAyudaEconomica/>
                     </div>
                     <div className="tab-pane" id="5">
 

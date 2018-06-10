@@ -24,7 +24,7 @@ export function currentRole() {
                 return Role.COORDINADOR;
         }
     } catch (e) {
-        console.error('Error el obtener los roles');
+        console.error('Error al obtener los roles');
         return null;
     }
 
