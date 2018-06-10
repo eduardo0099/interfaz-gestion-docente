@@ -22,6 +22,14 @@ class Dashboard extends Component {
     }
 
 
+    allSecciones = () => {
+        API.get('secciones')
+            .then(response => {
+                this.setState({secciones: response.data});
+            })
+    }
+
+
     cambioSeccion = (obj) => {
         this.setState({seccion: obj});
     };
@@ -52,8 +60,7 @@ class Dashboard extends Component {
                                     </div>
                                 </div>
                                 <div className="m-t-lg">
-                                    <DashboardTabs
-                                        ruta={this.props.match.path} seccion={this.state.seccion}/>
+                                    <DashboardTabs ruta={this.props.match.path} seccion={this.state.seccion}/>
                                 </div>
                             </div>
                         </div>
