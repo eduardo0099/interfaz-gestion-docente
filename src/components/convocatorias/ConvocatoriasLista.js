@@ -3,8 +3,10 @@ import {Route, Link,Redirect} from 'react-router-dom';
 import BaseContainer from "../BaseContainer";
 import ConvocatoriaNuevo from "./ConvocatoriasNuevo";
 import ConvocatoriasListaPostulantes from "./ConvocatoriasListaPostulantes";
+import ConvocatoriaDetalle from "./ConvocatoriaDetalle"
 import API from '../../api.js';
 import ConfirmationModal from "../ConfirmationModal";
+import {Role,currentRole} from '../../auth.js'
 import axios from 'axios';
 
 class ConvocatoriasLista extends Component {
@@ -54,6 +56,8 @@ class ConvocatoriasLista extends Component {
         switch (estado) {
             case 'Creada':
                 return <span className="label label-default"> Creado </span>;
+            case 'Aprobada':
+                return <span className="label label-default"> Aprobada </span>;
             case 'Abierta':
                 return <span className="label label-success"> Abierta </span>;
             case 'Cerrada':
@@ -70,19 +74,21 @@ class ConvocatoriasLista extends Component {
 
 
     render() {
-        if(!this.state.auth && this.state.verAuth){
+        /*if(!this.state.auth && this.state.verAuth){
             return(<Redirect to="/home"/>);
         }else if (!this.state.verAuth){
             return(<div/>);
-        }
+        }*/
         return (
             <div>
                 <Route exact path={`${this.props.match.path}`} render={() =>
                     <BaseContainer>
                         <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
                             <div className="panel-heading">
-                                <Link className="btn btn-sm btn-primary pull-right m-t-md"
-                                      to={"/convocatorias/nuevo"}> Nueva Convocatoria</Link>
+                                {currentRole()=== Role.JEFE_DEPARTAMENTO ?<span></span>
+                                    :<Link className="btn btn-sm btn-primary pull-right m-t-md"
+                                           to={"/convocatorias/nuevo"}> Nueva Convocatoria</Link>
+                                    }
                                 <h2> Convocatorias </h2>
                             </div>
                             <div className="panel-body">
@@ -105,19 +111,23 @@ class ConvocatoriasLista extends Component {
                                                     <small className="block text-muted"> {item.fechaRegistro} </small>
                                                 </td>
                                                 <td className="v-middle">
-                                                    <span> {item.nombre} </span>
+                                                    <Link to={"/convocatorias/" + item.id +"/detalle" }>
+                                                        <span> {item.nombre} </span>
+                                                    </Link>
                                                 </td>
                                                 <td className="v-middle">
                                                     <span className="block text-primary"> {item.curso.nombre} </span>
                                                     <small className="block text-muted"> {item.curso.codigo} </small>
                                                 </td>
                                                 <td className="v-middle text-center">
-                                                    <Link to={"/convocatorias/" + item.id}>
-
+                                                    {(item.estado === 'Creada' || item.estado === 'Aprobado')?
+                                                        <span></span>
+                                                        :
+                                                        <Link to={"/convocatorias/" + item.id}>
                                                             <span className="badge"> {item.cantidadPostulantes} </span>
-                                                            <span
-                                                                className="block small text-muted m-t-xs"> postulantes </span>
-                                                    </Link>
+                                                            <span className="block small text-muted m-t-xs"> postulantes </span>
+                                                        </Link>
+                                                    }
                                                 </td>
                                                 <td className="v-middle text-center">
                                                     {this.labelEstado(item.estado)}
@@ -133,6 +143,7 @@ class ConvocatoriasLista extends Component {
                 }/>
 
                 <Route path="/convocatorias/nuevo" component={ConvocatoriaNuevo}/>
+                <Route path="/convocatorias/:id_convocatoria/detalle" component={ConvocatoriaDetalle}/>
                 <Route path="/convocatorias/:id_convocatoria" component={ConvocatoriasListaPostulantes}/>
 
             </div>
