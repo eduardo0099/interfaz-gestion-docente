@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
+import React from 'react';
 import DashboardCursos from './DashboardCursos';
 import DashboardInvestigaciones from "./DashboardInvestigaciones";
 import DashboardAyudaEconomica from "./DashboardAyudaEconomica";
 
-class DashboardTabs extends Component {
+class DashboardTabs extends React.Component {
 
     render() {
         return (
