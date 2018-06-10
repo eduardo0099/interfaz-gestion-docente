@@ -1,0 +1,92 @@
+import React from 'react';
+import Select from 'react-select';
+import {Panel, Dropdown, Glyphicon, MenuItem} from 'react-bootstrap';
+import API from "../../api";
+import {Modal} from 'react-bootstrap';
+import {currentRole, Role} from "../../auth";
+
+class DashboardAyudaEconomica extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            ayudas: [
+                {
+                    id: 20,
+                    codigo_solicitud: 'SOL001',
+                    titulo: 'Investigando las Causas de las Investigaciones 1',
+                    motivo: 'Compra de Materiales',
+                    monto_otorgado: 8000000.63,
+                    estado:'Aprobado',
+                    fechaSolicitud: '12/12/12',
+                    profesor: {
+                        codigo_profesor:20112728,
+                        nombres:"Freddy",
+                        apellido_paterno:"Espinoza",
+                        apellido_materno:"Paz",
+                        correo_pucp:"fpaz@pucp.edu.pe",
+                        tipo_profesor:"TC",
+                        seccion:"Informatica"
+                    },
+                }]
+        }
+    }
+
+    render() {
+        return (
+            <div>
+                <div>
+                    <table className="table table-striped">
+                        <thead>
+                        <tr>
+                            <th className="col-md-1 text-center"> Código</th>
+                            <th className="col-md-3"> Investigación</th>
+                            <th className="col-md-3"> Profesor</th>
+                            <th className="col-md-2"> Motivo</th>
+                            <th className="col-md-2 text-center"> Monto</th>
+                            <th className="col-md-1 text-center"> Estado</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {this.state.ayudas.map(ayuda => {
+                            return (
+                                <tr>
+                                    <td className="v-middle text-center">
+                                        <b className="text-primary text-md"> {ayuda.codigo_solicitud} </b>
+                                    </td>
+                                    <td className="v-middle">
+                                        <span> {ayuda.titulo}</span>
+                                    </td>
+                                    <td className="v-middle">
+                                        <span className="block"> {ayuda.profesor.nombres} {ayuda.profesor.apellido_paterno}</span>
+                                        <small
+                                            className="block text-muted"> {ayuda.profesor.tipo_profesor}</small>
+                                        <small
+                                            className="block text-muted"> {ayuda.profesor.seccion}</small>
+                                    </td>
+                                    <td className="v-middle">
+                                        <span> {ayuda.motivo}</span>
+                                    </td>
+                                    <td className="v-middle text-center">
+                                        <span className="text-md"> S/ {ayuda.monto_otorgado} </span>
+                                    </td>
+                                    <td className="v-middle text-center">
+                                                            <span className={"label label-" + ({
+                                                                'Aprobado': 'success',
+                                                                'Pendiente': 'warning',
+                                                                'Rechazado': 'danger'
+                                                            }[ayuda.estado])}> {ayuda.estado} </span>
+                                    </td>
+                                </tr>
+                            )
+                        })}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        );
+    }
+}
+
+export default DashboardAyudaEconomica;
