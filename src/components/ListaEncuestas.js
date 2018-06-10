@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route,Redirect } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import axios from "axios/index";
 import ProfesorPerfilEncuesta from "./ProfesorPerfilEncuesta";
@@ -17,10 +17,32 @@ class ListaEncuestas extends React.Component {
             verComentarios: false,
             comentarioSeleccionado: -1,
             infoDocente: {},
-            ciclos: []
+            ciclos: [],
+            auth: false,
+            verAuth:false,
         }
     }
-
+    componentWillMount() {
+        if (localStorage.getItem('jwt') == null) {
+            window.location.href = "/";
+        } else {
+            API.get('/auth/verificaPermiso', {
+                /*
+                headers:{
+                  'x-access-token' : localStorage.getItem('jwt'),
+                },
+                */
+                params: {
+                    ruta: this.props.match.path
+                }
+            }).then(resp => {
+                console.log("resp", resp.data);
+                this.setState({ auth: resp.data.permiso, verAuth:true });
+            }).catch(err => {
+                console.log("err", err);
+            })
+        }
+    }
     findCicloActual() {
         API.get('general/cicloActual')
             .then(response => {
@@ -87,6 +109,11 @@ class ListaEncuestas extends React.Component {
     };
 
     render() {
+        if(!this.state.auth && this.state.verAuth){
+            return(<Redirect to="/home"/>);
+        }else if (!this.state.verAuth){
+            return(<div/>);
+        }
         if (!this.state.verComentarios) {
             return (
                 <div>

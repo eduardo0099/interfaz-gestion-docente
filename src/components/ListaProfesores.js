@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Route,Link} from 'react-router-dom';
+import {Route,Link,Redirect} from 'react-router-dom';
 import DetalleDocente from "./DetalleDocente";
 import BaseContainer from "./BaseContainer";
 import fotoAnonima from '../resources/images/anonimo.png';
@@ -28,6 +28,30 @@ class ListaProfesores extends Component {
             filtro1: -1,
             open: false,
             secciones: [],
+            auth: false,
+            verAuth: false,
+        }
+    }
+
+    componentWillMount() {
+        if (localStorage.getItem('jwt') == null) {
+            window.location.href = "/";
+        } else {
+            API.get('/auth/verificaPermiso', {
+                /*
+                headers:{
+                  'x-access-token' : localStorage.getItem('jwt'),
+                },
+                */
+                params: {
+                    ruta: "/profesores"
+                }
+            }).then(resp => {
+                console.log("resp", resp.data);
+                this.setState({ auth: resp.data.permiso,verAuth:true });
+            }).catch(err => {
+                console.log("err", err);
+            })
         }
     }
 
@@ -116,7 +140,11 @@ class ListaProfesores extends Component {
             color: 'white',
             backgroundColor: '#87cefa',
         };
-
+        if(!this.state.auth && this.state.verAuth){
+            return(<Redirect to="/home"/>);
+        }else if (!this.state.verAuth){
+            return(<div/>);
+        }
         return (
             <div>
                 <Route exact path={`${this.props.match.path}`} render={() =>

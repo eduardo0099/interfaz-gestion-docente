@@ -1902,3 +1902,15 @@ div.notas {
 .page-header {
     margin: 0px;
 }
+
+.modal-title{
+    font-weight: 400;
+    font-family: 'Roboto', sans-serif;
+}
+p, span{
+    font-family: 'Roboto', sans-serif;
+}
+.label {
+    height: 200px;
+    padding: .3em .6em .4em;
+}
