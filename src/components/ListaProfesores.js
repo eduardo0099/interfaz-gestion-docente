@@ -3,11 +3,12 @@ import {Route,Link} from 'react-router-dom';
 import DetalleDocente from "./DetalleDocente";
 import BaseContainer from "./BaseContainer";
 import fotoAnonima from '../resources/images/anonimo.png';
+import email from '../resources/images/email.jpg';
+import phone from '../resources/images/phone.png';
 import Collapsible from 'react-collapsible';
 import axios from "axios/index";
 import {Glyphicon, Dropdown, MenuItem, Col, FormControl, Form, FormGroup, ControlLabel, Panel, Button, Radio} from 'react-bootstrap';
 import API from '../api';
-import { EmailShareButton, ViberIcon, EmailIcon } from 'react-share';
 import {Role, currentRole} from '../auth';
 import { Image } from 'react-bootstrap';
 
@@ -111,6 +112,11 @@ class ListaProfesores extends Component {
 
 
     render() {
+        var divStyle = {
+            color: 'white',
+            backgroundColor: '#87cefa',
+        };
+
         return (
             <div>
                 <Route exact path={`${this.props.match.path}`} render={() =>
@@ -118,9 +124,9 @@ class ListaProfesores extends Component {
                         <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
                             <div className="panel-heading">
                                 <h2> Profesores </h2>
-                                {currentRole() === Role.JEFE_DEPARTAMENTO ? 1: 2}
                             </div>
-                            <Col md={ 10 }>
+                            <div className="row">
+                                <div className="col-md-1"></div>
                                 <Form horizontal>
                                     <FormGroup controlId="formHorizontalSeccion">
                                         <Col sm={ 4 }>
@@ -130,7 +136,16 @@ class ListaProfesores extends Component {
                                         </Col>
                                     </FormGroup>
                                 </Form>
-                            </Col>
+                            </div>
+
+                            <div className="row">
+
+                                <div className="col-md-1" style={divStyle}><p className="bold">Foto</p></div>
+                                <div className="col-md-5" style={divStyle}><p class="bold">Nombre</p></div>
+                                <div className="col-md-4" style={divStyle}><p className="bold">Informacion de contacto</p></div>
+                                <div className="col-md-1" style={divStyle}><p className="bold">Tipo</p></div>
+                            </div>
+
                             <div className="panel-body">
                                 <table className="table table-striped table-hover">
                                     <tbody>
@@ -144,14 +159,31 @@ class ListaProfesores extends Component {
                                                     <span className="block text-primary"><Link to={"/profesores/"+profesor.codigo}> {profesor.nombre}</Link> </span>
                                                     <small className="block text-muted"> Codigo: {profesor.codigo} </small>
                                                 </td>
-                                                <td className="col-md-4">
-
-                                                    <EmailShareButton children={<EmailIcon size={16} round={true} />}><span>{ profesor.correo_pucp }</span></EmailShareButton>
-                                                    <ViberIcon size={16} round={true}/>
-                                                    <ViberIcon size={16} round={true}/>
+                                                <td className="col-md-6">
+                                                    <div className="row">
+                                                        <div className="col-xs-6 col-md-6"><div className="col-md-1">
+                                                            <Image src={ email } width="20" height="20"/>
+                                                        </div>
+                                                            <div className="col-md-2">
+                                                                <span className="block text-muted">{ profesor.correo_pucp } </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-xs-6 col-md-6"><div className="col-md-1">
+                                                            <Image src={ phone } width="20" height="20"/>
+                                                        </div>
+                                                            <div className="col-md-2">
+                                                                <span className="block text-muted">{ profesor.telefono }</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </td>
                                                 <td className="col-md-4">
-                                                    <span className="block text-muted">{profesor.descripcion}</span>
+                                                    <span className={"label label-" + ({
+                                                        'TC': 'success',
+                                                        'TPA': 'warning',
+                                                    }[profesor.descripcion])}> {profesor.descripcion} </span>
                                                 </td>
                                             </tr>
                                         );

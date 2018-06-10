@@ -9,6 +9,7 @@ import AyudaEconomicaNuevo from "./AyudaEconomicaNuevo";
 import API from "../../api";
 import AyudaEconomicaDetalle from "./AyudaEconomicaDetalle";
 import AyudaEconomicaAprobar from "./AyudaEconomicaAprobar";
+import {Role, currentRole} from "../../auth";
 
 function onlyUnique(array) {
     var BreakException = {};
@@ -39,7 +40,7 @@ class AyudaEconomica extends React.Component {
 
     constructor(props){
         super(props);
-
+        console.log(currentRole());
         this.state = {
             montoMinVal:'',
             montoMaxVal:'',
@@ -272,8 +273,10 @@ class AyudaEconomica extends React.Component {
                     <BaseContainer>
                         <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
                             <div className="panel-heading">
-                                <a className="btn btn-sm btn-primary pull-right m-t-md"
-                                   href={`${this.props.match.url}/nuevo`}> Nueva </a>
+                                { (currentRole() != Role.JEFE_DEPARTAMENTO) ?
+                                    <a className="btn btn-sm btn-primary pull-right m-t-md"
+                                   href={`${this.props.match.url}/nuevo`}> Nueva </a> :
+                                   " " }
                                 <h2> Ayudas Económicas </h2>
                             </div>
                             <div className="panel-body row">
@@ -375,8 +378,6 @@ class AyudaEconomica extends React.Component {
                                                 </Panel>
                                             </div>
 
-
-
                                             <div>
                                                 <button className="btn btn-primary btn-block" onClick={this.realizarFiltro}> Filtrar</button>
                                             </div>
@@ -450,11 +451,10 @@ class AyudaEconomica extends React.Component {
                                                                     <Glyphicon glyph="option-vertical"/>
                                                                 </Dropdown.Toggle>
                                                                 <Dropdown.Menu>
-                                                                    <MenuItem href={'/ayudaeconomica/id/' + ayuda.id}>Ver
-                                                                    Detalle</MenuItem>
-                                                                    <MenuItem href={'/ayudaeconomica/' + ayuda.id + '/Detalle'}>Ver
-                                                                        Detalle JD</MenuItem>
-                                                               </Dropdown.Menu>
+                                                                    { (currentRole() === Role.JEFE_DEPARTAMENTO) ?
+                                                                        <MenuItem href={'/ayudaeconomica/' + ayuda.id + '/Detalle'}>Ver Detalle</MenuItem> :
+                                                                        <MenuItem href={'/ayudaeconomica/id/' + ayuda.id}>Ver Detalle</MenuItem> }
+                                                                </Dropdown.Menu>
                                                             </Dropdown>
                                                         </td>
                                                     </tr>
