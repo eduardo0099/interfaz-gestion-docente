@@ -20,11 +20,19 @@ class DashboardInvestigaciones extends React.Component {
                     profesores: [
                         {
                             id: 1,
-                            nombre: 'Johann Morales'
+                            nombre: 'Johann Morales',
+                            codigo: '20141909',
+                            email: 'johann.morales@pucp.edu.pe',
+                            telefono: '01 4244369',
+                            celular: '991142846'
                         },
                         {
                             id: 2,
-                            nombre: 'Morales Johann'
+                            nombre: 'Morales Johann',
+                            codigo: '20141909',
+                            email: 'johann.morales@pucp.edu.pe',
+                            telefono: '01 4244369',
+                            celular: '991142846'
                         }
                     ],
                     estado: 'Aprobado'
@@ -94,7 +102,7 @@ class DashboardInvestigaciones extends React.Component {
                         <tbody>
                         {this.state.investigaciones.map(i => {
                             return (
-                                <tr>
+                                <tr key={i.id}>
                                     <td className="v-middle">
                                         <span className="text-primary"> {i.titulo} </span>
                                     </td>
@@ -103,7 +111,7 @@ class DashboardInvestigaciones extends React.Component {
                                         <small className="block text-muted m-t-xs"> investigadores</small>
                                     </td>
                                     <td className="v-middle text-center">
-                                        <i className="fa-file"/>
+                                        <i className="fa fa-file"/>
                                     </td>
                                     <td className="v-middle text-center">
                                         {this.estadoLabel(i.estado)}
@@ -115,9 +123,9 @@ class DashboardInvestigaciones extends React.Component {
                     </table>
 
                     <Modal show={this.state.show}>
-                        <div className="modal-header">
-                            <h4> Investigaciones </h4>
-                        </div>
+                        <Modal.Header>
+                            Investigaciones
+                        </Modal.Header>
                         <div className="modal-body">
                             <table className="table table-striped table-hover">
                                 <tbody>
@@ -131,7 +139,7 @@ class DashboardInvestigaciones extends React.Component {
                                             <td className="v-middle col-md-6">
                                                 <span className="block m-t-xs m-b-xs"><i
                                                     class="fa fa-envelope text-primary"></i> {p.email}</span>
-                                                <span className="block m-b-xs"><i
+                                                <span className="block m-b-xs m-l-xs "><i
                                                     class="fa fa-mobile"></i> {p.celular}</span>
                                                 <span className="block m-b-xs"><i
                                                     class="fa fa-phone"></i> {p.telefono}</span>
@@ -143,7 +151,7 @@ class DashboardInvestigaciones extends React.Component {
                             </table>
                         </div>
                         <div className="modal-footer">
-                            <button className="btn btn-link" onClick={this.close.bind(this)}>Cancelar</button>
+                            <button className="btn btn-link" onClick={this.close.bind(this)}>Cerrar</button>
                         </div>
                     </Modal>
                 </div>
