@@ -11,6 +11,8 @@ import Actividades from "./Actividades"
 import BaseContainer from "./BaseContainer";
 import { Image } from 'react-bootstrap';
 import API from '../api';
+import email from '../resources/images/email.jpg';
+import phone from '../resources/images/phone.png';
 
 class DetalleDocente extends Component {
 
