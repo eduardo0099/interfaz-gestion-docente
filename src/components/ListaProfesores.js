@@ -161,9 +161,10 @@ class ListaProfesores extends Component {
                                                 </td>
                                                 <td className="col-md-6">
                                                     <div className="row">
-                                                        <div className="col-xs-6 col-md-6"><div className="col-md-1">
-                                                            <Image src={ email } width="20" height="20"/>
-                                                        </div>
+                                                        <div className="col-xs-6 col-md-6">
+                                                            <div className="col-md-1">
+                                                                <Image src={ email } width="20" height="20"/>
+                                                            </div>
                                                             <div className="col-md-2">
                                                                 <span className="block text-muted">{ profesor.correo_pucp } </span>
                                                             </div>
