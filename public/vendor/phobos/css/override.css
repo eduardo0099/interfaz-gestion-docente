@@ -1899,6 +1899,11 @@ div.notas {
     background-color: #004bff;
 }
 
+.badge-red {
+    padding-top: 5px;
+    background-color: #b1240e;
+}
+
 .page-header {
     margin: 0px;
 }

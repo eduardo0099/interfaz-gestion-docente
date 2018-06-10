@@ -27,7 +27,14 @@ class DashboardCargaHoraria extends React.Component {
                     codigo:"20126666",
                     hDictado:1,
                     hInvestigacion:1,
-                    hDeuda:40
+                    hDeuda:0
+                },
+                {
+                    nombre:"guani sama",
+                    codigo:"20106969",
+                    hDictado:1,
+                    hInvestigacion:1,
+                    hDeuda:10
                 }
             ],
             descargaHoras:[
@@ -36,7 +43,14 @@ class DashboardCargaHoraria extends React.Component {
                     codigo:"20126666",
                     hDictado:1,
                     hInvestigacion:1,
-                    hDeuda:40
+                    hDeuda:0
+                },
+                {
+                    nombre:"guani sama",
+                    codigo:"20106969",
+                    hDictado:1,
+                    hInvestigacion:1,
+                    hDeuda:10
                 }
             ]
         }
@@ -75,12 +89,12 @@ class DashboardCargaHoraria extends React.Component {
 
         if (this.state.profeText == '') {//la lista no esta filtrada
             var aux = this.state.descargaHoras.filter((d) => {
-                return d.nombre.toUpperCase().indexOf(e.target.value.toUpperCase()) !== -1
+                return d.nombre.toUpperCase().indexOf(e.target.value.toUpperCase()) !== -1 || d.codigo.indexOf(e.target.value) !== -1
             });
         }
         else {//el filtro tiene algo
             var aux = this.state.descargaHorasAux.filter((d) => {
-                return d.nombre.toUpperCase().indexOf(e.target.value.toUpperCase()) !== -1
+                return d.nombre.toUpperCase().indexOf(e.target.value.toUpperCase()) !== -1 || d.codigo.indexOf(e.target.value) !== -1
             });
         }
         this.setState({
@@ -105,7 +119,7 @@ class DashboardCargaHoraria extends React.Component {
                 </div>
                 <div className="col-md-1"></div>
                 <div className="col-md-4">
-                    <FormControl type="text" placeholder="Buscar Nombre Profesor"
+                    <FormControl type="text" placeholder="Buscar Profesor"
                                  value={ this.state.profeText}
                                  onChange={ this.busquedaNombreProfesor.bind(this) }/>
                 </div>
@@ -117,16 +131,20 @@ class DashboardCargaHoraria extends React.Component {
                             <table className="table table-striped">
                                 <thead>
                                 <tr>
-                                    <th className="col-md-2 "> Profesor</th>
-                                    <th className="col-md-2 text-center"> Horas Dictado</th>
-                                    <th className="col-md-2 text-center"> Horas Investigación</th>
-                                    <th className="col-md-2 text-center"> Horas Deuda</th>
+                                    <th></th>
+                                    <th className="col-md-3 "> Profesor</th>
+                                    <th className="col-md-3 text-center"> Horas Dictado</th>
+                                    <th className="col-md-3 text-center"> Horas Investigación</th>
+                                    <th className="col-md-3 text-center"> Horas Deuda</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {this.state.descargaHoras.map(desHora => {
                                     return (
                                         <tr>
+                                            <td className="v-middle">
+                                                { desHora.hDeuda>0 ?  <span className="badge badge-red "> ! </span> : <span className="badge-red "></span> }
+                                            </td>
                                             <td className="v-middle">
                                                 <span className="block text-primary"> { desHora.nombre } </span>
                                                 <small className="block text-muted"> { desHora.codigo } </small>
