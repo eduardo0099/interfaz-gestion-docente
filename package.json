@@ -9,6 +9,7 @@
     "npm": "^6.1.0",
     "papaparse": "^4.4.0",
     "prop-types": "^15.6.1",
+    "rc-progress": "^2.2.5",
     "react": "^16.3.1",
     "react-bootstrap": "^0.32.1",
     "react-bootstrap-combobox": "^3.0.1",

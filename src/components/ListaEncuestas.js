@@ -6,6 +6,7 @@ import ProfesorPerfilEncuesta from "./ProfesorPerfilEncuesta";
 import BaseContainer from "./BaseContainer";
 import API from '../api';
 import Select from 'react-select';
+import { Line } from 'rc-progress';
 
 class ListaEncuestas extends React.Component {
 
@@ -162,7 +163,10 @@ class ListaEncuestas extends React.Component {
                                                     <small
                                                         className="block text-muted"> Horario { item.horario } </small>
                                                 </td>
-                                                <td className="v-middle text-center">{ item.porcentaje }%</td>
+                                                <td>
+                                                    <Line percent="item.porcentaje" strokeWidth="4" strokeColor="#87cefa" />
+                                                    <span className="block text-center"> { item.porcentaje } %</span>
+                                                </td>
                                                 <td className="v-middle text-center">{ item.puntaje }</td>
                                                 <td className="v-middle"><Button
                                                     onClick={ () => this.mostarComentarios(i) }>Ver

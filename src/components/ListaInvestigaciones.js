@@ -8,6 +8,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import BaseContainer from "./BaseContainer";
 import API from "../api";
 import Select from 'react-select';
+/*import {Role, currentRole} from "../../auth";*/
 
 export class ListaInvestigaciones extends React.Component {
     constructor(props) {
@@ -114,7 +115,8 @@ export class ListaInvestigaciones extends React.Component {
         }, {
             dataField: 'resumen',
             text: 'Descripcion'
-        }];
+        }
+        ];
 
         const selectRow = {
             mode: 'radio',

@@ -108,7 +108,7 @@ export class Cursos extends React.Component {
                         </div>
                         <div className="panel-body">
                             <div>
-                                <div className="form-group col-md-2 row ">
+                                <div className="form-group col-md-2 row">
                                     <label> Ciclo </label>
                                     <Select
                                         value={ this.state.cicloSeleccionado }
