@@ -58,6 +58,7 @@ class ListaProfesores extends Component {
     componentDidMount() {
         API.get('general/listaDocente')
             .then(response => {
+                console.log(response);
                 this.setState({loading: false, profesores: response.data.docentes, profesoresAux: response.data.docentes});
             })
             .catch(error => {
