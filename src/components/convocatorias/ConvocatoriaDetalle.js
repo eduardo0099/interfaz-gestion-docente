@@ -3,6 +3,7 @@ import {Route, Link,Redirect} from 'react-router-dom';
 import BaseContainer from "../BaseContainer";
 import {Role,currentRole} from '../../auth.js'
 import API from "../../api";
+import ConvocatoriaPesos from "./ConvocatoriaPesos";
 
 
 class ConvocatoriaDetalle extends Component{
@@ -35,6 +36,7 @@ class ConvocatoriaDetalle extends Component{
             peso_grado_titulo: 60,
             peso_investigacion: 10
         }
+
     }
 
     componentDidMount(){
@@ -48,7 +50,7 @@ class ConvocatoriaDetalle extends Component{
     }
 
     render(){
-
+        let estado="Aprobado"
         return(
             <BaseContainer>
                 <div className="panel col-lg-offset-2 col-lg-8 col-md-12 col-sm-12">
@@ -79,12 +81,12 @@ class ConvocatoriaDetalle extends Component{
                                     <div className="form-group"></div>
                                         <label htmlFor="disabledTextInput">Descripcion:</label>
                                         <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" type="text" id="disabledTextInput" className="form-control"
-                                                  placeholder="Esta por decidir si se añade o no"></textarea>
+                                                  placeholder={this.state.descripcion}></textarea>
                                 </fieldset>
                             </div>
                         </div>
                     <div className="panel-footer text-right">
-                        {currentRole()=== Role.JEFE_DEPARTAMENTO && this.state.estado == "Creado"?
+                        {currentRole()=== Role.JEFE_DEPARTAMENTO && estado == "Creado"?
                             <div>
                                 <button className="btn btn-primary" > Aprobar </button>
                                 <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
@@ -92,9 +94,9 @@ class ConvocatoriaDetalle extends Component{
                             </div>
                             :
                             <div>
-                                {this.state.estado == "Aprobado" ?
+                                {estado == "Aprobado" ?
                                     <div>
-                                        <button className="btn btn-primary"> Agregar Campos</button>
+                                        <button className="btn btn-primary" > Agregar Campos</button>
                                         <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
                                         <button className="btn btn-primary"> Cancelar</button>
                                     </div>
