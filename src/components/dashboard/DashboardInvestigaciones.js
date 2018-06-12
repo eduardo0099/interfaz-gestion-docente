@@ -11,6 +11,7 @@ class DashboardInvestigaciones extends React.Component {
 
         this.state = {
             show: false,
+            showResumen: false,
             investigacion: {
                 profesores: []
             },
@@ -35,7 +36,8 @@ class DashboardInvestigaciones extends React.Component {
                             celular: '991142846'
                         }
                     ],
-                    estado: 'Aprobado'
+                    estado: 'Aprobado',
+                    resumen: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
 
                 },
                 {
@@ -58,13 +60,19 @@ class DashboardInvestigaciones extends React.Component {
                             celular: '991142846'
                         }
                     ],
-                    estado: 'Terminado'
+                    estado: 'Terminado',
+                    resumen: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
                 }]
         }
     }
 
-    close (){
+    close() {
         this.setState({show: false});
+    }
+
+
+    closeResumen() {
+        this.setState({showResumen: false});
     }
 
 
@@ -80,9 +88,14 @@ class DashboardInvestigaciones extends React.Component {
     }
 
     openModal = (investigacion, e) => {
-        console.log(investigacion);
         this.setState({investigacion: investigacion}, () => {
             this.setState({show: true})
+        });
+    }
+
+    openModalResumen = (investigacion, e) => {
+        this.setState({investigacion: investigacion}, () => {
+            this.setState({showResumen: true})
         });
     }
 
@@ -93,10 +106,10 @@ class DashboardInvestigaciones extends React.Component {
                     <table className="table table-striped">
                         <thead>
                         <tr>
-                            <th className="col-md-4"></th>
+                            <th className="col-md-3">Titulo</th>
                             <th className="col-md-3"></th>
-                            <th className="col-md-3"></th>
-                            <th className="col-md-2"></th>
+                            <th className="col-md-3 text-center">Documento</th>
+                            <th className="col-md-3 text-center">Estado</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -104,14 +117,17 @@ class DashboardInvestigaciones extends React.Component {
                             return (
                                 <tr key={i.id}>
                                     <td className="v-middle">
-                                        <span className="text-primary"> {i.titulo} </span>
+                                        <a className="text-primary pointer"
+                                           onClick={this.openModalResumen.bind(this, i)}> {i.titulo} </a>
                                     </td>
                                     <td className="v-middle text-center" onClick={this.openModal.bind(this, i)}>
                                         <span className="badge"> {i.profesores.length} </span>
                                         <small className="block text-muted m-t-xs"> investigadores</small>
                                     </td>
                                     <td className="v-middle text-center">
-                                        <i className="fa fa-file"/>
+                                        <button type="button" className="btn btn-primary btn-xs">
+                                            <i className="fa fa-file-alt"/>
+                                        </button>
                                     </td>
                                     <td className="v-middle text-center">
                                         {this.estadoLabel(i.estado)}
@@ -122,9 +138,9 @@ class DashboardInvestigaciones extends React.Component {
                         </tbody>
                     </table>
 
-                    <Modal show={this.state.show}>
-                        <Modal.Header>
-                            Investigaciones
+                    <Modal show={this.state.show} onHide={this.close.bind(this)}>
+                        <Modal.Header closeButton>
+                            <Modal.Title> {this.state.investigacion.titulo}: Investigadores </Modal.Title>
                         </Modal.Header>
                         <div className="modal-body">
                             <table className="table table-striped table-hover">
@@ -150,8 +166,13 @@ class DashboardInvestigaciones extends React.Component {
                                 </tbody>
                             </table>
                         </div>
-                        <div className="modal-footer">
-                            <button className="btn btn-link" onClick={this.close.bind(this)}>Cerrar</button>
+                    </Modal>
+                    <Modal show={this.state.showResumen} onHide={this.closeResumen.bind(this)}>
+                        <Modal.Header closeButton>
+                            <Modal.Title> {this.state.investigacion.titulo}</Modal.Title>
+                        </Modal.Header>
+                        <div className="modal-body text-justify">
+                            {this.state.investigacion.resumen}
                         </div>
                     </Modal>
                 </div>

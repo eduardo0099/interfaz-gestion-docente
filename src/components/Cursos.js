@@ -12,10 +12,10 @@ export class Cursos extends React.Component {
             ciclos: [],
             cicloSeleccionado: "",
             infoDocente: {},
-            tipoCursos:[{id:"1",descripcion:"pregrado"},
-                {id:"2",descripcion:"posgrado"},
-                {id:"3",descripcion:"otros"}],
-            tipoSeleccionado:"pregrado",
+            tipoCursos:[{id:"1",descripcion:"Pregrado"},
+                {id:"2",descripcion:"Posgrado"},
+                {id:"3",descripcion:"Otros"}],
+            tipoSeleccionado:"Pregrado",
         }
     }
 
@@ -102,7 +102,7 @@ export class Cursos extends React.Component {
                                 <a className="btn btn-default pull-right"
                                    onClick={ this.props.history.goBack }> Volver al Perfil </a>
                                 <p className="h2 m-b-sm"> { this.state.infoDocente.nombres } { this.state.infoDocente.apellido_paterno } { this.state.infoDocente.apellido_materno }
-                                    <small className="block m-t-xs"> Cursos </small>
+                                    <small className="block m-t-xs"> CURSOS </small>
                                 </p>
                             </header>
                         </div>
@@ -134,8 +134,8 @@ export class Cursos extends React.Component {
                             <table className="table table-striped">
                                 <thead>
                                 <th className="v-middle col-md-4"> Curso</th>
-                                <th className="v-middle col-md-4"></th>
-                                <th className="v-middle col-md-4"></th>
+                                <th className="v-middle col-md-3"> Unidad</th>
+                                <th className="v-middle col-md-6"></th>
                                 </thead>
                                 <tbody>
                                 { this.state.infoCursos.map(item => {
@@ -145,6 +145,9 @@ export class Cursos extends React.Component {
                                                 <span className="block text-primary"> { item.nombre } </span>
                                                 <small className="block text-muted"> { item.codigo } </small>
                                                 <small className="block text-muted"> Horario { item.horario } </small>
+                                            </td>
+                                            <td className="v-middle text-center">
+                                                <span className="block text-muted"> { item.unidad } </span>
                                             </td>
                                             <td className="v-middle text-center">
                                                 <span className="badge badge-blue"> { item.creditos } </span>

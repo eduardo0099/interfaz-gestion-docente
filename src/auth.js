@@ -1,9 +1,11 @@
-export class Role {
-    static  ASISTENTE_DEPARTAMENTO = 'ASISTENTE_DEPARTAMENTO';
-    static  ASISTENTE_SECCION = 'ASISTENTE_SECCION';
-    static  JEFE_DEPARTAMENTO = 'JEFE_DEPARTAMENTO';
-    static  COORDINADOR = 'COORDINADOR';
+export const Role = {
+    ASISTENTE_DEPARTAMENTO: 'ASISTENTE_DEPARTAMENTO',
+    ASISTENTE_SECCION: 'ASISTENTE_SECCION',
+    JEFE_DEPARTAMENTO: 'JEFE_DEPARTAMENTO',
+    COORDINADOR: 'COORDINADOR'
 }
+
+Object.freeze(Role)
 
 export function currentRole() {
     try {
@@ -24,9 +26,8 @@ export function currentRole() {
                 return Role.COORDINADOR;
         }
     } catch (e) {
-        console.error('Error el obtener los roles');
+        console.error('Error al obtener los roles');
         return null;
     }
 
 }
-

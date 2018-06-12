@@ -2,11 +2,15 @@ import React, {Component} from 'react';
 import {Route,Link,Redirect} from 'react-router-dom';
 import DetalleDocente from "./DetalleDocente";
 import BaseContainer from "./BaseContainer";
+import fotoAnonima from '../resources/images/anonimo.png';
+import email from '../resources/images/email.jpg';
+import phone from '../resources/images/phone.png';
 import Collapsible from 'react-collapsible';
 import axios from "axios/index";
 import {Glyphicon, Dropdown, MenuItem, Col, FormControl, Form, FormGroup, ControlLabel, Panel, Button, Radio} from 'react-bootstrap';
 import API from '../api';
 import {Role, currentRole} from '../auth';
+import { Image } from 'react-bootstrap';
 
 class ListaProfesores extends Component {
 
@@ -54,6 +58,7 @@ class ListaProfesores extends Component {
     componentDidMount() {
         API.get('general/listaDocente')
             .then(response => {
+                console.log(response);
                 this.setState({loading: false, profesores: response.data.docentes, profesoresAux: response.data.docentes});
             })
             .catch(error => {
@@ -132,6 +137,10 @@ class ListaProfesores extends Component {
 
 
     render() {
+        var divStyle = {
+            color: 'white',
+            backgroundColor: '#87cefa',
+        };
         if(!this.state.auth && this.state.verAuth){
             return(<Redirect to="/home"/>);
         }else if (!this.state.verAuth){
@@ -145,26 +154,26 @@ class ListaProfesores extends Component {
                             <div className="panel-heading">
                                 <h2> Profesores </h2>
                             </div>
-
-                            <Col md={ 10 }>
+                            <div className="row">
+                                <div className="col-md-1"></div>
                                 <Form horizontal>
                                     <FormGroup controlId="formHorizontalSeccion">
-
-
-
-
                                         <Col sm={ 4 }>
                                             <FormControl type="text" placeholder="Buscar Nombre Profesor"
                                                          value={ this.state.profeText}
                                                          onChange={ this.busquedaNombreProfesor.bind(this) }/>
                                         </Col>
-
-
-
-
                                     </FormGroup>
                                 </Form>
-                            </Col>
+                            </div>
+
+                            <div className="row">
+
+                                <div className="col-md-1" style={divStyle}><p className="bold">Foto</p></div>
+                                <div className="col-md-5" style={divStyle}><p class="bold">Nombre</p></div>
+                                <div className="col-md-4" style={divStyle}><p className="bold">Informacion de contacto</p></div>
+                                <div className="col-md-1" style={divStyle}><p className="bold">Tipo</p></div>
+                            </div>
 
                             <div className="panel-body">
                                 <table className="table table-striped table-hover">
@@ -172,20 +181,39 @@ class ListaProfesores extends Component {
                                     {this.state.profesores.map(profesor => {
                                         return (
                                             <tr className="pointer">
-                                                <td className="col-md-12">
-                                                    <span className="block text-primary"><Link to={"/profesores/"+profesor.codigo}> {profesor.nombre}</Link> </span>
-                                                    <small className="block text-muted"> {profesor.codigo} </small>
+                                                <td className="col-md-1">
+                                                    <Image src={ fotoAnonima } circle width="50" height="50"/>
                                                 </td>
-                                                <td className="v-middle">
-                                                    <Dropdown className="dropdown-options" pullRight>
-                                                        <Dropdown.Toggle className="dropdown-options" noCaret="true">
-                                                            <Glyphicon glyph="option-vertical"/>
-                                                        </Dropdown.Toggle>
-                                                        <Dropdown.Menu>
-                                                            <MenuItem href={'/profesores/' + profesor.codigo}>Ver
-                                                                Perfil</MenuItem>
-                                                        </Dropdown.Menu>
-                                                    </Dropdown>
+                                                <td className="col-md-6">
+                                                    <span className="block text-primary"><Link to={"/profesores/"+profesor.codigo}> {profesor.nombre}</Link> </span>
+                                                    <small className="block text-muted"> Codigo: {profesor.codigo} </small>
+                                                </td>
+                                                <td className="col-md-6">
+                                                    <div className="row">
+                                                        <div className="col-xs-6 col-md-6">
+                                                            <div className="col-md-1">
+                                                                <Image src={ email } width="20" height="20"/>
+                                                            </div>
+                                                            <div className="col-md-2">
+                                                                <span className="block text-muted">{ profesor.correo_pucp } </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-xs-6 col-md-6"><div className="col-md-1">
+                                                            <Image src={ phone } width="20" height="20"/>
+                                                        </div>
+                                                            <div className="col-md-2">
+                                                                <span className="block text-muted">{ profesor.telefono }</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td className="col-md-4">
+                                                    <span className={"label label-" + ({
+                                                        'TC': 'success',
+                                                        'TPA': 'warning',
+                                                    }[profesor.descripcion])}> {profesor.descripcion} </span>
                                                 </td>
                                             </tr>
                                         );

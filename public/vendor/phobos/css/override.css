@@ -1899,6 +1899,23 @@ div.notas {
     background-color: #004bff;
 }
 
+.badge-red {
+    padding-top: 5px;
+    background-color: #b1240e;
+}
+
 .page-header {
     margin: 0px;
+}
+
+.modal-title{
+    font-weight: 400;
+    font-family: 'Roboto', sans-serif;
+}
+p, span{
+    font-family: 'Roboto', sans-serif;
+}
+.label {
+    height: 200px;
+    padding: .3em .6em .4em;
 }
