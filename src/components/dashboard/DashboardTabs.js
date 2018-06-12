@@ -3,6 +3,11 @@ import DashboardCursos from './DashboardCursos';
 import DashboardInvestigaciones from "./DashboardInvestigaciones";
 import DashboardAyudaEconomica from "./DashboardAyudaEconomica";
 import DashboardCargaHoraria from "./DashboardCargaHoraria";
+import { AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid, Brush, Legend,
+    ReferenceArea, ReferenceLine, ReferenceDot, ResponsiveContainer,
+    LabelList, Label ,Line, LineChart} from 'recharts';
+import DashboardGraficos from "./DashboardGraficos";
+
 
 class DashboardTabs extends React.Component {
 
@@ -18,7 +23,7 @@ class DashboardTabs extends React.Component {
                 </ul>
                 <div className="tab-content clearfix m-t-md">
                     <div className="tab-pane active row" id="1">
-
+                        <DashboardGraficos/>
                     </div>
                     <div className="tab-pane" id="2">
                         <DashboardCursos

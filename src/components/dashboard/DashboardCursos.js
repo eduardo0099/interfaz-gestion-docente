@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import {Route} from 'react-router-dom';
 import Select from 'react-select';
-import {Panel,  Dropdown, Glyphicon, MenuItem,Modal} from 'react-bootstrap';
+import {Panel,  Dropdown, Glyphicon, MenuItem,FormControl,Modal} from 'react-bootstrap';
 import BaseContainer from "../BaseContainer";
 import ConvocatoriaNuevo from "../convocatorias/ConvocatoriasNuevo";
 import AyudaEconomicaNuevo from "../AyudaEconomica/AyudaEconomicaNuevo";
@@ -17,8 +17,10 @@ class DashboardCursos extends React.Component {
         super(props);
 
         this.state = {
+            cursoText:'',
             showDetalleCurso:false,
             selectedNombre:'',
+            cursosAux:[],
             cursos: [
                 {
                     id: 20,
@@ -26,7 +28,7 @@ class DashboardCursos extends React.Component {
                     nombre: 'Chistemas Operativos',
                     seccion: 'Chinformatica',
                     creditos: 20,
-                    tipo:'Pregrado',
+                    tipo_curso:'Pregrado',
                 }],
             horariosSes:[
                 {
@@ -39,11 +41,23 @@ class DashboardCursos extends React.Component {
             ]
         }
     }
-/*
+
     componentDidMount() {
-        this.findCicloActual();
-        this.allCiclos();
-    }*/
+        this.findCursos();
+    }
+
+    findCursos() {
+        API.get('/general/listaCurso')
+            .then(response => {
+                console.log(response);
+                this.setState({
+                    cursos: response.data.curso,
+                    cursosAux: response.data.curso
+                })
+            }).catch(error => {
+            console.log("Error obteniendo la lista de cursos", error);
+        });
+    }
 
     findCicloActual() {
         API.get('general/cicloActual')
@@ -76,9 +90,36 @@ class DashboardCursos extends React.Component {
         this.setState({showDetalleCurso: false});
     }
 
+    busquedaNombreProfesor = e => {
+        this.setState({
+            cursoText: e.target.value,
+        })
+
+        if (this.state.cursoText == '') {//la lista no esta filtrada
+            var aux = this.state.cursos.filter((d) => {
+                return d.nombre.toUpperCase().indexOf(e.target.value.toUpperCase()) !== -1 || d.codigo.toUpperCase().indexOf(e.target.value.toUpperCase()) !== -1
+            });
+        }
+        else {//el filtro tiene algo
+            var aux = this.state.cursosAux.filter((d) => {
+                return d.nombre.toUpperCase().indexOf(e.target.value.toUpperCase()) !== -1 || d.codigo.toUpperCase().indexOf(e.target.value.toUpperCase()) !== -1
+            });
+        }
+        this.setState({
+            cursos: aux
+        })
+    }
+
     render() {
         return (
             <div>
+                <div className="col-md-4">
+                    <FormControl type="text" placeholder="Buscar Curso"
+                                 value={ this.state.cursoText}
+                                 onChange={ this.busquedaNombreProfesor.bind(this) }/>
+                </div>
+                <br></br>
+                <br></br>
                 <Route exact path={`${this.props.ruta}`} render={() =>
                     <div className="panel ">
                         <div className="panel-body row">
@@ -86,7 +127,7 @@ class DashboardCursos extends React.Component {
                                 <table className="table table-striped">
                                     <thead>
                                     <tr>
-                                        <th className="col-md-2 "> Curso</th>
+                                        <th className="col-md-3 "> Curso</th>
                                         <th className="col-md-2"> Sección</th>
                                         <th className="col-md-2 text-center"> Créditos</th>
                                         <th className="col-md-2 text-center"> Tipo</th>
@@ -107,7 +148,7 @@ class DashboardCursos extends React.Component {
                                                     <span className="badge badge-blue"> { curso.creditos } </span>
                                                 </td>
                                                 <td className="v-middle text-center">
-                                                    <span> {curso.tipo}</span>
+                                                    <span> {curso.tipo_curso}</span>
                                                 </td>
                                             </tr>
                                         )
