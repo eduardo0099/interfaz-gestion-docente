@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
-import { Grid, Row, Button, Col, FormControl, FormGroup, ControlLabel, Form } from 'react-bootstrap';
+import { Grid, Row, Button,Modal } from 'react-bootstrap';
 import axios from "axios/index";
 import Detalle_DescargaHoras from "./Detalle_DescargaHoras";
 import BaseContainer from "./BaseContainer";
 import API from "../api";
 import Select from 'react-select';
+import {Role,currentRole} from "../auth";
 
 class DescargaHoras extends React.Component {
     constructor(props) {
         super(props);
+        this.handleOpenModal=this.handleOpenModal.bind(this);
+        this.handleClose=this.handleClose.bind(this);
         this.state = {
             descargas: [{
                 nombre: "",
@@ -20,7 +23,11 @@ class DescargaHoras extends React.Component {
             cicloSelect: "",
             selectedId: -1,
             verDetalle: false,
-            infoDocente: {}
+            infoDocente: {},
+            showModalMod:false,
+            nombreSelcc:"",
+            horarioSelecc:"",
+            totalHorasSelecc:-1,
         }
     }
 
@@ -66,8 +73,7 @@ class DescargaHoras extends React.Component {
             }
         }).then((response) => {
             this.setState({
-                // descargas: response.data.descargas,
-                descargas: []
+                descargas: response.data.descargas,
             })
         }).catch(error => {
             console.log(`Error al obtener datos de la pantalla cursos`, error);
@@ -84,6 +90,7 @@ class DescargaHoras extends React.Component {
         this.setState({
             selectedId: -1,
             verDetalle: false,
+            showModalMod: false,
         });
     };
 
@@ -94,6 +101,42 @@ class DescargaHoras extends React.Component {
         });
     };
 
+    handleModificar(descarga,e){
+        {currentRole()===Role.JEFE_DEPARTAMENTO?
+            this.setState({
+                showModalMod : false,
+            })
+            :
+            this.setState({
+                showModalMod : true,
+            })
+        }
+        this.setState({
+            nombreSelcc:descarga.nombre,
+            horarioSelecc:descarga.codigo,
+            totalHorasSelecc:descarga.hDescargaTotal,
+        },()=>{
+            this.handleOpenModal;
+        })
+
+    }
+
+    handleOpenModal(){
+        {currentRole()===Role.JEFE_DEPARTAMENTO?
+            this.setState({
+                showModalMod : false,
+            })
+            :
+            this.setState({
+                showModalMod : true,
+            })
+        }
+    }
+    handleClose(){
+        this.setState({
+            showModalMod : false,
+        })
+    }
 
     render() {
         if (!this.state.verDetalle) {
@@ -135,13 +178,13 @@ class DescargaHoras extends React.Component {
                                     </thead>
                                     <tbody>
 
-                                    { this.state.descargas.map((item, i) => {
-                                        return <tr key={ i }>
+                                    { this.state.descargas.map((descarga,i) => {
+                                        return <tr key={i} onClick={this.handleModificar.bind(this,descarga)}>
                                             <td className="v-middle">
-                                                <span className="block text-primary"> { item.nombre } </span>
+                                                <span className="block text-primary"> { descarga.nombre } </span>
                                             </td>
-                                            <td className="v-middle text-center">{ item.codigo }</td>
-                                            <td className="v-middle text-center">{ item.hDescargaTotal }</td>
+                                            <td className="v-middle text-center">{ descarga.codigo }</td>
+                                            <td className="v-middle text-center">{ descarga.hDescargaTotal }</td>
                                             <td className="v-middle"><Button
                                                 onClick={ () => this.mostarComentarios(i) }>Ver
                                                 Detalle</Button>
@@ -149,7 +192,52 @@ class DescargaHoras extends React.Component {
                                         </tr>
                                     }) }
                                     </tbody>
+                                    <Modal show={this.state.showModalMod} onClose={this.handleClose}>
+                                        <Modal.Header >
+                                            <Modal.Title>Añadir Descarga de Horas</Modal.Title>
+                                        </Modal.Header>
+                                        <Modal.Body>
+                                            <BaseContainer>
+                                                <div className="row form-group">
+                                                    <label>Curso :{this.state.nombreSelcc}</label>
+                                                </div>
+                                                <div className="row form-group">
+                                                    <label>Horario :{this.state.horarioSelecc}</label>
+                                                </div>
+                                                <div className="row form-group">
+                                                    <label>Horas Descargadas Totales :{this.state.totalHorasSelecc}</label>
+                                                </div>
+
+                                                <div className="row form-group">
+                                                    <label>Semana: </label>
+                                                    <input className="form-control" type="number" pattern="[0-9]*"></input>
+                                                </div>
+                                                <div className="row form-group">
+                                                    <label>Horas de descarga: </label>
+                                                    <input className="form-control" type="number" pattern="[0-9]*"></input>
+                                                </div>
+                                                <div className="row form-group">
+                                                    <label>Motivo: </label>
+                                                    <input className="form-control"></input>
+                                                </div>
+                                            </BaseContainer>
+                                        </Modal.Body>
+                                        <Modal.Footer>
+                                            <button type="button" className="btn btn-primary">Añadir</button>
+                                            <button type="button" className="btn btn-primary" onClick={this.handleClose}>Cancelar</button>
+                                        </Modal.Footer>
+                                    </Modal>
                                 </table>
+                            </div>
+                            <div>
+                                {(currentRole() === Role.JEFE_DEPARTAMENTO) ?
+                                    <span></span>
+                                    :
+                                    <div>
+                                        <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
+                                        <a className="btn btn-primary" href="#" role="button">Nuevo</a>
+                                    </div>
+                                    }
                             </div>
                         </div>
                     </BaseContainer>

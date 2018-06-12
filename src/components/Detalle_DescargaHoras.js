@@ -27,23 +27,16 @@ class Detalle_DescargaHoras extends React.Component{
         ];
         return (
             <div>
-                    <BaseContainer>
-                        <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
-                            <Grid>
-                                <Row className="back-bar">
-                                    <Col md={12}>
-                                        <Button onClick={this.props.volverLista}><Glyphicon glyph="arrow-left"/></Button>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col md={8}>
-                                        <h2>Detalle de descarga de Horas</h2>
-                                    </Col>
-                                    <Col md={2}>
-                                        <div className="panel-heading">
-                                        </div>
-                                    </Col>
-                                </Row>
+                <BaseContainer>
+                    <div className="panel col-lg-offset-2 col-lg-8 col-md-12 col-sm-12">
+                        <div className="panel-heading">
+                            <header className="page-header">
+                                <a className="btn btn-default pull-right" onClick={this.props.volverLista}>volver</a>
+                                <p className="h2 m-b-sm" >
+                                    <small>Detalle de descarga de Horas</small>
+                                </p>
+                            </header>
+                            <div className="panel-body">
                                 <Col md={6}>
                                     <BootstrapTable
                                         keyField='id'
@@ -53,9 +46,10 @@ class Detalle_DescargaHoras extends React.Component{
                                 <Col>
                                     Falta cuadro estadistico del horasXsemanaCiclo
                                 </Col>
-                            </Grid>
+                            </div>
                         </div>
-                    </BaseContainer>
+                    </div>
+                </BaseContainer>
             </div>
         );
     }
