@@ -105,7 +105,7 @@ class RegistroInvestigación extends Component{
         }
     }
 
-    uploadFile(e) {
+    uploadFile = (e) => {
         let file = e.target.files[0];
         let formData = new FormData();
         formData.append('file', file);
@@ -115,10 +115,8 @@ class RegistroInvestigación extends Component{
                 headers: {'Content-Type': 'multipart/form-data'}
             }
         ).then(response =>{
-            this.setState({idArchivo:response.data.id},()=>{console.log(this.state.idArchivo)})
-
-        }).catch(response =>{
-            //this.setState({idArchivo:response.data.id},()=>{console.log(this.state.idArchivo)})
+            this.setState({idArchivo :response.data.id})
+        }).catch(response =>  {
         });
     }
 
