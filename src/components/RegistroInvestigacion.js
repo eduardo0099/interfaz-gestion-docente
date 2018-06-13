@@ -11,7 +11,6 @@ import API from "../api";
 
 class RegistroInvestigación extends Component{
 
-
     constructor(props){
         super(props);
         this.validator = new SimpleReactValidator();
@@ -21,7 +20,8 @@ class RegistroInvestigación extends Component{
             resumen: '',
             fecha_inicio: null,
             fecha_fin: null,
-            file:null
+            file:null,
+            idArchivo:'',
         };
         this.handleTitulo = this.handleTitulo.bind(this);
         this.handleAutor = this.handleAutor.bind(this);
@@ -84,11 +84,11 @@ class RegistroInvestigación extends Component{
                 resumen: this.state.resumen,
                 fecha_inicio: this.armarFecha(this.state.fecha_inicio._d),
                 fecha_fin: this.armarFecha(this.state.fecha_fin._d),
-                file:null
+                archivo:this.state.idArchivo,
             })
                 .then(response => {
                     alert("Investigación registrada");
-                    this.props.history.goBack();
+                    //this.props.history.goBack();
                 })
                 .catch(error => {
                     alert("Error: No se pudo registrar la investigación");
@@ -109,12 +109,15 @@ class RegistroInvestigación extends Component{
         let file = e.target.files[0];
         let formData = new FormData();
         formData.append('file', file);
-        API.post('tests/upload',
+        API.post('docente/investigacion/registrarArchivo',
             formData,
             {
                 headers: {'Content-Type': 'multipart/form-data'}
             }
-        ).catch(function () {
+        ).then(response =>{
+            this.setState({idArchivo:response.data.id})
+        })
+            .catch(function () {
             console.log('Error al subir el archivo');
         });
     }
