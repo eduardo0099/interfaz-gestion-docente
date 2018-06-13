@@ -107,6 +107,7 @@ class AyudaEconomicaDetalle extends React.Component {
                 tipo_documento:this.state.tipoDocSeleccionado,
             }).then(res => { 
                 this.setState({idNew: res.data[0].nuevo_id});
+                console.log(this.state.idNew.value);
                 alert("Se ha registrado correctamente");
             }).catch(error => {
                 alert("Ha ocurrido un error, intentelo luego");
@@ -126,7 +127,6 @@ class AyudaEconomicaDetalle extends React.Component {
             let nuevoArreglo = this.state.solicitudEconomica;
             nuevoArreglo.gastos.push(nuevo);
             this.setState({solicitudEconomica: nuevoArreglo});
-            console.log(this.state.idNew.value);
         }
         else{
             //Mostrar campos errados

@@ -38,7 +38,8 @@ class PreferenciaCursos extends Component {
 				})
 			console.log(this.state.existe.value);
 			//Evaluador
-			if(this.state.existe == 'false'){
+			let profe = this.state.nombreProfe;
+			if(this.state.nombreProfe == ""){
 				alert("Error: el código proporcionado no corresponde a ningún profesor de la sección.");
 				this.setState({nombreProfe: ''});
 			}
