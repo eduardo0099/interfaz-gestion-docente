@@ -10,12 +10,7 @@ class DescargaHoras extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            descargas: [{
-                nombre: "",
-                codigo: "",
-                hDescargaTotal: "",
-                semana: []
-            }],
+            descargas: [],
             ciclos: [],
             cicloSelect: "",
             selectedId: -1,
@@ -66,8 +61,7 @@ class DescargaHoras extends React.Component {
             }
         }).then((response) => {
             this.setState({
-                // descargas: response.data.descargas,
-                descargas: []
+                descargas: response.data.descargas,
             })
         }).catch(error => {
             console.log(`Error al obtener datos de la pantalla cursos`, error);
@@ -109,9 +103,11 @@ class DescargaHoras extends React.Component {
                                 </header>
                             </div>
                             <div className="panel-body">
-                                <div>
-                                    <div className="form-group col-md-2 row ">
-                                        <label> Ciclo </label>
+                                <div className="col-md-6">
+                                    <div className="col-md-2">
+                                        <label> Ciclo: </label>
+                                    </div>
+                                    <div className="col-md-4">
                                         <Select
                                             value={ this.state.cicloSeleccionado }
                                             onChange={ this.cambioCiclo }
@@ -126,7 +122,7 @@ class DescargaHoras extends React.Component {
                                     <thead>
                                     <tr>
                                         <th className="col-md-3">Curso</th>
-                                        <th className="col-md-2 text-center">Codigo</th>
+                                        <th className="col-md-2 text-center">Horario</th>
                                         <th className="col-md-2 text-center">Horas de descarga</th>
                                         <th className="col-md-2 text-center">Detalle</th>
                                     </tr>
@@ -140,7 +136,7 @@ class DescargaHoras extends React.Component {
                                             </td>
                                             <td className="v-middle text-center">{ item.codigo }</td>
                                             <td className="v-middle text-center">{ item.hDescargaTotal }</td>
-                                            <td className="v-middle"><Button
+                                            <td className="v-middle text-center"><Button
                                                 onClick={ () => this.mostarComentarios(i) }>Ver
                                                 Detalle</Button>
                                             </td>
