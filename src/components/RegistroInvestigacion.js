@@ -105,6 +105,20 @@ class RegistroInvestigación extends Component{
         }
     }
 
+    uploadFile(e) {
+        let file = e.target.files[0];
+        let formData = new FormData();
+        formData.append('file', file);
+        API.post('tests/upload',
+            formData,
+            {
+                headers: {'Content-Type': 'multipart/form-data'}
+            }
+        ).catch(function () {
+            console.log('Error al subir el archivo');
+        });
+    }
+
     render(){
 
         console.log(this.props);
@@ -154,7 +168,7 @@ class RegistroInvestigación extends Component{
                         <div className="form-group">
                             <label> Adjuntar Archivo </label>
                             <td className="v-middle">
-                                <input type="file" name="datafile"/>
+                                <input type="file" id="files" ref="files" onChange={this.uploadFile}/>
                             </td>
                         </div>
                     </div>
