@@ -115,10 +115,10 @@ class RegistroInvestigación extends Component{
                 headers: {'Content-Type': 'multipart/form-data'}
             }
         ).then(response =>{
-            this.setState({idArchivo:response.data.id})
-        })
-            .catch(function () {
-            console.log('Error al subir el archivo');
+            this.setState({idArchivo:response.data.id},()=>{console.log(this.state.idArchivo)})
+
+        }).catch(response =>{
+            //this.setState({idArchivo:response.data.id},()=>{console.log(this.state.idArchivo)})
         });
     }
 
