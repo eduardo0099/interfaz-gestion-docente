@@ -7,6 +7,7 @@ import { Button, Modal } from 'react-bootstrap';
 import RegistroInvestigacion from "./RegistroInvestigacion";
 import ModificarInvestigacion from "./ModificarInvestigacion";
 import {Role, currentRole} from "../auth";
+import {Panel,  Dropdown, Glyphicon, MenuItem} from 'react-bootstrap';
 
 
 export class ListaInvestigaciones extends React.Component {
@@ -102,10 +103,10 @@ export class ListaInvestigaciones extends React.Component {
             selectedResumen:obj.resumen});
     }
 
-    eliminar = () => {
+    eliminar = (item,e) => {
         if (window.confirm('Seguro que deseas eliminar esta investigacion?')) {
             // Save it!
-            let selectedId = this.state.selectedId;
+            let selectedId = item.id;
             API.delete('docente/investigacion/eliminar', {
                 data: {
                     id: this.state.selectedId
@@ -213,6 +214,21 @@ export class ListaInvestigaciones extends React.Component {
                                         <td className="v-middle text-center modal-container" >
                                             <Button bsStyle="info" onClick={this.handleMostrarResumen.bind(this,item)} >Ver</Button>
                                         </td>
+                                        {!(currentRole() === Role.JEFE_DEPARTAMENTO) ?
+                                            <td className="v-middle">
+                                                <Dropdown className="dropdown-options" pullRight>
+                                                    <Dropdown.Toggle className="dropdown-options" noCaret="true">
+                                                        <Glyphicon glyph="option-vertical"/>
+                                                    </Dropdown.Toggle>
+                                                    <Dropdown.Menu>
+                                                        <MenuItem onClick={this.eliminar.bind(this, item)}>Eliminar</MenuItem> :
+                                                        <MenuItem href={ `${this.props.match.url}/${item.id}/ModificarInvestigacion` }>Modificar</MenuItem>
+                                                    </Dropdown.Menu>
+                                                </Dropdown>
+                                            </td>
+                                            :
+                                            <td></td>
+                                        }
                                     </tr>
                                 }) }
                                 </tbody>
