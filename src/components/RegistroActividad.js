@@ -107,7 +107,7 @@ class RegistroActividad extends Component{
 
     performPostRequest = ()=> {
         if( this.validator.allValid() && this.validDates(this.state.fecha_fin,this.state.fecha_inicio)){
-            axios.post('http://200.16.7.151:8080/docente/actividad/registrar', {
+            API.post('docente/actividad/registrar', {
                 idProfesor: this.state.idProfesor,
                 ciclo: this.state.ciclo,
                 tipo: this.state.tipoSeleccionado,

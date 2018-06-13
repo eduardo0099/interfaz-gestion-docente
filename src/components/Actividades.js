@@ -91,7 +91,7 @@ export class Actividades extends React.Component {
         if (window.confirm('Seguro que deseas eliminar esta investigacion?')) {
             // Save it!
             let selectedId = this.state.selectedId;
-            axios.delete('http://200.16.7.151:8080/docente/actividad/eliminar', {
+            API.delete('docente/actividad/eliminar', {
                 data: {
                     id: this.state.selectedId
                 }
