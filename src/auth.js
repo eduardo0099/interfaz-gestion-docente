@@ -31,3 +31,18 @@ export function currentRole() {
     }
 
 }
+
+export function currentSeccion(){
+  try {
+    const user = JSON.parse(atob(localStorage.getItem('u')));
+
+    if (! user || ! user.hasOwnProperty('tipo_usuario')) {
+      return null;
+    }
+    console.log('user: ',user);
+    return user.seccion;
+  }catch (e) {
+    console.error('Error al obtener los roles');
+    return null;
+  }
+}
