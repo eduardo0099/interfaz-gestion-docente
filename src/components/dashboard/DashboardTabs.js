@@ -23,7 +23,8 @@ class DashboardTabs extends React.Component {
                 </ul>
                 <div className="tab-content clearfix m-t-md">
                     <div className="tab-pane active row" id="1">
-                        <DashboardGraficos/>
+                        <DashboardGraficos
+                        seccion={this.props.seccion}/>
                     </div>
                     <div className="tab-pane" id="2">
                         <DashboardCursos

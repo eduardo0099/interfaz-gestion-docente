@@ -1,223 +1,366 @@
 import React from 'react';
 import {Bar, BarChart, CartesianGrid, Cell, Legend, Line, LineChart, Pie, PieChart, ResponsiveContainer, Sector, Tooltip, XAxis, YAxis} from 'recharts';
 import 'create-react-class';
+import API from "../../api";
 
-const data = [
-  { name: 'Page A', uv: 4000, pv: 2400, amt: 2400, time: 1 },
-  { name: 'Page B', uv: 3000, pv: 1398, amt: 2210, time: 3 },
-  { name: 'Page C', uv: 2000, pv: 9800, amt: 2290, time: 9 },
-  { name: 'Page D', uv: 2780, pv: 3908, amt: 2000, time: 10 },
-  { name: 'Page E', uv: 2500, pv: 4800, amt: 2181, time: 12 },
-  { name: 'Page F', uv: 1220, pv: 3800, amt: 2500, time: 16 },
-  { name: 'Page G', uv: 2300, pv: 4300, amt: 2100, time: 18 }
-];
 
 function getRandomColor() {
-  let letters = '0123456789ABCDEF';
-  let color = '#';
-  for (let i = 0; i < 6; i ++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
+    let letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i ++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
 }
 
-const data2 = [{ name: 'Group A', value: 123 }, { name: 'Group B', value: 300 },
-  { name: 'Group C', value: 300 }, { name: 'Group D', value: 200 }, { name: 'Group E', value: 200 }];
-
-const data3 = [{ name: 'Group A', val: 123 }, { name: 'Group B', val: 300 },
-  { name: 'Group C', val: 300 }, { name: 'Group D', val: 200 }, { name: 'Group E', val: 200 }];
-
-//const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
-
-const RADIAN = Math.PI / 180;
-
-const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
-  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-  const x = cx + radius * Math.cos(- midAngle * RADIAN);
-  const y = cy + radius * Math.sin(- midAngle * RADIAN);
-
-  return (
-      <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
-        {`${(percent * 100).toFixed(0)}%`}
-      </text>
-  );
-};
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+COLORS.push(getRandomColor());
+COLORS.push(getRandomColor());
+COLORS.push(getRandomColor());
+COLORS.push(getRandomColor());
 
 const renderActiveShape = (props) => {
-  console.log('props:', props);
-  const RADIAN = Math.PI / 180;
-  const {
-    cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle,
-    fill, payload, percent, value
-  } = props;
-  const sin = Math.sin(- RADIAN * midAngle);
-  const cos = Math.cos(- RADIAN * midAngle);
-  const sx = cx + (outerRadius + 10) * cos;
-  const sy = cy + (outerRadius + 10) * sin;
-  const mx = cx + (outerRadius + 30) * cos;
-  const my = cy + (outerRadius + 30) * sin;
-  const ex = mx + (cos >= 0 ? 1 : - 1) * 22;
-  const ey = my;
-  const textAnchor = cos >= 0 ? 'start' : 'end';
+    //console.log('props:', props);
+    const RADIAN = Math.PI / 180;
+    const {
+        cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle,
+        fill, payload, percent, value
+    } = props;
+    const sin = Math.sin(- RADIAN * midAngle);
+    const cos = Math.cos(- RADIAN * midAngle);
+    const sx = cx + (outerRadius + 10) * cos;
+    const sy = cy + (outerRadius + 10) * sin;
+    const mx = cx + (outerRadius + 30) * cos;
+    const my = cy + (outerRadius + 30) * sin;
+    const ex = mx + (cos >= 0 ? 1 : - 1) * 22;
+    const ey = my;
+    const textAnchor = cos >= 0 ? 'start' : 'end';
 
-  return (
-      <g>
-        <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>{payload.name}</text>
-        <Sector
-            cx={cx}
-            cy={cy}
-            innerRadius={innerRadius}
-            outerRadius={outerRadius}
-            startAngle={startAngle}
-            endAngle={endAngle}
-            fill={fill}
-        />
-        <Sector
-            cx={cx}
-            cy={cy}
-            startAngle={startAngle}
-            endAngle={endAngle}
-            innerRadius={outerRadius + 6}
-            outerRadius={outerRadius + 10}
-            fill={fill}
-        />
-        <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none"/>
-        <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none"/>
-        <text x={ex + (cos >= 0 ? 1 : - 1) * 12} y={ey} textAnchor={textAnchor} fill="#333">{`PV ${value}`}</text>
-        <text x={ex + (cos >= 0 ? 1 : - 1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill="#999">
-          {`(Rate ${(percent * 100).toFixed(2)}%)`}
-        </text>
-      </g>
-  );
+    return (
+        <g>
+            <text x={cx} y={cy} dy={-5} textAnchor="middle" fill={fill}>{payload.name}</text>
+            <text x={cx} y={cy} dy={10} textAnchor="middle" fill={fill}>{`Value ${value}`}</text>
+            <text x={cx} y={cy} dy={25} textAnchor="middle" fill={fill}>
+                {`(Rate ${(percent * 100).toFixed(2)}%)`}
+            </text>
+            <Sector
+                cx={cx}
+                cy={cy}
+                innerRadius={innerRadius}
+                outerRadius={outerRadius}
+                startAngle={startAngle}
+                endAngle={endAngle}
+                fill={fill}
+            />
+            <Sector
+                cx={cx}
+                cy={cy}
+                startAngle={startAngle}
+                endAngle={endAngle}
+                innerRadius={outerRadius + 6}
+                outerRadius={outerRadius + 10}
+                fill={fill}
+            />
+            <circle r={2} fill={fill} stroke="none"/>
+        </g>
+    );
 };
 
-
+/*
 const COLORS = [];
 for (let i = 0; i < data2.length; i ++) {
-  COLORS.push(getRandomColor());
-}
+    COLORS.push(getRandomColor());
+}*/
 
 class DashboardGraficos extends React.Component {
 
-  constructor(props) {
-    super(props);
+    constructor(props) {
+        super(props);
 
-    this.state = {
-      activeIndex: 0
+        this.state = {
+            seccion:this.props.seccion,
+
+            activeIndex: 0,
+            activeIndexDTP: 0,
+            dataDocentesTipoDepartamento: [],
+
+            activeIndexATD: 0,
+            dataActividadesTipoDepartamento: [],
+
+            activeIndexAEED: 0,
+            dataApoyoEconomicoEstadoDepartamento: [],
+
+            activeIndexCED: 0,
+            dataConvocatoriaEstadoDepartamento: [],
+
+        }
+
+        this.onPieEnter = this.onPieEnter.bind(this);
+        this.onPieEnterDTP = this.onPieEnterDTP.bind(this);
+        this.onPieEnterATD = this.onPieEnterATD.bind(this);
+        this.onPieEnterAEED = this.onPieEnterAEED.bind(this);
+        this.onPieEnterCED = this.onPieEnterCED.bind(this);
+
+
 
     }
 
-    this.onPieEnter = this.onPieEnter.bind(this);
-  }
+
+    onPieEnter(data, index) {
+        this.setState({
+            activeIndex: index
+        });
+    }
 
 
-  onPieEnter(data, index) {
-    this.setState({
-      activeIndex: index
-    });
-  }
+    onPieEnterDTP(data, index) {
+        this.setState({
+            activeIndexDTP: index
+        });
+    }
 
-  /*
-      componentDidMount() {
-          this.findCicloActual();
-          this.allCiclos();
-      }*/
 
-  render() {
+    onPieEnterATD(data, index) {
+        this.setState({
+            activeIndexATD: index
+        });
+    }
 
-    return (
-        <div>
-          <div className="card-row">
-            <div className="card-graph">
-              <ResponsiveContainer height={400}>
-                <LineChart
-                    data={data}
-                >
-                  <XAxis dataKey="name"/>
-                  <Tooltip/>
-                  <CartesianGrid stroke="#f5f5f5"/>
-                  <Line type="monotone" dataKey="uv" stroke="#ff7300" yAxisId={0}/>
-                  <Line type="monotone" dataKey="pv" stroke="#387908" yAxisId={1}/>
-                </LineChart>
-              </ResponsiveContainer>
+    onPieEnterAEED(data, index) {
+        this.setState({
+            activeIndexAEED: index
+        });
+    }
+
+    onPieEnterCED(data, index) {
+        this.setState({
+            activeIndexCED: index
+        });
+    }
+
+    componentDidMount() {
+        console.log('seccion: ',this.props.seccion.id);
+        this.obtenerDocentesTipoDepartamento();
+        this.obtenerActividadesTipoDepartamento();
+        this.obtenerApoyoEconomicoEstadoDepartamento();
+        this.obtenerConvocatoriaEstadoDepartamento();
+    }
+
+    componentWillReceiveProps=(nextProps)=> {
+
+        console.log('nextprops: ',nextProps);
+        if(nextProps.seccion.id!==0) {
+            this.obtenerDocentesTipoSeccion(nextProps);
+            this.obtenerActividadesTipoSeccion(nextProps);
+            this.obtenerApoyoEconomicoEstadoSeccion(nextProps);
+            this.obtenerConvocatoriaEstadoSeccion(nextProps);
+        }else{
+            this.obtenerDocentesTipoDepartamento();
+            this.obtenerActividadesTipoDepartamento();
+            this.obtenerApoyoEconomicoEstadoDepartamento();
+            this.obtenerConvocatoriaEstadoDepartamento();
+        }
+    }
+
+
+
+    obtenerDocentesTipoDepartamento(){
+        API.get('/dashboard/docentesTipoDepartamento')
+            .then(response => {
+                console.log('response:',response);
+                this.setState({ dataDocentesTipoDepartamento: response.data });
+            }).catch(error => {
+            console.log(`Error al obtener datos `, error);
+        });
+    }
+
+    obtenerActividadesTipoDepartamento(){
+        API.get('/dashboard/actividadesTipoDepartamento')
+            .then(response => {
+                console.log('response:',response);
+                this.setState({ dataActividadesTipoDepartamento: response.data });
+            }).catch(error => {
+            console.log(`Error al obtener datos `, error);
+        });
+    }
+
+    obtenerApoyoEconomicoEstadoDepartamento(){
+        API.get('/dashboard/apoyoEconomicoEstadoDepartamento')
+            .then(response => {
+                console.log('response:',response);
+                this.setState({ dataApoyoEconomicoEstadoDepartamento: response.data });
+            }).catch(error => {
+            console.log(`Error al obtener datos `, error);
+        });
+    }
+
+    obtenerConvocatoriaEstadoDepartamento(){
+        API.get('/dashboard/convocatoriaEstadoDepartamento')
+            .then(response => {
+                console.log('response:',response);
+                this.setState({ dataConvocatoriaEstadoDepartamento: response.data });
+            }).catch(error => {
+            console.log(`Error al obtener datos `, error);
+        });
+    }
+
+
+    obtenerDocentesTipoSeccion(nextProps){
+        API.get('/dashboard/docentesTipoSeccion', {
+            params: {
+                idSeccion: nextProps.seccion.id,
+            }
+        })
+            .then(response => {
+                console.log('response:',response);
+                this.setState({ dataDocentesTipoDepartamento: response.data });
+            }).catch(error => {
+            console.log(`Error al obtener datos `, error);
+        });
+    }
+
+    obtenerActividadesTipoSeccion(nextProps){
+        API.get('/dashboard/actividadesTipoSeccion', {
+            params: {
+                idSeccion: nextProps.seccion.id,
+            }
+        })
+            .then(response => {
+                console.log('response:',response);
+                this.setState({ dataActividadesTipoDepartamento: response.data });
+            }).catch(error => {
+            console.log(`Error al obtener datos `, error);
+        });
+    }
+
+    obtenerApoyoEconomicoEstadoSeccion(nextProps){
+        API.get('/dashboard/apoyoEconomicoEstadoSeccion', {
+            params: {
+                idSeccion: nextProps.seccion.id,
+            }
+        })
+            .then(response => {
+                console.log('response:',response);
+                this.setState({ dataApoyoEconomicoEstadoDepartamento: response.data });
+            }).catch(error => {
+            console.log(`Error al obtener datos `, error);
+        });
+    }
+
+    obtenerConvocatoriaEstadoSeccion(nextProps){
+        API.get('/dashboard/convocatoriaEstadoSeccion', {
+            params: {
+                idSeccion: nextProps.seccion.id,
+            }
+        })
+            .then(response => {
+                console.log('response:',response);
+                //this.setState({ dataConvocatoriaEstadoDepartamento: response.data });
+            }).catch(error => {
+            console.log(`Error al obtener datos `, error);
+        });
+    }
+
+    render() {
+        console.log('seccion: ',this.props.seccion);
+
+        return (
+            <div>
+
+                <div className="card-row">
+                    <div className="card-graph">
+                        <ResponsiveContainer height={350}>
+                            <PieChart width={800} height={400}>
+                                <Pie
+                                    activeIndex={this.state.activeIndexCED}
+                                    activeShape={renderActiveShape}
+                                    data={this.state.dataConvocatoriaEstadoDepartamento}
+                                    cx={160}
+                                    cy={160}
+                                    innerRadius={60}
+                                    outerRadius={80}
+                                    fill="#8884d8"
+                                    onMouseEnter={this.onPieEnterCED}
+                                >
+                                    {
+                                        this.state.dataConvocatoriaEstadoDepartamento.map((entry, index) => <Cell fill={COLORS[index % COLORS.length]}/>)
+                                    }
+                                </Pie>
+                            </PieChart>
+                        </ResponsiveContainer>
+                    </div>
+                    <div className="card-graph">
+                        <ResponsiveContainer height={350}>
+                            <PieChart width={800} height={400}>
+                                <Pie
+                                    activeIndex={this.state.activeIndexDTP}
+                                    activeShape={renderActiveShape}
+                                    data={this.state.dataDocentesTipoDepartamento}
+                                    cx={160}
+                                    cy={160}
+                                    innerRadius={60}
+                                    outerRadius={80}
+                                    fill="#8884d8"
+                                    onMouseEnter={this.onPieEnterDTP}
+                                >
+                                    {
+                                        this.state.dataDocentesTipoDepartamento.map((entry, index) => <Cell fill={COLORS[index % COLORS.length]}/>)
+                                    }
+                                </Pie>
+                            </PieChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+
+                <div className="card-row">
+                    <div className="card-graph">
+                        <ResponsiveContainer height={350}>
+                            <PieChart width={800} height={400}>
+                                <Pie
+                                    activeIndex={this.state.activeIndexAEED}
+                                    activeShape={renderActiveShape}
+                                    data={this.state.dataApoyoEconomicoEstadoDepartamento}
+                                    cx={160}
+                                    cy={160}
+                                    innerRadius={60}
+                                    outerRadius={80}
+                                    fill="#8884d8"
+                                    onMouseEnter={this.onPieEnterAEED}
+                                >
+                                    {
+                                        this.state.dataApoyoEconomicoEstadoDepartamento.map((entry, index) => <Cell fill={COLORS[index % COLORS.length]}/>)
+                                    }
+                                </Pie>
+                            </PieChart>
+                        </ResponsiveContainer>
+                    </div>
+                    <div className="card-graph">
+                        <ResponsiveContainer height={350}>
+                            <PieChart width={800} height={400}>
+                                <Pie
+                                    activeIndex={this.state.activeIndexATD}
+                                    activeShape={renderActiveShape}
+                                    data={this.state.dataActividadesTipoDepartamento}
+                                    cx={160}
+                                    cy={160}
+                                    innerRadius={60}
+                                    outerRadius={80}
+                                    fill="#8884d8"
+                                    onMouseEnter={this.onPieEnterATD}
+                                >
+                                    {
+                                        this.state.dataActividadesTipoDepartamento.map((entry, index) => <Cell fill={COLORS[index % COLORS.length]}/>)
+                                    }
+                                </Pie>
+                            </PieChart>
+                        </ResponsiveContainer>
+                    </div>
+
+                </div>
             </div>
-            <div className="card-graph">
 
-              <ResponsiveContainer height={400}>
-                <LineChart
-                    data={data}
-                >
-                  <XAxis dataKey="name"/>
-                  <Tooltip/>
-                  <CartesianGrid stroke="#f5f5f5"/>
-                  <Line type="monotone" dataKey="uv" stroke="#ff7300" yAxisId={0}/>
-                  <Line type="monotone" dataKey="pv" stroke="#387908" yAxisId={1}/>
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-            <div className="card-graph">
-              <ResponsiveContainer height={400}>
-                <LineChart
-                    data={data}
-                >
-                  <XAxis dataKey="name"/>
-                  <Tooltip/>
-                  <CartesianGrid stroke="#f5f5f5"/>
-                  <Line type="monotone" dataKey="uv" stroke="#ff7300" yAxisId={0}/>
-                  <Line type="monotone" dataKey="pv" stroke="#387908" yAxisId={1}/>
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-          <BarChart width={600} height={300} data={data}
-                    margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3"/>
-            <XAxis dataKey="name"/>
-            <YAxis/>
-            <Tooltip/>
-            <Legend/>
-            <Bar dataKey="pv" fill="#8884d8"/>
-            <Bar dataKey="uv" fill="#82ca9d"/>
-          </BarChart>
-
-          <PieChart width={800} height={400} onMouseEnter={this.onPieEnter}>
-            <Pie
-                data={data3}
-                cx={300}
-                cy={200}
-                labelLine={false}
-                label={renderCustomizedLabel}
-                outerRadius={80}
-                fill="#8884d8"
-            >
-              {
-                data.map((entry, index) => <Cell fill={COLORS[index % COLORS.length]}/>)
-              }
-            </Pie>
-          </PieChart>
-
-          <PieChart width={800} height={400}>
-            <Pie
-                activeIndex={this.state.activeIndex}
-                activeShape={renderActiveShape}
-                data={data2}
-                cx={300}
-                cy={200}
-                innerRadius={60}
-                outerRadius={80}
-                fill="#8884d8"
-                onMouseEnter={this.onPieEnter}
-            >
-              {
-                data.map((entry, index) => <Cell fill={COLORS[index % COLORS.length]}/>)
-              }
-            </Pie>
-          </PieChart>
-
-        </div>
-
-    )
-  }
+        )
+    }
 }
 
 export default DashboardGraficos;
