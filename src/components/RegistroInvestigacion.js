@@ -21,7 +21,7 @@ class RegistroInvestigación extends Component{
             resumen: '',
             fecha_inicio: null,
             fecha_fin: null,
-            archivo:null
+            file:null
         };
         this.handleTitulo = this.handleTitulo.bind(this);
         this.handleAutor = this.handleAutor.bind(this);
@@ -84,7 +84,7 @@ class RegistroInvestigación extends Component{
                 resumen: this.state.resumen,
                 fecha_inicio: this.armarFecha(this.state.fecha_inicio._d),
                 fecha_fin: this.armarFecha(this.state.fecha_fin._d),
-                archivo:null
+                file:null
             })
                 .then(response => {
                     alert("Investigación registrada");
@@ -153,8 +153,9 @@ class RegistroInvestigación extends Component{
                         </div>
                         <div className="form-group">
                             <label> Adjuntar Archivo </label>
-                            <button className="btn btn-primary" onChange={this.handleResumen}>Adjuntar</button>
-                            {this.validator.message('resumen', this.state.resumen, 'required', false, {required: 'Este campo es obligatorio'})}
+                            <td className="v-middle">
+                                <input type="file" name="datafile"/>
+                            </td>
                         </div>
                     </div>
                     <div className="panel-footer text-right">

@@ -205,7 +205,7 @@ export class ListaInvestigaciones extends React.Component {
                                             <span className="block text-muted"> 02/05/2018 </span>
                                         </td>
                                         <td className="v-middle text-center">
-                                            <span className="block text-muted"> Finalizado  </span>
+                                            <span className="block text-muted"> { item.estado }  </span>
                                         </td>
                                         <td className="v-middle text-center">
                                             <Button bsStyle="info">Descargar</Button>
