@@ -163,102 +163,102 @@ export class ListaInvestigaciones extends React.Component {
         return (
             <div>
                 <Route exact path={ `${this.props.match.path}` } render={ () =>
-                <BaseContainer>
-                    <div className="panel col-lg-offset-2 col-lg-8 col-md-12 col-sm-12">
-                        <div className="panel-heading">
-                            <header className="page-header">
-                                <a className="btn btn-default pull-right"
-                                   onClick={ this.props.history.goBack }> Volver al Perfil </a>
-                                <p className="h2 m-b-sm"> { this.state.infoDocente.nombres } { this.state.infoDocente.apellido_paterno } { this.state.infoDocente.apellido_materno } - Investigaciones</p>
-                            </header>
-                        </div>
-                        <div className="panel-body">
-                            <div className="col-md-8">
-                                <div className="col-md-1">
-                                    <label> Ciclo: </label>
-                                </div>
-                                <div className="col-md-3">
-                                    <Select
-                                        value={ this.state.cicloSeleccionado }
-                                        onChange={ this.cambioCiclo }
-                                        valueKey={ "descripcion" }
-                                        labelKey={ "descripcion" }
-                                        options={ this.state.ciclos }
-                                        clearable={ false }
-                                    />
-                                </div>
+                    <BaseContainer>
+                        <div className="panel col-lg-offset-2 col-lg-8 col-md-12 col-sm-12">
+                            <div className="panel-heading">
+                                <header className="page-header">
+                                    <a className="btn btn-default pull-right"
+                                       onClick={ this.props.history.goBack }> Volver al Perfil </a>
+                                    <p className="h2 m-b-sm"> { this.state.infoDocente.nombres } { this.state.infoDocente.apellido_paterno } { this.state.infoDocente.apellido_materno } - Investigaciones</p>
+                                </header>
                             </div>
-                            <table className="table table-striped">
-                                <thead>
-                                <th className="v-middle col-md-4 text-center"> Titulo</th>
-                                <th className="v-middle col-md-2 text-center"> Fecha Inicio</th>
-                                <th className="v-middle col-md-2 text-center"> Estado</th>
-                                <th className="v-middle col-md-2 text-center"> Archivo</th>
-                                <th className="v-middle col-md-2 text-center"> Resumen</th>
-                                <th className="v-middle col-md-2 text-center">&nbsp;</th>
-                                </thead>
-                                <tbody>
-                                { this.state.investigaciones.map(item => {
-                                    return <tr keyField='id' rowEvents={ rowEvents } selectRow={ selectRow } >
-                                        <td className="v-middle">
-                                            <span className="block text-primary"> { item.titulo } </span>
-                                        </td>
-                                        <td className="v-middle text-center">
-                                            <span className="block text-muted"> 02/05/2018 </span>
-                                        </td>
-                                        <td className="v-middle text-center">
-                                            <span className="block text-muted"> { item.estado }  </span>
-                                        </td>
-                                        <td className="v-middle text-center">
-                                            <Button bsStyle="info">Descargar</Button>
-                                        </td>
-                                        <td className="v-middle text-center modal-container" >
-                                            <Button bsStyle="info" onClick={this.handleMostrarResumen.bind(this,item)} >Ver</Button>
-                                        </td>
-                                        {!(currentRole() === Role.JEFE_DEPARTAMENTO) ?
+                            <div className="panel-body">
+                                <div className="col-md-8">
+                                    <div className="col-md-1">
+                                        <label> Ciclo: </label>
+                                    </div>
+                                    <div className="col-md-3">
+                                        <Select
+                                            value={ this.state.cicloSeleccionado }
+                                            onChange={ this.cambioCiclo }
+                                            valueKey={ "descripcion" }
+                                            labelKey={ "descripcion" }
+                                            options={ this.state.ciclos }
+                                            clearable={ false }
+                                        />
+                                    </div>
+                                </div>
+                                <table className="table table-striped">
+                                    <thead>
+                                    <th className="v-middle col-md-4 text-center"> Titulo</th>
+                                    <th className="v-middle col-md-2 text-center"> Fecha Inicio</th>
+                                    <th className="v-middle col-md-2 text-center"> Estado</th>
+                                    <th className="v-middle col-md-2 text-center"> Archivo</th>
+                                    <th className="v-middle col-md-2 text-center"> Resumen</th>
+                                    <th className="v-middle col-md-2 text-center">&nbsp;</th>
+                                    </thead>
+                                    <tbody>
+                                    { this.state.investigaciones.map(item => {
+                                        return <tr keyField='id' rowEvents={ rowEvents } selectRow={ selectRow } >
                                             <td className="v-middle">
-                                                <Dropdown className="dropdown-options" pullRight>
-                                                    <Dropdown.Toggle className="dropdown-options" noCaret="true">
-                                                        <Glyphicon glyph="option-vertical"/>
-                                                    </Dropdown.Toggle>
-                                                    <Dropdown.Menu>
-                                                        <MenuItem onClick={this.eliminar.bind(this, item)}>Eliminar</MenuItem> :
-                                                        <MenuItem href={ `${this.props.match.url}/${item.id}/ModificarInvestigacion` }>Modificar</MenuItem>
-                                                    </Dropdown.Menu>
-                                                </Dropdown>
+                                                <span className="block text-primary"> { item.titulo } </span>
                                             </td>
-                                            :
-                                            <td></td>
-                                        }
-                                    </tr>
-                                }) }
-                                </tbody>
-                            </table>
+                                            <td className="v-middle text-center">
+                                                <span className="block text-muted"> 02/05/2018 </span>
+                                            </td>
+                                            <td className="v-middle text-center">
+                                                <span className="block text-muted"> { item.estado }  </span>
+                                            </td>
+                                            <td className="v-middle text-center">
+                                                <Button bsStyle="info">Descargar</Button>
+                                            </td>
+                                            <td className="v-middle text-center modal-container" >
+                                                <Button bsStyle="info" onClick={this.handleMostrarResumen.bind(this,item)} >Ver</Button>
+                                            </td>
+                                            {!(currentRole() === Role.JEFE_DEPARTAMENTO) ?
+                                                <td className="v-middle">
+                                                    <Dropdown className="dropdown-options" pullRight>
+                                                        <Dropdown.Toggle className="dropdown-options" noCaret="true">
+                                                            <Glyphicon glyph="option-vertical"/>
+                                                        </Dropdown.Toggle>
+                                                        <Dropdown.Menu>
+                                                            <MenuItem onClick={this.eliminar.bind(this, item)}>Eliminar</MenuItem> :
+                                                            <MenuItem href={ `${this.props.match.url}/${item.id}/ModificarInvestigacion` }>Modificar</MenuItem>
+                                                        </Dropdown.Menu>
+                                                    </Dropdown>
+                                                </td>
+                                                :
+                                                <td></td>
+                                            }
+                                        </tr>
+                                    }) }
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <Modal show={this.state.show} onHide={this.handleClose.bind(this)}>
+                                <Modal.Header closeButton>
+                                    <Modal.Title>{this.state.selectedTitulo}</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>
+                                    {this.state.selectedResumen}
+                                </Modal.Body>
+                            </Modal>
+
+                            { !(currentRole() === Role.JEFE_DEPARTAMENTO)?
+                                <div className="m-t-md">
+                                    <a className="btn btn-primary" href={ `${this.props.match.url}/RegistroInvestigacion` }>Registrar</a>
+                                    <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
+                                    { eliminar }
+                                    <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
+                                    { myComponent }
+                                </div>
+                                :
+                                <div></div>
+                            }
+
                         </div>
-
-                        <Modal show={this.state.show} onHide={this.handleClose.bind(this)}>
-                            <Modal.Header closeButton>
-                                <Modal.Title>{this.state.selectedTitulo}</Modal.Title>
-                            </Modal.Header>
-                            <Modal.Body>
-                                {this.state.selectedResumen}
-                            </Modal.Body>
-                        </Modal>
-
-                    { !(currentRole() === Role.JEFE_DEPARTAMENTO)?
-                        <div className="m-t-md">
-                            <a className="btn btn-primary" href={ `${this.props.match.url}/RegistroInvestigacion` }>Registrar</a>
-                            <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
-                            { eliminar }
-                            <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
-                            { myComponent }
-                        </div>
-                        :
-                        <div></div>
-                    }
-
-                    </div>
-                </BaseContainer>
+                    </BaseContainer>
                 }/>
 
                 <Route path={ `${this.props.match.path}/RegistroInvestigacion` } component={ RegistroInvestigacion }/>

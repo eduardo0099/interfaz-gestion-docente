@@ -1,6 +1,5 @@
-
-import React, { Component } from 'react';
-import {Checkbox,Radio,FormGroup,FormControl,ControlLabel,Button} from 'react-bootstrap';
+import React, {Component} from 'react';
+import {Button, Checkbox, ControlLabel, FormControl, FormGroup} from 'react-bootstrap';
 import BaseContainer from './BaseContainer';
 import axios from 'axios';
 import API from '../api';
