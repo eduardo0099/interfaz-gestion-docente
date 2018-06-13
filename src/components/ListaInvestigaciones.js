@@ -195,6 +195,7 @@ export class ListaInvestigaciones extends React.Component {
                                 <th className="v-middle col-md-2 text-center"> Estado</th>
                                 <th className="v-middle col-md-2 text-center"> Archivo</th>
                                 <th className="v-middle col-md-2 text-center"> Resumen</th>
+                                <th className="v-middle col-md-2 text-center">&nbsp;</th>
                                 </thead>
                                 <tbody>
                                 { this.state.investigaciones.map(item => {
