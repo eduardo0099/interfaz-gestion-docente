@@ -5,7 +5,7 @@ import BaseContainer from '../BaseContainer';
 import API from '../../api'
 import DashboardTabs from './DashboardTabs'
 import Select from 'react-select';
-import {currentSeccion} from '../../auth';
+import {currentSeccion,currentRole,Role} from '../../auth';
 
 
 class Dashboard extends Component {
@@ -20,6 +20,7 @@ class Dashboard extends Component {
 
     componentDidMount() {
         console.log(currentSeccion());
+        console.log(currentRole());
         this.allSecciones();
     }
 
@@ -29,12 +30,17 @@ class Dashboard extends Component {
             .then(response => {
                 let aux=response.data.secciones;
                 let len =response.data.secciones.length;
+                console.log('secciones:',aux,len);
                 aux.push({ id: 0, nombre: 'Todas' });
-                console.log('secciones:',aux);
                 this.setState({
                     secciones: aux,
                     seccion:aux[len]
                 });
+                if(currentRole()!==Role.JEFE_DEPARTAMENTO){
+                    this.setState({
+                        seccion:aux[0]
+                    });
+                }
             })
     }
 
@@ -44,6 +50,22 @@ class Dashboard extends Component {
     };
 
     render() {
+        let select;
+        if (currentRole()===Role.JEFE_DEPARTAMENTO){
+            select = <div className="col-md-3">
+                <label> Seccion </label>
+                <Select
+                    value={this.state.seccion}
+                    onChange={this.cambioSeccion}
+                    valueKey={'id'}
+                    labelKey={'nombre'}
+                    options={this.state.secciones}
+                    clearable={false}
+                />
+            </div>
+        }else{
+            select = null;
+        }
         return (
             <div>
                 <Route exact path={`${this.props.match.path}`} render={() =>
@@ -56,17 +78,7 @@ class Dashboard extends Component {
                             </div>
                             <div className="panel-body m-t-n">
                                 <div className="form-group row">
-                                    <div className="col-md-3">
-                                        <label> Seccion </label>
-                                        <Select
-                                            value={this.state.seccion}
-                                            onChange={this.cambioSeccion}
-                                            valueKey={'id'}
-                                            labelKey={'nombre'}
-                                            options={this.state.secciones}
-                                            clearable={false}
-                                        />
-                                    </div>
+                                    {select}
                                 </div>
                                 <div className="m-t-lg">
                                     <DashboardTabs ruta={this.props.match.path} seccion={this.state.seccion}/>
