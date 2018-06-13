@@ -46,13 +46,40 @@ class DashboardCursos extends React.Component {
         this.findCursos();
     }
 
+    componentWillReceiveProps=(nextProps)=> {
+
+        console.log('nextprops: ',nextProps);
+        if(nextProps.seccion.id!==0) {
+            this.findCursosSeccion(nextProps);
+        }else{
+            this.findCursos();
+        }
+    }
+
     findCursos() {
-        API.get('/general/listaCurso')
+        API.get('/dashboard/listaCurso')
             .then(response => {
-                console.log(response);
+                //console.log('cursos: ',response.data.curso);
                 this.setState({
                     cursos: response.data.curso,
                     cursosAux: response.data.curso
+                })
+            }).catch(error => {
+            console.log("Error obteniendo la lista de cursos", error);
+        });
+    }
+
+    findCursosSeccion(nextProps) {
+        API.get('/general/listaCursosSeccion', {
+            params: {
+                seccion: nextProps.seccion.nombre,
+            }
+        })
+            .then(response => {
+                //console.log('cursos nextprops: ',response.data );
+                this.setState({
+                    cursos: response.data.cursos,
+                    cursosAux: response.data.cursos
                 })
             }).catch(error => {
             console.log("Error obteniendo la lista de cursos", error);
