@@ -4,6 +4,10 @@ import {Route} from 'react-router-dom';
 import API from "../api";
 import Select from 'react-select';
 import { Button, Modal } from 'react-bootstrap';
+import RegistroInvestigacion from "./RegistroInvestigacion";
+import ModificarInvestigacion from "./ModificarInvestigacion";
+import {Role, currentRole} from "../auth";
+
 
 export class ListaInvestigaciones extends React.Component {
 
@@ -98,9 +102,66 @@ export class ListaInvestigaciones extends React.Component {
             selectedResumen:obj.resumen});
     }
 
+    eliminar = () => {
+        if (window.confirm('Seguro que deseas eliminar esta investigacion?')) {
+            // Save it!
+            let selectedId = this.state.selectedId;
+            API.delete('docente/investigacion/eliminar', {
+                data: {
+                    id: this.state.selectedId
+                }
+            }).then(function (response) {
+                alert("Investigación eliminada");
+            }).catch(function (error) {
+                alert("Error: No se pudo eliminar la investigación");
+            })
+
+            this.setState({
+                investigaciones: this.state.investigaciones.filter(function (el) {
+                    return el.id !== selectedId;
+                })
+            })
+        } else {
+            // Do nothing!
+        }
+    }
+
     render() {
+        const selectRow = {
+            mode: 'radio',
+            clickToSelect: true,
+            hideSelectColumn: true,
+            bgColor: '#93a3b5',
+            selected: [this.state.selectedId]
+        };
+
+        const rowEvents = {
+            onClick: (e, row, rowIndex) => {
+                console.log(rowIndex)
+                console.log(row)
+                this.setState({
+                    selectedId: row.id,
+                })
+            }
+        };
+
+        let myComponent;
+        if (this.state.selectedId !== -1) {
+            myComponent = <Button disabled={ false } href={ `${this.props.match.url}/${this.state.selectedId}/ModificarInvestigacion` }>Modificar</Button>
+        } else {
+            myComponent = <Button disabled={ true }>Modificar</Button>
+        }
+
+        let eliminar;
+        if (this.state.selectedId !== -1) {
+            eliminar = <Button disabled={ false } onClick={ this.eliminar }>Eliminar</Button>
+        } else {
+            eliminar = <Button disabled={ true }>Eliminar</Button>
+        }
+
         return (
             <div>
+                <Route exact path={ `${this.props.match.path}` } render={ () =>
                 <BaseContainer>
                     <div className="panel col-lg-offset-2 col-lg-8 col-md-12 col-sm-12">
                         <div className="panel-heading">
@@ -136,7 +197,7 @@ export class ListaInvestigaciones extends React.Component {
                                 </thead>
                                 <tbody>
                                 { this.state.investigaciones.map(item => {
-                                    return <tr>
+                                    return <tr keyField='id' rowEvents={ rowEvents } selectRow={ selectRow } >
                                         <td className="v-middle">
                                             <span className="block text-primary"> { item.titulo } </span>
                                         </td>
@@ -157,16 +218,34 @@ export class ListaInvestigaciones extends React.Component {
                                 </tbody>
                             </table>
                         </div>
+
+                        <Modal show={this.state.show} onHide={this.handleClose.bind(this)}>
+                            <Modal.Header closeButton>
+                                <Modal.Title>{this.state.selectedTitulo}</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                {this.state.selectedResumen}
+                            </Modal.Body>
+                        </Modal>
+
+                    { !(currentRole() === Role.JEFE_DEPARTAMENTO)?
+                        <div className="m-t-md">
+                            <a className="btn btn-primary" href={ `${this.props.match.url}/RegistroInvestigacion` }>Registrar</a>
+                            <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
+                            { eliminar }
+                            <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
+                            { myComponent }
+                        </div>
+                        :
+                        <div></div>
+                    }
+
                     </div>
                 </BaseContainer>
-                <Modal show={this.state.show} onHide={this.handleClose.bind(this)}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>{this.state.selectedTitulo}</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        {this.state.selectedResumen}
-                    </Modal.Body>
-                </Modal>
+                }/>
+
+                <Route path={ `${this.props.match.path}/RegistroInvestigacion` } component={ RegistroInvestigacion }/>
+                <Route path={ `${this.props.match.path}/:idInvestigacion/ModificarInvestigacion` } component={ ModificarInvestigacion }/>
             </div>
         )
 
