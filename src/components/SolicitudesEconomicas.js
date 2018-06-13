@@ -110,9 +110,7 @@ class SolicitudesEconomicas extends React.Component {
                                     <header className="page-header">
                                         <a className="btn btn-default pull-right"
                                            onClick={ this.props.history.goBack }> Volver al Perfil </a>
-                                        <p className="h2"> { this.state.infoDocente.nombres } { this.state.infoDocente.apellido_paterno } { this.state.infoDocente.apellido_materno }
-                                            <small className="block m-t-xs"> Solicitudes Económicas</small>
-                                        </p>
+                                        <p className="h2"> { this.state.infoDocente.nombres } { this.state.infoDocente.apellido_paterno } { this.state.infoDocente.apellido_materno }- Solicitudes Económicas</p>
                                     </header>
                                 </div>
                                 <div className="panel-body">
