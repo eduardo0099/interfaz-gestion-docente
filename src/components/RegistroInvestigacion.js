@@ -151,6 +151,11 @@ class RegistroInvestigación extends Component{
                             />
                             {this.validator.message('fechaFin', this.state.fecha_fin, 'required', false, {required: 'Este campo es obligatorio'})}
                         </div>
+                        <div className="form-group">
+                            <label> Adjuntar Archivo </label>
+                            <button className="btn btn-primary" onChange={this.handleResumen}>Adjuntar</button>
+                            {this.validator.message('resumen', this.state.resumen, 'required', false, {required: 'Este campo es obligatorio'})}
+                        </div>
                     </div>
                     <div className="panel-footer text-right">
                         <button className="btn btn-primary" onClick={this.performPostRequest}>Registrar</button>

@@ -10,6 +10,7 @@ import RegistroActividad from "./RegistroActividad";
 import ModificarActividad from "./ModificarActividad";
 import API from "../api";
 import Select from 'react-select';
+import {currentRole, Role} from "../auth";
 
 export class Actividades extends React.Component {
     constructor(props) {
@@ -90,7 +91,7 @@ export class Actividades extends React.Component {
         if (window.confirm('Seguro que deseas eliminar esta investigacion?')) {
             // Save it!
             let selectedId = this.state.selectedId;
-            axios.delete('http://200.16.7.151:8080/docente/actividad/eliminar', {
+            API.delete('docente/actividad/eliminar', {
                 data: {
                     id: this.state.selectedId
                 }
@@ -188,28 +189,33 @@ export class Actividades extends React.Component {
                                 <header className="page-header">
                                     <a className="btn btn-default pull-right"
                                        onClick={ this.props.history.goBack }> Volver al Perfil </a>
-                                    <p className="h2 m-b-sm"> { this.state.infoDocente.nombres } { this.state.infoDocente.apellido_paterno } { this.state.infoDocente.apellido_materno }
-                                        <small className="block m-t-xs"> Actividades</small>
-                                    </p>
+                                    <p className="h2 m-b-sm"> { this.state.infoDocente.nombres } { this.state.infoDocente.apellido_paterno } { this.state.infoDocente.apellido_materno } - Actividades</p>
                                 </header>
                             </div>
                             <div className="panel-body">
                                 <div>
-                                    <div className="form-group col-md-2 row ">
-                                        <label> Ciclo </label>
-                                        <Select
-                                            value={ this.state.cicloSeleccionado }
-                                            onChange={ this.cambioCiclo }
-                                            valueKey={ "descripcion" }
-                                            labelKey={ "descripcion" }
-                                            options={ this.state.ciclos }
-                                            clearable={ false }
-                                        />
+                                    <div className="col-md-6">
+                                        <div className="col-md-2">
+                                            <label> Ciclo: </label>
+                                        </div>
+                                        <div className="col-md-4">
+                                            <Select
+                                                value={ this.state.cicloSeleccionado }
+                                                onChange={ this.cambioCiclo }
+                                                valueKey={ "descripcion" }
+                                                labelKey={ "descripcion" }
+                                                options={ this.state.ciclos }
+                                                clearable={ false }
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="m-t-md">
                                     <BootstrapTable keyField='id' data={ this.state.actividades } columns={ columns } rowEvents={ rowEvents } selectRow={ selectRow }/>
                                 </div>
+                            </div>
+
+                            { !(currentRole() === Role.JEFE_DEPARTAMENTO)?
                                 <div className="m-t-md">
                                     <a className="btn btn-primary" href={ `${this.props.match.url}/RegistroActividad` }>Registrar</a>
                                     <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
@@ -217,7 +223,10 @@ export class Actividades extends React.Component {
                                     <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
                                     { myComponent }
                                 </div>
-                            </div>
+                                :
+                                <div></div>
+                            }
+
                         </div>
                     </BaseContainer>
                 }/>

@@ -13,12 +13,7 @@ class DescargaHoras extends React.Component {
         this.handleOpenModal=this.handleOpenModal.bind(this);
         this.handleClose=this.handleClose.bind(this);
         this.state = {
-            descargas: [{
-                nombre: "",
-                codigo: "",
-                hDescargaTotal: "",
-                semana: []
-            }],
+            descargas: [],
             ciclos: [],
             cicloSelect: "",
             selectedId: -1,
@@ -148,15 +143,15 @@ class DescargaHoras extends React.Component {
                                 <header className="page-header">
                                     <a className="btn btn-default pull-right"
                                        onClick={ this.props.history.goBack }> Volver al Perfil </a>
-                                    <p className="h2 m-b-sm"> { this.state.infoDocente.nombres } { this.state.infoDocente.apellido_paterno } { this.state.infoDocente.apellido_materno }
-                                        <small className="block m-t-xs"> Descarga de Horas </small>
-                                    </p>
+                                    <p className="h2 m-b-sm"> { this.state.infoDocente.nombres } { this.state.infoDocente.apellido_paterno } { this.state.infoDocente.apellido_materno } - Descarga de Horas</p>
                                 </header>
                             </div>
                             <div className="panel-body">
-                                <div>
-                                    <div className="form-group col-md-2 row ">
-                                        <label> Ciclo </label>
+                                <div className="col-md-6">
+                                    <div className="col-md-2">
+                                        <label> Ciclo: </label>
+                                    </div>
+                                    <div className="col-md-4">
                                         <Select
                                             value={ this.state.cicloSeleccionado }
                                             onChange={ this.cambioCiclo }
@@ -171,7 +166,7 @@ class DescargaHoras extends React.Component {
                                     <thead>
                                     <tr>
                                         <th className="col-md-3">Curso</th>
-                                        <th className="col-md-2 text-center">Codigo</th>
+                                        <th className="col-md-2 text-center">Horario</th>
                                         <th className="col-md-2 text-center">Horas de descarga</th>
                                         <th className="col-md-2 text-center">Detalle</th>
                                     </tr>
@@ -185,9 +180,8 @@ class DescargaHoras extends React.Component {
                                             </td>
                                             <td className="v-middle text-center">{ descarga.codigo }</td>
                                             <td className="v-middle text-center">{ descarga.hDescargaTotal }</td>
-                                            <td className="v-middle"><Button
-                                                onClick={ () => this.mostarComentarios(i) }>Ver
-                                                Detalle</Button>
+                                            <td className="v-middle">
+											<Button onClick={ () => this.mostarComentarios(i) }>Ver Detalle</Button>
                                             </td>
                                         </tr>
                                     }) }
