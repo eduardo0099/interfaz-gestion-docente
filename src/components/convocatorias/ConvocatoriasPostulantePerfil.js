@@ -200,8 +200,13 @@ class ConvocatoriasPostulantePerfil extends Component {
                             </div>
                             <div className="panel-footer">
                                 <div className="text-center">
-                                    <button className="btn btn-danger btn-lg" onClick={this.openConfirmationRechazar}> Rechazar </button>
-                                    <button className="btn btn-success m-l-sm btn-lg" onClick={this.openConfirmationAceptar}> Aceptar </button>
+                                  {this.state.postulante.estado_postulante !== 'Pendiente' ? null
+                                    : (
+                                          <div>
+                                            < button className="btn btn-danger btn-lg" onClick={this.openConfirmationRechazar}> Rechazar </button>
+                                            <button className="btn btn-success m-l-sm btn-lg" onClick={this.openConfirmationAceptar}> Aceptar </button>
+                                          </div>)
+                                  }
                                 </div>
                             </div>
                         </div>
