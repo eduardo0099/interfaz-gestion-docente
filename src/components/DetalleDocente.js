@@ -9,7 +9,7 @@ import SolicitudesEconomicas from "./SolicitudesEconomicas"
 import DescargaHoras from "./DescargaHoras"
 import Actividades from "./Actividades"
 import BaseContainer from "./BaseContainer";
-import { Image } from 'react-bootstrap';
+import { Image, Button } from 'react-bootstrap';
 import API from '../api';
 import email from '../resources/images/email.jpg';
 import phone from '../resources/images/phone.png';
@@ -65,32 +65,31 @@ class DetalleDocente extends Component {
             <div className="m-t-md">
                 <Route exact path={ `${this.props.match.path}` } render={ () =>
                     <BaseContainer>
-                        <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
+                        <div className="font-small pt-4 mt-4">
                             <div className="m-t-sm">
                                 <div class="col-md-2">
-                                    <a className="btn btn-primary col-md-12"
-                                       href={ `${this.props.match.url}/cursos` }>Cursos</a>
+                                    <Button className="btn btn-primary col-md-12 m-t-lg" bsSize="lg" href={ `${this.props.match.url}/cursos` }>Cursos</Button>
                                 </div>
                                 <div class="col-md-2">
-                                    <a className="btn btn-primary col-md-12" href={ `${this.props.match.url}/descargaHoras` }>Descarga de Horas</a>
+                                    <Button className="btn btn-primary col-md-12 m-t-lg" bsSize="lg" href={ `${this.props.match.url}/descargaHoras` }>Descarga de Horas</Button>
                                 </div>
                                 <div class="col-md-2">
-                                    <a className="btn btn-primary col-md-12" href={ `${this.props.match.url}/encuestas` }>Encuestas</a>
+                                    <Button className="btn btn-primary col-md-12 m-t-lg" bsSize="lg" href={ `${this.props.match.url}/encuestas` }>Encuestas</Button>
                                 </div>
                                 <div class="col-md-2">
-                                    <a className="btn btn-primary col-md-12" href={ `${this.props.match.url}/investigaciones` }>Investigaciones</a>
+                                    <Button className="btn btn-primary col-md-12 m-t-lg" bsSize="lg" href={ `${this.props.match.url}/investigaciones` }>Investigaciones</Button>
                                 </div>
                                 <div class="col-md-2">
-                                    <a className="btn btn-primary col-md-12" href={ `${this.props.match.url}/solicitudesEconomicas` }>Solicitudes</a>
+                                    <Button className="btn btn-primary col-md-12 m-t-lg" bsSize="lg" href={ `${this.props.match.url}/solicitudesEconomicas` }>Solicitudes</Button>
                                 </div>
                                 <div class="col-md-2">
-                                    <a className="btn btn-primary col-md-12" href={ `${this.props.match.url}/Actividades` }>Actividades</a>
+                                    <Button className="btn btn-primary col-md-12 m-t-lg" bsSize="lg" href={ `${this.props.match.url}/Actividades` }>Actividades</Button>
                                 </div>
                             </div>
                             <div class="col-md-12 m-t-lg">
                                 <div class="panel panel-primary m-b-md">
                                     <div class="panel panel-heading panel-heading-profesor">
-                                        <h3 class="panel-title"> { `${this.state.info.apellido_paterno} ${this.state.info.apellido_materno}, ${this.state.info.nombres}` } </h3>
+                                        <h3 class="panel-title boldHeader"> { `${this.state.info.apellido_paterno} ${this.state.info.apellido_materno}, ${this.state.info.nombres}` } </h3>
                                     </div>
                                     <div class="panel-body panel-perfil-profesor">
                                         <div class="col-md-offset-1 col-md-3">

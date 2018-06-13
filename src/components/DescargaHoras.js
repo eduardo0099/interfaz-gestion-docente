@@ -105,9 +105,7 @@ class DescargaHoras extends React.Component {
                                 <header className="page-header">
                                     <a className="btn btn-default pull-right"
                                        onClick={ this.props.history.goBack }> Volver al Perfil </a>
-                                    <p className="h2 m-b-sm"> { this.state.infoDocente.nombres } { this.state.infoDocente.apellido_paterno } { this.state.infoDocente.apellido_materno }
-                                        <small className="block m-t-xs"> Descarga de Horas </small>
-                                    </p>
+                                    <p className="h2 m-b-sm"> { this.state.infoDocente.nombres } { this.state.infoDocente.apellido_paterno } { this.state.infoDocente.apellido_materno } - Descarga de Horas</p>
                                 </header>
                             </div>
                             <div className="panel-body">
