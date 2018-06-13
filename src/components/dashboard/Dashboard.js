@@ -5,6 +5,7 @@ import BaseContainer from '../BaseContainer';
 import API from '../../api'
 import DashboardTabs from './DashboardTabs'
 import Select from 'react-select';
+import {currentSeccion} from '../../auth';
 
 
 class Dashboard extends Component {
@@ -18,6 +19,7 @@ class Dashboard extends Component {
     }
 
     componentDidMount() {
+        console.log(currentSeccion());
         this.allSecciones();
     }
 
