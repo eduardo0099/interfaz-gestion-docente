@@ -5,6 +5,9 @@ import Detalle_DescargaHoras from "./Detalle_DescargaHoras";
 import BaseContainer from "./BaseContainer";
 import API from "../api";
 import Select from 'react-select';
+import {currentRole, Role} from "../auth";
+import {Route} from 'react-router-dom';
+
 
 class DescargaHoras extends React.Component {
     constructor(props) {
