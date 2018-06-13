@@ -23,7 +23,7 @@ class DashboardInvestigaciones extends React.Component {
                             id: 1,
                             nombre: 'Johann Morales',
                             codigo: '20141909',
-                            email: 'johann.morales@pucp.edu.pe',
+                            correo: 'johann.morales@pucp.edu.pe',
                             telefono: '01 4244369',
                             celular: '991142846'
                         },
@@ -31,7 +31,7 @@ class DashboardInvestigaciones extends React.Component {
                             id: 2,
                             nombre: 'Morales Johann',
                             codigo: '20141909',
-                            email: 'johann.morales@pucp.edu.pe',
+                            correo: 'johann.morales@pucp.edu.pe',
                             telefono: '01 4244369',
                             celular: '991142846'
                         }
@@ -47,7 +47,7 @@ class DashboardInvestigaciones extends React.Component {
                             id: 1,
                             nombre: 'Johann Morales',
                             codigo: '20141909',
-                            email: 'johann.morales@pucp.edu.pe',
+                            correo: 'johann.morales@pucp.edu.pe',
                             telefono: '01 4244369',
                             celular: '991142846'
                         },
@@ -55,7 +55,7 @@ class DashboardInvestigaciones extends React.Component {
                             id: 2,
                             nombre: 'Morales Johann',
                             codigo: '20141909',
-                            email: 'johann.morales@pucp.edu.pe',
+                            correo: 'johann.morales@pucp.edu.pe',
                             telefono: '01 4244369',
                             celular: '991142846'
                         }
@@ -64,6 +64,47 @@ class DashboardInvestigaciones extends React.Component {
                     resumen: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
                 }]
         }
+    }
+
+
+    componentDidMount() {
+        this.findInvestigaciones();
+    }
+
+    componentWillReceiveProps=(nextProps)=> {
+
+        console.log('nextprops: ',nextProps);
+        if(nextProps.seccion.id!==0) {
+        }else{
+            this.findInvestigaciones();
+        }
+    }
+
+    findInvestigaciones() {
+        API.get('/general/listaInvestigacionDep?departamento=Ingenieria')
+            .then(response => {
+                //console.log('ayudas: ',response.data.investigaciones);
+                this.setState({
+                    investigaciones:response.data.investigaciones,
+                })
+            }).catch(error => {
+            console.log("Error obteniendo la lista de cursos", error);
+        });
+    }
+
+    findInvestigacionesSeccion(nextProps) {
+        API.get('/general/', {
+            params: {
+                seccion: nextProps.seccion.id,
+            }
+        })
+            .then(response => {
+                console.log('investigaciones nextprops: ',response.data );
+                /*this.setState({
+                })*/
+            }).catch(error => {
+            console.log("Error obteniendo la lista de cursos", error);
+        });
     }
 
     close() {
@@ -84,6 +125,10 @@ class DashboardInvestigaciones extends React.Component {
                 return <span className="label label-success"> Aprobado </span>
             case 'Terminado':
                 return <span className="label label-primary"> Terminado </span>
+            case 'Finalizada':
+                return <span className="label label-success"> Finalizada </span>
+            case 'En proceso':
+                return <span className="label label-primary"> En proceso </span>
         }
     }
 
@@ -154,9 +199,7 @@ class DashboardInvestigaciones extends React.Component {
                                             </td>
                                             <td className="v-middle col-md-6">
                                                 <span className="block m-t-xs m-b-xs"><i
-                                                    class="fa fa-envelope text-primary"></i> {p.email}</span>
-                                                <span className="block m-b-xs m-l-xs "><i
-                                                    class="fa fa-mobile"></i> {p.celular}</span>
+                                                    class="fa fa-envelope text-primary"></i> {p.correo}</span>
                                                 <span className="block m-b-xs"><i
                                                     class="fa fa-phone"></i> {p.telefono}</span>
                                             </td>
