@@ -18,7 +18,7 @@ class ModificarActividad extends Component {
         super(props);
         this.validator = new SimpleReactValidator();
         this.state = {
-			id_actividad: this.props.match.params.idActividad,
+            id_actividad: this.props.match.params.idActividad,
             actividadBuscada : [],
             titulo: "",
             tipo: "",
@@ -52,7 +52,7 @@ class ModificarActividad extends Component {
     }
 
     componentDidMount() {
-		this.listarTipo();
+        this.listarTipo();
         this.obtenerDatosActividad();
     }
 
@@ -103,21 +103,21 @@ class ModificarActividad extends Component {
     armarFecha(date) {
         var cadena="";
         //cadena=cadena+date.getFullYear();
-		
-		
-		if (date.getDate()<10){
+
+
+        if (date.getDate()<10){
             cadena=cadena+0+date.getDate();
         }else{
             cadena=cadena+date.getDate();
         }
-		cadena += "-";
+        cadena += "-";
         if (date.getMonth()<9){
             cadena=cadena+0+(date.getMonth()+1);
         }else{
             cadena=cadena+(date.getMonth()+1);
         }
-		cadena = cadena + "-";
-		cadena=cadena+date.getFullYear();
+        cadena = cadena + "-";
+        cadena=cadena+date.getFullYear();
         console.log(cadena);
         return cadena;
     }
@@ -136,8 +136,8 @@ class ModificarActividad extends Component {
                 titulo: this.state.titulo,
                 fecha_inicio: this.armarFecha(this.state.fecha_inicio._d),
                 fecha_fin: this.armarFecha(this.state.fecha_fin._d),
-				estado: this.state.estado,
-				lugar: this.state.lugar
+                estado: this.state.estado,
+                lugar: this.state.lugar
             })
                 .then(response => {
                     alert("Modificación registrada");

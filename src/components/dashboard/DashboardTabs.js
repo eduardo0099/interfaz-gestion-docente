@@ -1,7 +1,15 @@
-import React, {Component} from 'react';
+import React from 'react';
 import DashboardCursos from './DashboardCursos';
+import DashboardInvestigaciones from "./DashboardInvestigaciones";
+import DashboardAyudaEconomica from "./DashboardAyudaEconomica";
+import DashboardCargaHoraria from "./DashboardCargaHoraria";
+import { AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid, Brush, Legend,
+    ReferenceArea, ReferenceLine, ReferenceDot, ResponsiveContainer,
+    LabelList, Label ,Line, LineChart} from 'recharts';
+import DashboardGraficos from "./DashboardGraficos";
 
-class DashboardTabs extends Component {
+
+class DashboardTabs extends React.Component {
 
     render() {
         return (
@@ -11,24 +19,27 @@ class DashboardTabs extends Component {
                     <li><a href="#2" data-toggle="tab"> Cursos </a></li>
                     <li><a href="#3" data-toggle="tab"> Investigaciones </a></li>
                     <li><a href="#4" data-toggle="tab"> Ayuda Economica </a></li>
-                    <li><a href="#5" data-toggle="tab"> Carga Horaria </a></li>
                 </ul>
                 <div className="tab-content clearfix m-t-md">
                     <div className="tab-pane active row" id="1">
-
+                        <DashboardGraficos
+                        seccion={this.props.seccion}/>
                     </div>
                     <div className="tab-pane" id="2">
                         <DashboardCursos
-                        ruta={this.props.ruta}/>
+                        ruta={this.props.ruta}
+                        seccion={this.props.seccion}/>
                     </div>
                     <div className="tab-pane" id="3">
-
+                        <DashboardInvestigaciones
+                            seccion={this.props.seccion}/>
                     </div>
                     <div className="tab-pane" id="4">
-
+                        <DashboardAyudaEconomica
+                            seccion={this.props.seccion}/>
                     </div>
                     <div className="tab-pane" id="5">
-
+                        <DashboardCargaHoraria/>
                     </div>
                 </div>
             </div>

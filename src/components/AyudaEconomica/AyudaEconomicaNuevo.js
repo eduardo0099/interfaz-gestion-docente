@@ -11,6 +11,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import {Checkbox, CheckboxGroup} from 'react-checkbox-group';
 import SimpleReactValidator from "simple-react-validator";
 import moment from "moment/moment";
+import {Role, currentRole} from "../../auth";
 
 const motivos=[{motivo:"Exposición de paper"},{motivo:"Viajes Académicos"}]
 
@@ -311,298 +312,310 @@ class AyudaEconomicaNuevo extends Component {
 
 
     render() {
-        const columnsAgregarProf = [{
-            dataField: 'codigo',
-            text: 'Codigo'
-        }, {
-            dataField: 'nombre',
-            text: 'Nombre'
-        }];
+        if(currentRole() != Role.JEFE_DEPARTAMENTO){
+            const columnsAgregarProf = [{
+                dataField: 'codigo',
+                text: 'Codigo'
+            }, {
+                dataField: 'nombre',
+                text: 'Nombre'
+            }];
 
-        const selectRowAgregarProf = {
-            mode: 'radio',
-            clickToSelect: true,
-            hideSelectColumn: true,
-            bgColor: '#93a3b5',
-            selected: [this.state.codigoProf]
-        };
+            const selectRowAgregarProf = {
+                mode: 'radio',
+                clickToSelect: true,
+                hideSelectColumn: true,
+                bgColor: '#93a3b5',
+                selected: [this.state.codigoProf]
+            };
 
-        const rowEventsAgregarProf = {
-            onClick: (e, row, rowIndex) => {
-                console.log(rowIndex)
-                console.log(row)
-                this.setState({
-                    codigoProf: row.codigo,
-                    nombreProf: row.nombre,
-                })
+            const rowEventsAgregarProf = {
+                onClick: (e, row, rowIndex) => {
+                    console.log(rowIndex)
+                    console.log(row)
+                    this.setState({
+                        codigoProf: row.codigo,
+                        nombreProf: row.nombre,
+                    })
+                }
+            };
+
+            const columnsInv = [{
+                dataField: 'id',
+                text: 'ID',
+                hidden: true
+            }, {
+                dataField: 'titulo',
+                text: 'Nombre'
+            }, {
+                dataField: 'resumen',
+                text: 'Descripcion'
+            }];
+
+            const selectRowInv = {
+                mode: 'radio',
+                clickToSelect: true,
+                hideSelectColumn: true,
+                bgColor: '#93a3b5',
+                selected: [this.state.selectedId]
+            };
+
+
+            const rowEventsInv = {
+                onClick: (e, row, rowIndex) => {
+                    console.log(rowIndex)
+                    console.log(row)
+                    this.setState({
+                        selectedId: row.id,
+                        investigacionSel:row.titulo
+                    })
+                }
+            };
+
+            let buttonRegInv;
+            if (this.state.codigoProf !== '') {
+                buttonRegInv = <button className="btn btn-primary m-l-sm" onClick={this.handleShowSeleccionarInvestigacion}> Buscar Investigación </button>
+            } else {
+                buttonRegInv = <button className="btn btn-primary m-l-sm" disabled={true} > Buscar Investigación </button>
             }
-        };
 
-        const columnsInv = [{
-            dataField: 'id',
-            text: 'ID',
-            hidden: true
-        }, {
-            dataField: 'titulo',
-            text: 'Nombre'
-        }, {
-            dataField: 'resumen',
-            text: 'Descripcion'
-        }];
+            return (
+                <div>
+                    <Route exact path={`${this.props.match.path}`} render={() =>
+                        <BaseContainer>
+                            <div className="panel col-lg-offset-2 col-lg-8 col-md-offset-1 col-md-10 col-sm-12">
+                                <div className="panel-heading">
+                                    <header className="page-header m-b-n">
+                                        <a className="btn btn-default pull-right"
+                                           onClick={this.props.history.goBack}> Volver </a>
+                                        <p className="h2"> Nueva Solicitud Económica </p>
+                                    </header>
+                                </div>
+                                <div className="panel-body">
+                                    <div className="form-group">
+                                        <Panel>
+                                            <Panel.Heading> Motivo </Panel.Heading>
+                                            <Panel.Body>
+                                                <div className="form-horizontal">
+                                                    <div className="form-group">
+                                                        <label className="control-label col-md-2"></label>
+                                                        <div className="col-md-6">
+                                                            <Select
+                                                                value={ this.state.motivo }
+                                                                onChange={ this.handleMotivo }
+                                                                valueKey={ "descripcion" }
+                                                                labelKey={ "descripcion" }
+                                                                options={ this.state.motivos }
+                                                                clearable={ false }
+                                                            />
+                                                            {this.validator.message('motivo', this.state.motivo, 'required', false, {required: 'Este campo es obligatorio'})}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </Panel.Body>
+                                        </Panel>
+                                    </div>
+                                    <div className="form-group">
+                                        <Panel>
+                                            <Panel.Heading> Profesor </Panel.Heading>
+                                            <Panel.Body>
+                                                <div className="form-horizontal">
+                                                    <div className="form-group">
+                                                        <label
+                                                            className="control-label col-md-2"> Código: </label>
+                                                        <div className="col-md-6">
+                                                            <input type="text" disabled={true} className="form-control" value={this.state.codigoProf}></input>
+                                                            {this.validator.message('codigoProf', this.state.codigoProf, 'required', false, {required: 'Este campo es obligatorio'})}
+                                                        </div>
+                                                        <div className="col-md-3">
+                                                            <button className="btn btn-primary m-l-sm" onClick={this.handleShowAgregarProfe}> Buscar profesor </button>
+                                                        </div>
+                                                    </div>
+                                                    <div className="form-group">
+                                                        <label
+                                                            className="control-label col-md-2"> Nombre: </label>
+                                                        <div className="col-md-6">
+                                                            <input type="text" disabled={true} className="form-control" value={this.state.nombreProf}></input>
+                                                            {this.validator.message('nombreProf', this.state.nombreProf, 'required', false, {required: 'Este campo es obligatorio'})}
+                                                        </div>
+                                                    </div>
+                                                    <br></br>
+                                                    <div className="form-group">
+                                                        <label
+                                                            className="control-label col-md-2"> Investigación: </label>
+                                                        <div className="col-md-6">
+                                                            <input type="text" disabled={true} className="form-control" value={this.state.investigacionSel}></input>
+                                                            {this.validator.message('investigacionSel', this.state.investigacionSel, 'required', false, {required: 'Este campo es obligatorio'})}
+                                                        </div>
+                                                        <div className="col-md-3">
+                                                            {buttonRegInv}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </Panel.Body>
+                                        </Panel>
+                                    </div>
 
-        const selectRowInv = {
-            mode: 'radio',
-            clickToSelect: true,
-            hideSelectColumn: true,
-            bgColor: '#93a3b5',
-            selected: [this.state.selectedId]
-        };
-
-
-        const rowEventsInv = {
-            onClick: (e, row, rowIndex) => {
-                console.log(rowIndex)
-                console.log(row)
-                this.setState({
-                    selectedId: row.id,
-                    investigacionSel:row.titulo
-                })
-            }
-        };
-
-        let buttonRegInv;
-        if (this.state.codigoProf !== '') {
-            buttonRegInv = <button className="btn btn-primary m-l-sm" onClick={this.handleShowSeleccionarInvestigacion}> Buscar Investigación </button>
-        } else {
-            buttonRegInv = <button className="btn btn-primary m-l-sm" disabled={true} > Buscar Investigación </button>
-        }
-
-        return (
-            <div>
-                <Route exact path={`${this.props.match.path}`} render={() =>
-                    <BaseContainer>
-                        <div className="panel col-lg-offset-2 col-lg-8 col-md-offset-1 col-md-10 col-sm-12">
-                            <div className="panel-heading">
-                                <header className="page-header m-b-n">
-                                    <a className="btn btn-default pull-right"
-                                       onClick={this.props.history.goBack}> Volver </a>
-                                    <p className="h2"> Nueva Solicitud Económica </p>
-                                </header>
-                            </div>
-                            <div className="panel-body">
-                                <div className="form-group">
-                                    <Panel>
-                                        <Panel.Heading> Motivo </Panel.Heading>
-                                        <Panel.Body>
-                                            <div className="form-horizontal">
-                                                <div className="form-group">
-                                                    <label className="control-label col-md-2"></label>
-                                                    <div className="col-md-6">
-                                                        <Select
-                                                            value={ this.state.motivo }
-                                                            onChange={ this.handleMotivo }
-                                                            valueKey={ "descripcion" }
-                                                            labelKey={ "descripcion" }
-                                                            options={ this.state.motivos }
-                                                            clearable={ false }
+                                    <div className="form-group">
+                                        <Panel>
+                                            <Panel.Heading> Detalle </Panel.Heading>
+                                            <Panel.Body>
+                                                <div className="row form-group">
+                                                    <label className="control-label col-md-1"></label>
+                                                    <div className="col-md-4">
+                                                        <label>Fecha de Inicio </label>
+                                                        <DatePicker
+                                                            className="form-control"
+                                                            dateFormat="DD/MM/YYYY"
+                                                            selected={this.state.fecha_inicio}
+                                                            onChange={this.handleFIni}
+                                                        />
+                                                        {this.validator.message('fecha_inicio', this.state.fecha_inicio, 'required', false, {required: 'Este campo es obligatorio'})}
+                                                    </div>
+                                                    <div className="col-md-1"></div>
+                                                    <div className="col-md-4">
+                                                        <label> Fecha de Fin </label>
+                                                        <DatePicker
+                                                            className="form-control"
+                                                            dateFormat="DD/MM/YYYY"
+                                                            selected={this.state.fecha_fin}
+                                                            onChange={this.handleFFin}
                                                         />
                                                         {this.validator.message('motivo', this.state.motivo, 'required', false, {required: 'Este campo es obligatorio'})}
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </Panel.Body>
-                                    </Panel>
-                                </div>
-                                <div className="form-group">
-                                    <Panel>
-                                        <Panel.Heading> Profesor </Panel.Heading>
-                                        <Panel.Body>
-                                            <div className="form-horizontal">
-                                                <div className="form-group">
-                                                    <label
-                                                        className="control-label col-md-2"> Código: </label>
-                                                    <div className="col-md-6">
-                                                        <input type="text" disabled={true} className="form-control" value={this.state.codigoProf}></input>
-                                                        {this.validator.message('codigoProf', this.state.codigoProf, 'required', false, {required: 'Este campo es obligatorio'})}
+                                                <div className="row form-group">
+                                                    <label className="control-label col-md-1"></label>
+                                                    <div className="col-md-4">
+                                                        <label>Monto</label>
+                                                        <input type="number" className="form-control" onChange ={this.handleMonto}></input>
+                                                        {this.validator.message('monto', this.state.monto, 'required', false, {required: 'Este campo es obligatorio'})}
                                                     </div>
-                                                    <div className="col-md-3">
-                                                        <button className="btn btn-primary m-l-sm" onClick={this.handleShowAgregarProfe}> Buscar profesor </button>
-                                                    </div>
-                                                </div>
-                                                <div className="form-group">
-                                                    <label
-                                                        className="control-label col-md-2"> Nombre: </label>
-                                                    <div className="col-md-6">
-                                                        <input type="text" disabled={true} className="form-control" value={this.state.nombreProf}></input>
-                                                        {this.validator.message('nombreProf', this.state.nombreProf, 'required', false, {required: 'Este campo es obligatorio'})}
+                                                    <div className="col-md-1"></div>
+                                                    <div className="col-md-4">
+                                                        <label>Pais</label>
+                                                        <Select
+                                                            value={ this.state.pais }
+                                                            onChange={ this.handlePais }
+                                                            valueKey={ "pais" }
+                                                            labelKey={ "pais" }
+                                                            options={ this.state.paises }
+                                                            clearable={ false }
+                                                        />
+                                                        {this.validator.message('pais', this.state.pais, 'required', false, {required: 'Este campo es obligatorio'})}
                                                     </div>
                                                 </div>
-                                                <br></br>
-                                                <div className="form-group">
-                                                    <label
-                                                        className="control-label col-md-2"> Investigación: </label>
-                                                    <div className="col-md-6">
-                                                        <input type="text" disabled={true} className="form-control" value={this.state.investigacionSel}></input>
-                                                        {this.validator.message('investigacionSel', this.state.investigacionSel, 'required', false, {required: 'Este campo es obligatorio'})}
+
+                                                <div className="row form-group">
+                                                    <label className="control-label col-md-1"></label>
+                                                    <div className="col-md-9">
+                                                        <label>Servicios</label>
+                                                        <CheckboxGroup
+                                                            checkboxDepth={2} // This is needed to optimize the checkbox group
+                                                            name="servicios"
+                                                            value={this.state.servicios}
+                                                            onChange={this.serviciosChanged}>
+                                                            <label><Checkbox value="Boletos"/> Boletos</label>
+                                                            <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
+                                                            <label><Checkbox value="Inscripcion del Paper"/> Inscripcion del Paper</label>
+                                                            <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
+                                                            <label><Checkbox value="Viaticos"/> Viaticos</label>
+                                                        </CheckboxGroup>
+                                                        {this.validator.message('servicios', this.state.servicios, 'required', false, {required: 'Este campo es obligatorio'})}
                                                     </div>
-                                                    <div className="col-md-3">
-                                                        {buttonRegInv}
+                                                </div>
+
+                                                <div className="row form-group">
+                                                    <label className="control-label col-md-1"></label>
+                                                    <div className="col-md-9">
+                                                        <label>Instituto/
+                                                        Universidad</label>
+                                                        <input className="form-control"  onChange={ this.handleInsUniv }></input>
+                                                        {this.validator.message('insUniv', this.state.insUniv, 'required', false, {required: 'Este campo es obligatorio'})}
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </Panel.Body>
-                                    </Panel>
-                                </div>
 
-                                <div className="form-group">
-                                    <Panel>
-                                        <Panel.Heading> Detalle </Panel.Heading>
-                                        <Panel.Body>
-                                            <div className="row form-group">
-                                                <label className="control-label col-md-1"></label>
-                                                <div className="col-md-4">
-                                                    <label>Fecha de Inicio </label>
-                                                    <DatePicker
-                                                        className="form-control"
-                                                        dateFormat="DD/MM/YYYY"
-                                                        selected={this.state.fecha_inicio}
-                                                        onChange={this.handleFIni}
-                                                    />
-                                                    {this.validator.message('fecha_inicio', this.state.fecha_inicio, 'required', false, {required: 'Este campo es obligatorio'})}
+                                                <div className="row form-group">
+                                                    <label className="control-label col-md-1"></label>
+                                                    <div className="col-md-9">
+                                                        <label>Comentarios</label>
+                                                        <textarea className="form-control"  onChange={ this.handleComentario }></textarea>
+                                                        {this.validator.message('comentario', this.state.comentario, 'required', false, {required: 'Este campo es obligatorio'})}
+                                                    </div>
                                                 </div>
-                                                <div className="col-md-1"></div>
-                                                <div className="col-md-4">
-                                                    <label> Fecha de Fin </label>
-                                                    <DatePicker
-                                                        className="form-control"
-                                                        dateFormat="DD/MM/YYYY"
-                                                        selected={this.state.fecha_fin}
-                                                        onChange={this.handleFFin}
-                                                    />
-                                                    {this.validator.message('motivo', this.state.motivo, 'required', false, {required: 'Este campo es obligatorio'})}
-                                                </div>
-                                            </div>
-                                            <div className="row form-group">
-                                                <label className="control-label col-md-1"></label>
-                                                <div className="col-md-4">
-                                                    <label>Monto</label>
-                                                    <input type="number" className="form-control" onChange ={this.handleMonto}></input>
-                                                    {this.validator.message('monto', this.state.monto, 'required', false, {required: 'Este campo es obligatorio'})}
-                                                </div>
-                                                <div className="col-md-1"></div>
-                                                <div className="col-md-4">
-                                                    <label>Pais</label>
-                                                    <Select
-                                                        value={ this.state.pais }
-                                                        onChange={ this.handlePais }
-                                                        valueKey={ "pais" }
-                                                        labelKey={ "pais" }
-                                                        options={ this.state.paises }
-                                                        clearable={ false }
-                                                    />
-                                                    {this.validator.message('pais', this.state.pais, 'required', false, {required: 'Este campo es obligatorio'})}
-                                                </div>
-                                            </div>
-
-                                            <div className="row form-group">
-                                                <label className="control-label col-md-1"></label>
-                                                <div className="col-md-9">
-                                                    <label>Servicios</label>
-                                                    <CheckboxGroup
-                                                        checkboxDepth={2} // This is needed to optimize the checkbox group
-                                                        name="servicios"
-                                                        value={this.state.servicios}
-                                                        onChange={this.serviciosChanged}>
-                                                        <label><Checkbox value="Boletos"/> Boletos</label>
-                                                        <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
-                                                        <label><Checkbox value="Inscripcion del Paper"/> Inscripcion del Paper</label>
-                                                        <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
-                                                        <label><Checkbox value="Viaticos"/> Viaticos</label>
-                                                    </CheckboxGroup>
-                                                    {this.validator.message('servicios', this.state.servicios, 'required', false, {required: 'Este campo es obligatorio'})}
-                                                </div>
-                                            </div>
-
-                                            <div className="row form-group">
-                                                <label className="control-label col-md-1"></label>
-                                                <div className="col-md-9">
-                                                    <label>Instituto/
-                                                    Universidad</label>
-                                                    <input className="form-control"  onChange={ this.handleInsUniv }></input>
-                                                    {this.validator.message('insUniv', this.state.insUniv, 'required', false, {required: 'Este campo es obligatorio'})}
-                                                </div>
-                                            </div>
-
-                                            <div className="row form-group">
-                                                <label className="control-label col-md-1"></label>
-                                                <div className="col-md-9">
-                                                    <label>Comentarios</label>
-                                                    <textarea className="form-control"  onChange={ this.handleComentario }></textarea>
-                                                    {this.validator.message('comentario', this.state.comentario, 'required', false, {required: 'Este campo es obligatorio'})}
-                                                </div>
-                                            </div>
-                                        </Panel.Body>
-                                    </Panel>
-                                </div>
-
-
-                            </div>
-                            <div className="panel-footer text-right">
-                                <button className="btn btn-primary m-l-sm" onClick={this.handleGuardar}> Guardar Solicitud </button>
-                            </div>
-                        </div>
-
-                        <Modal show={this.state.showSeleccionarProfe} onHide={this.handleCloseAgregarProfe}>
-                            <Modal.Header closeButton>
-                                <Modal.Title>Seleccionar Profesor</Modal.Title>
-                            </Modal.Header>
-                            <Modal.Body>
-                                <div className="form-group">
-                                    <div className="col-md-6">
-                                        <FormControl type="text" placeholder="Buscar Nombre Profesor"
-                                                     value={ this.state.profeText}
-                                                     onChange={ this.busquedaNombreProfesor.bind(this) }/>
-                                        <br></br>
+                                            </Panel.Body>
+                                        </Panel>
                                     </div>
-                                    <BootstrapTable keyField='codigo' data={this.state.profesores} columns={columnsAgregarProf}
-                                                    selectRow={selectRowAgregarProf} rowEvents={ rowEventsAgregarProf }/>
-                                </div>
-                            </Modal.Body>
-                            <Modal.Footer>
-                                <button className="btn btn-primary" onClick={this.handleCloseAgregarProfe}>Guardar</button>
-                            </Modal.Footer>
-                        </Modal>
 
-                        <Modal show={this.state.showSeleccionarInvestigacion} onHide={this.handleCloseSeleccionarInvestigacion}>
-                            <Modal.Header closeButton>
-                                <Modal.Title>Seleccionar Investigacion</Modal.Title>
-                            </Modal.Header>
-                            <Modal.Body>
-                                <div className="form-group col-md-4 row ">
-                                    <label> Ciclo </label>
-                                    <Select
-                                        value={ this.state.cicloSeleccionado }
-                                        onChange={ this.cambioCiclo }
-                                        valueKey={ "descripcion" }
-                                        labelKey={ "descripcion" }
-                                        options={ this.state.ciclos }
-                                        clearable={ false }
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <BootstrapTable keyField='id' data={this.state.investigaciones} columns={columnsInv}
-                                                    selectRow={selectRowInv} rowEvents={ rowEventsInv }/>
-                                </div>
-                            </Modal.Body>
-                            <Modal.Footer>
-                                <button className="btn btn-primary" onClick={this.handleCloseSeleccionarInvestigacion}>Guardar</button>
-                            </Modal.Footer>
-                        </Modal>
 
-                    </BaseContainer>
-                }/>
-            </div>
-        );
+                                </div>
+                                <div className="panel-footer text-right">
+                                    <button className="btn btn-primary m-l-sm" onClick={this.handleGuardar}> Guardar Solicitud </button>
+                                </div>
+                            </div>
+
+                            <Modal show={this.state.showSeleccionarProfe} onHide={this.handleCloseAgregarProfe}>
+                                <Modal.Header closeButton>
+                                    <Modal.Title>Seleccionar Profesor</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>
+                                    <div className="form-group">
+                                        <div className="col-md-6">
+                                            <FormControl type="text" placeholder="Buscar Nombre Profesor"
+                                                         value={ this.state.profeText}
+                                                         onChange={ this.busquedaNombreProfesor.bind(this) }/>
+                                            <br></br>
+                                        </div>
+                                        <BootstrapTable keyField='codigo' data={this.state.profesores} columns={columnsAgregarProf}
+                                                        selectRow={selectRowAgregarProf} rowEvents={ rowEventsAgregarProf }/>
+                                    </div>
+                                </Modal.Body>
+                                <Modal.Footer>
+                                    <button className="btn btn-primary" onClick={this.handleCloseAgregarProfe}>Guardar</button>
+                                </Modal.Footer>
+                            </Modal>
+
+                            <Modal show={this.state.showSeleccionarInvestigacion} onHide={this.handleCloseSeleccionarInvestigacion}>
+                                <Modal.Header closeButton>
+                                    <Modal.Title>Seleccionar Investigacion</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>
+                                    <div className="form-group col-md-4 row ">
+                                        <label> Ciclo </label>
+                                        <Select
+                                            value={ this.state.cicloSeleccionado }
+                                            onChange={ this.cambioCiclo }
+                                            valueKey={ "descripcion" }
+                                            labelKey={ "descripcion" }
+                                            options={ this.state.ciclos }
+                                            clearable={ false }
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <BootstrapTable keyField='id' data={this.state.investigaciones} columns={columnsInv}
+                                                        selectRow={selectRowInv} rowEvents={ rowEventsInv }/>
+                                    </div>
+                                </Modal.Body>
+                                <Modal.Footer>
+                                    <button className="btn btn-primary" onClick={this.handleCloseSeleccionarInvestigacion}>Guardar</button>
+                                </Modal.Footer>
+                            </Modal>
+
+                        </BaseContainer>
+                    }/>
+                </div>
+            );
+        }else{
+            return(
+                <div>
+                    <label>
+                        Lo sentimos. Al parecer la dirección está mal escrita o no tiene permiso para entrar en esta página. Por favor, contacte con los administradores del sistema.
+                    </label>
+                    <br></br>   
+                    <a className="btn btn-default pull-right"onClick={this.props.history.goBack}> Volver </a>
+                </div>
+            );
+        }
     }
 }
 

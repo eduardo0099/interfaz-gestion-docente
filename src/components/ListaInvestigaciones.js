@@ -1,42 +1,38 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
-import { Route } from 'react-router-dom';
-import RegistroInvestigacion from "./RegistroInvestigacion"
-import ModificarInvestigacion from "./ModificarInvestigacion"
-import axios from "axios/index";
-import BootstrapTable from 'react-bootstrap-table-next';
 import BaseContainer from "./BaseContainer";
+import {Route} from 'react-router-dom';
 import API from "../api";
 import Select from 'react-select';
+import { Button, Modal } from 'react-bootstrap';
+import RegistroInvestigacion from "./RegistroInvestigacion";
+import ModificarInvestigacion from "./ModificarInvestigacion";
+import {Role, currentRole} from "../auth";
+import {Panel,  Dropdown, Glyphicon, MenuItem} from 'react-bootstrap';
+
 
 export class ListaInvestigaciones extends React.Component {
+
     constructor(props) {
         super(props);
         this.state = {
             selectedId: -1,
             investigaciones: [],
+            verComentarios: false,
             ciclos: [],
             cicloSeleccionado: "",
-            infoDocente: {}
-        }
+            infoDocente: {},
+            selectedTitulo:"",
+            selectedResumen:"",
+            show: false
+        };
+        this.handleShow = this.handleShow.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+        this.handleHide = this.handleHide.bind(this);
     }
 
     componentDidMount() {
-        this.findCicloActual();
         this.allCiclos();
-    }
-
-    findDocente(ciclo) {
-        API.get('docente/docente/general', {
-            params: {
-                codigo: this.props.match.params.codigo,
-                ciclo: ciclo,
-            }
-        }).then(response => {
-            this.setState({ infoDocente: response.data });
-        }).catch(error => {
-            console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`, error);
-        });
+        this.findCicloActual();
     }
 
     findCicloActual() {
@@ -55,12 +51,6 @@ export class ListaInvestigaciones extends React.Component {
             })
     }
 
-    cambioCiclo = (obj) => {
-        let ciclo = obj.descripcion;
-        this.setState({ cicloSeleccionado: ciclo })
-        this.findInvestigaciones(ciclo);
-    };
-
     findInvestigaciones(ciclo) {
         API.get('/docente/docente/invDocente', {
             params: {
@@ -76,11 +66,47 @@ export class ListaInvestigaciones extends React.Component {
         });
     }
 
+    findDocente(ciclo) {
+        API.get('docente/docente/general', {
+            params: {
+                codigo: this.props.match.params.codigo,
+                ciclo: ciclo,
+            }
+        }).then(response => {
+            this.setState({ infoDocente: response.data });
+        }).catch(error => {
+            console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`, error);
+        });
+    }
 
-    eliminar = () => {
+    cambioCiclo = (obj) => {
+        let ciclo = obj.descripcion;
+        this.setState({ cicloSeleccionado: ciclo })
+        this.findInvestigaciones(ciclo);
+    };
+
+    handleShow() {
+        this.setState({ show: true });
+    }
+
+    handleClose() {
+        this.setState({ show: false });
+    }
+
+    handleHide() {
+        this.setState({ show: false });
+    }
+
+    handleMostrarResumen(obj, event){
+        this.setState({show: true,
+            selectedTitulo:obj.titulo,
+            selectedResumen:obj.resumen});
+    }
+
+    eliminar = (item,e) => {
         if (window.confirm('Seguro que deseas eliminar esta investigacion?')) {
             // Save it!
-            let selectedId = this.state.selectedId;
+            let selectedId = item.id;
             API.delete('docente/investigacion/eliminar', {
                 data: {
                     id: this.state.selectedId
@@ -101,21 +127,7 @@ export class ListaInvestigaciones extends React.Component {
         }
     }
 
-
     render() {
-
-        const columns = [{
-            dataField: 'id',
-            text: 'ID',
-            hidden: true
-        }, {
-            dataField: 'titulo',
-            text: 'Nombre'
-        }, {
-            dataField: 'resumen',
-            text: 'Descripcion'
-        }];
-
         const selectRow = {
             mode: 'radio',
             clickToSelect: true,
@@ -123,7 +135,6 @@ export class ListaInvestigaciones extends React.Component {
             bgColor: '#93a3b5',
             selected: [this.state.selectedId]
         };
-
 
         const rowEvents = {
             onClick: (e, row, rowIndex) => {
@@ -158,15 +169,15 @@ export class ListaInvestigaciones extends React.Component {
                                 <header className="page-header">
                                     <a className="btn btn-default pull-right"
                                        onClick={ this.props.history.goBack }> Volver al Perfil </a>
-                                    <p className="h2 m-b-sm"> { this.state.infoDocente.nombres } { this.state.infoDocente.apellido_paterno } { this.state.infoDocente.apellido_materno }
-                                        <small className="block m-t-xs"> Investigaciones</small>
-                                    </p>
+                                    <p className="h2 m-b-sm"> { this.state.infoDocente.nombres } { this.state.infoDocente.apellido_paterno } { this.state.infoDocente.apellido_materno } - Investigaciones</p>
                                 </header>
                             </div>
                             <div className="panel-body">
-                                <div>
-                                    <div className="form-group col-md-2 row ">
-                                        <label> Ciclo </label>
+                                <div className="col-md-8">
+                                    <div className="col-md-1">
+                                        <label> Ciclo: </label>
+                                    </div>
+                                    <div className="col-md-3">
                                         <Select
                                             value={ this.state.cicloSeleccionado }
                                             onChange={ this.cambioCiclo }
@@ -177,9 +188,64 @@ export class ListaInvestigaciones extends React.Component {
                                         />
                                     </div>
                                 </div>
-                                <div className="m-t-md">
-                                    <BootstrapTable keyField='id' data={ this.state.investigaciones } columns={ columns } rowEvents={ rowEvents } selectRow={ selectRow }/>
-                                </div>
+                                <table className="table table-striped">
+                                    <thead>
+                                    <th className="v-middle col-md-4 text-center"> Titulo</th>
+                                    <th className="v-middle col-md-2 text-center"> Fecha Inicio</th>
+                                    <th className="v-middle col-md-2 text-center"> Estado</th>
+                                    <th className="v-middle col-md-2 text-center"> Archivo</th>
+                                    <th className="v-middle col-md-2 text-center"> Resumen</th>
+                                    <th className="v-middle col-md-2 text-center">&nbsp;</th>
+                                    </thead>
+                                    <tbody>
+                                    { this.state.investigaciones.map(item => {
+                                        return <tr keyField='id' rowEvents={ rowEvents } selectRow={ selectRow } >
+                                            <td className="v-middle">
+                                                <span className="block text-primary"> { item.titulo } </span>
+                                            </td>
+                                            <td className="v-middle text-center">
+                                                <span className="block text-muted"> 02/05/2018 </span>
+                                            </td>
+                                            <td className="v-middle text-center">
+                                                <span className="block text-muted"> { item.estado }  </span>
+                                            </td>
+                                            <td className="v-middle text-center">
+                                                <Button bsStyle="info">Descargar</Button>
+                                            </td>
+                                            <td className="v-middle text-center modal-container" >
+                                                <Button bsStyle="info" onClick={this.handleMostrarResumen.bind(this,item)} >Ver</Button>
+                                            </td>
+                                            {!(currentRole() === Role.JEFE_DEPARTAMENTO) ?
+                                                <td className="v-middle">
+                                                    <Dropdown className="dropdown-options" pullRight>
+                                                        <Dropdown.Toggle className="dropdown-options" noCaret="true">
+                                                            <Glyphicon glyph="option-vertical"/>
+                                                        </Dropdown.Toggle>
+                                                        <Dropdown.Menu>
+                                                            <MenuItem onClick={this.eliminar.bind(this, item)}>Eliminar</MenuItem> :
+                                                            <MenuItem href={ `${this.props.match.url}/${item.id}/ModificarInvestigacion` }>Modificar</MenuItem>
+                                                        </Dropdown.Menu>
+                                                    </Dropdown>
+                                                </td>
+                                                :
+                                                <td></td>
+                                            }
+                                        </tr>
+                                    }) }
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <Modal show={this.state.show} onHide={this.handleClose.bind(this)}>
+                                <Modal.Header closeButton>
+                                    <Modal.Title>{this.state.selectedTitulo}</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>
+                                    {this.state.selectedResumen}
+                                </Modal.Body>
+                            </Modal>
+
+                            { !(currentRole() === Role.JEFE_DEPARTAMENTO)?
                                 <div className="m-t-md">
                                     <a className="btn btn-primary" href={ `${this.props.match.url}/RegistroInvestigacion` }>Registrar</a>
                                     <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
@@ -187,17 +253,21 @@ export class ListaInvestigaciones extends React.Component {
                                     <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
                                     { myComponent }
                                 </div>
-                            </div>
+                                :
+                                <div></div>
+                            }
+
                         </div>
                     </BaseContainer>
                 }/>
 
                 <Route path={ `${this.props.match.path}/RegistroInvestigacion` } component={ RegistroInvestigacion }/>
                 <Route path={ `${this.props.match.path}/:idInvestigacion/ModificarInvestigacion` } component={ ModificarInvestigacion }/>
-
             </div>
         )
+
     }
 }
+
 
 export default ListaInvestigaciones;

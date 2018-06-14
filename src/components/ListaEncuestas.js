@@ -1,11 +1,12 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route,Redirect } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import axios from "axios/index";
 import ProfesorPerfilEncuesta from "./ProfesorPerfilEncuesta";
 import BaseContainer from "./BaseContainer";
 import API from '../api';
 import Select from 'react-select';
+import { Line } from 'rc-progress';
 
 class ListaEncuestas extends React.Component {
 
@@ -17,10 +18,32 @@ class ListaEncuestas extends React.Component {
             verComentarios: false,
             comentarioSeleccionado: -1,
             infoDocente: {},
-            ciclos: []
+            ciclos: [],
+            auth: false,
+            verAuth:false,
         }
     }
-
+    componentWillMount() {
+        if (localStorage.getItem('jwt') == null) {
+            window.location.href = "/";
+        } else {
+            API.get('/auth/verificaPermiso', {
+                /*
+                headers:{
+                  'x-access-token' : localStorage.getItem('jwt'),
+                },
+                */
+                params: {
+                    ruta: this.props.match.path
+                }
+            }).then(resp => {
+                console.log("resp", resp.data);
+                this.setState({ auth: resp.data.permiso, verAuth:true });
+            }).catch(err => {
+                console.log("err", err);
+            })
+        }
+    }
     findCicloActual() {
         API.get('general/cicloActual')
             .then(response => {
@@ -87,6 +110,11 @@ class ListaEncuestas extends React.Component {
     };
 
     render() {
+        if(!this.state.auth && this.state.verAuth){
+            return(<Redirect to="/home"/>);
+        }else if (!this.state.verAuth){
+            return(<div/>);
+        }
         if (!this.state.verComentarios) {
             return (
                 <div>
@@ -97,23 +125,25 @@ class ListaEncuestas extends React.Component {
                                     <header className="page-header">
                                         <a className="btn btn-default pull-right"
                                            onClick={ this.props.history.goBack }> Volver al Perfil </a>
-                                        <p className="h2 m-b-sm"> { this.state.infoDocente.nombres } { this.state.infoDocente.apellido_paterno } { this.state.infoDocente.apellido_materno }
-                                            <small className="block m-t-xs"> Encuestas </small>
-                                        </p>
+                                        <p className="h2 m-b-sm"> { this.state.infoDocente.nombres } { this.state.infoDocente.apellido_paterno } { this.state.infoDocente.apellido_materno } - Encuestas</p>
                                     </header>
                                 </div>
                                 <div className="panel-body">
                                     <div>
-                                        <div className="form-group col-md-2 row ">
-                                            <label> Ciclo </label>
-                                            <Select
-                                                value={ this.state.cicloSeleccionado }
-                                                onChange={ this.cambioCiclo }
-                                                valueKey={ "descripcion" }
-                                                labelKey={ "descripcion" }
-                                                options={ this.state.ciclos }
-                                                clearable={ false }
-                                            />
+                                        <div className="col-md-6">
+                                            <div className="col-md-2">
+                                                <label> Ciclo: </label>
+                                            </div>
+                                            <div className="col-md-4">
+                                                <Select
+                                                    value={ this.state.cicloSeleccionado }
+                                                    onChange={ this.cambioCiclo }
+                                                    valueKey={ "descripcion" }
+                                                    labelKey={ "descripcion" }
+                                                    options={ this.state.ciclos }
+                                                    clearable={ false }
+                                                />
+                                            </div>
                                         </div>
                                     </div>
                                     <table className="table table-striped">
@@ -135,7 +165,10 @@ class ListaEncuestas extends React.Component {
                                                     <small
                                                         className="block text-muted"> Horario { item.horario } </small>
                                                 </td>
-                                                <td className="v-middle text-center">{ item.porcentaje }%</td>
+                                                <td>
+                                                    <Line percent="item.porcentaje" strokeWidth="4" strokeColor="#87cefa" />
+                                                    <span className="block text-center"> { item.porcentaje } %</span>
+                                                </td>
                                                 <td className="v-middle text-center">{ item.puntaje }</td>
                                                 <td className="v-middle"><Button
                                                     onClick={ () => this.mostarComentarios(i) }>Ver

@@ -103,7 +103,7 @@ class SignIn extends Component {
 							    </Col>
 							  </FormGroup>
 							  <Col smOffset={2} sm={10}>
-							  <a href="http://localhost:3000/registrar">Crear nuevo usuario</a>
+							  <a href= {window.location.origin+"/registrar"}>Crear nuevo usuario</a>
 							  </Col>
 							</Form>
 						</div>
