@@ -4,7 +4,9 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
+    "create-react-class": "^15.6.3",
     "install": "^0.11.0",
+    "js-file-download": "^0.4.1",
     "moment": "^2.22.1",
     "npm": "^6.1.0",
     "papaparse": "^4.4.0",
@@ -24,6 +26,7 @@
     "react-datepicker": "^1.4.1",
     "react-dom": "^16.3.1",
     "react-fa": "^5.0.0",
+    "react-file-download": "^0.3.5",
     "react-icons": "^2.2.7",
     "react-input-calendar": "^0.5.3",
     "react-redux": "^5.0.7",
@@ -36,6 +39,7 @@
     "react-table": "^6.8.2",
     "react-validation": "^3.0.7",
     "reactjs-popup": "^1.1.1",
+    "recharts": "^1.0.0-beta.10",
     "redux": "^3.7.2",
     "simple-react-validator": "0.0.7",
     "validator": "^10.2.0"

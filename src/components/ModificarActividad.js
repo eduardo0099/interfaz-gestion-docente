@@ -9,7 +9,7 @@ import moment from "moment";
 import BootstrapTable from 'react-bootstrap-table-next';
 import BaseContainer from "./BaseContainer";
 import Select from 'react-select';
-import API from "../api";
+import API from '../api';
 
 class ModificarActividad extends Component {
 
@@ -18,20 +18,21 @@ class ModificarActividad extends Component {
         super(props);
         this.validator = new SimpleReactValidator();
         this.state = {
-			id_actividad: this.props.match.params.idActividad,
+            id_actividad: this.props.match.params.idActividad,
             actividadBuscada : [],
-            titulo: "Hola",
-            tipo: "Congreso",
+            titulo: "",
+            tipo: "",
             fecha_inicio: '',
             fecha_fin: '',
-            estado: 'Asistira',
+            estado: '',
             lugar: '',
             profesores: [],
             showQuitar: false,
             selectedQuitar: [],
-            tipoSeleccionado: "",
             listaTipo: [{id:"1",descripcion:"Congreso"},{id:"2",descripcion:"Visita"}],
             tipoSeleccionado:"",
+            id_tipoActividad: 1,
+            id_estadoActividad: 3,
         };
 
         this.handleTitulo = this.handleTitulo.bind(this);
@@ -51,7 +52,7 @@ class ModificarActividad extends Component {
     }
 
     componentDidMount() {
-		this.listarTipo();
+        this.listarTipo();
         this.obtenerDatosActividad();
     }
 
@@ -68,7 +69,15 @@ class ModificarActividad extends Component {
                 id_actividad: this.props.match.params.idActividad,
             }
         }).then(response => {
-            this.setState({ actividadBuscada: response.data });
+            this.setState({
+                actividadBuscada: response.data,
+                titulo : response.data[0].titulo,
+                tipoSeleccionado: response.data[0].tipo,
+                fecha_inicio: moment(response.data[0].fecha_inicio),
+                fecha_fin: moment(response.data[0].fecha_fin),
+                estado: response.data[0].estado,
+                lugar: response.data[0].lugar
+            });
         }).catch(error => {
             console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`, error);
         });
@@ -94,21 +103,21 @@ class ModificarActividad extends Component {
     armarFecha(date) {
         var cadena="";
         //cadena=cadena+date.getFullYear();
-		
-		
-		if (date.getDate()<10){
+
+
+        if (date.getDate()<10){
             cadena=cadena+0+date.getDate();
         }else{
             cadena=cadena+date.getDate();
         }
-		cadena += "-";
+        cadena += "-";
         if (date.getMonth()<9){
             cadena=cadena+0+(date.getMonth()+1);
         }else{
             cadena=cadena+(date.getMonth()+1);
         }
-		cadena = cadena + "-";
-		cadena=cadena+date.getFullYear();
+        cadena = cadena + "-";
+        cadena=cadena+date.getFullYear();
         console.log(cadena);
         return cadena;
     }
@@ -121,17 +130,18 @@ class ModificarActividad extends Component {
 
     performPostRequest = () => {
         if (this.validator.allValid() && this.validDates(this.state.fecha_fin, this.state.fecha_inicio)) {
-            API.put('http://200.16.7.151:8080/docente/actividad/actualizar', {
+            API.put('docente/actividad/actualizar', {
                 id_actividad: this.state.id_actividad,
-				tipo: this.state.tipo,
+                tipo: this.state.tipoSeleccionado,
                 titulo: this.state.titulo,
                 fecha_inicio: this.armarFecha(this.state.fecha_inicio._d),
                 fecha_fin: this.armarFecha(this.state.fecha_fin._d),
-				estado: this.state.estado,
-				lugar: this.state.lugar
+                estado: this.state.estado,
+                lugar: this.state.lugar
             })
                 .then(response => {
                     alert("Modificación registrada");
+                    this.props.history.goBack();
                     //this.props.history.goBack();
                 })
                 .catch(error => {
@@ -335,7 +345,7 @@ class ModificarActividad extends Component {
                     <div className="panel-body">
                         <div className="form-group">
                             <label> Título </label>
-                            <input type="text" className="form-control" value={this.state.actividadBuscada[0].titulo} onChange={this.handleTitulo}></input>
+                            <input type="text" className="form-control" value={this.state.titulo} onChange={this.handleTitulo}></input>
                             {this.validator.message('titulo', this.state.titulo, 'required|max:100', false, {required: 'Este campo es obligatorio', max: 'El número máximo de caracteres es 20'})}
                         </div>
 
