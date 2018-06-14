@@ -25,6 +25,7 @@ class DescargaHoras extends React.Component {
             nombreSelcc:"",
             horarioSelecc:"",
             totalHorasSelecc:-1,
+            cicloActual:-1,
         }
     }
 
@@ -36,7 +37,10 @@ class DescargaHoras extends React.Component {
     findCicloActual() {
         API.get('general/cicloActual')
             .then(response => {
-                this.setState({ cicloSeleccionado: response.data.cicloActual })
+                this.setState({
+                    cicloSeleccionado: response.data.cicloActual,
+                    cicloActual:response.data.cicloActual
+                })
                 this.findDescargas(response.data.cicloActual);
                 this.findDocente(response.data.cicloActual);
             })
@@ -133,6 +137,32 @@ class DescargaHoras extends React.Component {
         this.setState({
             showModalMod : false,
         })
+    }
+
+    aumentarDescarga=()=>{
+        if(this.state.horas!==-1 & this.state.codDocente!==-1 & this.state.horarioSeleccionado!==""
+            & this.state.cicloActual!==-1 & this.state.codigo!=="" & this.state.numSem!==-1 ){
+            API.post('/docente/docente/horaDescDocente/registrar',{
+                horas_reducidas : this.state.horas,
+                codigo_profesor : this.state.codDocente,
+                codigo_horario : this.state.horarioSeleccionado,
+                ciclo : this.state.cicloActual,
+                codigo_curso : this.state.codigo,
+                numero_semana : this.state.numSem,
+                motivo : this.state.motivo,
+                observaciones : " "
+
+            }).then(response => {
+                alert("Descarga de horas registrada");
+                //this.props.history.goBack();
+            })
+                .catch(error => {
+                    alert("Error: No se pudo registrar la descarga de horas");
+                })
+        }
+        else{
+            alert("Ingresar los campos nuevamente")
+        }
     }
 
     render() {
