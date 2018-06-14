@@ -7,7 +7,7 @@ import {Button, Modal} from 'react-bootstrap';
 import RegistroInvestigacion from './RegistroInvestigacion';
 import ModificarInvestigacion from './ModificarInvestigacion';
 import {Role, currentRole} from '../auth';
-
+import {Panel, Dropdown, Glyphicon, MenuItem} from 'react-bootstrap';
 
 export class ListaInvestigaciones extends React.Component {
 
@@ -104,10 +104,10 @@ export class ListaInvestigaciones extends React.Component {
     });
   }
 
-  eliminar = () => {
+  eliminar = (item, e) => {
     if (window.confirm('Seguro que deseas eliminar esta investigacion?')) {
       // Save it!
-      let selectedId = this.state.selectedId;
+      let selectedId = item.id;
       API.delete('docente/investigacion/eliminar', {
         data: {
           id: this.state.selectedId
@@ -129,20 +129,16 @@ export class ListaInvestigaciones extends React.Component {
   }
 
   descargar = (item, e) => {
-    console.log(item);
-    API.get('general/descargarArchivo?id=' + item.archivo, {
-      responseType: 'stream'
-    })
+    API.get('general/descargarArchivo?id=' + item.archivo)
         .then(response => {
-          response.data = null;
-          console.log(JSON.stringify(response, null, 2));
-          const url = window.URL.createObjectURL(new Blob([response.data]));
-          const link = document.createElement('a');
-          link.href = url;
-          link.setAttribute('download', response.headers['content-type']);
-          document.body.appendChild(link);
-          link.click();
-        });
+      console.log(response);
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', response.headers['content-type']);
+      document.body.appendChild(link);
+      link.click();
+    })
   }
 
   render() {
@@ -177,6 +173,7 @@ export class ListaInvestigaciones extends React.Component {
     } else {
       eliminar = <Button disabled={true}>Eliminar</Button>
     }
+
 
     return (
         <div>
@@ -213,6 +210,7 @@ export class ListaInvestigaciones extends React.Component {
                         <th className="v-middle col-md-2 text-center"> Estado</th>
                         <th className="v-middle col-md-2 text-center"> Archivo</th>
                         <th className="v-middle col-md-2 text-center"> Resumen</th>
+                        <th className="v-middle col-md-2 text-center">&nbsp;</th>
                       </thead>
                       <tbody>
                         {this.state.investigaciones.map(item => {
@@ -227,11 +225,26 @@ export class ListaInvestigaciones extends React.Component {
                               <span className="block text-muted"> {item.estado}  </span>
                             </td>
                             <td className="v-middle text-center">
-                              <Button bsStyle="info" onClick={this.descargar.bind(this, item)}>Descargar</Button>
+                              <Button bsStyle="info" onClick={this.descargar.bind(this, item)}> Descargar</Button>
                             </td>
                             <td className="v-middle text-center modal-container">
                               <Button bsStyle="info" onClick={this.handleMostrarResumen.bind(this, item)}>Ver</Button>
                             </td>
+                            {! (currentRole() === Role.JEFE_DEPARTAMENTO) ?
+                                <td className="v-middle">
+                                  <Dropdown className="dropdown-options" pullRight>
+                                    <Dropdown.Toggle className="dropdown-options" noCaret="true">
+                                      <Glyphicon glyph="option-vertical"/>
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu>
+                                      <MenuItem onClick={this.eliminar.bind(this, item)}>Eliminar</MenuItem> :
+                                      <MenuItem href={`${this.props.match.url}/${item.id}/ModificarInvestigacion`}>Modificar</MenuItem>
+                                    </Dropdown.Menu>
+                                  </Dropdown>
+                                </td>
+                                :
+                                <td></td>
+                            }
                           </tr>
                         })}
                       </tbody>

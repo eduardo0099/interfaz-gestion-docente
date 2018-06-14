@@ -17,30 +17,35 @@ class PreferenciaCursos extends Component {
 			cursosElec: [],
 			cursosPref: [],
 			codigoProfe: 0,
-			nombreProfe: ""
+			nombreProfe: "",
+			existe: 'false'
 		};
 		this.handleProfCode = this.handleProfCode.bind(this);
 	}
 
 	handleProfCode(event) {
-		this.setState({codigoProfe: event.target.value});
-		//Servicio que recoge el nombre del profesor
-		API.get('asignacionHorarios/nombreProfeReferenciado', {
-            params: {
-                id: this.state.codigoProfe
-            }
-        }).then(response => {
-				this.setState({nombreProfe: response.data.nombreProfe});
-			})
-			.catch(error => {
-			})
-		//Evaluador
-		if(this.state.nombreProfe == "ERROR"){
-			alert("Error: el código proporcionado no corresponde a ningún profesor de la sección.")
+		console.log(event.target.value.length);
+		if(event.target.value.length == 8){
+			this.setState({codigoProfe: event.target.value});
+			//Servicio que recoge el nombre del profesor
+			let urlN = "/asignacionHorarios/verificaCodigoDocente?codigo=" + event.target.value.toString() + "";
+			console.log(urlN.toString());
+			API.get(urlN)
+			.then(response => {
+					this.setState({nombreProfe: response.data.nombre, existe: response.data.exists});
+				})
+				.catch(error => {
+				})
+			console.log(this.state.existe.value);
+			//Evaluador
+			let profe = this.state.nombreProfe;
+			if(this.state.nombreProfe == ""){
+				alert("Error: el código proporcionado no corresponde a ningún profesor de la sección.");
+				this.setState({nombreProfe: ''});
+			}
+			console.log(this.state.nombreProfe);
 		}
-		else{
-			document.getElementsByName("codigoProfe")[0].value=this.state.nombreProfe;
-		}
+		this.setState({existe: 'false'});
 	}
 
 
@@ -162,7 +167,7 @@ class PreferenciaCursos extends Component {
 								</div>
 								<div class="col-md-2">Apellidos y nombres:</div>
 								<div class="col-md-6">
-									<input type="text" class="form-control" size="80" name="nombreProfe" disabled></input>
+									<label type="text" class="form-control" size="80" name="nombreCompProfe" disabled>{this.state.nombreProfe} </label>
 								</div>
 							</div>
 							<div> 
