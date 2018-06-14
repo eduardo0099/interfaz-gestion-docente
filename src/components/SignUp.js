@@ -36,7 +36,7 @@ class SignUp extends Component {
 			this.state.password!="" &&
 			this.state.id_tipo_usuario!=0 &&
 			this.state.id_departamento!=0){
-			if(this.state.id_tipo_usuario==2 || this.state.id_tipo_usuario==4){
+			if(this.state.id_tipo_usuario==2 || this.state.id_tipo_usuario==5){
 				if(this.state.id_seccion!=0){
 					axios.post('http://200.16.7.151:8080/auth/register',{
 						nombres: this.state.nombres,
