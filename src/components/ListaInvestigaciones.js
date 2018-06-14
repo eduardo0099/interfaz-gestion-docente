@@ -8,6 +8,7 @@ import RegistroInvestigacion from './RegistroInvestigacion';
 import ModificarInvestigacion from './ModificarInvestigacion';
 import {Role, currentRole} from '../auth';
 import {Panel, Dropdown, Glyphicon, MenuItem} from 'react-bootstrap';
+import {download} from '../util';
 
 export class ListaInvestigaciones extends React.Component {
 
@@ -129,17 +130,7 @@ export class ListaInvestigaciones extends React.Component {
   }
 
   descargar = (item, e) => {
-    console.log(item.archivo)
-    API.get('general/descargarArchivo?id=' + item.archivo)
-        .then(response => {
-      console.log(response);
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', response.headers['content-type']);
-      document.body.appendChild(link);
-      link.click();
-    })
+    download(item.archivo);
   }
 
   render() {
@@ -253,9 +244,9 @@ export class ListaInvestigaciones extends React.Component {
                   </div>
                   <div className="panel-footer">
                     {! (currentRole() === Role.JEFE_DEPARTAMENTO) ?
-                          <a className="btn btn-primary" href={`${this.props.match.url}/RegistroInvestigacion`}>Registrar</a>
+                        <a className="btn btn-primary" href={`${this.props.match.url}/RegistroInvestigacion`}>Registrar</a>
                         :
-                       null
+                        null
                     }
                   </div>
 
@@ -267,7 +258,6 @@ export class ListaInvestigaciones extends React.Component {
                       {this.state.selectedResumen}
                     </Modal.Body>
                   </Modal>
-
 
 
                 </div>
