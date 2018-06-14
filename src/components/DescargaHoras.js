@@ -26,7 +26,13 @@ class DescargaHoras extends React.Component {
             horarioSelecc:"",
             totalHorasSelecc:-1,
             cicloActual:-1,
+            semana:-1,
+            horas:-1,
+            motivo:"",
         }
+        this.changeHoras=this.changeHoras.bind(this);
+        this.changeSemana=this.changeSemana.bind(this);
+        this.changeMotivo=this.changeMotivo.bind(this);
     }
 
     componentDidMount() {
@@ -123,13 +129,13 @@ class DescargaHoras extends React.Component {
     }
 
     handleOpenModal(){
-        {currentRole()===Role.JEFE_DEPARTAMENTO?
+        {currentRole()===Role.JEFE_DEPARTAMENTO ||currentRole()===Role.COORDINADOR?
             this.setState({
                 showModalMod : false,
             })
             :
             this.setState({
-                showModalMod : true,
+                showModalMod : false,
             })
         }
     }
@@ -145,10 +151,10 @@ class DescargaHoras extends React.Component {
             API.post('/docente/docente/horaDescDocente/registrar',{
                 horas_reducidas : this.state.horas,
                 codigo_profesor : this.state.codDocente,
-                codigo_horario : this.state.horarioSeleccionado,
+                codigo_horario : this.state.horarioSelecc,
                 ciclo : this.state.cicloActual,
                 codigo_curso : this.state.codigo,
-                numero_semana : this.state.numSem,
+                numero_semana : this.state.semana,
                 motivo : this.state.motivo,
                 observaciones : " "
 
@@ -163,6 +169,24 @@ class DescargaHoras extends React.Component {
         else{
             alert("Ingresar los campos nuevamente")
         }
+    }
+
+    changeSemana(event){
+        this.setState({
+            semana:event.target.value,
+        })
+    }
+
+    changeHoras(event){
+        this.setState({
+            horas:event.target.value,
+        })
+    }
+
+    changeMotivo(event){
+        this.setState({
+            motivo:event.target.value,
+        })
     }
 
     render() {
@@ -241,16 +265,16 @@ class DescargaHoras extends React.Component {
                                                     <div className="row form-group">
                                                         <label>Semana: </label>
                                                         <input className="form-control" type="number"
-                                                               pattern="[0-9]*"></input>
+                                                               pattern="[0-9]*" onChange={this.changeSemana}></input>
                                                     </div>
                                                     <div className="row form-group">
                                                         <label>Horas de descarga: </label>
                                                         <input className="form-control" type="number"
-                                                               pattern="[0-9]*"></input>
+                                                               pattern="[0-9]*" onChange={this.changeHoras}></input>
                                                     </div>
                                                     <div className="row form-group">
                                                         <label>Motivo: </label>
-                                                        <input className="form-control"></input>
+                                                        <input className="form-control" onChange={this.changeMotivo}></input>
                                                     </div>
                                                 </BaseContainer>
                                             </Modal.Body>
@@ -264,7 +288,7 @@ class DescargaHoras extends React.Component {
                                     </table>
                                 </div>
                                 <div>
-                                    {(currentRole() === Role.JEFE_DEPARTAMENTO) ?
+                                    {(currentRole() === Role.JEFE_DEPARTAMENTO) || currentRole()===Role.COORDINADOR ?
                                         <span></span>
                                         :
                                         <div>
