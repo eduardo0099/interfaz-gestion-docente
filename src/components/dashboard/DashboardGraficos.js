@@ -336,7 +336,9 @@ class DashboardGraficos extends React.Component {
         return (
             <div>
                 <div className="card-row">
-                    <div className="card-graph">
+                    <div className="card-graph text-center">
+                      <h5 className="block m-b-n"> Cantidad de Ayudas Economicas </h5>
+
                         <ResponsiveContainer height={350}>
                             <div>
                                 <LineChart width={700} height={300} data={this.state.investigacionesAnho}
@@ -355,9 +357,10 @@ class DashboardGraficos extends React.Component {
                 </div>
 
                 <div className="card-row">
-                    <div className="card-graph">
-                        <ResponsiveContainer height={350}>
-                            <PieChart width={800} height={400}>
+                    <div className="card-graph text-center">
+                        <h5 className="block m-b-n"> Convocatorias </h5>
+                      <ResponsiveContainer height={300}>
+                            <PieChart width={800} height={100}>
                                 <Pie
                                     activeIndex={this.state.activeIndexCED}
                                     activeShape={renderActiveShape}
@@ -376,7 +379,8 @@ class DashboardGraficos extends React.Component {
                             </PieChart>
                         </ResponsiveContainer>
                     </div>
-                    <div className="card-graph">
+                    <div className="card-graph text-center  ">
+                      <h5 className="block m-b-n"> Docentes </h5>
                         <ResponsiveContainer height={350}>
                             <PieChart width={800} height={400}>
                                 <Pie
@@ -400,8 +404,10 @@ class DashboardGraficos extends React.Component {
                 </div>
 
                 <div className="card-row">
-                    <div className="card-graph">
-                        <ResponsiveContainer height={350}>
+                  <div className="card-graph text-center">
+                    <h5 className="block m-b-n"> Estado de Ayudas Economicas </h5>
+
+                      <ResponsiveContainer height={350}>
                             <PieChart width={800} height={400}>
                                 <Pie
                                     activeIndex={this.state.activeIndexAEED}
@@ -421,8 +427,10 @@ class DashboardGraficos extends React.Component {
                             </PieChart>
                         </ResponsiveContainer>
                     </div>
-                    <div className="card-graph">
-                        <ResponsiveContainer height={350}>
+                  <div className="card-graph text-center">
+                    <h5 className="block m-b-n"> Actividades por Tipo </h5>
+
+                      <ResponsiveContainer height={350}>
                             <PieChart width={800} height={400}>
                                 <Pie
                                     activeIndex={this.state.activeIndexATD}
@@ -446,8 +454,10 @@ class DashboardGraficos extends React.Component {
                 </div>
 
                 <div className="card-row">
-                    <div className="card-graph">
-                        <ResponsiveContainer height={350}>
+                  <div className="card-graph text-center">
+                    <h5 className="block m-b-n"> Monto de Ayudas Economicas </h5>
+
+                      <ResponsiveContainer height={350}>
                             <div>
                                 <LineChart width={700} height={300} data={this.state.apoyoEconomicoAnho}
                                            margin={{top: 50, right: 5, left: 20, bottom: 5}}>

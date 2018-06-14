@@ -7,6 +7,7 @@ import {Button, Modal} from 'react-bootstrap';
 import RegistroInvestigacion from './RegistroInvestigacion';
 import ModificarInvestigacion from './ModificarInvestigacion';
 import {Role, currentRole} from '../auth';
+import FileDownload from 'js-file-download'
 
 
 export class ListaInvestigaciones extends React.Component {
@@ -131,17 +132,10 @@ export class ListaInvestigaciones extends React.Component {
   descargar = (item, e) => {
     console.log(item);
     API.get('general/descargarArchivo?id=' + item.archivo, {
-      responseType: 'stream'
     })
         .then(response => {
-          response.data = null;
-          console.log(JSON.stringify(response, null, 2));
-          const url = window.URL.createObjectURL(new Blob([response.data]));
-          const link = document.createElement('a');
-          link.href = url;
-          link.setAttribute('download', response.headers['content-type']);
-          document.body.appendChild(link);
-          link.click();
+          var fileDownload = require('js-file-download');
+          fileDownload(response.data, 'filename.pdf');
         });
   }
 
