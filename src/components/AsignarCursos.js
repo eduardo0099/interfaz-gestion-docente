@@ -51,6 +51,8 @@ class AsignarCursos extends Component {
             resSeleccionado: "",  //[res]
             detalleResSelec: [],
             showDetalle: false,
+
+            actualizarProfe: false,
         };
     }
 
@@ -141,13 +143,29 @@ class AsignarCursos extends Component {
             .catch(error => {
                 console.log(`Error al obtener datos de la pantalla asignacion de cursos`, error);
             });
-        API.get('http://200.16.7.151:8080/asignacionHorarios/listaDocenteCargaAsignada', {
+        API.get('asignacionHorarios/listaDocenteCargaAsignada', {
             params: { ciclo: this.state.filtroCicloRes }
         }).then(res => {
             this.setState({ resumenAsignacion: res.data.docentes });
         }).catch(error => {
             alert("Ha ocurrido un error, intentelo luego");
         });
+    }
+
+    handleCrearNuevoHorario = () =>{
+        //Falta el api
+        console.log("horarios actuales",this.state.datacodSeleccionado);
+        this.setState({datacodSeleccionado: this.state.datacodSeleccionado.concat({
+            numHorario: "99",
+            id:this.state.datacodSeleccionado.length,
+            codigo: "",
+            nombre: "",
+            horasAsignadas: ""
+        })});
+    }
+
+    handleActualizarProfesor = () =>{
+
     }
 
     handleClose = () => {
@@ -159,6 +177,7 @@ class AsignarCursos extends Component {
             codigoProfSelec: "",
             nombreProfSelec: "",
             horasTProfSelec: "",
+            actualizarProfe: false
         });
     };
 
@@ -172,37 +191,71 @@ class AsignarCursos extends Component {
                obj.nombre = "";
                obj.horasAsignadas = "";
                */
-        if (this.state.asigHorasModal > 0 && this.state.codigoProfSelec != "") {
-            API.post('asignacionHorarios/asignarDocenteHorario', {
-                codigoDocente: this.state.codigoProfSelec,
-                codCurso: this.state.codSeleccionado,
-                numHorario: this.state.datacodSeleccionado[this.state.horSeleccionado[0]].numHorario,
-                horasAsignadas: this.state.asigHorasModal,
-                ciclo: this.state.filtroCiclo,
-            })
-                .then(res => {
-                    alert("Se ha registrado correctamente");
-                    this.setState({
-                        showAsignar: false,
-                        docentesPrefModal: [],
-                        docentesGeneralModal: [],
-                        maxHorasModal: 0,
-                        codigoProfSelec: "",
-                        nombreProfSelec: "",
-                        horasTProfSelec: "",
-                        asigHorasModal: 0
-                    });
+        if(!this.state.actualizarProfe){
+            if (this.state.asigHorasModal > 0 && this.state.codigoProfSelec != "") {
+                API.post('asignacionHorarios/asignarDocenteHorario', {
+                    codigoDocente: this.state.codigoProfSelec,
+                    codCurso: this.state.codSeleccionado,
+                    numHorario: this.state.datacodSeleccionado[this.state.horSeleccionado[0]].numHorario,
+                    horasAsignadas: this.state.asigHorasModal,
+                    ciclo: this.state.filtroCiclo,
                 })
-                .catch(error => {
-                    alert("Ha ocurrido un error, intentelo luego");
-                    console.log(error);
-                });
-        } else {
-            alert("Falta agregar datos")
+                    .then(res => {
+                        alert("Se ha registrado correctamente");
+                        this.setState({
+                            showAsignar: false,
+                            docentesPrefModal: [],
+                            docentesGeneralModal: [],
+                            maxHorasModal: 0,
+                            codigoProfSelec: "",
+                            nombreProfSelec: "",
+                            horasTProfSelec: "",
+                            asigHorasModal: 0
+                        });
+                    })
+                    .catch(error => {
+                        alert("Ha ocurrido un error, intentelo luego");
+                        console.log(error);
+                    });
+            } else {
+                alert("Falta agregar datos")
+            }
+        }else{
+            //Actualiza
+            if (this.state.asigHorasModal > 0 && this.state.codigoProfSelec != "") {
+                API.post('asignacionHorarios/actualizarDocenteHorario', {
+                    codigoDocente: this.state.codigoProfSelec,
+                    codCurso: this.state.codSeleccionado,
+                    numHorario: this.state.datacodSeleccionado[this.state.horSeleccionado[0]].numHorario,
+                    horasAsignadas: this.state.asigHorasModal,
+                    ciclo: this.state.filtroCiclo,
+                })
+                    .then(res => {
+                        alert("Se ha registrado correctamente");
+                        this.setState({
+                            showAsignar: false,
+                            docentesPrefModal: [],
+                            docentesGeneralModal: [],
+                            maxHorasModal: 0,
+                            codigoProfSelec: "",
+                            nombreProfSelec: "",
+                            horasTProfSelec: "",
+                            asigHorasModal: 0,
+                            actualizarProfe: false,
+                        });
+                    })
+                    .catch(error => {
+                        alert("Ha ocurrido un error, intentelo luego");
+                        console.log(error);
+                    });
+            } else {
+                alert("Falta agregar datos")
+            }
         }
     };
 
     handleShow = () => {
+        let index = this.state.horSeleccionado[0];
         API.get('asignacionHorarios/listaDocenteAsignar', {
             params: {
                 codCur: this.state.codSeleccionado,
@@ -210,13 +263,34 @@ class AsignarCursos extends Component {
             }
         })
             .then(response => {
-                this.setState({
-                    showAsignar: true,
-                    maxHorasModal: this.state.dataTablaAsignacion.find(curso => curso.codigo === this.state.codSeleccionado[0]).horas,
-                    docentesPrefModal: response.data.preferencia,
-                    docentesGeneralModal: response.data.general,
-                    mostrarPreferencias: true,
-                });
+                if(
+                this.state.datacodSeleccionado[index].codigo != "" &&
+                this.state.datacodSeleccionado[index].nombre != "" &&
+                this.state.datacodSeleccionado[index].horasAsignadas != ""){
+                    let profSelec = response.data.general.find(doc => doc.codigo == this.state.datacodSeleccionado[index].codigo);
+                    this.setState({
+                        actualizarProfe: true,
+                        showAsignar: true,
+                        maxHorasModal: this.state.dataTablaAsignacion.find(curso => curso.codigo === this.state.codSeleccionado[0]).horas,
+                        docentesPrefModal: response.data.preferencia,
+                        docentesGeneralModal: response.data.general,
+                        mostrarPreferencias: true,
+                        codigoProfSelec: this.state.datacodSeleccionado[index].codigo,
+                        nombreProfSelec: this.state.datacodSeleccionado[index].nombre,
+                        asigHorasModal: this.state.datacodSeleccionado[index].horasAsignadas,
+                        horasTProfSelec: profSelec.horasAsignadas,
+                    });
+                }else{
+                    this.setState({
+                        showAsignar: true,
+                        maxHorasModal: this.state.dataTablaAsignacion.find(curso => curso.codigo === this.state.codSeleccionado[0]).horas,
+                        docentesPrefModal: response.data.preferencia,
+                        docentesGeneralModal: response.data.general,
+                        mostrarPreferencias: true,
+                        
+                    });
+                }
+                
             })
             .catch(error => {
                 alert("Ha ocurrido un error, intentelo luego");
@@ -653,6 +727,7 @@ class AsignarCursos extends Component {
                                         <span>
                 <Row>
                   <Col md={ 10 }>
+                  <Button bsStyle="primary" disabled={ !this.state.codSeleccionado.length } onClick={ this.handleCrearNuevoHorario }>Agregar nuevo horario</Button>
                     <h4>Horarios del curso seleccionado:</h4>
                   </Col>
                 </Row>
@@ -724,7 +799,7 @@ class AsignarCursos extends Component {
                                               Horas a dictar:
                                           </Col>
                                           <Col sm={ 7 }>
-                                              <FormControl type="number" step={ 1 } min={ 1 } max={ this.state.maxHorasModal } value={ this.asigHorasModal } onChange={ this.handleAsigHoras }/>
+                                              <FormControl type="number" step={ 1 } min={ 1 } max={ this.state.maxHorasModal } value={ this.state.asigHorasModal } onChange={ this.handleAsigHoras }/>
                                           </Col>
                                           <Col sm={ 3 }>
                                               <h4>Max horas:{ this.state.maxHorasModal }</h4>

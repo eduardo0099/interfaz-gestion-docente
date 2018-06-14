@@ -180,6 +180,9 @@ class ListaProfesores extends Component {
                             Nombre
                           </th>
                           <th className="col-md-1" style={divStyle}>
+                              Seccion
+                          </th>
+                          <th className="col-md-1" style={divStyle}>
                             Informacion de Contacto
                           </th>
                           <th className="col-md-1" style={divStyle}>
@@ -194,11 +197,14 @@ class ListaProfesores extends Component {
                                 <td className="col-md-1 text-center">
                                   <Image src={fotoAnonima} circle width="50" height="50"/>
                                 </td>
-                                <td className="col-md-6 v-middle">
+                                <td className="col-md-4 v-middle">
                                   <span className="block text-primary"><Link to={'/profesores/' + profesor.codigo}> {profesor.nombre}</Link> </span>
                                   <small className="block text-muted"> Codigo: {profesor.codigo} </small>
                                 </td>
-                                <td className="col-md-6 v-middle">
+                                <td className="col-md-2 v-middle">
+                                    <span className="block text-muted"> {profesor.seccion} </span>
+                                </td>
+                                <td className="col-md-8 v-middle">
                                   <div className="row m-b-xs">
                                     <div className="col-xs-6 col-md-6">
                                       <div className="col-md-1">
@@ -220,7 +226,7 @@ class ListaProfesores extends Component {
                                     </div>
                                   </div>
                                 </td>
-                                <td className="col-md-4 v-middle">
+                                <td className="col-md-2 v-middle">
                                                     <span className={'label label-' + ({
                                                       'TC': 'success',
                                                       'TPA': 'warning'
