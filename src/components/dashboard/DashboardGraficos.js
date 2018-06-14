@@ -149,16 +149,6 @@ class DashboardGraficos extends React.Component {
         });
     }
 
-    componentDidMount() {
-        console.log('seccion: ',this.props.seccion.id);
-        this.obtenerDocentesTipoDepartamento();
-        this.obtenerActividadesTipoDepartamento();
-        this.obtenerApoyoEconomicoEstadoDepartamento();
-        this.obtenerConvocatoriaEstadoDepartamento();
-        this.obtenerInvestigacionesAnhoDepartamento();
-        this.obtenerApoyoEconomicoAnoDepartamento();
-
-    }
 
     componentWillReceiveProps=(nextProps)=> {
 
@@ -331,7 +321,7 @@ class DashboardGraficos extends React.Component {
     }
 
     render() {
-        //console.log('seccion: ',this.props.seccion);
+        //console.log('seccion en graficos: ',this.props.seccion);
 
         return (
             <div>

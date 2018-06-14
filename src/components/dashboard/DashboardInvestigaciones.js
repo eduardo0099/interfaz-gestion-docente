@@ -75,6 +75,7 @@ class DashboardInvestigaciones extends React.Component {
 
         console.log('nextprops: ',nextProps);
         if(nextProps.seccion.id!==0) {
+            this.findInvestigacionesSeccion(nextProps);
         }else{
             this.findInvestigaciones();
         }
@@ -93,15 +94,16 @@ class DashboardInvestigaciones extends React.Component {
     }
 
     findInvestigacionesSeccion(nextProps) {
-        API.get('/general/', {
+        API.get('/general/listaInvestigacionsec', {
             params: {
-                seccion: nextProps.seccion.id,
+                seccion: nextProps.seccion.nombre,
             }
         })
             .then(response => {
                 console.log('investigaciones nextprops: ',response.data );
-                /*this.setState({
-                })*/
+                this.setState({
+                    investigaciones:response.data.investigaciones,
+                })
             }).catch(error => {
             console.log("Error obteniendo la lista de cursos", error);
         });
