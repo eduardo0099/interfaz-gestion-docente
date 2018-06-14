@@ -9,8 +9,6 @@ import ModificarInvestigacion from './ModificarInvestigacion';
 import {Role, currentRole} from '../auth';
 import {Panel, Dropdown, Glyphicon, MenuItem} from 'react-bootstrap';
 
-var request = require('ajax-request');
-
 export class ListaInvestigaciones extends React.Component {
 
   constructor(props) {
