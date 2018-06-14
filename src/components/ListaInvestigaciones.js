@@ -129,6 +129,7 @@ export class ListaInvestigaciones extends React.Component {
   }
 
   descargar = (item, e) => {
+    console.log(item.archivo)
     API.get('general/descargarArchivo?id=' + item.archivo)
         .then(response => {
       console.log(response);
@@ -250,6 +251,13 @@ export class ListaInvestigaciones extends React.Component {
                       </tbody>
                     </table>
                   </div>
+                  <div className="panel-footer">
+                    {! (currentRole() === Role.JEFE_DEPARTAMENTO) ?
+                          <a className="btn btn-primary" href={`${this.props.match.url}/RegistroInvestigacion`}>Registrar</a>
+                        :
+                       null
+                    }
+                  </div>
 
                   <Modal show={this.state.show} onHide={this.handleClose.bind(this)}>
                     <Modal.Header closeButton>
@@ -260,17 +268,7 @@ export class ListaInvestigaciones extends React.Component {
                     </Modal.Body>
                   </Modal>
 
-                  {! (currentRole() === Role.JEFE_DEPARTAMENTO) ?
-                      <div className="m-t-md">
-                        <a className="btn btn-primary" href={`${this.props.match.url}/RegistroInvestigacion`}>Registrar</a>
-                        <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
-                        {eliminar}
-                        <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
-                        {myComponent}
-                      </div>
-                      :
-                      <div></div>
-                  }
+
 
                 </div>
               </BaseContainer>
