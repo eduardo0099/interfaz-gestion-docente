@@ -4,6 +4,8 @@ import BaseContainer from "../BaseContainer";
 import {Role,currentRole} from '../../auth.js'
 import API from "../../api";
 import ConvocatoriaPesos from "./ConvocatoriaPesos";
+import ConvocatoriaNuevo from "./ConvocatoriasNuevo";
+import ConvocatoriaCampos from "./convocatoriaCampos";
 
 
 class ConvocatoriaDetalle extends Component{
@@ -52,62 +54,67 @@ class ConvocatoriaDetalle extends Component{
     render(){
         let estado="Aprobado"
         return(
-            <BaseContainer>
-                <div className="panel col-lg-offset-2 col-lg-8 col-md-12 col-sm-12">
-                    <div className="panel-heading">
-                        <header className="page-header m-t-sm">
-                            <a className="btn btn-default pull-right" onClick={this.props.history.goBack}> Volver </a>
-                            <p className="h2 m-b-sm"> Detalle de Convocatoria </p>
-                        </header>
-                    </div>
+            <div>
+            <Route exact path={`${this.props.match.path}`} render={() =>
+                <BaseContainer>
+                    <div className="panel col-lg-offset-2 col-lg-8 col-md-12 col-sm-12">
+                        <div className="panel-heading">
+                            <header className="page-header m-t-sm">
+                                <a className="btn btn-default pull-right" onClick={this.props.history.goBack}> Volver </a>
+                                <p className="h2 m-b-sm"> Detalle de Convocatoria </p>
+                            </header>
+                        </div>
                         <div className="panel-body">
                             <h4> Datos generales </h4>
                             <div className="col-md-offset-0 col-md-10">
                                 <hr/>
                                 <fieldset disabled>
                                     <div className="form-group"></div>
-                                        <label htmlFor="disabledTextInput">Nombre:</label>
-                                        <input type="text" id="disabledTextInput" className="form-control"
-                                               placeholder={this.state.nombre}></input>
+                                    <label htmlFor="disabledTextInput">Nombre:</label>
+                                    <input type="text" id="disabledTextInput" className="form-control"
+                                           placeholder={this.state.nombre}></input>
                                     <div className="form-group"></div>
                                     <div className="form-group"></div>
-                                        <label htmlFor="disabledTextInput">Fecha de Inicio:</label>
-                                        <input type="text" id="disabledTextInput" className="form-control"
-                                               placeholder={this.state.fecha_inicio}></input>
+                                    <label htmlFor="disabledTextInput">Fecha de Inicio:</label>
+                                    <input type="text" id="disabledTextInput" className="form-control"
+                                           placeholder={this.state.fecha_inicio}></input>
                                     <div className="form-group"></div>
-                                        <label htmlFor="disabledTextInput">Fecha de Fin:</label>
-                                        <input type="text" id="disabledTextInput" className="form-control"
-                                               placeholder={this.state.fecha_fin}></input>
+                                    <label htmlFor="disabledTextInput">Fecha de Fin:</label>
+                                    <input type="text" id="disabledTextInput" className="form-control"
+                                           placeholder={this.state.fecha_fin}></input>
                                     <div className="form-group"></div>
-                                        <label htmlFor="disabledTextInput">Descripcion:</label>
-                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" type="text" id="disabledTextInput" className="form-control"
-                                                  placeholder={this.state.descripcion}></textarea>
+                                    <label htmlFor="disabledTextInput">Descripcion:</label>
+                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" type="text" id="disabledTextInput" className="form-control"
+                                              placeholder={this.state.descripcion}></textarea>
                                 </fieldset>
                             </div>
                         </div>
-                    <div className="panel-footer text-right">
-                        {currentRole()=== Role.JEFE_DEPARTAMENTO && estado == "Creado"?
-                            <div>
-                                <button className="btn btn-primary" > Aprobar </button>
-                                <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
-                                <button className="btn btn-primary" > Cancelar </button>
-                            </div>
-                            :
-                            <div>
-                                {estado == "Aprobado" ?
-                                    <div>
-                                        <button className="btn btn-primary" > Agregar Campos</button>
-                                        <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
-                                        <button className="btn btn-primary"> Cancelar</button>
-                                    </div>
-                                    :
-                                    <button className="btn btn-primary"> Cancelar </button>
-                                }
-                            </div>
-                        }
+                        <div className="panel-footer text-right">
+                            {currentRole()=== Role.JEFE_DEPARTAMENTO && estado == "Creado"?
+                                <div>
+                                    <button className="btn btn-primary" > Aprobar </button>
+                                    <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
+                                    <button className="btn btn-primary" > Cancelar </button>
+                                </div>
+                                :
+                                <div>
+                                    {estado == "Aprobado" ?
+                                        <div>
+                                            <Link className="btn  btn-primary " to={`${this.props.history.location.pathname}/agregarCampos`} >Agregar Campos</Link>
+                                            <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
+                                            <button className="btn btn-primary"> Cancelar</button>
+                                        </div>
+                                        :
+                                        <button className="btn btn-primary"> Cancelar </button>
+                                    }
+                                </div>
+                            }
+                        </div>
                     </div>
-                </div>
-            </BaseContainer>
+                </BaseContainer>
+            }/>
+            <Route path={`${this.props.match.path}/agregarCampos`} component={ConvocatoriaCampos}/>
+            </div>
         );
     }
 }

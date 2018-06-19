@@ -87,7 +87,7 @@ class ConvocatoriasLista extends Component {
                             <div className="panel-heading">
                                 {currentRole()=== Role.JEFE_DEPARTAMENTO ?<span></span>
                                     :<Link className="btn btn-sm btn-primary pull-right m-t-md"
-                                           to={"/convocatorias/nuevo"}> Nueva Convocatoria</Link>
+                                           to={"/convocatorias/registro/nuevo"}> Nueva Convocatoria</Link>
                                     }
                                 <h2> Convocatorias </h2>
                             </div>
@@ -142,7 +142,7 @@ class ConvocatoriasLista extends Component {
                     </BaseContainer>
                 }/>
 
-                <Route path="/convocatorias/nuevo" component={ConvocatoriaNuevo}/>
+                <Route path="/convocatorias/registro/nuevo" component={ConvocatoriaNuevo}/>
                 <Route path="/convocatorias/:id_convocatoria/detalle" component={ConvocatoriaDetalle}/>
                 <Route path="/convocatorias/:id_convocatoria" component={ConvocatoriasListaPostulantes}/>
 
