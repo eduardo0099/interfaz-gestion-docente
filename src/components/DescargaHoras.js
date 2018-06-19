@@ -145,32 +145,6 @@ class DescargaHoras extends React.Component {
         })
     }
 
-    aumentarDescarga=()=>{
-        if(this.state.horas!==-1 & this.state.codDocente!==-1 & this.state.horarioSeleccionado!==""
-            & this.state.cicloActual!==-1 & this.state.codigo!=="" & this.state.numSem!==-1 ){
-            API.post('/docente/docente/horaDescDocente/registrar',{
-                horas_reducidas : this.state.horas,
-                codigo_profesor : this.state.codDocente,
-                codigo_horario : this.state.horarioSelecc,
-                ciclo : this.state.cicloActual,
-                codigo_curso : this.state.codigo,
-                numero_semana : this.state.semana,
-                motivo : this.state.motivo,
-                observaciones : " "
-
-            }).then(response => {
-                alert("Descarga de horas registrada");
-                //this.props.history.goBack();
-            })
-                .catch(error => {
-                    alert("Error: No se pudo registrar la descarga de horas");
-                })
-        }
-        else{
-            alert("Ingresar los campos nuevamente")
-        }
-    }
-
     changeSemana(event){
         this.setState({
             semana:event.target.value,
@@ -245,46 +219,6 @@ class DescargaHoras extends React.Component {
                                             </tr>
                                         })}
                                         </tbody>
-                                        <Modal show={this.state.showModalMod} onClose={this.handleClose}>
-                                            <Modal.Header>
-                                                <Modal.Title>Añadir Descarga de Horas</Modal.Title>
-                                            </Modal.Header>
-                                            <Modal.Body>
-                                                <BaseContainer>
-                                                    <div className="row form-group">
-                                                        <label>Curso :{this.state.nombreSelcc}</label>
-                                                    </div>
-                                                    <div className="row form-group">
-                                                        <label>Horario :{this.state.horarioSelecc}</label>
-                                                    </div>
-                                                    <div className="row form-group">
-                                                        <label>Horas Descargadas Totales
-                                                            :{this.state.totalHorasSelecc}</label>
-                                                    </div>
-
-                                                    <div className="row form-group">
-                                                        <label>Semana: </label>
-                                                        <input className="form-control" type="number"
-                                                               pattern="[0-9]*" onChange={this.changeSemana}></input>
-                                                    </div>
-                                                    <div className="row form-group">
-                                                        <label>Horas de descarga: </label>
-                                                        <input className="form-control" type="number"
-                                                               pattern="[0-9]*" onChange={this.changeHoras}></input>
-                                                    </div>
-                                                    <div className="row form-group">
-                                                        <label>Motivo: </label>
-                                                        <input className="form-control" onChange={this.changeMotivo}></input>
-                                                    </div>
-                                                </BaseContainer>
-                                            </Modal.Body>
-                                            <Modal.Footer>
-                                                <button type="button" className="btn btn-primary">Añadir</button>
-                                                <button type="button" className="btn btn-primary"
-                                                        onClick={this.handleClose}>Cancelar
-                                                </button>
-                                            </Modal.Footer>
-                                        </Modal>
                                     </table>
                                 </div>
                                 <div>
