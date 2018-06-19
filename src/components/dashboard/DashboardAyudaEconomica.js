@@ -64,6 +64,7 @@ class DashboardAyudaEconomica extends React.Component {
             }
         })
             .then(response => {
+                console.log('ayudas nextprops: ',nextProps.seccion );
                 console.log('ayudas nextprops: ',response.data );
                 this.setState({
                     ayudas:response.data.ayudas,
