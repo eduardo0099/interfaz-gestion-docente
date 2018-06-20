@@ -59,6 +59,7 @@ class AyudaEconomicaDetalle extends React.Component {
            }
        }).then(response => {
            const ae = response.data.ayudaEconomica;
+           console.log("response.data.ayudaEconomica",response.data.ayudaEconomica);
            this.setState({
                solicitudEconomica: {
                    id: ae.id,

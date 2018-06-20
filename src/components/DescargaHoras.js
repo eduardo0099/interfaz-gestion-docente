@@ -25,7 +25,14 @@ class DescargaHoras extends React.Component {
             nombreSelcc:"",
             horarioSelecc:"",
             totalHorasSelecc:-1,
+            cicloActual:-1,
+            semana:-1,
+            horas:-1,
+            motivo:"",
         }
+        this.changeHoras=this.changeHoras.bind(this);
+        this.changeSemana=this.changeSemana.bind(this);
+        this.changeMotivo=this.changeMotivo.bind(this);
     }
 
     componentDidMount() {
@@ -36,7 +43,10 @@ class DescargaHoras extends React.Component {
     findCicloActual() {
         API.get('general/cicloActual')
             .then(response => {
-                this.setState({ cicloSeleccionado: response.data.cicloActual })
+                this.setState({
+                    cicloSeleccionado: response.data.cicloActual,
+                    cicloActual:response.data.cicloActual
+                })
                 this.findDescargas(response.data.cicloActual);
                 this.findDocente(response.data.cicloActual);
             })
@@ -119,19 +129,37 @@ class DescargaHoras extends React.Component {
     }
 
     handleOpenModal(){
-        {currentRole()===Role.JEFE_DEPARTAMENTO?
+        {currentRole()===Role.JEFE_DEPARTAMENTO ||currentRole()===Role.COORDINADOR?
             this.setState({
                 showModalMod : false,
             })
             :
             this.setState({
-                showModalMod : true,
+                showModalMod : false,
             })
         }
     }
     handleClose(){
         this.setState({
             showModalMod : false,
+        })
+    }
+
+    changeSemana(event){
+        this.setState({
+            semana:event.target.value,
+        })
+    }
+
+    changeHoras(event){
+        this.setState({
+            horas:event.target.value,
+        })
+    }
+
+    changeMotivo(event){
+        this.setState({
+            motivo:event.target.value,
         })
     }
 
@@ -191,50 +219,10 @@ class DescargaHoras extends React.Component {
                                             </tr>
                                         })}
                                         </tbody>
-                                        <Modal show={this.state.showModalMod} onClose={this.handleClose}>
-                                            <Modal.Header>
-                                                <Modal.Title>Añadir Descarga de Horas</Modal.Title>
-                                            </Modal.Header>
-                                            <Modal.Body>
-                                                <BaseContainer>
-                                                    <div className="row form-group">
-                                                        <label>Curso :{this.state.nombreSelcc}</label>
-                                                    </div>
-                                                    <div className="row form-group">
-                                                        <label>Horario :{this.state.horarioSelecc}</label>
-                                                    </div>
-                                                    <div className="row form-group">
-                                                        <label>Horas Descargadas Totales
-                                                            :{this.state.totalHorasSelecc}</label>
-                                                    </div>
-
-                                                    <div className="row form-group">
-                                                        <label>Semana: </label>
-                                                        <input className="form-control" type="number"
-                                                               pattern="[0-9]*"></input>
-                                                    </div>
-                                                    <div className="row form-group">
-                                                        <label>Horas de descarga: </label>
-                                                        <input className="form-control" type="number"
-                                                               pattern="[0-9]*"></input>
-                                                    </div>
-                                                    <div className="row form-group">
-                                                        <label>Motivo: </label>
-                                                        <input className="form-control"></input>
-                                                    </div>
-                                                </BaseContainer>
-                                            </Modal.Body>
-                                            <Modal.Footer>
-                                                <button type="button" className="btn btn-primary">Añadir</button>
-                                                <button type="button" className="btn btn-primary"
-                                                        onClick={this.handleClose}>Cancelar
-                                                </button>
-                                            </Modal.Footer>
-                                        </Modal>
                                     </table>
                                 </div>
                                 <div>
-                                    {(currentRole() === Role.JEFE_DEPARTAMENTO) ?
+                                    {(currentRole() === Role.JEFE_DEPARTAMENTO) || currentRole()===Role.COORDINADOR ?
                                         <span></span>
                                         :
                                         <div>

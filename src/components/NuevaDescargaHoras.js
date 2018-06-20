@@ -23,6 +23,9 @@ class NuevaDescargaHoras extends React.Component {
             listaHorarios:[],
             horarioSeleccionado:"",
         }
+        this.changeHoras=this.changeHoras.bind(this);
+        this.changeSemana=this.changeSemana.bind(this);
+        this.changeMotivo=this.changeMotivo.bind(this);
 
     }
 
@@ -76,21 +79,27 @@ class NuevaDescargaHoras extends React.Component {
             if(this.state.tipoSeleccionado === "otros")
                 this.setState({ listaCursos: response.data.cursos[2].listaCursos})
         })
-        this.findHorarios();
     }
 
-    findHorarios(){
-        let lista=[];
-        for(let i=0;i<this.state.listaCursos.length;i++){
-            if(this.state.listaCursos[i].codigo === this.state.codigo){
-                let obj={};
-                obj.horario = this.state.listaCursos[i].horario;
-                lista.push(obj);
-            }
-        }
+    findHorarios(codigo){
+        //let lista=[];
+        //for(let i=0;i<this.state.listaCursos.length;i++){
+        //    if(this.state.listaCursos[i].codigo === this.state.codigo){
+        //        let obj={};
+        //       obj.horario = this.state.listaCursos[i].horario;
+        //        lista.push(obj);
+        //    }
+        //}
+        //this.setState({
+        //    listaHorarios:Array.from(new Set(lista)),
+        //})
+
+        let cursoFind=this.state.listaCursos.find(cur=>cur.codigo==codigo)
+        console.log("Valor:",cursoFind,this.state.listaCursos,codigo);
         this.setState({
-            listaHorarios:Array.from(new Set(lista)),
+            horarioSeleccionado:cursoFind.horario,
         })
+
     }
 
     cambioCurso=(obj)=>{
@@ -98,6 +107,7 @@ class NuevaDescargaHoras extends React.Component {
         this.setState({
             codigo:cod,
         })
+        this.findHorarios(cod);
     }
 
     cambioHorario=(obj)=>{
@@ -106,6 +116,49 @@ class NuevaDescargaHoras extends React.Component {
             horarioSeleccionado:aux,
         })
     }
+
+    agregarDescarga=()=>{
+        if(this.state.horas!==-1 & this.state.codDocente!==-1 & this.state.horarioSeleccionado!==""
+            & this.state.cicloActual!==-1 & this.state.codigo!=="" & this.state.numSem!==-1 ){
+            API.post('/docente/docente/horaDescDocente/registrar',{
+                horas_reducidas : this.state.horas,
+                codigo_profesor : this.state.codDocente,
+                codigo_horario : this.state.horarioSeleccionado,
+                ciclo : this.state.cicloActual,
+                codigo_curso : this.state.codigo,
+                numero_semana : this.state.numSem,
+                motivo : this.state.motivo,
+                observaciones : " "
+
+            }).then(response => {
+                alert("Descarga de horas registrada");
+                this.props.history.goBack();
+            })
+                .catch(error => {
+                    alert("Error: No se pudo registrar la descarga de horas");
+                })
+        }
+        else{
+            alert("Ingresar los campos nuevamente")
+        }
+    }
+
+    changeSemana(event){
+        this.setState({
+            numSem:event.target.value
+        })
+    }
+    changeMotivo(event){
+        this.setState({
+            motivo:event.target.value
+        })
+    }
+    changeHoras(event){
+        this.setState({
+            horas:event.target.value,
+        })
+    }
+
 
     render() {
         console.log(this.props);
@@ -137,38 +190,34 @@ class NuevaDescargaHoras extends React.Component {
                                 <Select
                                     value={this.state.codigo}
                                     onChange={this.cambioCurso}
-                                    
+                                    valueKey={"codigo"}
+                                    labelKey={"codigo"}
                                     options={this.state.listaCursos}
                                     clearable={false}
                                 />
                             </div>
+                            <fieldset disabled>
                             <div className="row form-group">
-                                <label>Horario:</label>
-                                <Select
-                                    value={this.state.horarioSeleccionado}
-                                    onChange={this.cambioHorario}
-                                    valueKey={"horario"}
-                                    labelKey={"horario"}
-                                    options={this.state.listaHorarios}
-                                    clearable={false}
-                                />
+                                <label htmlFor="disabledTextInput">Horario:</label>
+                                <input type="text" id="disabledTextInput" className="form-control"
+                                       placeholder={this.state.horarioSeleccionado}></input>
                             </div>
+                            </fieldset>
                             <div className="row form-group">
                                 <label>Semana:</label>
-                                <input className="form-control" type="number" pattern="[0-9]*"></input>
+                                <input className="form-control" type="number" pattern="[0-9]*" onChange={this.changeSemana}></input>
                             </div>
                             <div className="row form-group">
                                 <label>Horas:</label>
-                                <input className="form-control" type="number" pattern="[0-9]*"></input>
+                                <input className="form-control" type="number" pattern="[0-9]*" onChange={this.changeHoras}></input>
                             </div>
                             <div className="row form-group">
                                 <label>Motivo:</label>
-                                <input className="form-control"></input>
+                                <input className="form-control" onChange={this.changeMotivo}></input>
                             </div>
                         </div>
                         <hr/>
-                        <a className="btn btn-default pull-right">Cancelar</a>
-                        <a className="btn btn-default pull-right">Aceptar</a>
+                        <a className="btn btn-default pull-right" onClick={this.agregarDescarga}>Aceptar</a>
                     </div>
                 </div>
             </BaseContainer>
