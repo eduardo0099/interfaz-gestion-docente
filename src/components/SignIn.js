@@ -14,11 +14,11 @@ class SignIn extends Component {
 			auth:false,
 		}
 	};
-	/*
+	
 	componentDidMount(){
-		ReactDOM.findDOMNode(this).addEventListener('keypress', this.handleNVFocus);
+		document.addEventListener("keydown", this.enterLogin, false);
 	}
-	*/
+	
 	/*
 	componentWillMount(){
 		
@@ -33,7 +33,34 @@ class SignIn extends Component {
     
 	}
 	*/
-
+	enterLogin = (e) =>{
+		if(e.keyCode == 13){
+			e.preventDefault();
+  		if(this.state.codUser!="" && this.state.contrasena!=""){
+  			axios.post('http://200.16.7.151:80/auth/login',{
+  				codigo: parseInt(this.state.codUser),
+  				password: this.state.contrasena
+  			}).then(resp => {
+					console.log(resp.data);
+  				if(resp.data.auth){
+						
+  					this.props.handleLogIn();
+  					localStorage.setItem('jwt',resp.data.token);
+						localStorage.setItem('u',btoa(JSON.stringify(resp.data.user)));
+						this.setState({auth:true});
+  				}else{
+  					alert("Ingrese sus datos nuevamente");
+  				}
+  				
+  			}).catch(err => {
+  				console.log("error login",err);
+  				alert("Ha ocurrido un error");
+  			});
+  		}else{
+  			alert("Falta completar los datos");
+			}
+		}	
+	}
 	handleChangeCodUser = e => {
     	this.setState({ codUser: e.target.value });
   	};
@@ -43,7 +70,11 @@ class SignIn extends Component {
   	handleLogIn= e => {
   		e.preventDefault();
   		if(this.state.codUser!="" && this.state.contrasena!=""){
+<<<<<<< HEAD
   			axios.post('http://200.16.7.151:8080/auth/login',{
+=======
+  			axios.post('http://200.16.7.151/auth/login',{
+>>>>>>> develop
   				codigo: parseInt(this.state.codUser),
   				password: this.state.contrasena
   			}).then(resp => {
