@@ -327,7 +327,7 @@ class DashboardGraficos extends React.Component {
             <div>
                 <div className="card-row">
                     <div className="card-graph text-center">
-                      <h5 className="block m-b-n"> Cantidad de Ayudas Economicas </h5>
+                      <h5 className="block m-b-n"> Cantidad de Investigaciones </h5>
 
                         <ResponsiveContainer height={350}>
                             <div>

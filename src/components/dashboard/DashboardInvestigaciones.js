@@ -82,7 +82,7 @@ class DashboardInvestigaciones extends React.Component {
     }
 
     findInvestigaciones() {
-        API.get('/general/listaInvestigacionDep?departamento=Ingenieria')
+        API.get('/general/listaInvestigacionDep')
             .then(response => {
                 //console.log('ayudas: ',response.data.investigaciones);
                 this.setState({
@@ -96,7 +96,7 @@ class DashboardInvestigaciones extends React.Component {
     findInvestigacionesSeccion(nextProps) {
         API.get('/general/listaInvestigacionsec', {
             params: {
-                seccion: nextProps.seccion.nombre,
+                seccion: nextProps.seccion.id,
             }
         })
             .then(response => {
