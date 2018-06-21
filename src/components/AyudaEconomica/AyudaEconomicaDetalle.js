@@ -68,8 +68,9 @@ class AyudaEconomicaDetalle extends React.Component {
                    monto_otorgado: ae.monto_otorgado,
                    docenteSolicitante: ae.docenteSolicitante.nombres,
                    codigo: ae.codigo,
-                   investigacion: ae.investigacion.titulo
-               }
+                   investigacion: ae.investigacion.titulo,
+               },
+               idArchivo:'',
            });
        })
     }
@@ -180,6 +181,23 @@ class AyudaEconomicaDetalle extends React.Component {
             obsDoc:e.target.value
         })
     }
+
+
+  uploadFile = (e) => {
+    let file = e.target.files[0];
+    let formData = new FormData();
+    formData.append('file', file);
+    API.post('ayudasEconomicas/ayudasEconomicasAsistente/registrarArchivo',
+        formData,
+        {
+          headers: {'Content-Type': 'multipart/form-data'}
+        }
+    ).then(response =>{
+      this.setState({idArchivo :response.data.id})
+    }).catch(response =>  {
+    });
+  }
+
     render() {
         if(currentRole() != Role.JEFE_DEPARTAMENTO){
             return (
@@ -321,7 +339,12 @@ class AyudaEconomicaDetalle extends React.Component {
                                                 </div>
                                                 <div className="row form-group">
                                                     <label>Fotografia del documento:</label>
-
+                                                  <div className="form-group">
+                                                    <label> Adjuntar Archivo </label>
+                                                    <td className="v-middle">
+                                                      <input type="file" id="files" ref="files" onChange={this.uploadFile}/>
+                                                    </td>
+                                                  </div>
                                                 </div>
                                             </BaseContainer>
                                         </Modal.Body>
