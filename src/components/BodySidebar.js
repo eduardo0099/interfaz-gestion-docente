@@ -34,7 +34,7 @@ class BodySidebar extends Component {
             <div className="divider"/>
             <Link to="/ayudaeconomica" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Ayudas Económicas</Link>
             <div className="divider"/>
-            <Link to="/preferenciaCursos" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Prefencia de Dictado</Link>
+            <Link to="/preferenciaCursos" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Preferencia de Dictado</Link>
           </div>
       );
     } else if (tipoUser == 2) {
@@ -51,7 +51,7 @@ class BodySidebar extends Component {
             <div className="divider"/>
             <Link to="/ayudaeconomica" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Ayudas Económicas</Link>
             <div className="divider"/>
-            <Link to="/preferenciaCursos" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Prefencia de Dictado</Link>
+            <Link to="/preferenciaCursos" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Preferencia de Dictado</Link>
           </div>
       );
     } else if (tipoUser == 3) {
@@ -66,7 +66,7 @@ class BodySidebar extends Component {
             <div className="divider"/>
             <Link to="/ayudaeconomica" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Ayudas Económicas</Link>
             <div className="divider"/>
-            <Link to="/preferenciaCursos" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Prefencia de Dictado</Link>
+            <Link to="/preferenciaCursos" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Preferencia de Dictado</Link>
           </div>
       );
     } else if (tipoUser == 4) {
@@ -83,7 +83,7 @@ class BodySidebar extends Component {
             <div className="divider"/>
             <Link to="/ayudaeconomica" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Ayudas Económicas</Link>
             <div className="divider"/>
-            <Link to="/preferenciaCursos" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Prefencia de Dictado</Link>
+            <Link to="/preferenciaCursos" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Preferencia de Dictado</Link>
           </div>
       );
     } else {

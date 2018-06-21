@@ -24,28 +24,24 @@ class PreferenciaCursos extends Component {
 	}
 
 	handleProfCode(event) {
-		console.log(event.target.value.length);
 		if(event.target.value.length == 8){
 			this.setState({codigoProfe: event.target.value});
 			//Servicio que recoge el nombre del profesor
 			let urlN = "/asignacionHorarios/verificaCodigoDocente?codigo=" + event.target.value.toString() + "";
-			console.log(urlN.toString());
+			//console.log(urlN.toString());
 			API.get(urlN)
 			.then(response => {
+					//console.log('e',response.data);
 					this.setState({nombreProfe: response.data.nombre, existe: response.data.exists});
 				})
 				.catch(error => {
+					alert("Error: el código proporcionado no corresponde a ningún profesor de la sección.");
+					this.setState({nombreProfe: "", existe: false});
 				})
-			console.log(this.state.existe.value);
-			//Evaluador
-			let profe = this.state.nombreProfe;
-			if(this.state.nombreProfe == ""){
-				alert("Error: el código proporcionado no corresponde a ningún profesor de la sección.");
-				this.setState({nombreProfe: ''});
-			}
-			console.log(this.state.nombreProfe);
 		}
-		this.setState({existe: 'false'});
+		else{
+			this.setState({nombreProfe: "", existe: false});
+		}
 	}
 
 
@@ -156,8 +152,14 @@ class PreferenciaCursos extends Component {
 					<div>
 						<div className="panel-heading">
 							<header className="page-header m-b-md text-center">
-                                    <p className="h2 m-b-lg"> PREFERENCIAS DE CURSOS </p>
+                                    <p className="h2 m-b-lg"> PREFERENCIA DE DICTADO </p>
                             </header>
+						</div>
+						<div className="panel-body">
+							¡Bienvenido al Formulario de Preferencia de Dictado!<br></br><br></br>
+							Aquí podrá seleccionar los cursos que desea dictar en los próximos dos semestres académicos.
+							Para empezar, digite su código PUCP en el recuadro de abajo. Su nombre aparecerá automáticamente
+							a la derecha, si el código fue escrito correctamente.
 						</div>
 						<div className="panel-body">
 							<div className="row form-group">
@@ -167,11 +169,15 @@ class PreferenciaCursos extends Component {
 								</div>
 								<div class="col-md-2">Apellidos y nombres:</div>
 								<div class="col-md-6">
-									<label type="text" class="form-control" size="80" name="nombreCompProfe" disabled>{this.state.nombreProfe} </label>
+									<label type="text" class="form-control" size="80" name="nombreCompProfe" disabled>{this.state.nombreProfe.toUpperCase()} </label>
 								</div>
 							</div>
-							<div> 
-							<hr/>
+						</div>
+						<hr/>
+						<div className="panel-body">
+							<div>
+							Ahora seleccione las casillas correspondientes a los cursos y a los ciclos que desea dictar.<br></br>
+							Recuerde que puede seleccionar uno o ambos ciclos.
 							<h4> Cursos obligatorios </h4>
 							<table className="table table-striped m-t-md">
 								<thead>
