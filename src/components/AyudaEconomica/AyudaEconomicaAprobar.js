@@ -17,7 +17,7 @@ class AyudaEconomicaAprobar extends React.Component {
         this.confirmationAceptar = React.createRef();
         this.confirmationRechazar = React.createRef();
         this.state = {
-
+            estado_test : 1,
             solicitudEconomica: {
                 id: 2,
                 codigo: 'AYU001',
@@ -170,12 +170,22 @@ class AyudaEconomicaAprobar extends React.Component {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="panel-footer">
-                                    <div className="text-center">
-                                        <button className="btn btn-danger m-r-sm btn-lg" onClick={this.openConfirmationRechazar.bind(this)}> Rechazar </button>
-                                        <button className="btn btn-success btn-lg" onClick={this.openConfirmationAceptar.bind(this)}> Aprobar </button>
+
+                                {this.state.estado_test == "1" ?
+                                    <div className="panel-footer">
+                                        <div className="text-center">
+                                            <button className="btn btn-danger m-r-sm btn-lg"
+                                                    onClick={this.openConfirmationRechazar.bind(this)}> Rechazar
+                                            </button>
+                                            <button className="btn btn-success btn-lg"
+                                                    onClick={this.openConfirmationAceptar.bind(this)}> Aprobar
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
+                                    :
+                                    null
+                                }
+
                             </div>
                         </BaseContainer>
                     }/>
