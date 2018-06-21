@@ -8,7 +8,8 @@ import {Redirect} from 'react-router-dom';
 class AsignarCursos extends Component {
     constructor(props) {
         super(props);
-
+        //this.handleOnModalCurso=this.handleOnModalCurso.bind(this);
+        this.closeModalCurso=this.closeModalCurso.bind(this);
         this.totalCursosXciclo = [];
 
         this.state = {
@@ -25,6 +26,9 @@ class AsignarCursos extends Component {
             filtro1: -1,
             listaFiltrada1: [],
             showAsignar: false,
+            cursoSeleccionado:"",
+            showModalCurso:false,
+            listaDocenteCurso:[{nombre:"x",tipo:"x",ciclo1:"x",ciclo2:"x"}],
 
             listaSecciones: [],
             filtroSeccion: "todos",
@@ -103,36 +107,12 @@ class AsignarCursos extends Component {
                 }
                 let lista = [];
                 for (let i = 0; i < this.state.cursos.length; i++) {
-                    if (this.state.cursos[i].profesorPreferencia.length)
-                        for (let j = 0; j < this.state.cursos[i].profesorPreferencia.length; j++) {
-                            let obj = {};
-                            obj.codigo = this.state.cursos[i].codigo;
-                            obj.seccion = this.state.cursos[i].seccion;
-                            obj.nombreCurso = this.state.cursos[i].nombreCurso;
-                            obj.claseCurso = this.state.cursos[i].claseCurso;
-                            obj.nombre = this.state.cursos[i].profesorPreferencia[j].nombre;
-                            obj.tipo = this.state.cursos[i].profesorPreferencia[j].tipo;
-                            if (this.state.cursos[i].profesorPreferencia[j].ciclo1 == true)
-                                obj.ciclo1 = "inscrito";
-                            else
-                                obj.ciclo1 = "";
-                            if (this.state.cursos[i].profesorPreferencia[j].ciclo2 == true)
-                                obj.ciclo2 = "inscrito";
-                            else
-                                obj.ciclo2 = "";
-                            lista.push(obj);
-                        }
-                    else {
                         let obj = {};
                         obj.codigo = this.state.cursos[i].codigo;
                         obj.seccion = this.state.cursos[i].seccion;
                         obj.nombreCurso = this.state.cursos[i].nombreCurso;
                         obj.claseCurso = this.state.cursos[i].claseCurso;
-                        obj.nombre = "";
-                        obj.ciclo1 = "";
-                        obj.ciclo2 = "";
                         lista.push(obj);
-                    }
                 }
                 this.setState({
                     listaProfesoresTotal: Array.from(new Set(lista)),
@@ -511,6 +491,105 @@ class AsignarCursos extends Component {
         })
     }
 
+    handleOnModalCurso=(row)=>{
+        this.setState({
+            showModalCurso:true,
+            cursoSeleccionado:row.codigo,
+        })
+        //this.handleMuestraDocentes(row.codigo);
+        API.get('asignacionHorarios/consultaPreferencias')
+            .then(response => {
+                let cursos= response.data.cursos;
+                let lista = [];
+                let ind=0;
+                for (let i = 0; i < cursos.length; i++) {
+                    if (cursos[i].codigo == row.codigo)
+                        ind = i;//Encontre el curso
+                }
+                if (cursos[ind].profesorPreferencia.length)
+                    for (let j = 0; j < cursos[ind].profesorPreferencia.length; j++) {
+                        let obj = {};
+                        obj.nombre = cursos[ind].profesorPreferencia[j].nombre;
+                        obj.tipo = cursos[ind].profesorPreferencia[j].tipo;
+                        if (cursos[ind].profesorPreferencia[j].ciclo1 == true)
+                            obj.ciclo1 = "inscrito";
+                        else
+                            obj.ciclo1 = "";
+                        if (cursos[ind].profesorPreferencia[j].ciclo2 == true)
+                            obj.ciclo2 = "inscrito";
+                        else
+                            obj.ciclo2 = "";
+                        lista.push(obj);
+                    }
+                else {
+                    let obj = {};
+                    obj.nombre = "";
+                    obj.tipo = "";
+                    obj.ciclo1 = "";
+                    obj.ciclo2 = "";
+                    lista.push(obj);
+                }
+                this.setState({
+                    listaDocentesCurso:Array.from(new Set(lista)),
+                })
+
+            })
+            .catch(error => {
+                console.log(`Error al obtener lista de docentes en ese curso`, error);
+            });
+    }
+
+    handleMuestraDocentes=(codigoCur)=>{
+        API.get('asignacionHorarios/consultaPreferencias')
+            .then(response => {
+                this.setState({
+                    cursos: response.data.cursos
+                });
+                let lista = [];
+                let ind=-1;
+                for (let i = 0; i < this.state.cursos.length; i++) {
+                    if (this.state.cursos[i].codigo == codigoCur)
+                        ind = i;//Encontre el curso
+                }
+                    if (this.state.cursos[ind].profesorPreferencia.length)
+                        for (let j = 0; j < this.state.cursos[ind].profesorPreferencia.length; j++) {
+                            let obj = {};
+                            obj.nombre = this.state.cursos[ind].profesorPreferencia[j].nombre;
+                            obj.tipo = this.state.cursos[ind].profesorPreferencia[j].tipo;
+                            if (this.state.cursos[ind].profesorPreferencia[j].ciclo1 == true)
+                                obj.ciclo1 = "inscrito";
+                            else
+                                obj.ciclo1 = "";
+                            if (this.state.cursos[ind].profesorPreferencia[j].ciclo2 == true)
+                                obj.ciclo2 = "inscrito";
+                            else
+                                obj.ciclo2 = "";
+                            lista.push(obj);
+                        }
+                    else {
+                        let obj = {};
+                        obj.nombre = "";
+                        obj.tipo = "";
+                        obj.ciclo1 = "";
+                        obj.ciclo2 = "";
+                        lista.push(obj);
+                    }
+                this.setState({
+                    listaDocentesCurso:Array.from(new Set(lista)),
+                })
+
+            })
+            .catch(error => {
+                console.log(`Error al obtener lista de docentes en ese curso`, error);
+            });
+    }
+
+    closeModalCurso(){
+        this.setState({
+            showModalCurso:false,
+        })
+    }
+
     render() {
         const columnasResumenDet = [
             { text: 'CODIGO', dataField: 'codigo' },
@@ -521,12 +600,18 @@ class AsignarCursos extends Component {
             { text: 'Codigo', dataField: 'codigo' },
             { text: 'Seccion', dataField: 'seccion' },
             { text: 'Curso', dataField: 'nombreCurso' },
-            { text: 'Clase', dataField: 'claseCurso' },
-            { text: 'Profesor', dataField: 'nombre' },
-            { text: 'Tipo', dataField: 'tipo' },
-            { text: 'Ciclo_1', dataField: 'ciclo1' },
-            { text: 'Ciclo_2', dataField: 'ciclo2' }
+            { text: 'Clase', dataField: 'claseCurso' }
         ];
+
+        const selectRowVistaProf={
+            mode:'radio',
+            selected: this.state.cursoSeleccionado,
+            clickToSelect: true,
+            onSelect: this.handleOnModalCurso,
+            hideSelectColumn: true,
+            bgColor: '#edeaea'
+
+        }
         const columnasResumen = [
             { text: 'TIPO', dataField: 'tipo' },
             { text: 'CODIGO', dataField: 'codigo' },
@@ -602,6 +687,14 @@ class AsignarCursos extends Component {
             bgColor: '#edeaea'
         };
 
+        const columnasDocentes=[
+            { text: 'Profesor', dataField: 'nombre' },
+            { text: 'Tipo', dataField: 'tipo' },
+            { text: 'Ciclo_1', dataField: 'ciclo1' },
+            { text: 'Ciclo_2', dataField: 'ciclo2' }
+        ]
+
+
         const selectRowRes = {
             mode: 'radio',
             selected: this.state.resSeleccionado,
@@ -653,17 +746,25 @@ class AsignarCursos extends Component {
                                                                  value={ this.state.cursoText }
                                                                  onChange={ this.busquedaCurso.bind(this) }/>
                                                 </Col>
-                                                <Col sm={ 4 }>
-                                                    <FormControl type="Buscar Profesor" placeholder="Buscar Profesor"
-                                                                 value={ this.state.profeText }
-                                                                 onChange={ this.busquedaProfesor.bind(this) }/>
-                                                </Col>
                                             </FormGroup>
                                         </Form>
                                     </Col>
                                     <Col md={ 10 }>
-                                        <BootstrapTable keyField='id' data={ this.state.listaProfesoresParcial } columns={ columnasPreferencias }/>
+                                        <BootstrapTable selectRow={ selectRowVistaProf } keyField='codigo' data={ this.state.listaProfesoresParcial }
+                                                        columns={ columnasPreferencias }/>
                                     </Col>
+                                    <Modal show={this.state.showModalCurso}>
+                                        <Modal.Header>
+                                            <Modal.Title>Detalle de Docentes</Modal.Title>
+                                        </Modal.Header>
+                                        <Modal.Body>
+                                            <h4>Lista Docentes</h4>
+                                            <BootstrapTable keyField='nombre' data={this.state.listaDocenteCurso} columns={columnasDocentes}/>
+                                        </Modal.Body>
+                                        <Modal.Footer>
+                                            <Button onClick={this.closeModalCurso}>Cerrar</Button>
+                                        </Modal.Footer>
+                                    </Modal>
                                 </Grid>
                             </BaseContainer>
 
