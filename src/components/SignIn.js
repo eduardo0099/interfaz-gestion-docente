@@ -70,11 +70,8 @@ class SignIn extends Component {
   	handleLogIn= e => {
   		e.preventDefault();
   		if(this.state.codUser!="" && this.state.contrasena!=""){
-<<<<<<< HEAD
-  			axios.post('http://200.16.7.151:8080/auth/login',{
-=======
+  			//axios.post('http://200.16.7.151:8080/auth/login',{
   			axios.post('http://200.16.7.151/auth/login',{
->>>>>>> develop
   				codigo: parseInt(this.state.codUser),
   				password: this.state.contrasena
   			}).then(resp => {
