@@ -222,156 +222,8 @@ class ConvocatoriaNuevo extends Component {
         }
     }
 
-    performBack = ()=> {
-        if(this.state.paso==2) {
-            if(this.state.paso==2) {
-                this.setState({
-                    paso: 1,
-                    btnAnterior:false,
-                    btnFinalizar:false
-                });
-            }
-        }
-    }
-
-
+    
     render() {
-
-        let btnSiguiente;
-        if (this.state.btnFinalizar) {
-            btnSiguiente = <button className="btn btn-primary" onClick={this.performNext}> Finalizar </button>
-        } else {
-            btnSiguiente = <button className="btn btn-primary" onClick={this.performNext}> Siguiente </button>
-        }
-
-        let btnAnterior;
-        if (this.state.btnAnterior) {
-            btnAnterior = <button className="btn btn-primary" onClick={this.performBack}> Anterior </button>
-        } else {
-            btnAnterior=<label></label>
-        }
-
-        let cuerpo;
-        if (this.state.paso == 1) {
-            cuerpo = <div className="panel-body">
-                <h4> Datos generales </h4>
-                <div className="form-group">
-                    <div className="col-md-offset-0 col-md-7">
-                        <hr/>
-                        <div className="form-group">
-                            <label> Nombre </label>
-                            <input type="text" className="form-control" value={this.state.nombre} onChange={this.handleNombre}></input>
-                            {this.validator.message('nombre', this.state.nombre, 'required', false, {required: 'Este campo es obligatorio'})}
-                        </div>
-                        <div className="form-group">
-                            <label> Código curso </label>
-                            <Select
-                                value={ this.state.codigoCurso }
-                                onChange={ this.handleCodigoCurso }
-                                valueKey={ "codigo" }
-                                labelKey={ "codigo" }
-                                options={ this.state.cursos }
-                                clearable={ false }
-                            />
-                            {this.validator.message('codigoCurso', this.state.codigoCurso, 'required', false, {required: 'Este campo es obligatorio'})}
-                        </div>
-                        <div className="form-group">
-                            <label> Descripción </label>
-                            <textarea type="text" className="form-control" value={this.state.descripcion} onChange={this.handleDescripcion}></textarea>
-                            {this.validator.message('descripcion', this.state.descripcion, 'required', false, {required: 'Este campo es obligatorio'})}
-                        </div>
-                        <div className="form-group">
-                            Fecha Inicio:
-                            <DatePicker
-                                dateFormat="DD/MM/YYYY"
-                                selected={this.state.fecha_inicio}
-                                onChange={this.handleFIni}
-                            />
-                            {this.validator.message('fecha_inicio', this.state.fecha_inicio, 'required', false, {required: 'Este campo es obligatorio'})}
-                        </div>
-                        <div className="form-group">
-                            Fecha Fin:
-                            <DatePicker
-                                dateFormat="DD/MM/YYYY"
-                                selected={this.state.fecha_fin}
-                                onChange={this.handleFFin}
-                            />
-                            {this.validator.message('fechaFin', this.state.fecha_fin, 'required', false, {required: 'Este campo es obligatorio'})}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }else if(this.state.paso == 2){
-            cuerpo =
-                <div className="panel-body">
-                    <h4> Documentos</h4>
-                    <div className="form-group">
-                        <div className="col-md-offset-0 col-md-6">
-                            <hr/>
-                            <div className="form-group">
-                                <h5> Grados Academicos </h5>
-                                <div className="col-md-offset-1">
-                                    <CheckboxGroup
-                                        checkboxDepth={2} // This is needed to optimize the checkbox group
-                                        name="gradosAcademicos"
-                                        value={this.state.gradosAcademicos}
-                                        onChange={this.gradosAcademicosChanged}>
-                                        <label><Checkbox value="Titulo Profesional"/> Título Profesional</label>
-                                        <br/>
-                                        <label><Checkbox value="Maestria"/> Maestría</label>
-                                        <br/>
-                                        <label><Checkbox value="Doctorado"/> Doctorado</label>
-                                        <br/>
-                                        <label><Checkbox value="Diplomatura"/> Diplomado</label>
-                                    </CheckboxGroup>
-                                </div>
-
-                            </div>
-                            <div className="form-group">
-                                <h5> Docencia </h5>
-                                <div className="col-md-offset-1">
-                                    <CheckboxGroup
-                                        checkboxDepth={2} // This is needed to optimize the checkbox group
-                                        name="docencia"
-                                        value={this.state.docencia}
-                                        onChange={this.docenciaChanged}>
-                                        <label><Checkbox value="Cargos a su curso"/> Cargos a su curso</label>
-                                        <br/>
-                                        <label><Checkbox value="Asesoria de Tesis"/> Asesoria de Tesis</label>
-                                        <br/>
-                                        <label><Checkbox value="Premios a la Docencia"/> Premios a la Docencia</label>
-                                    </CheckboxGroup>
-                                </div>
-                            </div>
-                            <div className="form-group">
-                                <h5> Experiencia Profesional </h5>
-                                <div className="col-md-offset-1">
-                                    <CheckboxGroup
-                                        checkboxDepth={2} // This is needed to optimize the checkbox group
-                                        name="Solicitar Experiencia Profesional"
-                                        value={this.state.experienciaProfesional}
-                                        onChange={this.experienciaProfesionalChanged}>
-                                        <label><Checkbox value="Solicitar Experiencia Profesional"/> Solicitar Experiencia Profesional</label>
-                                    </CheckboxGroup>
-                                </div>
-                            </div>
-                            <div className="form-group">
-                                <h5> Investigacion </h5>
-                                <div className="col-md-offset-1">
-                                    <CheckboxGroup
-                                        checkboxDepth={2} // This is needed to optimize the checkbox group
-                                        name="Solicitar Investigacion"
-                                        value={this.state.investigacion}
-                                        onChange={this.investigacionProfesionalChanged}>
-                                        <label><Checkbox value="Solicitar Investigacion"/> Solicitar Investigacion</label>
-                                    </CheckboxGroup>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-        }
 
         return (
             <BaseContainer>
@@ -382,11 +234,56 @@ class ConvocatoriaNuevo extends Component {
                             <p className="h2 m-b-sm"> Nueva Convocatoria </p>
                         </header>
                     </div>
-                    {cuerpo}
+                    <div className="panel-body">
+                        <h4> Datos generales </h4>
+                        <div className="form-group">
+                            <div className="col-md-offset-0 col-md-7">
+                                <hr/>
+                                <div className="form-group">
+                                    <label> Nombre </label>
+                                    <input type="text" className="form-control" value={this.state.nombre} onChange={this.handleNombre}></input>
+                                    {this.validator.message('nombre', this.state.nombre, 'required', false, {required: 'Este campo es obligatorio'})}
+                                </div>
+                                <div className="form-group">
+                                    <label> Código curso </label>
+                                    <Select
+                                        value={ this.state.codigoCurso }
+                                        onChange={ this.handleCodigoCurso }
+                                        valueKey={ "codigo" }
+                                        labelKey={ "codigo" }
+                                        options={ this.state.cursos }
+                                        clearable={ false }
+                                    />
+                                    {this.validator.message('codigoCurso', this.state.codigoCurso, 'required', false, {required: 'Este campo es obligatorio'})}
+                                </div>
+                                <div className="form-group">
+                                    <label> Descripción </label>
+                                    <textarea type="text" className="form-control" value={this.state.descripcion} onChange={this.handleDescripcion}></textarea>
+                                    {this.validator.message('descripcion', this.state.descripcion, 'required', false, {required: 'Este campo es obligatorio'})}
+                                </div>
+                                <div className="form-group">
+                                    Fecha Inicio:
+                                    <DatePicker
+                                        dateFormat="DD/MM/YYYY"
+                                        selected={this.state.fecha_inicio}
+                                        onChange={this.handleFIni}
+                                    />
+                                    {this.validator.message('fecha_inicio', this.state.fecha_inicio, 'required', false, {required: 'Este campo es obligatorio'})}
+                                </div>
+                                <div className="form-group">
+                                    Fecha Fin:
+                                    <DatePicker
+                                        dateFormat="DD/MM/YYYY"
+                                        selected={this.state.fecha_fin}
+                                        onChange={this.handleFFin}
+                                    />
+                                    {this.validator.message('fechaFin', this.state.fecha_fin, 'required', false, {required: 'Este campo es obligatorio'})}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div className="panel-footer text-right">
-                        {btnAnterior}
-                        <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
-                        {btnSiguiente}
+                        <button className="btn btn-primary" onClick={this.performNext}> Finalizar </button>
                     </div>
                 </div>
             </BaseContainer>
