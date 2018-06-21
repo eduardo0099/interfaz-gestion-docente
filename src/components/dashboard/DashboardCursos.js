@@ -72,7 +72,7 @@ class DashboardCursos extends React.Component {
     findCursosSeccion(nextProps) {
         API.get('/general/listaCursosSeccion', {
             params: {
-                seccion: nextProps.seccion.nombre,
+                seccion: nextProps.seccion.id,
             }
         })
             .then(response => {
