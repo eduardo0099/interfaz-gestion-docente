@@ -142,6 +142,7 @@ class ListaEncuestas extends React.Component {
                                                     labelKey={ "descripcion" }
                                                     options={ this.state.ciclos }
                                                     clearable={ false }
+                                                    searchable={false}
                                                 />
                                             </div>
                                         </div>

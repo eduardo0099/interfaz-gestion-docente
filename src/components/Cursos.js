@@ -117,6 +117,7 @@ export class Cursos extends React.Component {
                                         labelKey={ "descripcion" }
                                         options={ this.state.ciclos }
                                         clearable={ false }
+                                        searchable={false}
                                     />
                                 </div>
                                 <div className="col-md-1">
@@ -130,6 +131,7 @@ export class Cursos extends React.Component {
                                         labelKey={ "nombre" }
                                         options={ this.state.tipoCursos }
                                         clearable={ false }
+                                        searchable={false}
                                     />
                                 </div>
                             </div>
