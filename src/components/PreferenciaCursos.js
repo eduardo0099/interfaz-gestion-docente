@@ -33,6 +33,10 @@ class PreferenciaCursos extends Component {
 			.then(response => {
 					//console.log('e',response.data);
 					this.setState({nombreProfe: response.data.nombre, existe: response.data.exists});
+					let selector = document.querySelectorAll('[type=checkbox]');
+					for(let i=0; i<selector.length; i++){
+						selector[i].disabled = false;
+					}
 				})
 				.catch(error => {
 					alert("Error: el código proporcionado no corresponde a ningún profesor de la sección.");
@@ -41,6 +45,11 @@ class PreferenciaCursos extends Component {
 		}
 		else{
 			this.setState({nombreProfe: "", existe: false});
+			document.querySelectorAll('[type=checkbox]').forEach((x) => x.checked=false);
+			let selector = document.querySelectorAll('[type=checkbox]');
+			for(let i=0; i<selector.length; i++){
+				selector[i].disabled = true;
+			}
 		}
 	}
 
@@ -52,6 +61,17 @@ class PreferenciaCursos extends Component {
 			}
 		}
 		return -1;
+	}
+
+	numberOnly(evt) {
+	  var theEvent = evt || window.event;
+	  var key = theEvent.keyCode || theEvent.which;
+	  key = String.fromCharCode( key );
+	  var regex = /[0-9]|\./;
+	  if( !regex.test(key) ) {
+	    theEvent.returnValue = false;
+	    if(theEvent.preventDefault) theEvent.preventDefault();
+	  }
 	}
 
 	handleChange(curso, e){
@@ -165,7 +185,7 @@ class PreferenciaCursos extends Component {
 							<div className="row form-group">
 								<div class="col-md-1">Código:</div>
 								<div class="col-md-2">
-									<input type="text" class="form-control" name="codigoProfe" onChange={this.handleProfCode}></input>
+									<input type="text" class="form-control" name="codigoProfe" maxlength="8" onKeyPress={this.numberOnly.bind(this)} onChange={this.handleProfCode}></input>
 								</div>
 								<div class="col-md-2">Apellidos y nombres:</div>
 								<div class="col-md-6">
@@ -196,10 +216,10 @@ class PreferenciaCursos extends Component {
 												<small className="block text-muted"> {curso.codigo} </small>
 											</td>
 											<td className="v-middle text-center">
-												<input type="checkbox" name={curso.codigo} onChange={this.handleChange.bind(this, curso)} value="2018-1"></input>
+												<input type="checkbox" name={curso.codigo} onChange={this.handleChange.bind(this, curso)} value="2018-1" disabled></input>
 											</td>
 											<td className="v-middle text-center">
-												<input type="checkbox" name={curso.codigo} onChange={this.handleChange.bind(this, curso)} value="2018-2"></input>
+												<input type="checkbox" name={curso.codigo} onChange={this.handleChange.bind(this, curso)} value="2018-2" disabled></input>
 											</td>
 										</tr>
 									);
@@ -227,10 +247,10 @@ class PreferenciaCursos extends Component {
 												<small className="block text-muted"> {curso.codigo} </small>
 											</td>
 											<td className="v-middle text-center">
-												<input type="checkbox" name={curso.codigo} onChange={this.handleChange.bind(this, curso)} value="2018-1"></input>
+												<input type="checkbox" name={curso.codigo} onChange={this.handleChange.bind(this, curso)} value="2018-1" disabled></input>
 											</td>
 											<td className="v-middle text-center">
-												<input type="checkbox" name={curso.codigo} onChange={this.handleChange.bind(this, curso)} value="2018-2"></input>
+												<input type="checkbox" name={curso.codigo} onChange={this.handleChange.bind(this, curso)} value="2018-2" disabled></input>
 											</td>
 										</tr>
 									);
