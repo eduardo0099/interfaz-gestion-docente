@@ -90,11 +90,12 @@ class ConvocatoriaCampos extends Component {
         console.log('gradAcadRegistrar:',gradAcadRegistrar);
         console.log('docenciaRegistrar:',docenciaRegistrar);
         console.log('expProfRegistrar:',expProfRegistrar);
-        console.log('investigacionRegistrar:',investigacionRegistrar);
+        console.log('investigacionRegistrar:',JSON.stringify(investigacionRegistrar));
+        // poner el put
         if( this.validator.allValid()){
             API.put('convocatoria/convocatoria/modificar', {
                 id : this.props.match.params.id_convocatoria,
-                estado_convocatoria : "Abierta"
+                estado_convocatoria : "Aprobada"//cambiar a Abierta
             })
                 .then(response => {
                     API.post('convocatoria/convocatoria/modificar', {

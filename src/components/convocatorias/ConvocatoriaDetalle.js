@@ -6,6 +6,7 @@ import API from "../../api";
 import ConvocatoriaPesos from "./ConvocatoriaPesos";
 import ConvocatoriaNuevo from "./ConvocatoriasNuevo";
 import ConvocatoriaCampos from "./convocatoriaCampos";
+import {Panel,Image, Col, Grid, Row,FormGroup} from 'react-bootstrap';
 
 
 class ConvocatoriaDetalle extends Component{
@@ -93,6 +94,101 @@ class ConvocatoriaDetalle extends Component{
 
     render(){
         let estado=this.state.descripcion;
+        let requisitos;
+        if(this.state.descripcion==="Abierta"||this.state.descripcion==="Aprobada"){
+            let asesoria=null;
+            let cargo=null;
+            let premio=null;
+            let experiencia=null;
+            let diplomatura=null;
+            let doctorado=null;
+            let maestria=null;
+            let titulo=null;
+            let investigacion=null;
+            if(this.state.requiere_docencia_asesoria){
+                asesoria=<div>
+                    <label>Asesoría docencia</label>
+                    <br></br>
+                </div>
+
+            }
+            if(this.state.requiere_docencia_cargo){
+                cargo=<div>
+                    <label>Cargo docencia</label>
+                    <br></br>
+                </div>
+            }
+            if(this.state.requiere_docencia_premio){
+                premio=
+                    <div>
+                        <label>Premio docencia</label>
+                        <br></br>
+                    </div>
+            }
+            if(this.state.requiere_experiencia){
+                experiencia=
+                    <div>
+                        <label>Experiencia laboral</label>
+                        <br></br>
+                    </div>
+            }
+            if(this.state.requiere_grado_diplomatura){
+                diplomatura=
+                    <div>
+                        <label>Diplomatura</label>
+                        <br></br>
+                    </div>
+            }
+            if(this.state.requiere_grado_doctorado){
+                doctorado=
+                    <div>
+                        <label>Doctorado</label>
+                        <br></br>
+                    </div>
+            }
+            if(this.state.requiere_grado_maestria){
+                maestria=
+                    <div>
+                        <label>Maestria</label>
+                        <br></br>
+                    </div>
+            }
+            if(this.state.requiere_grado_titulo){
+                titulo=
+                    <div>
+                        <label>Titulo</label>
+                        <br></br>
+                    </div>
+            }
+            if(this.state.requiere_investigacion){
+                investigacion=
+                    <div>
+                        <label>Investigaciones</label>
+                        <br></br>
+                    </div>
+            }
+            requisitos=
+                <div className="panel-body">
+                    <Row >
+                        <label>Requisitos:</label>
+                    </Row>
+                    <Row>
+                        <Col md={6}>
+                            {asesoria}
+                            {cargo}
+                            {premio}
+                            {investigacion}
+                            {experiencia}
+                            {titulo}
+                            {maestria}
+                            {doctorado}
+                            {diplomatura}
+                        </Col>
+                    </Row>
+                </div>
+        }else{
+            requisitos=null
+        }
         return(
             <div>
             <Route exact path={`${this.props.match.path}`} render={() =>
@@ -109,7 +205,7 @@ class ConvocatoriaDetalle extends Component{
                             <div className="col-md-offset-0 col-md-10">
                                 <hr/>
                                 <fieldset disabled>
-                                    <div className="form-group"></div>
+                                    <div className="panel-body"></div>
                                     <label htmlFor="disabledTextInput">Nombre:</label>
                                     <input type="text" id="disabledTextInput" className="form-control"
                                            placeholder={this.state.nombre}></input>
@@ -124,8 +220,11 @@ class ConvocatoriaDetalle extends Component{
                                            placeholder={this.state.fecha_fin}></input>
                                     <div className="form-group"></div>
                                     <label htmlFor="disabledTextInput">Estado:</label>
-                                    <input class="form-control" id="exampleFormControlTextarea1" rows="3" type="text" id="disabledTextInput" className="form-control"
-                                              placeholder={this.state.descripcion}></input>
+                                    <input className="form-control" id="exampleFormControlTextarea1" rows="3"
+                                           type="text" id="disabledTextInput" className="form-control"
+                                           placeholder={this.state.descripcion}></input>
+                                    <div className="form-group"></div>
+                                    {requisitos}
                                 </fieldset>
                             </div>
                         </div>
