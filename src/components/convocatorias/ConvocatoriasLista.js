@@ -48,6 +48,7 @@ class ConvocatoriasLista extends Component {
     search() {
         API.get('convocatoria/convocatoria/lista')
             .then(response => {
+                console.log(response);
                 this.setState({convocatorias: response.data.convocatorias})
             })
     }
@@ -55,17 +56,17 @@ class ConvocatoriasLista extends Component {
     labelEstado(estado) {
         switch (estado) {
             case 'Creada':
-                return <span className="label label-default"> Creado </span>;
+                return <span className="label label-default"> Creada </span>;
             case 'Aprobada':
                 return <span className="label label-default"> Aprobada </span>;
             case 'Abierta':
                 return <span className="label label-success"> Abierta </span>;
             case 'Cerrada':
-                return <span className="label label-danger"> Cerrado </span>;
+                return <span className="label label-danger"> Cerrada </span>;
             case 'Cancelada':
-                return <span className="label label-danger"> Cancelado </span>;
+                return <span className="label label-danger"> Cancelada </span>;
             case 'Finalizada':
-                return <span className="label label-success"> Finalizado </span>;
+                return <span className="label label-success"> Finalizada </span>;
             default:
                 return <span></span>;
         }
@@ -116,11 +117,9 @@ class ConvocatoriasLista extends Component {
                                                     </Link>
                                                 </td>
                                                 <td className="v-middle">
-                                                    <span className="block text-primary"> {item.curso.nombre} </span>
-                                                    <small className="block text-muted"> {item.curso.codigo} </small>
                                                 </td>
                                                 <td className="v-middle text-center">
-                                                    {(item.estado === 'Creada' || item.estado === 'Aprobado')?
+                                                    {(item.estado === 'Creada' || item.estado === 'Aprobada')?
                                                         <span></span>
                                                         :
                                                         <Link to={"/convocatorias/" + item.id}>

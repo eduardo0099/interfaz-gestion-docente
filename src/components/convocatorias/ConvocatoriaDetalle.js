@@ -47,12 +47,52 @@ class ConvocatoriaDetalle extends Component{
                 id: this.props.match.params.id_convocatoria
             }
         }).then(response => {
+            console.log(response.data[0])
             this.setState(response.data[0]);
+        }).catch(err => {
+            console.log("err", err);
         })
     }
 
+
+    aprobarConvocatoria = ()=> {
+        if (window.confirm('Seguro que deseas aprobar esta convocatoria?')) {
+            API.put('convocatoria/convocatoria/modificar', {
+                id : this.props.match.params.id_convocatoria,
+                estado_convocatoria : "Aprobada"
+            })
+                .then(response => {
+                    alert("Convocatoria Aprobada");
+                    window.location.reload();
+                })
+                .catch(error => {
+                    alert("Error: No se pudo aprobar la Convocatoria");
+                })
+        } else {
+            // Do nothing!
+        }
+    }
+
+    cancelarConvocatoria = ()=> {
+        if (window.confirm('Seguro que deseas cancelar esta convocatoria?')) {
+            API.put('convocatoria/convocatoria/modificar', {
+                id : this.props.match.params.id_convocatoria,
+                estado_convocatoria : "Cancelada"
+            })
+                .then(response => {
+                    alert("Convocatoria Cancelada");
+                    window.location.reload();
+                })
+                .catch(error => {
+                    alert("Error: No se pudo Cancelar la Convocatoria");
+                })
+        } else {
+            // Do nothing!
+        }
+    }
+
     render(){
-        let estado="Aprobado"
+        let estado=this.state.descripcion;
         return(
             <div>
             <Route exact path={`${this.props.match.path}`} render={() =>
@@ -83,29 +123,28 @@ class ConvocatoriaDetalle extends Component{
                                     <input type="text" id="disabledTextInput" className="form-control"
                                            placeholder={this.state.fecha_fin}></input>
                                     <div className="form-group"></div>
-                                    <label htmlFor="disabledTextInput">Descripcion:</label>
-                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" type="text" id="disabledTextInput" className="form-control"
-                                              placeholder={this.state.descripcion}></textarea>
+                                    <label htmlFor="disabledTextInput">Estado:</label>
+                                    <input class="form-control" id="exampleFormControlTextarea1" rows="3" type="text" id="disabledTextInput" className="form-control"
+                                              placeholder={this.state.descripcion}></input>
                                 </fieldset>
                             </div>
                         </div>
                         <div className="panel-footer text-right">
-                            {currentRole()=== Role.JEFE_DEPARTAMENTO && estado == "Creado"?
+                            {currentRole()=== Role.JEFE_DEPARTAMENTO && estado == "Creada"?
                                 <div>
-                                    <button className="btn btn-primary" > Aprobar </button>
+                                    <button className="btn btn-primary" onClick={this.aprobarConvocatoria}> Aprobar </button>
                                     <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
-                                    <button className="btn btn-primary" > Cancelar </button>
+                                    <button className="btn btn-primary" onClick={this.cancelarConvocatoria}> Cancelar </button>
                                 </div>
                                 :
                                 <div>
-                                    {estado == "Aprobado" ?
+                                    {estado == "Aprobada" ?
                                         <div>
                                             <Link className="btn  btn-primary " to={`${this.props.history.location.pathname}/agregarCampos`} >Agregar Campos</Link>
-                                            <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
-                                            <button className="btn btn-primary"> Cancelar</button>
+
                                         </div>
                                         :
-                                        <button className="btn btn-primary"> Cancelar </button>
+                                        null
                                     }
                                 </div>
                             }

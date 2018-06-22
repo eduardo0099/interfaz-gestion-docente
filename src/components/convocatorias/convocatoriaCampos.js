@@ -25,7 +25,6 @@ class ConvocatoriaCampos extends Component {
         super(props);
         this.validator = new SimpleReactValidator();
         this.state = {
-            btnFinalizar:false,
             gradosAcademicos: [],
             docencia: [],
             experienciaProfesional: [],
@@ -88,47 +87,45 @@ class ConvocatoriaCampos extends Component {
             let elemento  = {descripcion: entry, peso:10};
             investigacionRegistrar= [...investigacionRegistrar, elemento];
         });
-        //console.log('gradAcadRegistrar:',gradAcadRegistrar);
-        //console.log('docenciaRegistrar:',docenciaRegistrar);
-        //console.log('expProfRegistrar:',expProfRegistrar);
-        //console.log('investigacionRegistrar:',investigacionRegistrar);
-        if( this.validator.allValid() && this.validDates(this.state.fecha_fin,this.state.fecha_inicio)){
-            API.post('convocatoria/convocatoria/registrar', {
-                nombre : this.state.nombre,
-                codigo_curso : this.state.codigoCurso,
-                fecha_inicio : this.armarFecha(this.state.fecha_inicio._d),
-                fecha_fin : this.armarFecha(this.state.fecha_fin._d),
-                grados_academicos:gradAcadRegistrar,
-                docencia:docenciaRegistrar,
-                experiencia_profesional:expProfRegistrar,
-                investigacion:investigacionRegistrar,
+        console.log('gradAcadRegistrar:',gradAcadRegistrar);
+        console.log('docenciaRegistrar:',docenciaRegistrar);
+        console.log('expProfRegistrar:',expProfRegistrar);
+        console.log('investigacionRegistrar:',investigacionRegistrar);
+        if( this.validator.allValid()){
+            API.put('convocatoria/convocatoria/modificar', {
+                id : this.props.match.params.id_convocatoria,
+                estado_convocatoria : "Abierta"
             })
                 .then(response => {
-                    alert("Convocatoria registrada");
+                    API.post('convocatoria/convocatoria/modificar', {
+                        id:this.props.match.params.id_convocatoria,
+                        grados_academicos:gradAcadRegistrar,
+                        docencia:docenciaRegistrar,
+                        experiencia_profesional:expProfRegistrar,
+                        investigacion:investigacionRegistrar,
+                    })
+                        .then(response => {
+                        })
+                        .catch(error => {
+                            alert("Error: No se pudieron agregar los campos");
+                        })
+                    alert("Campos agregados");
                     this.props.history.goBack();
                 })
                 .catch(error => {
-                    alert("Error: No se pudo registrar la investigación");
+                    alert("Error: No se pudo modificar el estado");
                 })
+
+
         }else {
-            if ( this.state.fecha_fin !== null && this.state.fecha_fin !== null ){
-                if (!this.validDates(this.state.fecha_fin,this.state.fecha_inicio)){
-                    alert("La fecha de fin es menor a la fecha de inicio!");
-                }
-            }
             this.validator.showMessages();
             // rerender to show messages for the first time
             this.forceUpdate();
         }
     }
 
-    performNext = ()=> {}
-
-
-
     render() {
-
-
+        console.log(this.props.match.params.id_convocatoria)
 
 
         return (
@@ -208,7 +205,7 @@ class ConvocatoriaCampos extends Component {
                         </div>
                     </div>
                     <div className="panel-footer text-right">
-                        <button className="btn btn-primary" onClick={this.performNext}> Guardar </button>
+                        <button className="btn btn-primary" onClick={this.performPostRequest}> Guardar </button>
                     </div>
                 </div>
             </BaseContainer>
