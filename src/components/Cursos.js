@@ -135,7 +135,9 @@ export class Cursos extends React.Component {
                                     />
                                 </div>
                             </div>
-
+                            <br></br>
+                            <br></br>
+                            <br></br>
                             <table className="table table-striped">
                                 <thead>
                                 <th className="v-middle col-md-4 text-center"> Curso</th>

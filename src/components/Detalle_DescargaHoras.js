@@ -10,11 +10,7 @@ class Detalle_DescargaHoras extends React.Component{
     constructor(props){
         super(props);
         this.state= {
-            semana: [{
-                numero: "",
-                hDescarga: "",
-                motivo: ""
-            }],
+            semana: [],
             listaSemana:[],
         }
     }
@@ -25,14 +21,16 @@ class Detalle_DescargaHoras extends React.Component{
 
     crearListaSemana(){
         let lista=[];
-        for(let  i=1;i<=16;i++) {
+        for(let  i=0;i<16;i++) {
             let obj = {};
-            obj.semana = "Semana" + " "+ i;
-            if(this.state.semana[0].numero == i)
-                obj.horas = this.state.semana[0].hDescarga;
-            else
-                obj.horas = 0;
+            obj.semana = "Semana" + " "+ (i+1);
+            obj.horas = 0;
             lista.push(obj);
+        }
+        for(let j=0;j<this.props.semana.length;j++){
+            console.log("HORAS DE DESCARGA" , this.props.semana[j]);
+            let nSemana = this.props.semana[j].numero - 1;
+            lista[nSemana].horas = this.props.semana[j].hDescarga;
         }
         this.setState({
             listaSemana:Array.from(new Set(lista)),
