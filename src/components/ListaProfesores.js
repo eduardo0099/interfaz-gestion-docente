@@ -22,6 +22,7 @@ class ListaProfesores extends Component {
       error: '',
       profesores: [],
       profesoresAux: [],
+        profeFilter: [],
       profeText: '',
       codigoText: '',
       filtroSeccionKey: 'Todos',
@@ -133,20 +134,18 @@ class ListaProfesores extends Component {
         console.log("4..")
       var aux = this.state.profesoresAux.filter((d) => {
             console.log(e.target.value.toUpperCase())
-            return d.codigo.toString().indexOf(e.target.value.toString()) !== - 1
+            return d.codigo.toString().indexOf(this.state.codigoText.toString()) !== - 1
         });
     }
     this.setState({
       profesores: aux,
+
         profeText: e.target.value
     })
   }
 
 
   busquedaCodigoProfesor = e => {
-    this.setState({
-
-    })
 
     if ( (this.state.profeText == '') &&  (e.target.value == '') ) {//la lista no esta filtrada
       var aux = this.state.profesoresAux.filter((d) => {
@@ -160,14 +159,16 @@ class ListaProfesores extends Component {
       });
     }
     else if( (this.state.profeText != '') &&  (e.target.value != '') ) {//el filtro tiene algo
-        var aux = this.state.profesoresAux.filter((d) => {
+        console.log("B",this.state.profesoresAux)
+      var aux = this.state.profesoresAux.filter((d) => {
             return d.codigo.toString().indexOf(e.target.value.toString()) !== - 1
         });
     }
     else if( (this.state.profeText != '') &&  (e.target.value == '') ) {//el filtro tiene algo
+        console.log("A")
         var aux = this.state.profesoresAux.filter((d) => {
             console.log(e.target.value.toUpperCase())
-            return d.nombre.toUpperCase().indexOf(e.target.value.toUpperCase()) !== - 1
+            return d.nombre.toUpperCase().indexOf(this.state.profeText.toUpperCase()) !== - 1
         });
     }
     this.setState({
