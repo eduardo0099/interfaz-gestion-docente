@@ -72,14 +72,20 @@ class AyudaEconomicaNuevo extends Component {
         API.get('general/listaPais')
             .then(response => {
                 this.setState({ paises: response.data.pais })
-            })
+            }).catch(error => {
+            alert("Ha ocurrido un error obteniendo la lista de paises, intentelo luego");
+            console.log(error);
+        })
     }
 
     allMotivos() {
         API.get('ayudasEconomicas/ayudasEconomicas/motivos')
             .then(response => {
                 this.setState({ motivos: response.data.motivos })
-            })
+            }).catch(error => {
+            alert("Ha ocurrido un error obteniendo la lista de motivos de ayuda economica, intentelo luego");
+            console.log(error);
+        })
     }
 
     handleMotivo(obj) {
@@ -94,10 +100,9 @@ class AyudaEconomicaNuevo extends Component {
                 this.setState({ profesores: response.data.docentes, profesoresAux: response.data.docentes});
             })
             .catch(error => {
-                this.setState({
-                    error: `${error}`
-                });
-            });
+                alert("Ha ocurrido un error al obtener la lista de profesores, intentelo luego");
+                console.log(error);
+            })
     }
 
     getActualDate(){
@@ -155,7 +160,7 @@ class AyudaEconomicaNuevo extends Component {
         this.setState({
             showSeleccionarInvestigacion: false,
             selectedId:''
-            });
+        });
     }
 
     findCicloActual() {
@@ -164,7 +169,10 @@ class AyudaEconomicaNuevo extends Component {
                 console.log('response findCicloActual:',response);
                 this.setState({ cicloSeleccionado: response.data.cicloActual })
                 this.findInvestigaciones(response.data.cicloActual);
-            })
+            }).catch(error => {
+            alert("Ha ocurrido un error obteniendo el ciclo actual, intentelo luego");
+            console.log(error);
+        })
     }
 
     allCiclos() {
@@ -172,7 +180,10 @@ class AyudaEconomicaNuevo extends Component {
             .then(response => {
                 console.log('response allCiclos:',response);
                 this.setState({ ciclos: response.data.ciclos })
-            })
+            }).catch(error => {
+            alert("Ha ocurrido un error obteniendo la lista de ciclos, intentelo luego");
+            console.log(error);
+        })
     }
 
     cambioCiclo = (obj) => {
@@ -529,7 +540,7 @@ class AyudaEconomicaNuevo extends Component {
                                                     <label className="control-label col-md-1"></label>
                                                     <div className="col-md-9">
                                                         <label>Instituto/
-                                                        Universidad</label>
+                                                            Universidad</label>
                                                         <input className="form-control"  onChange={ this.handleInsUniv }></input>
                                                         {this.validator.message('insUniv', this.state.insUniv, 'required', false, {required: 'Este campo es obligatorio'})}
                                                     </div>
@@ -611,7 +622,7 @@ class AyudaEconomicaNuevo extends Component {
                     <label>
                         Lo sentimos. Al parecer la dirección está mal escrita o no tiene permiso para entrar en esta página. Por favor, contacte con los administradores del sistema.
                     </label>
-                    <br></br>   
+                    <br></br>
                     <a className="btn btn-default pull-right"onClick={this.props.history.goBack}> Volver </a>
                 </div>
             );

@@ -61,6 +61,7 @@ class Dashboard extends Component {
                     labelKey={'nombre'}
                     options={this.state.secciones}
                     clearable={false}
+                    searchable={false}
                 />
             </div>
         }else{

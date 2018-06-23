@@ -14,6 +14,7 @@ class BodySidebar extends Component {
     if (localStorage.getItem('u') != null) {
       var usuario = JSON.parse(atob(localStorage.getItem('u')));
       tipoUser = usuario.tipo_usuario;
+        console.log("tipoUser: ",tipoUser)
     }
 
     if (tipoUser == 3) {
@@ -69,7 +70,7 @@ class BodySidebar extends Component {
             <Link to="/preferenciaCursos" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Preferencia de Dictado</Link>
           </div>
       );
-    } else if (tipoUser == 4) {
+    } else if (tipoUser == 5) {
       //Asistente de departamento
       return (
           <div className="bodySidebar">
