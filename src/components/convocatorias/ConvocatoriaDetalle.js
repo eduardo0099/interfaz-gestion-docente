@@ -6,6 +6,7 @@ import API from "../../api";
 import ConvocatoriaPesos from "./ConvocatoriaPesos";
 import ConvocatoriaNuevo from "./ConvocatoriasNuevo";
 import ConvocatoriaCampos from "./convocatoriaCampos";
+import {Panel,Image, Col, Grid, Row,FormGroup} from 'react-bootstrap';
 
 
 class ConvocatoriaDetalle extends Component{
@@ -20,14 +21,14 @@ class ConvocatoriaDetalle extends Component{
             cantidad_postulantes_aceptados: 0,
             descripcion: "Abierta",
             requiere_docencia_asesoria: 1,
-            requiere_docencia_cargo: 1,
-            requiere_docencia_premio: 1,
-            requiere_experiencia: 1,
-            requiere_grado_diplomatura: 1,
-            requiere_grado_doctorado: 1,
-            requiere_grado_maestria: 1,
-            requiere_grado_titulo: 1,
-            requiere_investigacion: 1,
+            requiere_docencia_cargo: 0,
+            requiere_docencia_premio: 0,
+            requiere_experiencia: 0,
+            requiere_grado_diplomatura: 0,
+            requiere_grado_doctorado: 0,
+            requiere_grado_maestria: 0,
+            requiere_grado_titulo: 0,
+            requiere_investigacion: 0,
             peso_docencia_asesoria: 40,
             peso_docencia_cargo: 30,
             peso_docencia_premio: 50,
@@ -93,6 +94,157 @@ class ConvocatoriaDetalle extends Component{
 
     render(){
         let estado=this.state.descripcion;
+        let requisitos;
+        if(this.state.descripcion==="Abierta"){
+            let asesoria=null;
+            let asesoriaPeso=null;
+
+            let cargo=null;
+            let cargoPeso=null;
+
+            let premio=null;
+            let premioPeso=null;
+
+            let experiencia=null;
+            let experienciaPeso=null;
+
+            let diplomatura=null;
+            let diplomaturaPeso=null;
+
+            let doctorado=null;
+            let doctoradoPeso=null;
+
+            let maestria=null;
+            let maestriaPeso=null;
+
+            let titulo=null;
+            let tituloPeso=null;
+
+            let investigacion=null;
+            let investigacionPeso=null;
+            if(this.state.requiere_docencia_asesoria){
+                asesoria=<div>
+                    <span className="form-control">  {"Asesoría docencia"} </span>
+                </div>
+
+                asesoriaPeso=<div>
+                    <span className="form-control">  {this.state.peso_docencia_asesoria} </span>
+                </div>
+
+            }
+            if(this.state.requiere_docencia_cargo){
+                cargo=<div>
+                    <span className="form-control">  {"Cargo docencia"} </span>
+                </div>
+
+                cargoPeso=<div>
+                    <span className="form-control">  {this.state.peso_docencia_cargo} </span>
+                </div>
+            }
+            if(this.state.requiere_docencia_premio){
+                premio=
+                    <div>
+                        <span className="form-control">  {"Premio docencia"} </span>
+                    </div>
+
+                premioPeso=<div>
+                    <span className="form-control">  {this.state.peso_docencia_premio} </span>
+                </div>
+            }
+            if(this.state.requiere_experiencia){
+                experiencia=
+                    <div>
+                        <span className="form-control">  {"Experiencia laboral"} </span>
+                    </div>
+
+                experienciaPeso=<div>
+                    <span className="form-control">  {this.state.peso_experiencia} </span>
+                </div>
+            }
+            if(this.state.requiere_grado_diplomatura){
+                diplomatura=
+                    <div>
+                        <span className="form-control">  {"Diplomatura"} </span>
+                    </div>
+
+                diplomaturaPeso=<div>
+                    <span className="form-control">  {this.state.peso_grado_diplomatura} </span>
+                </div>
+            }
+            if(this.state.requiere_grado_doctorado){
+                doctorado=
+                    <div>
+                        <span className="form-control">  {"Doctorado"} </span>
+                    </div>
+
+                doctoradoPeso=<div>
+                    <span className="form-control">  {this.state.peso_grado_doctorado} </span>
+                </div>
+            }
+            if(this.state.requiere_grado_maestria){
+                maestria=
+                    <div>
+                        <span className="form-control">  {"Maestria"} </span>
+                    </div>
+
+                maestriaPeso=<div>
+                    <span className="form-control">  {this.state.peso_grado_maestria} </span>
+                </div>
+            }
+            if(this.state.requiere_grado_titulo){
+                titulo=
+                    <div>
+                        <span className="form-control">  {"Titulo"} </span>
+                    </div>
+
+                tituloPeso=<div>
+                    <span className="form-control">  {this.state.peso_grado_titulo} </span>
+                </div>
+            }
+            if(this.state.requiere_investigacion){
+                investigacion=
+                    <div>
+                        <span className="form-control">  {"Investigaciones"} </span>
+                    </div>
+
+                investigacionPeso=<div>
+                    <span className="form-control">  {this.state.peso_investigacion} </span>
+                </div>
+            }
+            requisitos=
+                <div className="panel-body">
+                    <Row >
+                        <label>Requisitos:</label>
+                    </Row>
+                    <Row>
+                        <Col md={6}>
+                            {asesoria}
+                            {cargo}
+                            {premio}
+                            {investigacion}
+                            {experiencia}
+                            {titulo}
+                            {maestria}
+                            {doctorado}
+                            {diplomatura}
+                        </Col>
+
+                        <Col md={2}>
+                            {asesoriaPeso}
+                            {cargoPeso}
+                            {premioPeso}
+                            {investigacionPeso}
+                            {experienciaPeso}
+                            {tituloPeso}
+                            {maestriaPeso}
+                            {doctoradoPeso}
+                            {diplomaturaPeso}
+                        </Col>
+                    </Row>
+                </div>
+        }else{
+            requisitos=null
+        }
         return(
             <div>
             <Route exact path={`${this.props.match.path}`} render={() =>
@@ -109,28 +261,24 @@ class ConvocatoriaDetalle extends Component{
                             <div className="col-md-offset-0 col-md-10">
                                 <hr/>
                                 <fieldset disabled>
-                                    <div className="form-group"></div>
-                                    <label htmlFor="disabledTextInput">Nombre:</label>
-                                    <input type="text" id="disabledTextInput" className="form-control"
-                                           placeholder={this.state.nombre}></input>
-                                    <div className="form-group"></div>
-                                    <div className="form-group"></div>
-                                    <label htmlFor="disabledTextInput">Fecha de Inicio:</label>
-                                    <input type="text" id="disabledTextInput" className="form-control"
-                                           placeholder={this.state.fecha_inicio}></input>
-                                    <div className="form-group"></div>
-                                    <label htmlFor="disabledTextInput">Fecha de Fin:</label>
-                                    <input type="text" id="disabledTextInput" className="form-control"
-                                           placeholder={this.state.fecha_fin}></input>
-                                    <div className="form-group"></div>
-                                    <label htmlFor="disabledTextInput">Estado:</label>
-                                    <input class="form-control" id="exampleFormControlTextarea1" rows="3" type="text" id="disabledTextInput" className="form-control"
-                                              placeholder={this.state.descripcion}></input>
+                                    <label>Nombre:</label>
+                                    <span className="form-control">{this.state.nombre}</span>
+                                    <br></br>
+                                    <label>Fecha de Inicio:</label>
+                                    <span className="form-control">{this.state.fecha_inicio}</span>
+                                    <br></br>
+                                    <label>Fecha de Fin:</label>
+                                    <span className="form-control">{this.state.fecha_fin}</span>
+                                    <br></br>
+                                    <label>Estado:</label>
+                                    <span className="form-control">{this.state.descripcion}</span>
+                                    <br></br>
+                                    {requisitos}
                                 </fieldset>
                             </div>
                         </div>
                         <div className="panel-footer text-right">
-                            {currentRole()=== Role.JEFE_DEPARTAMENTO && estado == "Creada"?
+                            {currentRole()=== Role.JEFE_DEPARTAMENTO && estado === "Creada"?
                                 <div>
                                     <button className="btn btn-primary" onClick={this.aprobarConvocatoria}> Aprobar </button>
                                     <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
@@ -138,7 +286,7 @@ class ConvocatoriaDetalle extends Component{
                                 </div>
                                 :
                                 <div>
-                                    {estado == "Aprobada" ?
+                                    {estado === "Aprobada" ?
                                         <div>
                                             <Link className="btn  btn-primary " to={`${this.props.history.location.pathname}/agregarCampos`} >Agregar Campos</Link>
 

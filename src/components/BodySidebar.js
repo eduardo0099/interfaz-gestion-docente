@@ -14,6 +14,7 @@ class BodySidebar extends Component {
     if (localStorage.getItem('u') != null) {
       var usuario = JSON.parse(atob(localStorage.getItem('u')));
       tipoUser = usuario.tipo_usuario;
+        console.log("tipoUser: ",tipoUser)
     }
 
     if (tipoUser == 3) {

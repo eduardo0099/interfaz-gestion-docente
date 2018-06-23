@@ -19,6 +19,7 @@ class ConvocatoriasLista extends Component {
             verAuth:false,
         }
     }
+
     componentWillMount() {
         if (localStorage.getItem('jwt') == null) {
             window.location.href = "/";
@@ -98,8 +99,8 @@ class ConvocatoriasLista extends Component {
                                     <tr>
                                         <th className="v-middle col-md-1 text-center">Código</th>
                                         <th className="v-middle col-md-4">Nombre</th>
-                                        <th className="v-middle col-md-3">Curso</th>
-                                        <th className="v-middle col-md-3"></th>
+                                        <th className="v-middle col-md-2">Fecha Registro</th>
+                                        <th className="v-middle col-md-4"></th>
                                         <th className="v-middle col-md-1 text-center">Estado</th>
                                     </tr>
                                     </thead>
@@ -109,14 +110,15 @@ class ConvocatoriasLista extends Component {
                                             <tr key={item.id}>
                                                 <td className="v-middle text-center">
                                                     <span className="block text-primary"> {item.codigo} </span>
-                                                    <small className="block text-muted"> {item.fechaRegistro} </small>
                                                 </td>
                                                 <td className="v-middle">
                                                     <Link to={"/convocatorias/" + item.id +"/detalle" }>
                                                         <span> {item.nombre} </span>
                                                     </Link>
+                                                    <small className="block text-muted"> {item.nombre_seccion} </small>
                                                 </td>
                                                 <td className="v-middle">
+                                                    <span className="block text-primary"> {item.fecha_registro} </span>
                                                 </td>
                                                 <td className="v-middle text-center">
                                                     {(item.estado === 'Creada' || item.estado === 'Aprobada')?

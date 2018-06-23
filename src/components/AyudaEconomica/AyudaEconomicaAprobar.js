@@ -17,7 +17,7 @@ class AyudaEconomicaAprobar extends React.Component {
         this.confirmationAceptar = React.createRef();
         this.confirmationRechazar = React.createRef();
         this.state = {
-            estado_test : 1,
+            estado_test : '',
             solicitudEconomica: {
                 id: 2,
                 codigo: 'AYU001',
@@ -42,7 +42,25 @@ class AyudaEconomicaAprobar extends React.Component {
 
     componentWillMount() {
         this.findSolicitud();
+        this.findEstado();
     }
+
+    findEstado(){
+        API.get('ayudasEconomicas/ayudasEconomicas/estado', {
+            params: {
+                id:  this.props.match.params.idAyudaEconomica
+            }
+        }).then(response => {
+            console.log("response:",response);
+            this.setState({
+                estado_test:response.data.descripcion
+            });
+        }).catch(err =>{
+            alert("Ha ocurrido un error obteniendo el estado de la solicitud, intentelo luego",err);
+            console.log(err);
+        })
+    }
+
     findSolicitud(){
         API.get('ayudasEconomicas/ayudasEconomicas/devuelveJustificacion', {
             params: {
@@ -50,6 +68,7 @@ class AyudaEconomicaAprobar extends React.Component {
             }
         }).then(response => {
             const ae = response.data.ayudaEconomica;
+            console.log("ae:",ae);
             this.setState({
                 solicitudEconomica: {
                     id: ae.id,
@@ -67,6 +86,9 @@ class AyudaEconomicaAprobar extends React.Component {
                     comentarios_adicionales: ae.comentarios_adicionales,
                 }
             });
+        }).catch(err =>{
+            alert("Ha ocurrido un error obteniendo datos de la solicitud, intentelo luego",err);
+            console.log(err);
         })
     }
 
@@ -86,6 +108,10 @@ class AyudaEconomicaAprobar extends React.Component {
         }).then(response => {
             this.confirmationAceptar.current.close();
             this.props.history.goBack();
+            window.location.reload();
+        }).catch(err =>{
+            alert("Ha ocurrido un error aprobando solicitud, intentelo luego",err);
+            console.log(err);
         })
     }
 
@@ -98,7 +124,9 @@ class AyudaEconomicaAprobar extends React.Component {
         }).then(response => {
             this.confirmationRechazar.current.close();
             this.props.history.goBack();
+            window.location.reload();
         }).catch(err =>{
+            alert("Ha ocurrido un error rechazando solicitud, intentelo luego",err);
             console.log(err);
         })
     }
@@ -171,7 +199,7 @@ class AyudaEconomicaAprobar extends React.Component {
                                     </div>
                                 </div>
 
-                                {this.state.estado_test == "1" ?
+                                {this.state.estado_test == "Pendiente" ?
                                     <div className="panel-footer">
                                         <div className="text-center">
                                             <button className="btn btn-danger m-r-sm btn-lg"

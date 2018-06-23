@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import {Route} from 'react-router-dom';
 import Select from 'react-select';
-import {Panel,  Dropdown, Glyphicon, MenuItem} from 'react-bootstrap';
+import {Panel,  Dropdown, Glyphicon, MenuItem,Row,Col} from 'react-bootstrap';
 import BaseContainer from "../BaseContainer";
 import ConvocatoriaNuevo from "../convocatorias/ConvocatoriasNuevo";
 import AyudaEconomicaNuevo from "./AyudaEconomicaNuevo";
@@ -140,12 +140,12 @@ class AyudaEconomica extends React.Component {
                 listaCBEstado=[...listaCBEstado,{estado:entry.estado}];
                 listaCBCodigo=[...listaCBCodigo,{codigo:entry.codigo_solicitud,id:entry.id}];
             });
-            console.log('listaCBProfesor0:',listaCBProfesor[0]);
+            /*console.log('listaCBProfesor0:',listaCBProfesor[0]);
             console.log('listaCBProfesor1:',listaCBProfesor[1]);
             console.log('Prueba obj:');
             if(JSON.stringify(listaCBProfesor[0])===JSON.stringify(listaCBProfesor[1])){
-                console.log('ala mrdd');
-            }
+                console.log('worked');
+            }*/
             this.setState({
                 ayudas: response.data.ayudaEconomica,
                 ayudasMostrar: response.data.ayudaEconomica,
@@ -169,32 +169,71 @@ class AyudaEconomica extends React.Component {
     };
 
     handleInvestigacion(obj) {
-        this.setState({ investigacionSelect: obj.titulo })
+        if(obj==null){
+            this.setState({
+                investigacionSelect: -1
+            })
+        }else {
+            this.setState({investigacionSelect: obj.titulo})
+        }
     }
 
     handleEstado(obj) {
-        this.setState({ estadoSelect: obj.estado })
+        if(obj==null){
+            this.setState({
+                estadoSelect: -1
+            })
+        }else {
+            this.setState({estadoSelect: obj.estado})
+        }
     }
 
     handleMotivo(obj) {
-        this.setState({ motivoSelect: obj.motivo })
+        if(obj==null){
+            this.setState({
+                motivoSelect: -1
+            })
+        }else {
+            this.setState({motivoSelect: obj.motivo})
+        }
     }
 
     handleSeccion(obj) {
-        this.setState({ seccionSelect: obj.seccion })
+        if(obj==null){
+            this.setState({
+                seccionSelect: -1
+            })
+        }else {
+            this.setState({seccionSelect: obj.seccion})
+        }
     }
 
     handleProfesor(obj) {
-        this.setState({
-            codigoProfesorSelect: obj.codigo,
-            profesorSelect:obj.nombres})
+        if(obj==null){
+            this.setState({
+                codigoProfesorSelect: -1,
+                profesorSelect: ''
+            })
+        }else {
+            this.setState({
+                codigoProfesorSelect: obj.codigo,
+                profesorSelect: obj.nombres
+            })
+        }
     }
 
     handleCodigo(obj) {
-        this.setState({
-            codigoSelect: obj.codigo,
-            idCodigoSolSelect:obj.id
-        })
+        if(obj==null){
+            this.setState({
+                codigoSelect: -1,
+                idCodigoSolSelect: -1
+            })
+        }else {
+            this.setState({
+                codigoSelect: obj.codigo,
+                idCodigoSolSelect: obj.id
+            })
+        }
     }
 
     handleMontoMin(event) {
@@ -266,6 +305,7 @@ class AyudaEconomica extends React.Component {
         });
     }
 
+
     render() {
         return (
             <div>
@@ -286,15 +326,14 @@ class AyudaEconomica extends React.Component {
                                         <Panel.Heading> Búsqueda </Panel.Heading>
                                         <Panel.Body>
                                             <div className="form-group">
-                                                <label> Código </label>
-                                                <Select
-                                                    value={ this.state.codigoSelect }
-                                                    onChange={ this.handleCodigo }
-                                                    valueKey={ "codigo" }
-                                                    labelKey={ "codigo" }
-                                                    options={ this.state.listaCBCodigo }
-                                                    clearable={ false }
-                                                />
+                                                <label> Código </label><Select
+                                                value={ this.state.codigoSelect }
+                                                onChange={ this.handleCodigo }
+                                                valueKey={ "codigo" }
+                                                labelKey={ "codigo" }
+                                                options={ this.state.listaCBCodigo }
+                                                clearable={ true }
+                                            />
                                             </div>
                                             <div className="form-group">
                                                 <label> Investigación </label>
@@ -304,8 +343,9 @@ class AyudaEconomica extends React.Component {
                                                     valueKey={ "titulo" }
                                                     labelKey={ "titulo" }
                                                     options={ this.state.listaCBInvestigaciones }
-                                                    clearable={ false }
+                                                    clearable={ true }
                                                 />
+
                                             </div>
                                             <div className="form-group">
                                                 <label> Profesor </label>
@@ -315,8 +355,9 @@ class AyudaEconomica extends React.Component {
                                                     valueKey={ "nombres" }
                                                     labelKey={ "nombres" }
                                                     options={ this.state.listaCBProfesor }
-                                                    clearable={ false }
+                                                    clearable={ true }
                                                 />
+
                                             </div>
                                             <div className="form-group">
                                                 <label> Sección </label>
@@ -326,8 +367,9 @@ class AyudaEconomica extends React.Component {
                                                     valueKey={ "seccion" }
                                                     labelKey={ "seccion" }
                                                     options={ this.state.listaCBSeccion }
-                                                    clearable={ false }
+                                                    clearable={ true }
                                                 />
+
                                             </div>
                                             <div className="form-group">
                                                 <label> Motivo </label>
@@ -337,7 +379,7 @@ class AyudaEconomica extends React.Component {
                                                     valueKey={ "motivo" }
                                                     labelKey={ "motivo" }
                                                     options={ this.state.listaCBMotivo }
-                                                    clearable={ false }
+                                                    clearable={ true }
                                                 />
                                             </div>
                                             <div className="form-group">
@@ -348,8 +390,9 @@ class AyudaEconomica extends React.Component {
                                                     valueKey={ "estado" }
                                                     labelKey={ "estado" }
                                                     options={ this.state.listaCBEstado }
-                                                    clearable={ false }
+                                                    clearable={ true }
                                                 />
+
                                             </div>
 
                                             <div className="form-group">
