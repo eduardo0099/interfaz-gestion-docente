@@ -21,8 +21,6 @@ class BodySidebar extends Component {
       //Jefe departamento
       return (
           <div className="bodySidebar">
-            <Link to="/home" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Inicio</Link>
-            <div className="divider"/>
             <Link to="/dashboard" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Dashboard</Link>
             <div className="divider"/>
             <Link to="/profesores" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Profesores</Link>
