@@ -99,7 +99,7 @@ class SignIn extends Component {
 	render(){
 		if(this.state.auth == true || localStorage.getItem('jwt')!= null){
 			//ME DIRIJA A /HOME
-			window.location.href = "/home";
+			window.location.href = "/dashboard";
 		}
 			return (
 				<div>
