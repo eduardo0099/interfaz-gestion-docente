@@ -22,7 +22,7 @@ class ListaProfesores extends Component {
       error: '',
       profesores: [],
       profesoresAux: [],
-        profeFilter: [],
+      profeFilter: [],
       profeText: '',
       codigoText: '',
       filtroSeccionKey: 'Todos',
@@ -31,9 +31,8 @@ class ListaProfesores extends Component {
       secciones: [],
       auth: false,
       verAuth: false,
-        profeNomFilter : -1,
-        profeCodFilter : -1
-
+      profeNomFilter : -1,
+      profeCodFilter : -1
     }
   }
 
@@ -117,17 +116,20 @@ class ListaProfesores extends Component {
         })
     }
     else if( (e.target.value != '') &&  (this.state.codigoText == '') ) {//el filtro tiene algo
-        console.log("2..")
+      console.log("2..")
       var aux = this.state.profesoresAux.filter((d) => {
           console.log(e.target.value)
         return d.nombre.toUpperCase().indexOf(e.target.value.toUpperCase()) !== - 1
       });
+        this.setState({
+            profeFilter: aux
+        })
     }
     else if( (e.target.value != '') &&  (this.state.codigoText != '') ) {//el filtro tiene algo
       console.log("3..",this.state.profesores)
-        var aux = this.state.profesoresAux.filter((d) => {
-            console.log(e.target.value.toUpperCase())
-            return d.nombre.toUpperCase().indexOf(e.target.value.toUpperCase()) !== - 1
+      var aux = this.state. profeFilter.filter((d) => {
+          console.log(e.target.value.toUpperCase())
+          return d.nombre.toUpperCase().indexOf(e.target.value.toUpperCase()) !== - 1
         });
     }
     else if( (e.target.value == '') &&  (this.state.codigoText != '') ) {//el filtro tiene algo
@@ -139,8 +141,7 @@ class ListaProfesores extends Component {
     }
     this.setState({
       profesores: aux,
-
-        profeText: e.target.value
+      profeText: e.target.value
     })
   }
 
@@ -157,10 +158,13 @@ class ListaProfesores extends Component {
       var aux = this.state.profesoresAux.filter((d) => {
         return d.codigo.toString().indexOf(e.target.value.toString()) !== - 1
       });
+        this.setState({
+            profeFilter: aux
+        })
     }
     else if( (this.state.profeText != '') &&  (e.target.value != '') ) {//el filtro tiene algo
         console.log("B",this.state.profesoresAux)
-      var aux = this.state.profesoresAux.filter((d) => {
+      var aux = this.state.profeFilter.filter((d) => {
             return d.codigo.toString().indexOf(e.target.value.toString()) !== - 1
         });
     }
@@ -172,8 +176,8 @@ class ListaProfesores extends Component {
         });
     }
     this.setState({
-      profesores: aux,
-        codigoText: e.target.value
+        profesores: aux,
+        codigoText: e.target.value,
     })
   }
 
