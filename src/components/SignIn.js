@@ -97,9 +97,29 @@ class SignIn extends Component {
   	
 
 	render(){
+
+        var tipoUser = 0;
+        var unidad = 0;
+        if (localStorage.getItem('u') != null) {
+            var usuario = JSON.parse(atob(localStorage.getItem('u')));
+            tipoUser = usuario.tipo_usuario;
+            unidad = usuario.unidad;
+            console.log("Tipo",tipoUser);
+            console.log("Unidad", unidad)
+        }
+
 		if(this.state.auth == true || localStorage.getItem('jwt')!= null){
-			//ME DIRIJA A /HOME
-			window.location.href = "/dashboard";
+			//ME DIRIJA A /dasboard o /profesores dependiendo el tipo de usuario
+
+			//Asistente de seccion
+			if(tipoUser == 5){
+                window.location.href = "/profesores";
+			}
+			else{
+                window.location.href = "/dashboard";
+			}
+
+
 		}
 			return (
 				<div>
