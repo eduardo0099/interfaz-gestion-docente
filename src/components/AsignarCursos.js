@@ -3,19 +3,19 @@ import { Tabs, Tab, Col, Grid, Row, FormGroup, ControlLabel, FormControl, Form, 
 import BaseContainer from './BaseContainer';
 import BootstrapTable from 'react-bootstrap-table-next';
 import API from '../api';
-import {Redirect} from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 
 class AsignarCursos extends Component {
     constructor(props) {
         super(props);
         //this.handleOnModalCurso=this.handleOnModalCurso.bind(this);
-        this.closeModalCurso=this.closeModalCurso.bind(this);
+        this.closeModalCurso = this.closeModalCurso.bind(this);
         this.totalCursosXciclo = [];
 
         this.state = {
-            auth:false,
-            verAuth:false,
+            auth: false,
+            verAuth: false,
             cursos: [],
             listaSeccioneskey1: [],
             filtroSeccionkey1: "todos",
@@ -27,10 +27,10 @@ class AsignarCursos extends Component {
             filtro1: -1,
             listaFiltrada1: [],
             showAsignar: false,
-            cursoSeleccionado:"",
-            showModalCurso:false,
-            listaDocenteCurso:[{nombre:"",tipo:"",ciclo1:"",ciclo2:""}],
-            listaDocentesTotal:[],
+            cursoSeleccionado: "",
+            showModalCurso: false,
+            listaDocenteCurso: [{ nombre: "", tipo: "", ciclo1: "", ciclo2: "" }],
+            listaDocentesTotal: [],
 
             listaSecciones: [],
             filtroSeccion: "todos",
@@ -77,7 +77,7 @@ class AsignarCursos extends Component {
                 }
             }).then(resp => {
                 console.log("resp asignar", resp.data);
-                this.setState({ auth: resp.data.permiso,verAuth:true });
+                this.setState({ auth: resp.data.permiso, verAuth: true });
             }).catch(err => {
                 alert("No tiene permisos");
             })
@@ -87,14 +87,14 @@ class AsignarCursos extends Component {
     componentDidMount() {
         console.log(this.state.filtroCiclo);
         let user = JSON.parse(atob(localStorage.getItem('u')));
-        if(user.unidad == 2 && user.tipo_usuario == 3){
+        if (user.unidad == 2 && user.tipo_usuario == 3) {
             API.get('asignacionHorarios/listaCursosDisponible', { params: { ciclo: this.state.filtroCiclo } })
                 .then(response => {
                     this.totalCursosXciclo = response.data.cursos;
                     let aux = [];
                     for (let i = 0; i < response.data.cursos.length; i++) {
                         aux.push(response.data.cursos[i].seccion);
-                    }   
+                    }
                     this.setState({ dataTablaAsignacion: response.data.cursos, listaSecciones: Array.from(new Set(aux)) });
                 })
                 .catch(error => {
@@ -150,12 +150,10 @@ class AsignarCursos extends Component {
                             lista.push(obj);
                         }
                     }
-                    //console.log("lista sin filtrar:",lista);
-                    //console.log("lista sin filtrar:",onlyUnique(lista));
                     this.setState({
                         listaProfesoresTotal: Array.from(new Set(listaCur)),
-                        listaProfesoresParcial:Array.from(new Set(listaCur)),
-                        listaDocentesTotal:Array.from(new Set(lista)),
+                        listaProfesoresParcial: Array.from(new Set(listaCur)),
+                        listaDocentesTotal: Array.from(new Set(lista)),
                         listaSeccioneskey1: Array.from(new Set(aux))
                     })
                 })
@@ -174,19 +172,42 @@ class AsignarCursos extends Component {
         }
     }
 
-    handleCrearNuevoHorario = () =>{
-        //Falta el api
-        console.log("horarios actuales",this.state.datacodSeleccionado);
-        this.setState({datacodSeleccionado: this.state.datacodSeleccionado.concat({
-            numHorario: "99",
-            id:this.state.datacodSeleccionado.length,
-            codigo: "",
-            nombre: "",
-            horasAsignadas: ""
-        })});
+    handleEliminarHorario = () => {
+        API.post('asignacionHorarios/eliminaHorarioCurso', {
+            curso: this.state.codSeleccionado[0],
+            ciclo: this.state.filtroCicloRes,
+            horEli: this.state.horSeleccionado[0]
+        }).then(res => {
+            alert("Se la eliminado correctamente");
+        }).catch(err => {
+            alert("Ha ocurrido un error");
+        })
     }
 
-    handleActualizarProfesor = () =>{
+    handleCrearNuevoHorario = () => {
+        console.log("manda",this.state.codSeleccionado[0],this.state.filtroCicloRes);
+        //Falta el api
+        API.post('asignacionHorarios/insertaNuevoHorarioCurso', {
+            curso: this.state.codSeleccionado[0],
+            ciclo: this.state.filtroCicloRes
+        }).then(resp => {
+            this.setState({
+                datacodSeleccionado: this.state.datacodSeleccionado.concat({
+                    numHorario: resp.data.num_horarios,
+                    id: this.state.datacodSeleccionado.length,
+                    codigo: "",
+                    nombre: "",
+                    horasAsignadas: ""
+                })
+            });
+        })
+        //curso, ciclo
+        //curso, ciclo, horEli
+
+
+    }
+
+    handleActualizarProfesor = () => {
 
     }
 
@@ -208,14 +229,9 @@ class AsignarCursos extends Component {
     };
 
     handleAsignar = () => {
-        /*
-       obj.codigo = "";
-               obj.nombre = "";
-               obj.horasAsignadas = "";
-               */
-        if(!this.state.actualizarProfe){
+        if (!this.state.actualizarProfe) {
             let user = JSON.parse(atob(localStorage.getItem('u')));
-            if(user.unidad == 2 && user.tipo_usuario == 3){
+            if (user.unidad == 2 && user.tipo_usuario == 3) {
                 if (this.state.asigHorasModal > 0 && this.state.codigoProfSelec != "") {
                     API.post('asignacionHorarios/asignarDocenteHorario', {
                         codigoDocente: this.state.codigoProfSelec,
@@ -245,12 +261,12 @@ class AsignarCursos extends Component {
                     alert("Falta agregar datos")
                 }
             }
-        }else{
+        } else {
             //Actualiza
             let user = JSON.parse(atob(localStorage.getItem('u')));
-            if(user.unidad == 2 && user.tipo_usuario == 3){
+            if (user.unidad == 2 && user.tipo_usuario == 3) {
                 if (this.state.asigHorasModal > 0 && this.state.codigoProfSelec != "") {
-                    API.post('asignacionHorarios/actualizarDocenteHorario', {
+                    API.post('asignacionHorarios/actualizaDocenteHorario', {
                         codigoDocente: this.state.codigoProfSelec,
                         codCurso: this.state.codSeleccionado,
                         numHorario: this.state.datacodSeleccionado[this.state.horSeleccionado[0]].numHorario,
@@ -285,7 +301,7 @@ class AsignarCursos extends Component {
     handleShow = () => {
         let index = this.state.horSeleccionado[0];
         let user = JSON.parse(atob(localStorage.getItem('u')));
-        if(user.unidad == 2 && user.tipo_usuario == 3){
+        if (user.unidad == 2 && user.tipo_usuario == 3) {
             API.get('asignacionHorarios/listaDocenteAsignar', {
                 params: {
                     codCur: this.state.codSeleccionado,
@@ -293,10 +309,10 @@ class AsignarCursos extends Component {
                 }
             })
                 .then(response => {
-                    if(
-                    this.state.datacodSeleccionado[index].codigo != "" &&
-                    this.state.datacodSeleccionado[index].nombre != "" &&
-                    this.state.datacodSeleccionado[index].horasAsignadas != ""){
+                    if (
+                        this.state.datacodSeleccionado[index].codigo != "" &&
+                        this.state.datacodSeleccionado[index].nombre != "" &&
+                        this.state.datacodSeleccionado[index].horasAsignadas != "") {
                         let profSelec = response.data.general.find(doc => doc.codigo == this.state.datacodSeleccionado[index].codigo);
                         this.setState({
                             actualizarProfe: true,
@@ -310,17 +326,17 @@ class AsignarCursos extends Component {
                             asigHorasModal: this.state.datacodSeleccionado[index].horasAsignadas,
                             horasTProfSelec: profSelec.horasAsignadas,
                         });
-                    }else{
+                    } else {
                         this.setState({
                             showAsignar: true,
                             maxHorasModal: this.state.dataTablaAsignacion.find(curso => curso.codigo === this.state.codSeleccionado[0]).horas,
                             docentesPrefModal: response.data.preferencia,
                             docentesGeneralModal: response.data.general,
                             mostrarPreferencias: true,
-                            
+
                         });
                     }
-                    
+
                 })
                 .catch(error => {
                     alert("Ha ocurrido un error, intentelo luego");
@@ -333,7 +349,7 @@ class AsignarCursos extends Component {
     handleFiltroCicloRes = e => {
         let newCicloRes = e.target.value;
         let user = JSON.parse(atob(localStorage.getItem('u')));
-        if(user.unidad == 2 && user.tipo_usuario == 3){
+        if (user.unidad == 2 && user.tipo_usuario == 3) {
             API.get('asignacionHorarios/listaDocenteCargaAsignada', {
                 params: { ciclo: newCicloRes }
             }).then(res => {
@@ -398,7 +414,7 @@ class AsignarCursos extends Component {
         let newFiltroCiclo = e.target.value;
         console.log(newFiltroCiclo);
         let user = JSON.parse(atob(localStorage.getItem('u')));
-        if(user.unidad == 2 && user.tipo_usuario == 3){
+        if (user.unidad == 2 && user.tipo_usuario == 3) {
             API.get('asignacionHorarios/listaCursosDisponible', {
                 params: {
                     ciclo: newFiltroCiclo
@@ -426,7 +442,7 @@ class AsignarCursos extends Component {
 
     handleOnSelectCurso = (row) => {
         let user = JSON.parse(atob(localStorage.getItem('u')));
-        if(user.unidad == 2 && user.tipo_usuario == 3){
+        if (user.unidad == 2 && user.tipo_usuario == 3) {
             API.get('asignacionHorarios/horariosCursoDisponible', {
                 params: {
                     codCur: row.codigo,
@@ -466,10 +482,11 @@ class AsignarCursos extends Component {
                     console.log("datacodSeleccionado", auxHor);
                     this.setState({ codSeleccionado: [row.codigo], datacodSeleccionado: auxHor, horSeleccionado: [] });
                 }).catch(error => {
-                alert("Ha ocurrido un error, intentelo luego");
-                console.log(error);
-            });
+                    alert("Ha ocurrido un error, intentelo luego");
+                    console.log(error);
+                });
         }
+
 
     };
 
@@ -501,7 +518,7 @@ class AsignarCursos extends Component {
 
     handleVerDetalles = () => {
         let user = JSON.parse(atob(localStorage.getItem('u')));
-        if(user.unidad == 2 && user.tipo_usuario == 3){
+        if (user.unidad == 2 && user.tipo_usuario == 3) {
             API.get('asignacionHorarios/detalleCargaDocenteAsignado', {
                 params: {
                     codDocente: this.state.resSeleccionado[0],
@@ -553,23 +570,23 @@ class AsignarCursos extends Component {
         })
     }
 
-    handleOnModalCurso=(row)=>{
-        let lista=this.state.listaDocentesTotal.filter((d) => {
-            return d.codigo.toUpperCase().indexOf(row.codigo.toUpperCase())!==-1
+    handleOnModalCurso = (row) => {
+        let lista = this.state.listaDocentesTotal.filter((d) => {
+            return d.codigo.toUpperCase().indexOf(row.codigo.toUpperCase()) !== -1
         });
         this.setState({
-            showModalCurso:true,
-            cursoSeleccionado:row.codigo,
-            listaDocenteCurso:lista
+            showModalCurso: true,
+            cursoSeleccionado: row.codigo,
+            listaDocenteCurso: lista
         })
-
-
     }
 
-    closeModalCurso(){
+    
+
+    closeModalCurso() {
         this.setState({
-            showModalCurso:false,
-        })
+            showModalCurso: false,
+        });
     }
 
     render() {
@@ -585,8 +602,8 @@ class AsignarCursos extends Component {
             { text: 'Clase', dataField: 'claseCurso' }
         ];
 
-        const selectRowVistaProf={
-            mode:'radio',
+        const selectRowVistaProf = {
+            mode: 'radio',
             selected: this.state.cursoSeleccionado,
             clickToSelect: true,
             onSelect: this.handleOnModalCurso,
@@ -669,7 +686,7 @@ class AsignarCursos extends Component {
             bgColor: '#edeaea'
         };
 
-        const columnasDocentes=[
+        const columnasDocentes = [
             { text: 'Profesor', dataField: 'nombre' },
             { text: 'Tipo', dataField: 'tipo' },
             { text: 'Ciclo_1', dataField: 'ciclo1' },
@@ -686,11 +703,13 @@ class AsignarCursos extends Component {
             bgColor: '#edeaea'
         };
         const user = JSON.parse(atob(localStorage.getItem('u')));
-        if(!(user.unidad == 2 && user.tipo_usuario == 3)){ /* Si no es JD de Economia, lo manda al home*/
-            return(<Redirect to="/home"/>);
+
+        if (!(user.unidad == 2 && user.tipo_usuario == 3)) { /* Si no es JD de Economia, lo manda al home*/
+            return (<Redirect to="/home" />);
+        } else if (!this.state.verAuth) {
+            return (<div />);
         }
-        else{
-            return (
+        return (
             <BaseContainer>
                 <div className="panel col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
                     <div className="panel-heading">
@@ -699,41 +718,41 @@ class AsignarCursos extends Component {
                     <div className="panel-body">
                     </div>
                     <Tabs
-                        activeKey={ this.state.key }
-                        onSelect={ this.handleSelect }
+                        activeKey={this.state.key}
+                        onSelect={this.handleSelect}
                         id="controlled-tab-example"
                     >
-                        <Tab eventKey={ 1 } title="Consulta de Preferencias">
+                        <Tab eventKey={1} title="Consulta de Preferencias">
 
                             <BaseContainer>
                                 <Grid>
-                                    <Col md={ 10 }>
+                                    <Col md={10}>
                                         <Form horizontal>
                                             <FormGroup controlId="formHorizontalSeccion">
-                                                <Col componentClass={ ControlLabel } sm={ 1 }>
+                                                <Col componentClass={ControlLabel} sm={1}>
                                                     Seccion:
                                                 </Col>
-                                                <Col sm={ 3 }>
+                                                <Col sm={3}>
                                                     <FormControl componentClass="select" placeholder="select"
-                                                                 onChange={ this.handleFiltroSeccionkey1 }
-                                                                 value={ this.state.filtroSeccionkey1 }>
+                                                        onChange={this.handleFiltroSeccionkey1}
+                                                        value={this.state.filtroSeccionkey1}>
                                                         <option value="todos">Todos</option>
-                                                        { this.state.listaSeccioneskey1.map((item, index) => {
-                                                            return <option key={ index } value={ item }>{ item }</option>
-                                                        }) }
+                                                        {this.state.listaSeccioneskey1.map((item, index) => {
+                                                            return <option key={index} value={item}>{item}</option>
+                                                        })}
                                                     </FormControl>
                                                 </Col>
-                                                <Col sm={ 4 }>
+                                                <Col sm={4}>
                                                     <FormControl type="text" placeholder="Buscar Curso"
-                                                                 value={ this.state.cursoText }
-                                                                 onChange={ this.busquedaCurso.bind(this) }/>
+                                                        value={this.state.cursoText}
+                                                        onChange={this.busquedaCurso.bind(this)} />
                                                 </Col>
                                             </FormGroup>
                                         </Form>
                                     </Col>
-                                    <Col md={ 10 }>
-                                        <BootstrapTable selectRow={ selectRowVistaProf } keyField='codigo' data={ this.state.listaProfesoresParcial }
-                                                        columns={ columnasPreferencias }/>
+                                    <Col md={10}>
+                                        <BootstrapTable selectRow={selectRowVistaProf} keyField='codigo' data={this.state.listaProfesoresParcial}
+                                            columns={columnasPreferencias} />
                                     </Col>
                                     <Modal show={this.state.showModalCurso}>
                                         <Modal.Header>
@@ -741,7 +760,7 @@ class AsignarCursos extends Component {
                                         </Modal.Header>
                                         <Modal.Body>
                                             <h4>Lista Docentes</h4>
-                                            <BootstrapTable keyField='nombre' data={this.state.listaDocenteCurso} columns={columnasDocentes}/>
+                                            <BootstrapTable keyField='nombre' data={this.state.listaDocenteCurso} columns={columnasDocentes} />
                                         </Modal.Body>
                                         <Modal.Footer>
                                             <Button onClick={this.closeModalCurso}>Cerrar</Button>
@@ -752,171 +771,172 @@ class AsignarCursos extends Component {
 
 
                         </Tab>
-                        <Tab eventKey={ 2 } title="Asignacion de cursos">
-                            <div style={ { "padding": "1em" } }>
+                        <Tab eventKey={2} title="Asignacion de cursos">
+                            <div style={{ "padding": "1em" }}>
                                 <Grid>
                                     <Row>
-                                        <Col md={ 10 }>
+                                        <Col md={10}>
                                             <Form horizontal>
-                                                <Col md={ 3 }>
-                                                        <FormGroup controlId="formHorizontalSeccion">
-                                                            <Col componentClass={ ControlLabel } sm={ 2 }>
-                                                                Ciclo:
+                                                <Col md={3}>
+                                                    <FormGroup controlId="formHorizontalSeccion">
+                                                        <Col componentClass={ControlLabel} sm={2}>
+                                                            Ciclo:
                                                             </Col>
-                                                            <Col sm={ 10 }>
-                                                                <FormControl componentClass="select" placeholder="select" onChange={ this.handleFiltroCiclo } value={ this.state.filtroCiclo }>
-                                                                    <option value="2018-1">2018-1</option>
-                                                                    <option value="2018-2">2018-2</option>
-                                                                </FormControl>
-                                                            </Col>
-                                                        </FormGroup>
+                                                        <Col sm={10}>
+                                                            <FormControl componentClass="select" placeholder="select" onChange={this.handleFiltroCiclo} value={this.state.filtroCiclo}>
+                                                                <option value="2018-1">2018-1</option>
+                                                                <option value="2018-2">2018-2</option>
+                                                            </FormControl>
+                                                        </Col>
+                                                    </FormGroup>
                                                 </Col>
-                                                <Col md={ 4 }>
-                                                        <FormGroup controlId="formHorizontalSeccion">
-                                                            <Col componentClass={ ControlLabel } sm={ 2 }>
-                                                                Sección:
+                                                <Col md={4}>
+                                                    <FormGroup controlId="formHorizontalSeccion">
+                                                        <Col componentClass={ControlLabel} sm={2}>
+                                                            Sección:
                                                             </Col>
-                                                            <Col sm={ 10 }>
-                                                                <FormControl componentClass="select" placeholder="select" onChange={ this.handleFiltroSeccion } value={ this.state.filtroSeccion }>
-                                                                    <option value="todos">Todos</option>
-                                                                    { this.state.listaSecciones.map((item, index) => {
-                                                                        return <option key={ index } value={ item }>{ item }</option>
-                                                                    }) }
-                                                                </FormControl>
-                                                            </Col>
-                                                        </FormGroup>
+                                                        <Col sm={10}>
+                                                            <FormControl componentClass="select" placeholder="select" onChange={this.handleFiltroSeccion} value={this.state.filtroSeccion}>
+                                                                <option value="todos">Todos</option>
+                                                                {this.state.listaSecciones.map((item, index) => {
+                                                                    return <option key={index} value={item}>{item}</option>
+                                                                })}
+                                                            </FormControl>
+                                                        </Col>
+                                                    </FormGroup>
                                                 </Col>
-                                                <Col md={ 3 } >
-                                                        <FormGroup controlId="formHorizontalBuscarCurso">
-                                                            <Col sm={ 12  }>
-                                                                <FormControl type="curso" placeholder="Buscar curso"/>
-                                                            </Col>
-                                                        </FormGroup>
+                                                <Col md={3} >
+                                                    <FormGroup controlId="formHorizontalBuscarCurso">
+                                                        <Col sm={12}>
+                                                            <FormControl type="curso" placeholder="Buscar curso" />
+                                                        </Col>
+                                                    </FormGroup>
                                                 </Col>
                                             </Form>
                                         </Col>
                                     </Row>
                                     <Row>
-                                        <Col md={ 10 }>
+                                        <Col md={10}>
                                             <BootstrapTable
                                                 keyField='codigo'
-                                                data={ this.state.dataTablaAsignacion }
-                                                columns={ columnsTodo }
-                                                selectRow={ selectRowTodo }
+                                                data={this.state.dataTablaAsignacion}
+                                                columns={columnsTodo}
+                                                selectRow={selectRowTodo}
                                             />
                                         </Col>
                                     </Row>
-                                    { this.state.codSeleccionado !== "" ?
+                                    {this.state.codSeleccionado !== "" ?
                                         <span>
-                <Row>
-                  <Col md={ 10 }>
-                  <Button bsStyle="primary" disabled={ !this.state.codSeleccionado.length } onClick={ this.handleCrearNuevoHorario }>Agregar nuevo horario</Button>
-                    <h4>Horarios del curso seleccionado:</h4>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col md={ 10 }>
-                    <BootstrapTable
-                        keyField='id'
-                        data={ this.state.datacodSeleccionado }
-                        columns={ columnsHor }
-                        selectRow={ selectRowHor }
-                    />
-                  </Col>
-                </Row>
-                <Row>
-                  <Col md={ 10 } mdOffset={ 1 }>
-                    <Button bsStyle="primary" disabled={ !this.state.horSeleccionado.length } onClick={ this.handleShow }>Asignar Profesores</Button>
-                      { console.log("ez??", this.state.horSeleccionado) }
-                      { this.state.horSeleccionado.length !== 0 ?
-                          <Modal show={ this.state.showAsignar } onHide={ this.handleClose }>
-                              <Modal.Header closeButton>
-                                  <Modal.Title>Asignar profesor al curso { this.state.codSeleccionado } en el horario { this.state.datacodSeleccionado[this.state.horSeleccionado[0]].numHorario }</Modal.Title>
-                              </Modal.Header>
-                              <Modal.Body>
-                                  <h4>Lista de profesores:</h4>
-                                  <FormControl componentClass="select" placeholder="vacioprof" onChange={ this.handleSelecionarProfeAsig }>
-                                      <option value="vacioprof">Seleccionar</option>
-                                      { this.state.mostrarPreferencias ?
-                                          this.state.docentesPrefModal.map((item, index) => {
-                                              return <option key={ index } value={ item.codigo }>{ `${item.nombre},${item.tipo},${item.encuesta}` }</option>
-                                          })
-                                          :
-                                          this.state.docentesGeneralModal.map((item, index) => {
-                                              return <option key={ index } value={ item.codigo }>{ `${item.nombre},${item.tipo},${item.encuesta}` }</option>
-                                          })
-                                      }
-                                  </FormControl>
-                                  <Checkbox checked={ this.state.mostrarPreferencias } onChange={ this.handleChangeListaPreferencias }>
-                                      Mostrar solo preferencias
+                                            <Row>
+                                                <Col md={10}>
+                                                    <Button bsStyle="primary" disabled={!this.state.codSeleccionado.length} onClick={this.handleCrearNuevoHorario}>Agregar nuevo horario</Button>
+                                                    <h4>Horarios del curso seleccionado:</h4>
+                                                </Col>
+                                            </Row>
+                                            <Row>
+                                                <Col md={10}>
+                                                    <BootstrapTable
+                                                        keyField='id'
+                                                        data={this.state.datacodSeleccionado}
+                                                        columns={columnsHor}
+                                                        selectRow={selectRowHor}
+                                                    />
+                                                </Col>
+                                            </Row>
+                                            <Row>
+                                                <Col md={10} mdOffset={1}>
+                                                    <Button bsStyle="primary" disabled={!this.state.horSeleccionado.length} onClick={this.handleShow}>Asignar Profesores</Button>
+                                                    <Button bsStyle="primary" disabled={!this.state.horSeleccionado.length} onClick={this.handleEliminarHorario}>Eliminar Horario</Button>
+                                                    {console.log("ez??", this.state.horSeleccionado)}
+                                                    {this.state.horSeleccionado.length !== 0 ?
+                                                        <Modal show={this.state.showAsignar} onHide={this.handleClose}>
+                                                            <Modal.Header closeButton>
+                                                                <Modal.Title>Asignar profesor al curso {this.state.codSeleccionado} en el horario {this.state.datacodSeleccionado[this.state.horSeleccionado[0]].numHorario}</Modal.Title>
+                                                            </Modal.Header>
+                                                            <Modal.Body>
+                                                                <h4>Lista de profesores:</h4>
+                                                                <FormControl componentClass="select" placeholder="vacioprof" onChange={this.handleSelecionarProfeAsig}>
+                                                                    <option value="vacioprof">Seleccionar</option>
+                                                                    {this.state.mostrarPreferencias ?
+                                                                        this.state.docentesPrefModal.map((item, index) => {
+                                                                            return <option key={index} value={item.codigo}>{`${item.nombre},${item.tipo},${item.encuesta}`}</option>
+                                                                        })
+                                                                        :
+                                                                        this.state.docentesGeneralModal.map((item, index) => {
+                                                                            return <option key={index} value={item.codigo}>{`${item.nombre},${item.tipo},${item.encuesta}`}</option>
+                                                                        })
+                                                                    }
+                                                                </FormControl>
+                                                                <Checkbox checked={this.state.mostrarPreferencias} onChange={this.handleChangeListaPreferencias}>
+                                                                    Mostrar solo preferencias
                                   </Checkbox>
-                                  <hr/>
-                                  <h4>Datos del profesor:</h4>
-                                  <Form horizontal>
-                                      <FormGroup controlId="formHorizontal1">
-                                          <Col componentClass={ ControlLabel } sm={ 2 }>
-                                              Codigo:
+                                                                <hr />
+                                                                <h4>Datos del profesor:</h4>
+                                                                <Form horizontal>
+                                                                    <FormGroup controlId="formHorizontal1">
+                                                                        <Col componentClass={ControlLabel} sm={2}>
+                                                                            Codigo:
                                           </Col>
-                                          <Col sm={ 10 }>
-                                              <FormControl readOnly type="text" value={ this.state.codigoProfSelec } placeholder="Codigo del profesor"/>
+                                                                        <Col sm={10}>
+                                                                            <FormControl readOnly type="text" value={this.state.codigoProfSelec} placeholder="Codigo del profesor" />
+                                                                        </Col>
+                                                                    </FormGroup>
+                                                                    <FormGroup controlId="formHorizontal2">
+                                                                        <Col componentClass={ControlLabel} sm={2}>
+                                                                            Nombre:
                                           </Col>
-                                      </FormGroup>
-                                      <FormGroup controlId="formHorizontal2">
-                                          <Col componentClass={ ControlLabel } sm={ 2 }>
-                                              Nombre:
+                                                                        <Col sm={10}>
+                                                                            <FormControl readOnly type="text" value={this.state.nombreProfSelec} placeholder="Nombre y apellidos del profesor" />
+                                                                        </Col>
+                                                                    </FormGroup>
+                                                                    <FormGroup controlId="formHorizontal2">
+                                                                        <Col componentClass={ControlLabel} sm={2}>
+                                                                            Total de horas:
                                           </Col>
-                                          <Col sm={ 10 }>
-                                              <FormControl readOnly type="text" value={ this.state.nombreProfSelec } placeholder="Nombre y apellidos del profesor"/>
+                                                                        <Col sm={10}>
+                                                                            <FormControl readOnly type="number" value={this.state.horasTProfSelec} placeholder="Horas asignadas en el ciclo" />
+                                                                        </Col>
+                                                                    </FormGroup>
+                                                                    <FormGroup controlId="formHorizontal3">
+                                                                        <Col componentClass={ControlLabel} sm={2}>
+                                                                            Horas a dictar:
                                           </Col>
-                                      </FormGroup>
-                                      <FormGroup controlId="formHorizontal2">
-                                          <Col componentClass={ ControlLabel } sm={ 2 }>
-                                              Total de horas:
-                                          </Col>
-                                          <Col sm={ 10 }>
-                                              <FormControl readOnly type="number" value={ this.state.horasTProfSelec } placeholder="Horas asignadas en el ciclo"/>
-                                          </Col>
-                                      </FormGroup>
-                                      <FormGroup controlId="formHorizontal3">
-                                          <Col componentClass={ ControlLabel } sm={ 2 }>
-                                              Horas a dictar:
-                                          </Col>
-                                          <Col sm={ 7 }>
-                                              <FormControl type="number" step={ 1 } min={ 1 } max={ this.state.maxHorasModal } value={ this.state.asigHorasModal } onChange={ this.handleAsigHoras }/>
-                                          </Col>
-                                          <Col sm={ 3 }>
-                                              <h4>Max horas:{ this.state.maxHorasModal }</h4>
-                                          </Col>
-                                      </FormGroup>
+                                                                        <Col sm={7}>
+                                                                            <FormControl type="number" step={1} min={1} max={this.state.maxHorasModal} value={this.state.asigHorasModal} onChange={this.handleAsigHoras} />
+                                                                        </Col>
+                                                                        <Col sm={3}>
+                                                                            <h4>Max horas:{this.state.maxHorasModal}</h4>
+                                                                        </Col>
+                                                                    </FormGroup>
 
-                                  </Form>
-                              </Modal.Body>
-                              <Modal.Footer>
-                                  <Button onClick={ this.handleAsignar }>Asignar</Button>
-                              </Modal.Footer>
-                          </Modal>
-                          : <span/> }
-                  </Col>
-                </Row>
-              </span>
-                                        : <span/> }
+                                                                </Form>
+                                                            </Modal.Body>
+                                                            <Modal.Footer>
+                                                                <Button onClick={this.handleAsignar}>Asignar</Button>
+                                                            </Modal.Footer>
+                                                        </Modal>
+                                                        : <span />}
+                                                </Col>
+                                            </Row>
+                                        </span>
+                                        : <span />}
                                 </Grid>
                             </div>
                         </Tab>
-                        <Tab eventKey={ 3 } title="Revision de carga">
-                            <FormControl componentClass="select" placeholder="select" onChange={ this.handleFiltroCicloRes } value={ this.state.filtroCicloRes }>
+                        <Tab eventKey={3} title="Revision de carga">
+                            <FormControl componentClass="select" placeholder="select" onChange={this.handleFiltroCicloRes} value={this.state.filtroCicloRes}>
                                 <option value="2018-1">2018-1</option>
                                 <option value="2018-2">2018-2</option>
                             </FormControl>
                             <BootstrapTable
                                 keyField='codigo'
-                                data={ this.state.resumenAsignacion }
-                                columns={ columnasResumen }
-                                selectRow={ selectRowRes }
+                                data={this.state.resumenAsignacion}
+                                columns={columnasResumen}
+                                selectRow={selectRowRes}
                             />
-                            <Button bsStyle="primary" disabled={ !this.state.resSeleccionado.length } onClick={ this.handleVerDetalles }>Ver detalles</Button>
-                            { this.state.resSeleccionado.length != 0 ?
-                                <Modal show={ this.state.showDetalle } onHide={ this.handleCloseRes }>
+                            <Button bsStyle="primary" disabled={!this.state.resSeleccionado.length} onClick={this.handleVerDetalles}>Ver detalles</Button>
+                            {this.state.resSeleccionado.length != 0 ?
+                                <Modal show={this.state.showDetalle} onHide={this.handleCloseRes}>
                                     <Modal.Header closeButton>
                                         <Modal.Title>Detalle de asignacion del docente</Modal.Title>
                                     </Modal.Header>
@@ -924,22 +944,22 @@ class AsignarCursos extends Component {
                                         <h4>Lista cursos</h4>
                                         <BootstrapTable
                                             keyField='codigo'
-                                            data={ this.state.detalleResSelec }
-                                            columns={ columnasResumenDet }
+                                            data={this.state.detalleResSelec}
+                                            columns={columnasResumenDet}
                                         />
                                     </Modal.Body>
                                     <Modal.Footer>
-                                        <Button onClick={ this.handleCloseRes }>Cerrar</Button>
+                                        <Button onClick={this.handleCloseRes}>Cerrar</Button>
                                     </Modal.Footer>
                                 </Modal>
-                                : <span/> }
+                                : <span />}
                         </Tab>
                     </Tabs>
                 </div>
             </BaseContainer>
         );
-        }
     }
 }
+
 
 export default AsignarCursos;
