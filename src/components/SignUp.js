@@ -261,16 +261,23 @@ class SignUp extends Component {
 								})}
 							</FormControl>
 						</FormGroup>
-						{this.state.listaSecc.length <= 1 ?
+						{(this.state.id_tipo_usuario == 3 || this.state.id_tipo_usuario == 4 || this.state.id_tipo_usuario == 0) ?
 							<span></span> :
-							<FormGroup controlId="formControlTipoSec">
-								<ControlLabel>Seleccione la seccion asociada</ControlLabel>
-								<FormControl componentClass="select" onChange={this.handleChangeVerSec} placeholder="Seleccione la seccion asociada">
-									{this.state.listaSecc.map((item, index) => {
-									return <option key={index} value={item.id}>{item.nombre}</option>
-								})}
-								</FormControl>
-							</FormGroup>
+							<span>
+							{
+								this.state.listaSecc.length <= 1 ?
+									<span></span> :
+									<FormGroup controlId="formControlTipoSec">
+										<ControlLabel>Seleccione la seccion asociada</ControlLabel>
+										<FormControl componentClass="select" onChange={this.handleChangeVerSec} placeholder="Seleccione la seccion asociada">
+											<option value="0">Seleccionar</option>
+											{this.state.listaSecc.map((item, index) => {
+												return <option key={index} value={item.id}>{item.nombre}</option>
+											})}
+										</FormControl>
+									</FormGroup>
+							}
+							</span>
 						}
 
 
