@@ -37,7 +37,7 @@ class SignIn extends Component {
 		if(e.keyCode == 13){
 			e.preventDefault();
   		if(this.state.codUser!="" && this.state.contrasena!=""){
-  			axios.post('http://200.16.7.151:80/auth/login',{
+  			API.post('auth/login',{
   				codigo: parseInt(this.state.codUser),
   				password: this.state.contrasena
   			}).then(resp => {
@@ -99,7 +99,7 @@ class SignIn extends Component {
 	render(){
 		if(this.state.auth == true || localStorage.getItem('jwt')!= null){
 			//ME DIRIJA A /HOME
-			window.location.href = "/home";
+			window.location.href = "/dashboard";
 		}
 			return (
 				<div>

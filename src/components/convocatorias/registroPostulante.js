@@ -28,6 +28,7 @@ class registroPostulante extends Component {
         this.doctoradoValidator = new SimpleReactValidator();
         this.diplomadoValidator = new SimpleReactValidator();
         this.state = {
+            idArchivo:'',
             paises:[],
             tipoDocList:[],
 
@@ -1133,6 +1134,24 @@ class registroPostulante extends Component {
         return valido;
     }
 
+    uploadFile = (e) => {
+        let file = e.target.files[0];
+        let formData = new FormData();
+        formData.append('file', file);
+        API.post('ayudasEconomicas/ayudasEconomicasAsistente/registrarArchivo',
+            formData,
+            {
+                headers: {'Content-Type': 'multipart/form-data'}
+            }
+        ).then(response =>{
+            console.log(response);
+            this.setState({idArchivo :response.data.id})
+        }).catch(error =>  {
+            alert("Ha ocurrido un error subiendo el archivo, intentelo luego",error);
+            console.log(error);
+        });
+    }
+
     render() {
 
         console.log(this.props)
@@ -1645,7 +1664,7 @@ class registroPostulante extends Component {
                                                 {this.tituloValidator.message('titulo.urlTesis', this.state.titulo.urlTesis, 'required', false, {required: 'Este campo es obligatorio'})}
 
                                                 <label> Archivo adjunto: </label>
-                                                <input type="file" name="datafile"/>
+                                                <input type="file" onChange={this.uploadFile}/>
                                                 <br></br>
                                                 <div className="m-t-md">
                                                     <BootstrapTable keyField='id' data={this.state.titulos} columns={tituloColumns}  rowEvents={tituloRowEvents} selectRow={tituloSelectRow}/>
@@ -1707,7 +1726,7 @@ class registroPostulante extends Component {
                                                 {this.maestriaValidator.message('maestria.urlTesis', this.state.maestria.urlTesis, 'required', false, {required: 'Este campo es obligatorio'})}
 
                                                 <label> Archivo adjunto: </label>
-                                                <input type="file" name="datafile"/>
+                                                <input type="file" onChange={this.uploadFile}/>
                                                 <br></br>
                                                 <div className="m-t-md">
                                                     <BootstrapTable keyField='id' data={this.state.maestrias} columns={maestriaColumns}  rowEvents={maestriaRowEvents} selectRow={maestriaSelectRow}/>
@@ -1770,7 +1789,7 @@ class registroPostulante extends Component {
 
 
                                                 <label> Archivo adjunto: </label>
-                                                <input type="file" name="datafile"/>
+                                                <input type="file" onChange={this.uploadFile}/>
                                                 <br></br>
                                                 <div className="m-t-md">
                                                     <BootstrapTable keyField='id' data={this.state.doctorados} columns={doctoradoColumns}  rowEvents={doctoradoRowEvents} selectRow={doctoradoSelectRow}/>
@@ -1833,7 +1852,7 @@ class registroPostulante extends Component {
 
 
                                                 <label> Archivo adjunto: </label>
-                                                <input type="file" name="datafile"/>
+                                                <input type="file" onChange={this.uploadFile}/>
                                                 <br></br>
                                                 <div className="m-t-md">
                                                     <BootstrapTable keyField='id' data={this.state.diplomados} columns={diplomadoColumns}  rowEvents={diplomadoRowEvents} selectRow={diplomadoSelectRow}/>
@@ -1891,7 +1910,7 @@ class registroPostulante extends Component {
                                                 {this.cargosValidator.message('cargoFFin', this.state.cargoFFin, 'required', false, {required: 'Este campo es obligatorio'})}
 
                                                 <label> Archivo: </label>
-                                                <input type="file" name="datafile"/>
+                                                <input type="file" onChange={this.uploadFile}/>
                                                 <br></br>
                                                 <div className="m-t-md">
                                                     <BootstrapTable keyField='id' data={this.state.cargos} columns={cargoColumns}  rowEvents={cargoRowEvents} selectRow={cargoSelectRow}/>
@@ -1950,7 +1969,7 @@ class registroPostulante extends Component {
                                                           onChange={this.handlePremioDescripcion}/>
                                                 {this.premiosValidator.message('premioDescripcion', this.state.premioDescripcion, 'required', false, {required: 'Este campo es obligatorio'})}
                                                 <label> Archivo: </label>
-                                                <input type="file" name="datafile"/>
+                                                <input type="file" onChange={this.uploadFile}/>
                                                 <br></br>
                                                 <div className="m-t-md">
                                                     <BootstrapTable keyField='id' data={this.state.premios} columns={premioColumns}  rowEvents={premioRowEvents} selectRow={premioSelectRow}/>
@@ -2032,7 +2051,7 @@ class registroPostulante extends Component {
                                     {this.invValidator.message('fechaInv', this.state.fechaInv, 'required', false, {required: 'Este campo es obligatorio'})}
 
                                     <label> Archivo: </label>
-                                    <input type="file" name="datafile"/>
+                                    <input type="file" onChange={this.uploadFile}/>
                                     <br></br>
                                     <div className="m-t-md">
                                         <BootstrapTable keyField='id' data={this.state.investigaciones} columns={columns}  rowEvents={rowEvents} selectRow={selectRow}/>

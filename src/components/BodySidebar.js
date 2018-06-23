@@ -24,8 +24,6 @@ class BodySidebar extends Component {
       if(unidad == 2){ // unidad = 2 => Economía
         return (
             <div className="bodySidebar">
-              <Link to="/home" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Inicio</Link>
-              <div className="divider"/>
               <Link to="/dashboard" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Dashboard</Link>
               <div className="divider"/>
               <Link to="/profesores" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Profesores</Link>
@@ -45,8 +43,6 @@ class BodySidebar extends Component {
       else{
         return (
             <div className="bodySidebar">
-              <Link to="/home" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Inicio</Link>
-              <div className="divider"/>
               <Link to="/dashboard" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Dashboard</Link>
               <div className="divider"/>
               <Link to="/profesores" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Profesores</Link>
@@ -61,12 +57,11 @@ class BodySidebar extends Component {
             </div>
         );
       }
+	  
     } else if (tipoUser == 2) {
       //Coordinador de seccion
       return (
           <div className="bodySidebar">
-            <Link to="/home" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Inicio</Link>
-            <div className="divider"/>
             <Link to="/dashboard" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Dashboard</Link>
             <div className="divider"/>
             <Link to="/profesores" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Profesores</Link>
@@ -78,12 +73,10 @@ class BodySidebar extends Component {
             <Link to="/preferenciaCursos" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Preferencia de Dictado</Link>
           </div>
       );
-    } else if (tipoUser == 3) {
+    } else if (tipoUser == 5) {
       //Asistente de seccion
       return (
           <div className="bodySidebar">
-            <Link to="/home" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Inicio</Link>
-            <div className="divider"/>
             <Link to="/profesores" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Profesores</Link>
             <div className="divider"/>
             <Link to="/convocatorias" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Convocatorias</Link>
@@ -97,8 +90,6 @@ class BodySidebar extends Component {
       //Asistente de departamento
       return (
           <div className="bodySidebar">
-            <Link to="/home" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Inicio</Link>
-            <div className="divider"/>
             <Link to="/dashboard" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Dashboard</Link>
             <div className="divider"/>
             <Link to="/profesores" onClick={() => this.props.handleMenu(false)} className="link-body-sidebar">Profesores</Link>
