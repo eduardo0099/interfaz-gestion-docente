@@ -16,8 +16,8 @@ class BodySidebar extends Component {
       var usuario = JSON.parse(atob(localStorage.getItem('u')));
       tipoUser = usuario.tipo_usuario;
       unidad = usuario.unidad;
-      console.log("Tipo",tipoUser);
-      console.log("Unidad", unidad)
+      //console.log("Tipo",tipoUser);
+      //console.log("Unidad", unidad)
     }
     if (tipoUser == 3) {
       //Jefe departamento
