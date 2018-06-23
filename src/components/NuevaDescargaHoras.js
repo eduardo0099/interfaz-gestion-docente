@@ -205,11 +205,11 @@ class NuevaDescargaHoras extends React.Component {
                             </fieldset>
                             <div className="row form-group">
                                 <label>Semana:</label>
-                                <input className="form-control" type="number" pattern="[0-9]*" onChange={this.changeSemana}></input>
+                                <input  className="form-control" type="number" pattern="[0-9]*" min={1} max={16} onChange={this.changeSemana}></input>
                             </div>
                             <div className="row form-group">
                                 <label>Horas:</label>
-                                <input className="form-control" type="number" pattern="[0-9]*" onChange={this.changeHoras}></input>
+                                <input  className="form-control" type="number" pattern="[0-9]*" min={1} max={4} onChange={this.changeHoras}></input>
                             </div>
                             <div className="row form-group">
                                 <label>Motivo:</label>
