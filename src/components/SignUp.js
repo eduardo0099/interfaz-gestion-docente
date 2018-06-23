@@ -99,6 +99,8 @@ class SignUp extends Component {
 
 		} else {
 			alert("Falta completar datos");
+            this.validator.showMessages();
+            this.forceUpdate();
 		}
 	}
 
@@ -174,7 +176,7 @@ class SignUp extends Component {
 								placeholder="Ingrese su nombre"
 								onChange={this.handleChangeNombres}
 							/>
-                            {this.validator1.message('nombres', this.state.nombres, 'required', false, {required: 'Este campo es obligatorio'})}
+                            {this.validator.message('nombres', this.state.nombres, 'required|max:50', false, {max:'Longitud maxima 50',required: 'Este campo es obligatorio'})}
 
 						</FormGroup>
 						<FormGroup controlId="formControlApePat" >
@@ -185,6 +187,7 @@ class SignUp extends Component {
 								placeholder="Ingrese su apellido paterno"
 								onChange={this.handleChangeApePat}
 							/>
+                            {this.validator.message('apellido_paterno', this.state.apellido_paterno, 'required|max:50', false, {max:'Longitud maxima 50',required: 'Este campo es obligatorio'})}
 						</FormGroup>
 						<FormGroup controlId="formControlApeMat" >
 							<ControlLabel>Apellido Materno</ControlLabel>
@@ -194,25 +197,29 @@ class SignUp extends Component {
 								placeholder="Ingrese su apellido materno"
 								onChange={this.handleChangeApeMat}
 							/>
+                            {this.validator.message('apellido_materno', this.state.apellido_materno, 'required|max:50', false, {max:'Longitud maxima 50',required: 'Este campo es obligatorio'})}
 						</FormGroup>
 						<FormGroup controlId="formControlDni" >
 							<ControlLabel>DNI</ControlLabel>
 							<FormControl
-								type="text"
+								type="number"
 								value={this.state.dni}
 								placeholder="Ingrese su DNI"
 								onChange={this.handleChangeDNI}
 							/>
-						</FormGroup>
+                            {this.validator.message('dni', this.state.dni, 'required|min:8|max:8', false, {required: 'Este campo es obligatorio',min: 'dni debe tener 8 digitos',max: 'dni debe tener 9 digitos'})}
+                        </FormGroup>
 						<FormGroup controlId="formControlTelf" >
 							<ControlLabel>Telefono</ControlLabel>
 							<FormControl
-								type="text"
+								type="number"
 								value={this.state.telefono}
 								placeholder="Ingrese su telefono"
 								onChange={this.handleChangeTelf}
 							/>
-						</FormGroup>
+                            {this.validator.message('telefono', this.state.telefono, 'required|min:9|max:9', false, {required: 'Este campo es obligatorio',min: 'telefono debe tener 9 digitos',max: 'telefono debe tener 9 digitos'})}
+
+                        </FormGroup>
 						<FormGroup controlId="formControlEmail" >
 							<ControlLabel>Email</ControlLabel>
 							<FormControl
@@ -221,16 +228,18 @@ class SignUp extends Component {
 								placeholder="Ingrese su email"
 								onChange={this.handleChangeCorreo}
 							/>
-						</FormGroup>
+                            {this.validator.message('correo', this.state.correo, 'required|email|max:50', false, {max:'Longitud maxima 50',required: 'Este campo es obligatorio',email: 'email no valido'})}
+                        </FormGroup>
 						<FormGroup controlId="formControlCodPuc" >
 							<ControlLabel>Codigo PUCP</ControlLabel>
 							<FormControl
-								type="text"
+								type="number"
 								value={this.state.codigo}
 								placeholder="Ingrese su codigo PUCP"
 								onChange={this.handleChangeCodigo}
 							/>
-						</FormGroup>
+                            {this.validator.message('codigo', this.state.codigo, 'required|min:8|max:8', false, {required: 'Este campo es obligatorio',min: 'codigo debe tener 8 digitos',max: 'codigo debe tener 8 digitos'})}
+                        </FormGroup>
 						<FormGroup controlId="formControlPassword" >
 							<ControlLabel>Contraseña</ControlLabel>
 							<FormControl
@@ -239,7 +248,8 @@ class SignUp extends Component {
 								placeholder="Ingresar contraseña"
 								onChange={this.handleChangeContra}
 							/>
-						</FormGroup>
+                            {this.validator.message('password', this.state.password, 'required|max:15', false, {required: 'Este campo es obligatorio',max: 'contraseña debe tener maximo 15 digitos'})}
+                        </FormGroup>
 
 						<Checkbox checked={this.state.verContraseña} onChange={this.handleChangeVerContra}>
 							Ver contraseña
