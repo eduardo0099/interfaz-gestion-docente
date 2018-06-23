@@ -86,90 +86,92 @@ class AsignarCursos extends Component {
 
     componentDidMount() {
         console.log(this.state.filtroCiclo);
-        
-        API.get('asignacionHorarios/listaCursosDisponible', { params: { ciclo: this.state.filtroCiclo } })
-            .then(response => {
-                this.totalCursosXciclo = response.data.cursos;
-                let aux = [];
-                for (let i = 0; i < response.data.cursos.length; i++) {
-                    aux.push(response.data.cursos[i].seccion);
-                }   
-                this.setState({ dataTablaAsignacion: response.data.cursos, listaSecciones: Array.from(new Set(aux)) });
-            })
-            .catch(error => {
-                alert("Ha ocurrido un error con el listado de cursos disponibles, intentelo luego");
-                console.log(error);
-            });
-        API.get('asignacionHorarios/consultaPreferencias')
-            .then(response => {
-                this.setState({
-                    cursos: response.data.cursos
+        let user = JSON.parse(atob(localStorage.getItem('u')));
+        if(user.unidad == 2 && user.tipo_usuario == 3){
+            API.get('asignacionHorarios/listaCursosDisponible', { params: { ciclo: this.state.filtroCiclo } })
+                .then(response => {
+                    this.totalCursosXciclo = response.data.cursos;
+                    let aux = [];
+                    for (let i = 0; i < response.data.cursos.length; i++) {
+                        aux.push(response.data.cursos[i].seccion);
+                    }   
+                    this.setState({ dataTablaAsignacion: response.data.cursos, listaSecciones: Array.from(new Set(aux)) });
+                })
+                .catch(error => {
+                    alert("Ha ocurrido un error con el listado de cursos disponibles, intentelo luego");
+                    console.log(error);
                 });
-                let aux = [];
-                for (let i = 0; i < response.data.cursos.length; i++) {
-                    aux.push(response.data.cursos[i].seccion);
-                }
-                let lista = [];
-                let listaCur = [];
-                for (let i = 0; i < this.state.cursos.length; i++) {
-                    let obj2 = {};
-                    obj2.codigo = this.state.cursos[i].codigo;
-                    obj2.seccion = this.state.cursos[i].seccion;
-                    obj2.nombreCurso = this.state.cursos[i].nombreCurso;
-                    obj2.claseCurso = this.state.cursos[i].claseCurso;
-                    listaCur.push(obj2);
-                    if (this.state.cursos[i].profesorPreferencia.length)
-                        for (let j = 0; j < this.state.cursos[i].profesorPreferencia.length; j++) {
+            API.get('asignacionHorarios/consultaPreferencias')
+                .then(response => {
+                    this.setState({
+                        cursos: response.data.cursos
+                    });
+                    let aux = [];
+                    for (let i = 0; i < response.data.cursos.length; i++) {
+                        aux.push(response.data.cursos[i].seccion);
+                    }
+                    let lista = [];
+                    let listaCur = [];
+                    for (let i = 0; i < this.state.cursos.length; i++) {
+                        let obj2 = {};
+                        obj2.codigo = this.state.cursos[i].codigo;
+                        obj2.seccion = this.state.cursos[i].seccion;
+                        obj2.nombreCurso = this.state.cursos[i].nombreCurso;
+                        obj2.claseCurso = this.state.cursos[i].claseCurso;
+                        listaCur.push(obj2);
+                        if (this.state.cursos[i].profesorPreferencia.length)
+                            for (let j = 0; j < this.state.cursos[i].profesorPreferencia.length; j++) {
+                                let obj = {};
+                                obj.codigo = this.state.cursos[i].codigo;
+                                obj.seccion = this.state.cursos[i].seccion;
+                                obj.nombreCurso = this.state.cursos[i].nombreCurso;
+                                obj.claseCurso = this.state.cursos[i].claseCurso;
+                                obj.nombre = this.state.cursos[i].profesorPreferencia[j].nombre;
+                                obj.tipo = this.state.cursos[i].profesorPreferencia[j].tipo;
+                                if (this.state.cursos[i].profesorPreferencia[j].ciclo1 == true)
+                                    obj.ciclo1 = "inscrito";
+                                else
+                                    obj.ciclo1 = "";
+                                if (this.state.cursos[i].profesorPreferencia[j].ciclo2 == true)
+                                    obj.ciclo2 = "inscrito";
+                                else
+                                    obj.ciclo2 = "";
+                                lista.push(obj);
+                            }
+                        else {
                             let obj = {};
                             obj.codigo = this.state.cursos[i].codigo;
                             obj.seccion = this.state.cursos[i].seccion;
                             obj.nombreCurso = this.state.cursos[i].nombreCurso;
                             obj.claseCurso = this.state.cursos[i].claseCurso;
-                            obj.nombre = this.state.cursos[i].profesorPreferencia[j].nombre;
-                            obj.tipo = this.state.cursos[i].profesorPreferencia[j].tipo;
-                            if (this.state.cursos[i].profesorPreferencia[j].ciclo1 == true)
-                                obj.ciclo1 = "inscrito";
-                            else
-                                obj.ciclo1 = "";
-                            if (this.state.cursos[i].profesorPreferencia[j].ciclo2 == true)
-                                obj.ciclo2 = "inscrito";
-                            else
-                                obj.ciclo2 = "";
+                            obj.nombre = "";
+                            obj.ciclo1 = "";
+                            obj.ciclo2 = "";
                             lista.push(obj);
                         }
-                    else {
-                        let obj = {};
-                        obj.codigo = this.state.cursos[i].codigo;
-                        obj.seccion = this.state.cursos[i].seccion;
-                        obj.nombreCurso = this.state.cursos[i].nombreCurso;
-                        obj.claseCurso = this.state.cursos[i].claseCurso;
-                        obj.nombre = "";
-                        obj.ciclo1 = "";
-                        obj.ciclo2 = "";
-                        lista.push(obj);
                     }
-                }
-                //console.log("lista sin filtrar:",lista);
-                //console.log("lista sin filtrar:",onlyUnique(lista));
-                this.setState({
-                    listaProfesoresTotal: Array.from(new Set(listaCur)),
-                    listaProfesoresParcial:Array.from(new Set(listaCur)),
-                    listaDocentesTotal:Array.from(new Set(lista)),
-                    listaSeccioneskey1: Array.from(new Set(aux))
+                    //console.log("lista sin filtrar:",lista);
+                    //console.log("lista sin filtrar:",onlyUnique(lista));
+                    this.setState({
+                        listaProfesoresTotal: Array.from(new Set(listaCur)),
+                        listaProfesoresParcial:Array.from(new Set(listaCur)),
+                        listaDocentesTotal:Array.from(new Set(lista)),
+                        listaSeccioneskey1: Array.from(new Set(aux))
+                    })
                 })
-            })
-            .catch(error => {
-                alert(`Error al consultar preferencias`);
+                .catch(error => {
+                    alert(`Error al consultar preferencias`);
+                    console.log(error);
+                });
+            API.get('asignacionHorarios/listaDocenteCargaAsignada', {
+                params: { ciclo: this.state.filtroCicloRes }
+            }).then(res => {
+                this.setState({ resumenAsignacion: res.data.docentes });
+            }).catch(error => {
+                alert("Ha ocurrido un error al consultar la carga asignada");
                 console.log(error);
             });
-        API.get('asignacionHorarios/listaDocenteCargaAsignada', {
-            params: { ciclo: this.state.filtroCicloRes }
-        }).then(res => {
-            this.setState({ resumenAsignacion: res.data.docentes });
-        }).catch(error => {
-            alert("Ha ocurrido un error al consultar la carga asignada");
-            console.log(error);
-        });
+        }
     }
 
     handleCrearNuevoHorario = () =>{
@@ -212,122 +214,134 @@ class AsignarCursos extends Component {
                obj.horasAsignadas = "";
                */
         if(!this.state.actualizarProfe){
-            if (this.state.asigHorasModal > 0 && this.state.codigoProfSelec != "") {
-                API.post('asignacionHorarios/asignarDocenteHorario', {
-                    codigoDocente: this.state.codigoProfSelec,
-                    codCurso: this.state.codSeleccionado,
-                    numHorario: this.state.datacodSeleccionado[this.state.horSeleccionado[0]].numHorario,
-                    horasAsignadas: this.state.asigHorasModal,
-                    ciclo: this.state.filtroCiclo,
-                })
-                    .then(res => {
-                        alert("Se ha registrado correctamente");
-                        this.setState({
-                            showAsignar: false,
-                            docentesPrefModal: [],
-                            docentesGeneralModal: [],
-                            maxHorasModal: 0,
-                            codigoProfSelec: "",
-                            nombreProfSelec: "",
-                            horasTProfSelec: "",
-                            asigHorasModal: 0
-                        });
+            let user = JSON.parse(atob(localStorage.getItem('u')));
+            if(user.unidad == 2 && user.tipo_usuario == 3){
+                if (this.state.asigHorasModal > 0 && this.state.codigoProfSelec != "") {
+                    API.post('asignacionHorarios/asignarDocenteHorario', {
+                        codigoDocente: this.state.codigoProfSelec,
+                        codCurso: this.state.codSeleccionado,
+                        numHorario: this.state.datacodSeleccionado[this.state.horSeleccionado[0]].numHorario,
+                        horasAsignadas: this.state.asigHorasModal,
+                        ciclo: this.state.filtroCiclo,
                     })
-                    .catch(error => {
-                        alert("Ha ocurrido un error, intentelo luego");
-                        console.log(error);
-                    });
-            } else {
-                alert("Falta agregar datos")
+                        .then(res => {
+                            alert("Se ha registrado correctamente");
+                            this.setState({
+                                showAsignar: false,
+                                docentesPrefModal: [],
+                                docentesGeneralModal: [],
+                                maxHorasModal: 0,
+                                codigoProfSelec: "",
+                                nombreProfSelec: "",
+                                horasTProfSelec: "",
+                                asigHorasModal: 0
+                            });
+                        })
+                        .catch(error => {
+                            alert("Ha ocurrido un error, intentelo luego");
+                            console.log(error);
+                        });
+                } else {
+                    alert("Falta agregar datos")
+                }
             }
         }else{
             //Actualiza
-            if (this.state.asigHorasModal > 0 && this.state.codigoProfSelec != "") {
-                API.post('asignacionHorarios/actualizarDocenteHorario', {
-                    codigoDocente: this.state.codigoProfSelec,
-                    codCurso: this.state.codSeleccionado,
-                    numHorario: this.state.datacodSeleccionado[this.state.horSeleccionado[0]].numHorario,
-                    horasAsignadas: this.state.asigHorasModal,
-                    ciclo: this.state.filtroCiclo,
-                })
-                    .then(res => {
-                        alert("Se ha registrado correctamente");
-                        this.setState({
-                            showAsignar: false,
-                            docentesPrefModal: [],
-                            docentesGeneralModal: [],
-                            maxHorasModal: 0,
-                            codigoProfSelec: "",
-                            nombreProfSelec: "",
-                            horasTProfSelec: "",
-                            asigHorasModal: 0,
-                            actualizarProfe: false,
-                        });
+            let user = JSON.parse(atob(localStorage.getItem('u')));
+            if(user.unidad == 2 && user.tipo_usuario == 3){
+                if (this.state.asigHorasModal > 0 && this.state.codigoProfSelec != "") {
+                    API.post('asignacionHorarios/actualizarDocenteHorario', {
+                        codigoDocente: this.state.codigoProfSelec,
+                        codCurso: this.state.codSeleccionado,
+                        numHorario: this.state.datacodSeleccionado[this.state.horSeleccionado[0]].numHorario,
+                        horasAsignadas: this.state.asigHorasModal,
+                        ciclo: this.state.filtroCiclo,
                     })
-                    .catch(error => {
-                        alert("Ha ocurrido un error, intentelo luego");
-                        console.log(error);
-                    });
-            } else {
-                alert("Falta agregar datos")
+                        .then(res => {
+                            alert("Se ha registrado correctamente");
+                            this.setState({
+                                showAsignar: false,
+                                docentesPrefModal: [],
+                                docentesGeneralModal: [],
+                                maxHorasModal: 0,
+                                codigoProfSelec: "",
+                                nombreProfSelec: "",
+                                horasTProfSelec: "",
+                                asigHorasModal: 0,
+                                actualizarProfe: false,
+                            });
+                        })
+                        .catch(error => {
+                            alert("Ha ocurrido un error, intentelo luego");
+                            console.log(error);
+                        });
+                } else {
+                    alert("Falta agregar datos")
+                }
             }
         }
     };
 
     handleShow = () => {
         let index = this.state.horSeleccionado[0];
-        API.get('asignacionHorarios/listaDocenteAsignar', {
-            params: {
-                codCur: this.state.codSeleccionado,
-                ciclo: this.state.filtroCiclo
-            }
-        })
-            .then(response => {
-                if(
-                this.state.datacodSeleccionado[index].codigo != "" &&
-                this.state.datacodSeleccionado[index].nombre != "" &&
-                this.state.datacodSeleccionado[index].horasAsignadas != ""){
-                    let profSelec = response.data.general.find(doc => doc.codigo == this.state.datacodSeleccionado[index].codigo);
-                    this.setState({
-                        actualizarProfe: true,
-                        showAsignar: true,
-                        maxHorasModal: this.state.dataTablaAsignacion.find(curso => curso.codigo === this.state.codSeleccionado[0]).horas,
-                        docentesPrefModal: response.data.preferencia,
-                        docentesGeneralModal: response.data.general,
-                        mostrarPreferencias: true,
-                        codigoProfSelec: this.state.datacodSeleccionado[index].codigo,
-                        nombreProfSelec: this.state.datacodSeleccionado[index].nombre,
-                        asigHorasModal: this.state.datacodSeleccionado[index].horasAsignadas,
-                        horasTProfSelec: profSelec.horasAsignadas,
-                    });
-                }else{
-                    this.setState({
-                        showAsignar: true,
-                        maxHorasModal: this.state.dataTablaAsignacion.find(curso => curso.codigo === this.state.codSeleccionado[0]).horas,
-                        docentesPrefModal: response.data.preferencia,
-                        docentesGeneralModal: response.data.general,
-                        mostrarPreferencias: true,
-                        
-                    });
+        let user = JSON.parse(atob(localStorage.getItem('u')));
+        if(user.unidad == 2 && user.tipo_usuario == 3){
+            API.get('asignacionHorarios/listaDocenteAsignar', {
+                params: {
+                    codCur: this.state.codSeleccionado,
+                    ciclo: this.state.filtroCiclo
                 }
-                
             })
-            .catch(error => {
-                alert("Ha ocurrido un error, intentelo luego");
-                console.log(error);
-            });
+                .then(response => {
+                    if(
+                    this.state.datacodSeleccionado[index].codigo != "" &&
+                    this.state.datacodSeleccionado[index].nombre != "" &&
+                    this.state.datacodSeleccionado[index].horasAsignadas != ""){
+                        let profSelec = response.data.general.find(doc => doc.codigo == this.state.datacodSeleccionado[index].codigo);
+                        this.setState({
+                            actualizarProfe: true,
+                            showAsignar: true,
+                            maxHorasModal: this.state.dataTablaAsignacion.find(curso => curso.codigo === this.state.codSeleccionado[0]).horas,
+                            docentesPrefModal: response.data.preferencia,
+                            docentesGeneralModal: response.data.general,
+                            mostrarPreferencias: true,
+                            codigoProfSelec: this.state.datacodSeleccionado[index].codigo,
+                            nombreProfSelec: this.state.datacodSeleccionado[index].nombre,
+                            asigHorasModal: this.state.datacodSeleccionado[index].horasAsignadas,
+                            horasTProfSelec: profSelec.horasAsignadas,
+                        });
+                    }else{
+                        this.setState({
+                            showAsignar: true,
+                            maxHorasModal: this.state.dataTablaAsignacion.find(curso => curso.codigo === this.state.codSeleccionado[0]).horas,
+                            docentesPrefModal: response.data.preferencia,
+                            docentesGeneralModal: response.data.general,
+                            mostrarPreferencias: true,
+                            
+                        });
+                    }
+                    
+                })
+                .catch(error => {
+                    alert("Ha ocurrido un error, intentelo luego");
+                    console.log(error);
+                });
+        }
     };
 
 
     handleFiltroCicloRes = e => {
         let newCicloRes = e.target.value;
-        API.get('asignacionHorarios/listaDocenteCargaAsignada', {
-            params: { ciclo: newCicloRes }
-        }).then(res => {
-            this.setState({ resumenAsignacion: res.data.docentes, filtroCicloRes: newCicloRes });
-        }).catch(error => {
-            alert("Ha ocurrido un error, intentelo luego");
-        });
+        let user = JSON.parse(atob(localStorage.getItem('u')));
+        if(user.unidad == 2 && user.tipo_usuario == 3){
+            API.get('asignacionHorarios/listaDocenteCargaAsignada', {
+                params: { ciclo: newCicloRes }
+            }).then(res => {
+                this.setState({ resumenAsignacion: res.data.docentes, filtroCicloRes: newCicloRes });
+            }).catch(error => {
+                alert("Ha ocurrido un error, intentelo luego");
+            });
+        }
     };
 
     handleSelect = key => {
@@ -383,74 +397,79 @@ class AsignarCursos extends Component {
     handleFiltroCiclo = e => {
         let newFiltroCiclo = e.target.value;
         console.log(newFiltroCiclo);
-        API.get('asignacionHorarios/listaCursosDisponible', {
-            params: {
-                ciclo: newFiltroCiclo
-            }
-        }).then(response => {
-            console.log("data", response.data);
-            this.totalCursosXciclo = response.data.cursos;
-            let aux = [];
-            for (let i = 0; i < response.data.cursos.length; i++) {
-                aux.push(response.data.cursos[i].seccion);
-            }
-            this.setState({
-                dataTablaAsignacion: response.data.cursos,
-                listaSecciones: Array.from(new Set(aux)),
-                filtroCiclo: newFiltroCiclo
-            });
-        })
-            .catch(error => {
-                alert("Ha ocurrido un error, intentelo luego");
-                console.log(error);
-            });
+        let user = JSON.parse(atob(localStorage.getItem('u')));
+        if(user.unidad == 2 && user.tipo_usuario == 3){
+            API.get('asignacionHorarios/listaCursosDisponible', {
+                params: {
+                    ciclo: newFiltroCiclo
+                }
+            }).then(response => {
+                console.log("data", response.data);
+                this.totalCursosXciclo = response.data.cursos;
+                let aux = [];
+                for (let i = 0; i < response.data.cursos.length; i++) {
+                    aux.push(response.data.cursos[i].seccion);
+                }
+                this.setState({
+                    dataTablaAsignacion: response.data.cursos,
+                    listaSecciones: Array.from(new Set(aux)),
+                    filtroCiclo: newFiltroCiclo
+                });
+            })
+                .catch(error => {
+                    alert("Ha ocurrido un error, intentelo luego");
+                    console.log(error);
+                });
+        }
     };
 
 
     handleOnSelectCurso = (row) => {
-        API.get('asignacionHorarios/horariosCursoDisponible', {
-            params: {
-                codCur: row.codigo,
-                ciclo: this.state.filtroCiclo
-            }
-        })
-            .then(response => {
+        let user = JSON.parse(atob(localStorage.getItem('u')));
+        if(user.unidad == 2 && user.tipo_usuario == 3){
+            API.get('asignacionHorarios/horariosCursoDisponible', {
+                params: {
+                    codCur: row.codigo,
+                    ciclo: this.state.filtroCiclo
+                }
+            })
+                .then(response => {
 
-                let auxHor = [];
-                let cont = 0;
-                console.log(response.data.horarios);
-                for (let idx = 0; idx < response.data.horarios.length; idx++) {
-                    if (response.data.horarios[idx].docentesInscritos.length > 0) {
-                        for (let j = 0; j < response.data.horarios[idx].docentesInscritos.length; j++) {
+                    let auxHor = [];
+                    let cont = 0;
+                    console.log(response.data.horarios);
+                    for (let idx = 0; idx < response.data.horarios.length; idx++) {
+                        if (response.data.horarios[idx].docentesInscritos.length > 0) {
+                            for (let j = 0; j < response.data.horarios[idx].docentesInscritos.length; j++) {
+                                let obj = {};
+                                obj.numHorario = response.data.horarios[idx].numHorario;
+                                obj.id = cont;
+                                obj.codigo = response.data.horarios[idx].docentesInscritos[j].codigo;
+                                obj.nombre = response.data.horarios[idx].docentesInscritos[j].nombre;
+                                obj.horasAsignadas = response.data.horarios[idx].docentesInscritos[j].horas_asignadas;
+                                //obj.tipo = "xxx";
+                                cont++;
+                                auxHor.push(obj);
+                            }
+                        } else {
                             let obj = {};
                             obj.numHorario = response.data.horarios[idx].numHorario;
                             obj.id = cont;
-                            obj.codigo = response.data.horarios[idx].docentesInscritos[j].codigo;
-                            obj.nombre = response.data.horarios[idx].docentesInscritos[j].nombre;
-                            obj.horasAsignadas = response.data.horarios[idx].docentesInscritos[j].horas_asignadas;
+                            obj.codigo = "";
+                            obj.nombre = "";
+                            obj.horasAsignadas = "";
                             //obj.tipo = "xxx";
                             cont++;
                             auxHor.push(obj);
                         }
-                    } else {
-                        let obj = {};
-                        obj.numHorario = response.data.horarios[idx].numHorario;
-                        obj.id = cont;
-                        obj.codigo = "";
-                        obj.nombre = "";
-                        obj.horasAsignadas = "";
-                        //obj.tipo = "xxx";
-                        cont++;
-                        auxHor.push(obj);
                     }
-                }
-                console.log("datacodSeleccionado", auxHor);
-                this.setState({ codSeleccionado: [row.codigo], datacodSeleccionado: auxHor, horSeleccionado: [] });
-            }).catch(error => {
-            alert("Ha ocurrido un error, intentelo luego");
-            console.log(error);
-        });
-
+                    console.log("datacodSeleccionado", auxHor);
+                    this.setState({ codSeleccionado: [row.codigo], datacodSeleccionado: auxHor, horSeleccionado: [] });
+                }).catch(error => {
+                alert("Ha ocurrido un error, intentelo luego");
+                console.log(error);
+            });
+        }
 
     };
 
@@ -481,16 +500,19 @@ class AsignarCursos extends Component {
     }
 
     handleVerDetalles = () => {
-        API.get('asignacionHorarios/detalleCargaDocenteAsignado', {
-            params: {
-                codDocente: this.state.resSeleccionado[0],
-                ciclo: this.state.filtroCicloRes
-            }
-        }).then(res => {
-            this.setState({ detalleResSelec: res.data.cursos, showDetalle: true });
-        }).catch(err => {
-            alert("Ha ocurrido un error, intentelo luego", err);
-        })
+        let user = JSON.parse(atob(localStorage.getItem('u')));
+        if(user.unidad == 2 && user.tipo_usuario == 3){
+            API.get('asignacionHorarios/detalleCargaDocenteAsignado', {
+                params: {
+                    codDocente: this.state.resSeleccionado[0],
+                    ciclo: this.state.filtroCicloRes
+                }
+            }).then(res => {
+                this.setState({ detalleResSelec: res.data.cursos, showDetalle: true });
+            }).catch(err => {
+                alert("Ha ocurrido un error, intentelo luego", err);
+            })
+        }
     };
 
     busquedaCurso = e => {
@@ -663,12 +685,12 @@ class AsignarCursos extends Component {
             hideSelectColumn: true,
             bgColor: '#edeaea'
         };
-        if(!this.state.auth && this.state.verAuth){
+        const user = JSON.parse(atob(localStorage.getItem('u')));
+        if(!(user.unidad == 2 && user.tipo_usuario == 3)){ /* Si no es JD de Economia, lo manda al home*/
             return(<Redirect to="/home"/>);
-        }else if (!this.state.verAuth){
-            return(<div/>);
         }
-        return (
+        else{
+            return (
             <BaseContainer>
                 <div className="panel col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
                     <div className="panel-heading">
@@ -916,6 +938,7 @@ class AsignarCursos extends Component {
                 </div>
             </BaseContainer>
         );
+        }
     }
 }
 
