@@ -119,7 +119,6 @@ class SignIn extends Component {
                 window.location.href = "/dashboard";
 			}
 
-
 		}
 			return (
 				<div>

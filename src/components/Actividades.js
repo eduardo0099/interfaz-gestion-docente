@@ -40,7 +40,7 @@ export class Actividades extends React.Component {
         }).then(response => {
             this.setState({ infoDocente: response.data });
         }).catch(error => {
-            console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`, error);
+            alert("Error al obtener datos del profesor");
         });
     }
 
@@ -50,14 +50,18 @@ export class Actividades extends React.Component {
                 this.setState({cicloSeleccionado: response.data.cicloActual})
                 this.findActividades(response.data.cicloActual);
                 this.findDocente(response.data.cicloActual);
-            })
+            }).catch(error => {
+            alert("Error al obtener datos del ciclo actual");
+        });
     }
 
     allCiclos() {
         API.get('general/listaCiclos')
             .then(response => {
                 this.setState({ ciclos: response.data.ciclos })
-            })
+            }).catch(error => {
+            alert("Error al obtener datos de los ciclos");
+        });
     }
 
     cambioCiclo = (obj) => {
@@ -77,7 +81,7 @@ export class Actividades extends React.Component {
                 actividades: response.data.actividades
             })
         }).catch(error => {
-            console.log("Error obteniendo la lista de las investigaciones", error);
+            alert("Error obteniendo la lista de las investigaciones");
         });
     }
 

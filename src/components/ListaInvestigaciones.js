@@ -41,7 +41,9 @@ export class ListaInvestigaciones extends React.Component {
           this.setState({ cicloSeleccionado: response.data.cicloActual })
           this.findInvestigaciones(response.data.cicloActual);
           this.findDocente(response.data.cicloActual);
-        })
+        }).catch(error => {
+            alert("Error obteniendo los datos del ciclo actual");
+        });
   }
 
   allCiclos() {
@@ -62,7 +64,8 @@ export class ListaInvestigaciones extends React.Component {
         investigaciones: response.data.investigaciones
       })
     }).catch(error => {
-      console.log('Error obteniendo la lista de las investigaciones', error);
+        console.log('Error obteniendo la lista de las investigaciones', error);
+        alert("Error obteniendo la lista de las investigaciones");
     });
   }
 
@@ -75,7 +78,8 @@ export class ListaInvestigaciones extends React.Component {
     }).then(response => {
       this.setState({ infoDocente: response.data });
     }).catch(error => {
-      console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`, error);
+        console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`, error);
+        alert("Error al obtener datos del profesor");
     });
   }
 

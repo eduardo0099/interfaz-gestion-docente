@@ -35,7 +35,7 @@ class SignUp extends Component {
 				this.setState({ listaDeps: res.data.tipos });
 			})
 			.catch(err => {
-				alert("Ha ocurrido un error");
+				alert("Error al obtener la lista de departamentos");
 				console.log("error listar departamentos", err);
 			});
 	}
@@ -155,7 +155,7 @@ class SignUp extends Component {
 				this.setState({ listaSecc: res.data.secciones });
 			})
 			.catch(err => {
-				alert("Ha ocurrido un error");
+				alert("Error al listar las secciones de departamento");
 				console.log("error listar departamentos", err);
 			});
 	}

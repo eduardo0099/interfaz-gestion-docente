@@ -95,14 +95,18 @@ class RegistroActividad extends Component{
         API.get('general/listaTipoActividad')
             .then(response => {
                 this.setState({listaTipo: response.data.tipo_actividad})
-            })
+            }).catch(error => {
+                alert("No se puede obtener los datos de los tipos de actividades");
+            });
     }
 
     findCicloActual(){
         API.get('general/cicloActual')
             .then(response => {
                 this.setState({ciclo: response.data.cicloActual})
-            })
+            }).catch(error => {
+                alert("No se puede obtener los datos del ciclo actual");
+            });
     }
 
     performPostRequest = ()=> {

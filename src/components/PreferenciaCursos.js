@@ -101,6 +101,9 @@ class PreferenciaCursos extends Component {
 					error: `${error}`,
 					loading: false
 				});
+
+				alert("No se puede obtener los datos de las preferencias de los cursos");
+
 			});
 	}
 

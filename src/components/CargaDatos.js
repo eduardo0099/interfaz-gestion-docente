@@ -34,7 +34,7 @@ class CargaDatos extends Component {
             console.log("resp", resp.data);
             this.setState({ auth: resp.data.permiso, verAuth:true });
         }).catch(err => {
-            console.log("err", err);
+            alert("No tiene permiso");
         })
     }
 }

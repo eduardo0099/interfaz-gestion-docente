@@ -27,7 +27,8 @@ class Home extends Component{
         console.log("resp",resp.data);
         this.setState({auth:resp.data.permiso});
       }).catch(err => {
-        console.log("err",err);
+          console.log("No tiene permiso",err);
+          alert("No tiene permiso");
       })
     }
   }

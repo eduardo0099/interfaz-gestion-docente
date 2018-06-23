@@ -212,6 +212,7 @@ class ModificarInvestigacion extends Component {
             })
             .catch(error => {
                 console.log(error);
+                alert("No se puede obtener los datos de la list docente");
             });
     }
 
@@ -288,6 +289,7 @@ class ModificarInvestigacion extends Component {
             })
             .catch(error => {
                 console.log(error);
+                alert("No se puede obtener los datos de la lista docente");
             });
     }
 

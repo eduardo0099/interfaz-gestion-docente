@@ -79,7 +79,7 @@ class AsignarCursos extends Component {
                 console.log("resp asignar", resp.data);
                 this.setState({ auth: resp.data.permiso,verAuth:true });
             }).catch(err => {
-                console.log("err", err);
+                alert("No tiene permisos");
             })
         }
     }
