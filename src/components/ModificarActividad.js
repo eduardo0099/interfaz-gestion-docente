@@ -132,7 +132,7 @@ class ModificarActividad extends Component {
         if (this.validator.allValid() && this.validDates(this.state.fecha_fin, this.state.fecha_inicio)) {
             API.put('docente/actividad/actualizar', {
                 id_actividad: this.state.id_actividad,
-                tipo: this.state.tipoSeleccionado,
+				tipo: this.state.tipoSeleccionado,
                 titulo: this.state.titulo,
                 fecha_inicio: this.armarFecha(this.state.fecha_inicio._d),
                 fecha_fin: this.armarFecha(this.state.fecha_fin._d),
