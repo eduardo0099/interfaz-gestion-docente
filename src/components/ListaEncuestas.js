@@ -40,7 +40,7 @@ class ListaEncuestas extends React.Component {
                 console.log("resp", resp.data);
                 this.setState({ auth: resp.data.permiso, verAuth:true });
             }).catch(err => {
-                console.log("err", err);
+                alert("No tiene permiso");
             })
         }
     }
@@ -50,14 +50,18 @@ class ListaEncuestas extends React.Component {
                 this.setState({ cicloSeleccionado: response.data.cicloActual })
                 this.findEncuestas(response.data.cicloActual);
                 this.findDocente(response.data.cicloActual);
-            })
+            }).catch(error => {
+                alert("Error al obtener datos del ciclo actual");
+            });
     }
 
     allCiclos() {
         API.get('general/listaCiclos')
             .then(response => {
                 this.setState({ ciclos: response.data.ciclos })
-            })
+            }).catch(error => {
+                alert("Error al obtener datos de los ciclos");
+        });
     }
 
     findDocente(ciclo) {
@@ -69,6 +73,7 @@ class ListaEncuestas extends React.Component {
         }).then(response => {
             this.setState({ infoDocente: response.data });
         }).catch(error => {
+            alert("Error al obtener datos del profesor");
         });
     }
 
@@ -81,6 +86,7 @@ class ListaEncuestas extends React.Component {
         }).then((response) => {
             this.setState({ listaEncuesta: response.data.encuestas })
         }).catch(error => {
+            alert("Error al obtener datos de las encuestas del docente");
         });
     }
 

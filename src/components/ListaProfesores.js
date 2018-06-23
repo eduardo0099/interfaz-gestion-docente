@@ -53,7 +53,8 @@ class ListaProfesores extends Component {
         console.log('resp', resp.data);
         this.setState({ auth: resp.data.permiso, verAuth: true });
       }).catch(err => {
-        console.log('err', err);
+          console.log('err', err);
+          alert("No tiene permiso");
       })
     }
   }
@@ -69,6 +70,7 @@ class ListaProfesores extends Component {
             error: `${error}`,
             loading: false
           });
+            alert("Error al obtener la lista de docentes");
         });
     this.allSecciones();
   }
@@ -77,6 +79,8 @@ class ListaProfesores extends Component {
     API.get('general/listaSecciones')
         .then(response => {
           this.setState({ secciones: response.data.secciones })
+        }).catch(error => {
+            alert("Error al obtener la lista de secciones");
         })
   }
 

@@ -79,7 +79,7 @@ class AsignarCursos extends Component {
                 console.log("resp asignar", resp.data);
                 this.setState({ auth: resp.data.permiso,verAuth:true });
             }).catch(err => {
-                console.log("err", err);
+                alert("No tiene permisos");
             })
         }
     }
@@ -489,7 +489,7 @@ class AsignarCursos extends Component {
         }).then(res => {
             this.setState({ detalleResSelec: res.data.cursos, showDetalle: true });
         }).catch(err => {
-            alert("Ha ocurrido un error, intentelo luego", err);
+            alert("Ha ocurrido un error, intentelo luego");
         })
     };
 

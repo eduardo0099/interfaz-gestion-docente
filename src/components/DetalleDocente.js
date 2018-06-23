@@ -43,6 +43,7 @@ class DetalleDocente extends Component {
             this.setState({ info: response.data });
         }).catch(error => {
             console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`, error);
+            alert("Error al obtener datos del profesor");
         });
     }
 

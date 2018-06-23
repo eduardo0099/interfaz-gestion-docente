@@ -108,14 +108,18 @@ class AyudaEconomica extends React.Component {
             .then(response => {
                 this.setState({ cicloSeleccionado: response.data.cicloActual })
                 this.findAyudas(response.data.cicloActual);
-            })
+            }).catch(error => {
+                console.log("Error al obtener datos del ciclo actual");
+            });
     }
 
     allCiclos() {
         API.get('general/listaCiclos')
             .then(response => {
                 this.setState({ ciclos: response.data.ciclos })
-            })
+            }).catch(error => {
+                console.log("Error al obtener datos de los ciclos");
+        });
     }
 
     findAyudas(ciclo) {
@@ -158,6 +162,7 @@ class AyudaEconomica extends React.Component {
             })
         }).catch(error => {
             console.log("Error obteniendo la lista de las investigaciones", error);
+            alert("Error obteniendo la lista de las investigaciones");
         });
     }
 
@@ -282,6 +287,7 @@ class AyudaEconomica extends React.Component {
             this.setState({ayudasMostrar: response.data.ayudaEconomica});
         }).catch(error => {
             console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`, error);
+            alert("Error al filtrar ayudas economicas");
         });
     }
 

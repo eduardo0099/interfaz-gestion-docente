@@ -117,6 +117,7 @@ class RegistroInvestigación extends Component{
         ).then(response =>{
             this.setState({idArchivo :response.data.id})
         }).catch(response =>  {
+            alert("Error al registrar un archivo");
         });
     }
 

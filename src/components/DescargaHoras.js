@@ -49,7 +49,10 @@ class DescargaHoras extends React.Component {
                 })
                 this.findDescargas(response.data.cicloActual);
                 this.findDocente(response.data.cicloActual);
-            })
+            }).catch(error => {
+                console.log("Error al obtener datos del ciclo actual", error);
+                alert("Error al obtener datos del ciclo actual");
+            });
     }
 
     findDocente(ciclo) {
@@ -62,6 +65,7 @@ class DescargaHoras extends React.Component {
             this.setState({ infoDocente: response.data });
         }).catch(error => {
             console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`, error);
+            alert("Error al obtener datos del profesor");
         });
     }
 
@@ -69,7 +73,10 @@ class DescargaHoras extends React.Component {
         API.get('general/listaCiclos')
             .then(response => {
                 this.setState({ ciclos: response.data.ciclos })
-            })
+            }).catch(error => {
+                console.log("Error al obtener datos de los ciclos", error);
+                alert("Error al obtener datos de los ciclos");
+            });
     }
 
     findDescargas(ciclo) {
@@ -84,6 +91,7 @@ class DescargaHoras extends React.Component {
             })
         }).catch(error => {
             console.log(`Error al obtener datos de la pantalla cursos`, error);
+            alert("Error al obtener datos de las horas de descarga del docente");
         });
     }
 

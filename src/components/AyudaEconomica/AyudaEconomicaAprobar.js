@@ -56,7 +56,7 @@ class AyudaEconomicaAprobar extends React.Component {
                 estado_test:response.data.descripcion
             });
         }).catch(err =>{
-            alert("Ha ocurrido un error obteniendo el estado de la solicitud, intentelo luego",err);
+            alert("Ha ocurrido un error obteniendo el estado de la solicitud, intentelo luego");
             console.log(err);
         })
     }
@@ -87,7 +87,7 @@ class AyudaEconomicaAprobar extends React.Component {
                 }
             });
         }).catch(err =>{
-            alert("Ha ocurrido un error obteniendo datos de la solicitud, intentelo luego",err);
+            alert("Ha ocurrido un error obteniendo datos de la solicitud, intentelo luego");
             console.log(err);
         })
     }
@@ -110,7 +110,7 @@ class AyudaEconomicaAprobar extends React.Component {
             this.props.history.goBack();
             window.location.reload();
         }).catch(err =>{
-            alert("Ha ocurrido un error aprobando solicitud, intentelo luego",err);
+            alert("Ha ocurrido un error aprobando solicitud, intentelo luego");
             console.log(err);
         })
     }
@@ -126,7 +126,7 @@ class AyudaEconomicaAprobar extends React.Component {
             this.props.history.goBack();
             window.location.reload();
         }).catch(err =>{
-            alert("Ha ocurrido un error rechazando solicitud, intentelo luego",err);
+            alert("Ha ocurrido un error rechazando solicitud, intentelo luego");
             console.log(err);
         })
     }

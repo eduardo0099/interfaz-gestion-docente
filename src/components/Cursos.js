@@ -31,6 +31,10 @@ export class Cursos extends React.Component {
                 this.findCursos(response.data.cicloActual);
                 this.findDocente(response.data.cicloActual);
             })
+            .catch(error => {
+                console.log("Error al obtener datos del ciclo actual", error);
+                alert("Error al obtener datos del ciclo actual");
+            });
     }
 
     allCiclos() {
@@ -38,6 +42,10 @@ export class Cursos extends React.Component {
             .then(response => {
                 this.setState({ ciclos: response.data.ciclos })
             })
+            .catch(error => {
+                console.log("Error al obtener datos de los ciclos", error);
+                alert("Error al obtener datos de los ciclos");
+            });
     }
 
     findCursos(ciclo) {
@@ -48,7 +56,10 @@ export class Cursos extends React.Component {
             }
         }).then(response => {
             this.setState({ infoCursos: response.data.cursos[0].listaCursos})
-        })
+        }).catch(error => {
+            console.log("Error al obtener datos de los cursos del docente", error);
+            alert("Error al obtener datos de los cursos del docente");
+        });
     }
 
 
@@ -61,6 +72,8 @@ export class Cursos extends React.Component {
         }).then(response => {
             this.setState({ infoDocente: response.data });
         }).catch(error => {
+            console.log("Error al obtener datos de los docentes", error);
+            alert("Error al obtener datos de los docentes");
         });
     }
 
@@ -83,7 +96,10 @@ export class Cursos extends React.Component {
                 this.setState({ infoCursos: response.data.cursos[1].listaCursos})
             if(this.state.tipoSeleccionado === "otros")
                 this.setState({ infoCursos: response.data.cursos[2].listaCursos})
-        })
+        }).catch(error => {
+            console.log("Error al obtener datos de los cursos del docente", error);
+            alert("Error al obtener datos de los cursos del docente");
+        });
     }
 
     cambioTipoCurso = (obj) => {

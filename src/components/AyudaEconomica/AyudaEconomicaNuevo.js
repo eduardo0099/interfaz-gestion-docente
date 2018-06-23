@@ -206,6 +206,7 @@ class AyudaEconomicaNuevo extends Component {
             })
         }).catch(error => {
             console.log("Error obteniendo la lista de las investigaciones", error);
+            alert("Error obteniendo la lista de las investigaciones");
         });
     }
 

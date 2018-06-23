@@ -60,7 +60,9 @@ class ModificarActividad extends Component {
         API.get('general/listaTipoActividad')
             .then(response => {
                 this.setState({listaTipo: response.data.tipo_actividad})
-            })
+            }).catch(error => {
+                alert("Error al obtener datos de los tipos de actividad");
+            });
     }
 
     obtenerDatosActividad(){
@@ -80,6 +82,7 @@ class ModificarActividad extends Component {
             });
         }).catch(error => {
             console.log(`Error al obtener datos del profesor ${this.props.match.params.codigo}`, error);
+            alert("Error al obtener datos de la actividad");
         });
     }
 
@@ -189,6 +192,7 @@ class ModificarActividad extends Component {
             })
             .catch(error => {
                 console.log(error);
+                alert("Error al obtener la lista de docentes");
             });
     }
 

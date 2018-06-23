@@ -40,7 +40,9 @@ class NuevaDescargaHoras extends React.Component {
                 this.setState({
                     cicloActual: response.data.cicloActual
                 })
-            })
+            }).catch(error => {
+                alert("No se puede obtener los datos del ciclo actual");
+            });
     }
 
     findCursos(){
@@ -54,7 +56,9 @@ class NuevaDescargaHoras extends React.Component {
                 this.setState({
                     codDocente:this.props.match.params.codigo,
                 })
-            })
+            }).catch(error => {
+                alert("No se puede obtener los datos de los cursos del docente");
+            });
     }
 
     cambioTipo=(obj)=>{
@@ -78,7 +82,9 @@ class NuevaDescargaHoras extends React.Component {
                 this.setState({ listaCursos: response.data.cursos[1].listaCursos})
             if(this.state.tipoSeleccionado === "otros")
                 this.setState({ listaCursos: response.data.cursos[2].listaCursos})
-        })
+        }).catch(error => {
+            alert("No se puede obtener los datos de los cursos del docente");
+        });
     }
 
     findHorarios(codigo){
