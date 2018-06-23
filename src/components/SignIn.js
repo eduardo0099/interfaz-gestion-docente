@@ -37,8 +37,7 @@ class SignIn extends Component {
 		if(e.keyCode == 13){
 			e.preventDefault();
   		if(this.state.codUser!="" && this.state.contrasena!=""){
-  			//axios.post('http://200.16.7.151:80/auth/login',{
-            axios.post('http://localhost:8080/auth/login',{
+  			axios.post('http://200.16.7.151:80/auth/login',{
   				codigo: parseInt(this.state.codUser),
   				password: this.state.contrasena
   			}).then(resp => {
