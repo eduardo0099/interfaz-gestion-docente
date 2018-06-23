@@ -147,6 +147,9 @@ class ListaEncuestas extends React.Component {
                                             </div>
                                         </div>
                                     </div>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
                                     <table className="table table-striped">
                                         <thead>
                                         <tr>
