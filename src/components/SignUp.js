@@ -261,7 +261,7 @@ class SignUp extends Component {
 								})}
 							</FormControl>
 						</FormGroup>
-						{(this.state.listaSecc.length <= 1) && this.state.id_tipo_usuario != 3 && this.state.id_tipo_usuario != 4?
+						{(this.state.listaSecc.length <= 1) && this.state.id_tipo_usuario == 3 && this.state.id_tipo_usuario == 4?
 							<span></span> :
 							<FormGroup controlId="formControlTipoSec">
 								<ControlLabel>Seleccione la seccion asociada</ControlLabel>
