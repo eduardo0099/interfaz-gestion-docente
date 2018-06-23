@@ -95,10 +95,10 @@ class ConvocatoriaCampos extends Component {
         if( this.validator.allValid()){
             API.put('convocatoria/convocatoria/modificar', {
                 id : this.props.match.params.id_convocatoria,
-                estado_convocatoria : "Aprobada"//cambiar a Abierta
+                estado_convocatoria : "Abierta"
             })
                 .then(response => {
-                    API.post('convocatoria/convocatoria/modificar', {
+                    API.put('convocatoria/convocatoria/modificar', {
                         id:this.props.match.params.id_convocatoria,
                         grados_academicos:gradAcadRegistrar,
                         docencia:docenciaRegistrar,
@@ -112,6 +112,7 @@ class ConvocatoriaCampos extends Component {
                         })
                     alert("Campos agregados");
                     this.props.history.goBack();
+                    window.location.reload();
                 })
                 .catch(error => {
                     alert("Error: No se pudo modificar el estado");

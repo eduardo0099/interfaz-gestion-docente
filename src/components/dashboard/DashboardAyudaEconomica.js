@@ -46,7 +46,7 @@ class DashboardAyudaEconomica extends React.Component {
     }
 
     findAyudas() {
-        API.get('/dashboard/listarAyudasEconomicas')
+        API.get('dashboard/listarAyudasEconomicas')
             .then(response => {
                 console.log('ayudas: ',response.data);
                 this.setState({
@@ -58,7 +58,7 @@ class DashboardAyudaEconomica extends React.Component {
     }
 
     findAyudasSeccion(nextProps) {
-        API.get('/dashboard/listarAyudasEconomicasSeccion', {
+        API.get('dashboard/listarAyudasEconomicasSeccion', {
             params: {
                 seccion: nextProps.seccion.id,
             }

@@ -8,17 +8,20 @@ import ConvocatoriaNuevo from "../convocatorias/ConvocatoriasNuevo";
 import AyudaEconomicaNuevo from "./AyudaEconomicaNuevo";
 import API from "../../api";
 import {Role, currentRole} from "../../auth";
+import SimpleReactValidator from "simple-react-validator";
 
 class AyudaEconomicaDetalle extends React.Component {
 
     constructor(props) {
         super(props);
+        this.validator = new SimpleReactValidator();
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleOpenMod=this.handleOpenMod.bind(this);
         this.handleCloseMod=this.handleCloseMod.bind(this);
 
         this.state = {
+            estado_test:'',
             solicitudEconomica: {
                 id: 2,
                 codigo: 'AYU001',
@@ -39,19 +42,50 @@ class AyudaEconomicaDetalle extends React.Component {
             isOpen: false,
             tipoDocumento: [{id: 1, descripcion: "Boleta"}, {id: 2, descripcion: "Factura"}],
             numDoc:"",
-            tipoDocSeleccionado: "---",
+            tipoDocSeleccionado: "",
             detalleDoc:"",
-            montoDoc:-1,
+            montoDoc:'',
             obsDoc:"",
             modificarOpen:false,
             idNew: 1,
-            gastoSelecc:[]
+            gastoSelecc:[],
+            idArchivo:''
         }
     }
 
     componentWillMount() {
         this.findSolicitud();
+        this.findEstado();
+        this.findTipoDoc();
     }
+
+    findEstado(){
+        API.get('ayudasEconomicas/ayudasEconomicas/estado', {
+            params: {
+                id:  this.props.match.params.idAyudaEconomica
+            }
+        }).then(response => {
+            console.log("response:",response);
+            this.setState({
+                estado_test:response.data.descripcion
+            });
+        }).catch(error => {
+            alert("Error obteniendo estado de ayuda");
+        })
+    }
+
+    findTipoDoc(){
+        API.get('general/listaDocumentoPagoTipo')
+            .then(response => {
+                console.log("response:",response);
+                this.setState({
+                    tipoDocumento:response.data.profesor
+                });
+            }).catch(error => {
+            alert("Error obteniendo lista de tipos de documento de pago");
+        })
+    }
+
     findSolicitud(){
        API.get('ayudasEconomicas/ayudasEconomicas/devuelveJustificacion', {
            params: {
@@ -69,9 +103,10 @@ class AyudaEconomicaDetalle extends React.Component {
                    docenteSolicitante: ae.docenteSolicitante.nombres,
                    codigo: ae.codigo,
                    investigacion: ae.investigacion.titulo,
-               },
-               idArchivo:'',
+               }
            });
+       }).catch(error => {
+           alert("Error encontrando datos de solicitud");
        })
     }
 
@@ -99,14 +134,15 @@ class AyudaEconomicaDetalle extends React.Component {
 
     agregarGasto=()=> {
         //Johana en este metodo deberias abrir el modal vacio para registrar
-        if(this.state.tipoDocSeleccionado!="---" &&  this.state.numDoc!="" && this.state.detalleDoc!="" && this.state.montoDoc!=-1 && this.state.obsDoc!=""){
+        if(this.validator.allValid()){
             API.post("/ayudasEconomicas/ayudasEconomicas/DocumentoGasto/registrar",{
                 id_ayuda_economica:this.state.solicitudEconomica.id,
                 numero_documento:this.state.numDoc,
                 detalle:this.state.detalleDoc,
                 monto_justificacion:this.state.montoDoc,
                 observaciones:this.state.obsDoc,
-                tipo_documento:this.state.tipoDocSeleccionado,
+                tipo_documento:this.state.tipoDocSeleccionado.id,
+                archivo:this.state.idArchivo
             }).then(res => { 
                 this.setState({idNew: res.data[0].nuevo_id});
                 console.log(this.state.idNew.value);
@@ -131,8 +167,9 @@ class AyudaEconomicaDetalle extends React.Component {
             this.setState({solicitudEconomica: nuevoArreglo});
         }
         else{
-            //Mostrar campos errados
-            alert("Falta agregar datos");
+            this.validator.showMessages();
+            // rerender to show messages for the first time
+            this.forceUpdate();
         }
 
     }
@@ -148,17 +185,9 @@ class AyudaEconomicaDetalle extends React.Component {
         });
     }
 
-    handleDocSeleccionado= e =>{
-        if(e.target.value == "---") {
-            this.setState({
-                tipoDocSeleccionado: e.target.value
-            })
-        }
-        else{
-            this.setState({
-                tipoDocSeleccionado:e.target.value
-            })
-        }
+    handleDocSeleccionado=(obj) =>{
+        console.log("tipodoc",obj);
+        this.setState({ tipoDocSeleccionado: obj})
     }
 
     handleNumDoc = e =>{
@@ -183,20 +212,23 @@ class AyudaEconomicaDetalle extends React.Component {
     }
 
 
-  uploadFile = (e) => {
-    let file = e.target.files[0];
-    let formData = new FormData();
-    formData.append('file', file);
-    API.post('ayudasEconomicas/ayudasEconomicasAsistente/registrarArchivo',
-        formData,
-        {
-          headers: {'Content-Type': 'multipart/form-data'}
-        }
-    ).then(response =>{
-      this.setState({idArchivo :response.data.id})
-    }).catch(response =>  {
-    });
-  }
+    uploadFile = (e) => {
+        let file = e.target.files[0];
+        let formData = new FormData();
+        formData.append('file', file);
+        API.post('ayudasEconomicas/ayudasEconomicasAsistente/registrarArchivo',
+            formData,
+            {
+                headers: {'Content-Type': 'multipart/form-data'}
+            }
+        ).then(response =>{
+            console.log(response);
+            this.setState({idArchivo :response.data.id})
+        }).catch(error =>  {
+            alert("Ha ocurrido un error subiendo el archivo, intentelo luego",error);
+            console.log(error);
+        });
+    }
 
     render() {
         if(currentRole() != Role.JEFE_DEPARTAMENTO){
@@ -240,43 +272,56 @@ class AyudaEconomicaDetalle extends React.Component {
                                     </div>
                                     <div className="row form-group">
                                         <div className="col-md-4">
-                                            <label> Monto Solicitado </label>
+                                            <label> Monto Solicitado (S/)</label>
                                             <span className="form-control"> {this.state.solicitudEconomica.monto_otorgado} </span>
                                         </div>
                                     </div>
-                                    <h5> Gastos Financieros Declarados </h5>
-                                    <hr/>
-                                    <table className="table table-striped table-hover" >
-                                        <thead>
-                                        <tr>
-                                            <th className="col-md-3">Documento</th>
-                                            <th className="col-md-3">Detalle</th>
-                                            <th className="col-md-3">Monto (S/)</th>
-                                            <th className="col-md-3">Observaciones</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {this.state.solicitudEconomica.gastos.map(gasto => {
-                                            return (
-                                                <tr key={gasto.id} onClick={this.modificarGasto.bind(this,gasto)} >
-                                                    <td className="v-middle">
-                                                        <span className="block text-muted m-t-xs"> Factura</span>
-                                                        <span className="block text-primary m-b-xs"> {gasto.numero_documento}</span>
-                                                    </td>
-                                                    <td className="v-middle">
-                                                        <span> {gasto.detalle}</span>
-                                                    </td>
-                                                    <td className="v-middle">
-                                                        <span> {gasto.monto_justificacion}</span>
-                                                    </td>
-                                                    <td className="v-middle">
-                                                        <span> {gasto.observaciones}</span>
-                                                    </td>
+                                    {this.state.estado_test == "Aprobado" ?
+                                        <div>
+                                            <h5> Gastos Financieros Declarados </h5>
+                                            <hr/>
+                                            <table className="table table-striped table-hover">
+                                                <thead>
+                                                <tr>
+                                                    <th className="col-md-3">Documento</th>
+                                                    <th className="col-md-3">Detalle</th>
+                                                    <th className="col-md-3">Monto (S/)</th>
+                                                    <th className="col-md-3">Observaciones</th>
                                                 </tr>
-                                            )})
-                                        }
-                                        </tbody>
-                                    </table>
+                                                </thead>
+                                                <tbody>
+                                                {this.state.solicitudEconomica.gastos.map(gasto => {
+                                                    return (
+                                                        <tr key={gasto.id}
+                                                            onClick={this.modificarGasto.bind(this, gasto)}>
+                                                            <td className="v-middle">
+                                                                <span
+                                                                    className="block text-muted m-t-xs"> Factura</span>
+                                                                <span
+                                                                    className="block text-primary m-b-xs"> {gasto.numero_documento}</span>
+                                                            </td>
+                                                            <td className="v-middle">
+                                                                <span> {gasto.detalle}</span>
+                                                            </td>
+                                                            <td className="v-middle">
+                                                                <span> {gasto.monto_justificacion}</span>
+                                                            </td>
+                                                            <td className="v-middle">
+                                                                <span> {gasto.observaciones}</span>
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                })
+                                                }
+                                                </tbody>
+                                            </table>
+                                            <div className="panel-footer text-right">
+                                                <button type="button" className="btn btn-primary" onClick={ this.handleOpen}>Agregar Gasto</button>
+                                            </div>
+                                        </div>
+                                        :
+                                        null
+                                    }
                                 </div>
                                 <Modal show={this.state.modificarOpen} onClose={this.handleCloseMod}>
                                     <Modal.Header closeButton>
@@ -300,9 +345,7 @@ class AyudaEconomicaDetalle extends React.Component {
                                     </Modal.Body>
                                 </Modal>
 
-                                <div className="panel-footer text-right">
-                                    <button type="button" className="btn btn-primary" onClick={ this.handleOpen}>Agregar Gasto</button>
-                                    <Modal show={this.state.isOpen} onClose={this.handleClose}>
+                                    <Modal show={this.state.isOpen} onHide={this.handleClose}>
                                         <Modal.Header closeButton>
                                             <Modal.Title>Agregar nuevo gasto</Modal.Title>
                                         </Modal.Header>
@@ -311,34 +354,39 @@ class AyudaEconomicaDetalle extends React.Component {
                                                 <div className="row form-group">
                                                     <label>N° Documento:</label>
                                                     <input className="form-control" onChange={this.handleNumDoc}></input>
+                                                    {this.validator.message('numDoc', this.state.numDoc, 'required|integer', false, {required: 'Este campo es obligatorio'})}
                                                 </div>
                                                 <div className="row form-group">
                                                     <label>Tipo de documento:</label>
-                                                    <FormControl componentClass="select" placeholder="select"
-                                                                 onChange={ this.handleDocSeleccionado }
-                                                                 value={ this.state.tipoDocSeleccionado }>
-                                                        <option value="---">---</option>
-                                                        { this.state.tipoDocumento.map((item) => {
-                                                            return <option key={ item.id } value={ item.descripcion }>{ item.descripcion }</option>
-                                                        }) }
-                                                    </FormControl>
+                                                    <Select
+                                                        value={ this.state.tipoDocSeleccionado }
+                                                        onChange={this.handleDocSeleccionado}
+                                                        valueKey={ "descripcion" }
+                                                        labelKey={ "descripcion" }
+                                                        options={ this.state.tipoDocumento }
+                                                        clearable={ false }
+                                                        searchable={false}
+                                                    />
+                                                    {this.validator.message('tipoDocSeleccionado', this.state.tipoDocSeleccionado, 'required', false, {required: 'Este campo es obligatorio'})}
                                                 </div>
                                                 <div className="row form-group">
                                                     <label>Detalle:</label>
                                                     <input className="form-control" onChange={this.handleDetalle}></input>
+                                                    {this.validator.message('detalleDoc', this.state.detalleDoc, 'required', false, {required: 'Este campo es obligatorio'})}
                                                 </div>
                                                 <div className="row form-group">
                                                     <label>Monto:</label>
                                                     <input className="form-control" type="number" pattern="[0-9]*" onChange={this.handleMonto}></input>
+                                                    {this.validator.message('montoDoc', this.state.montoDoc, 'required', false, {required: 'Este campo es obligatorio'})}
                                                 </div>
                                                 <div className="row form-group">
                                                     <label>Observaciones:</label>
                                                     <FormGroup controlId="formControlsTextarea">
                                                         <input className="form-control" componentClass="textarea" onChange={this.handleObs}/>
+                                                        {this.validator.message('obsDoc', this.state.obsDoc, 'required', false, {required: 'Este campo es obligatorio'})}
                                                     </FormGroup>
                                                 </div>
                                                 <div className="row form-group">
-                                                    <label>Fotografia del documento:</label>
                                                   <div className="form-group">
                                                     <label> Adjuntar Archivo </label>
                                                     <td className="v-middle">
@@ -354,10 +402,8 @@ class AyudaEconomicaDetalle extends React.Component {
                                         </Modal.Footer>
                                     </Modal>
                                 </div>
-                            </div>
                         </BaseContainer>
                     }/>
-                    <Route path={`${this.props.match.path}/nuevo`} component={AyudaEconomicaNuevo}/>
                 </div>
             );
         }else{

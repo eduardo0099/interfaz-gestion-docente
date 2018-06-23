@@ -95,7 +95,7 @@ class ConvocatoriaDetalle extends Component{
     render(){
         let estado=this.state.descripcion;
         let requisitos;
-        if(this.state.descripcion==="Abierta"||this.state.descripcion==="Aprobada"){
+        if(this.state.descripcion==="Abierta"){
             let asesoria=null;
             let cargo=null;
             let premio=null;

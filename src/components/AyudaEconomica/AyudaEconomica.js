@@ -140,12 +140,12 @@ class AyudaEconomica extends React.Component {
                 listaCBEstado=[...listaCBEstado,{estado:entry.estado}];
                 listaCBCodigo=[...listaCBCodigo,{codigo:entry.codigo_solicitud,id:entry.id}];
             });
-            console.log('listaCBProfesor0:',listaCBProfesor[0]);
+            /*console.log('listaCBProfesor0:',listaCBProfesor[0]);
             console.log('listaCBProfesor1:',listaCBProfesor[1]);
             console.log('Prueba obj:');
             if(JSON.stringify(listaCBProfesor[0])===JSON.stringify(listaCBProfesor[1])){
-                console.log('ala mrdd');
-            }
+                console.log('worked');
+            }*/
             this.setState({
                 ayudas: response.data.ayudaEconomica,
                 ayudasMostrar: response.data.ayudaEconomica,
