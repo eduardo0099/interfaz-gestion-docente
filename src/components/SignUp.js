@@ -3,10 +3,12 @@ import { Button, Checkbox, ControlLabel, FormControl, FormGroup } from 'react-bo
 import BaseContainer from './BaseContainer';
 import axios from 'axios';
 import API from '../api';
+import SimpleReactValidator from "simple-react-validator";
 
 class SignUp extends Component {
 	constructor(props) {
 		super(props);
+        this.validator = new SimpleReactValidator();
 		this.state = {
 			nombres: "",
 			apellido_materno: "",
@@ -172,6 +174,8 @@ class SignUp extends Component {
 								placeholder="Ingrese su nombre"
 								onChange={this.handleChangeNombres}
 							/>
+                            {this.validator1.message('nombres', this.state.nombres, 'required', false, {required: 'Este campo es obligatorio'})}
+
 						</FormGroup>
 						<FormGroup controlId="formControlApePat" >
 							<ControlLabel>Apellido Paterno</ControlLabel>
