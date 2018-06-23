@@ -85,17 +85,19 @@ class AsignarCursos extends Component {
     }
 
     componentDidMount() {
+        console.log(this.state.filtroCiclo);
+        
         API.get('asignacionHorarios/listaCursosDisponible', { params: { ciclo: this.state.filtroCiclo } })
             .then(response => {
                 this.totalCursosXciclo = response.data.cursos;
                 let aux = [];
                 for (let i = 0; i < response.data.cursos.length; i++) {
                     aux.push(response.data.cursos[i].seccion);
-                }
+                }   
                 this.setState({ dataTablaAsignacion: response.data.cursos, listaSecciones: Array.from(new Set(aux)) });
             })
             .catch(error => {
-                alert("Ha ocurrido un error, intentelo luego");
+                alert("Ha ocurrido un error con el listado de cursos disponibles, intentelo luego");
                 console.log(error);
             });
         API.get('asignacionHorarios/consultaPreferencias')
@@ -157,14 +159,16 @@ class AsignarCursos extends Component {
                 })
             })
             .catch(error => {
-                console.log(`Error al obtener datos de la pantalla asignacion de cursos`, error);
+                alert(`Error al consultar preferencias`);
+                console.log(error);
             });
         API.get('asignacionHorarios/listaDocenteCargaAsignada', {
             params: { ciclo: this.state.filtroCicloRes }
         }).then(res => {
             this.setState({ resumenAsignacion: res.data.docentes });
         }).catch(error => {
-            alert("Ha ocurrido un error, intentelo luego");
+            alert("Ha ocurrido un error al consultar la carga asignada");
+            console.log(error);
         });
     }
 
