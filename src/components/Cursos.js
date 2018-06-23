@@ -12,9 +12,9 @@ export class Cursos extends React.Component {
             ciclos: [],
             cicloSeleccionado: "",
             infoDocente: {},
-            tipoCursos:[{id:"1",descripcion:"pregrado"},
-                {id:"2",descripcion:"posgrado"},
-                {id:"3",descripcion:"otros"}],
+            tipoCursos:[{id:"1",descripcion:"pregrado", nombre:"Pregrado"},
+                {id:"2",descripcion:"posgrado", nombre:"Posgrado"},
+                {id:"3",descripcion:"otros", nombre:"Otros"}],
             tipoSeleccionado:"pregrado",
         }
     }
@@ -101,15 +101,15 @@ export class Cursos extends React.Component {
                             <header className="page-header">
                                 <a className="btn btn-default pull-right"
                                    onClick={ this.props.history.goBack }> Volver al Perfil </a>
-                                <p className="h2 m-b-sm"> { this.state.infoDocente.nombres } { this.state.infoDocente.apellido_paterno } { this.state.infoDocente.apellido_materno }
-                                    <small className="block m-t-xs"> Cursos </small>
-                                </p>
+                                <p className="h2 m-b-sm"> { this.state.infoDocente.nombres } { this.state.infoDocente.apellido_paterno } { this.state.infoDocente.apellido_materno } - Cursos</p>
                             </header>
                         </div>
                         <div className="panel-body">
-                            <div>
-                                <div className="form-group col-md-2 row ">
-                                    <label> Ciclo </label>
+                            <div className="col-md-8">
+                                <div className="col-md-1">
+                                    <label> Ciclo: </label>
+                                </div>
+                                <div className="col-md-3">
                                     <Select
                                         value={ this.state.cicloSeleccionado }
                                         onChange={ this.cambioCiclo }
@@ -117,25 +117,31 @@ export class Cursos extends React.Component {
                                         labelKey={ "descripcion" }
                                         options={ this.state.ciclos }
                                         clearable={ false }
+                                        searchable={false}
                                     />
                                 </div>
-                                <div className="form-group col-md-2 row ">
-                                    <label> Tipo </label>
+                                <div className="col-md-1">
+                                    <label> Tipo: </label>
+                                </div>
+                                <div className="col-md-3">
                                     <Select
                                         value={ this.state.tipoSeleccionado }
                                         onChange={ this.cambioTipoCurso }
                                         valueKey={ "descripcion" }
-                                        labelKey={ "descripcion" }
+                                        labelKey={ "nombre" }
                                         options={ this.state.tipoCursos }
                                         clearable={ false }
+                                        searchable={false}
                                     />
                                 </div>
                             </div>
+
                             <table className="table table-striped">
                                 <thead>
-                                <th className="v-middle col-md-4"> Curso</th>
-                                <th className="v-middle col-md-4"></th>
-                                <th className="v-middle col-md-4"></th>
+                                <th className="v-middle col-md-4 text-center"> Curso</th>
+                                <th className="v-middle col-md-4 text-center"> Unidad</th>
+                                <th className="v-middle col-md-2 text-center"> Creditos</th>
+                                <th className="v-middle col-md-2 text-center"> Horas</th>
                                 </thead>
                                 <tbody>
                                 { this.state.infoCursos.map(item => {
@@ -145,6 +151,9 @@ export class Cursos extends React.Component {
                                                 <span className="block text-primary"> { item.nombre } </span>
                                                 <small className="block text-muted"> { item.codigo } </small>
                                                 <small className="block text-muted"> Horario { item.horario } </small>
+                                            </td>
+                                            <td className="v-middle text-center">
+                                                <span className="block text-muted"> { item.unidad } </span>
                                             </td>
                                             <td className="v-middle text-center">
                                                 <span className="badge badge-blue"> { item.creditos } </span>
@@ -165,6 +174,7 @@ export class Cursos extends React.Component {
             </div>
         )
     }
+
 }
 
 

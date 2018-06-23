@@ -11,13 +11,9 @@ import BaseContainer from "../BaseContainer";
 import {Checkbox, CheckboxGroup} from 'react-checkbox-group';
 import API from "../../api";
 import Select from 'react-select';
+import {currentSeccion,currentRole,Role} from '../../auth';
 
-const gradosAcademicos = [
-    'Título Profesional',
-    'Maestría',
-    'Doctorado',
-    'Diplomatura'
-]
+
 
 class ConvocatoriaNuevo extends Component {
 
@@ -25,14 +21,8 @@ class ConvocatoriaNuevo extends Component {
         super(props);
         this.validator = new SimpleReactValidator();
         this.state = {
-            cursos:[],
-            paso:1,
-            btnAnterior:false,
-            btnFinalizar:false,
-            gradosAcademicos: [],
-            docencia: [],
-            experienciaProfesional: [],
-            investigacion: [],
+            secciones:[],
+            seccion:'',
 
             nombre: '',
             codigoCurso:'',
@@ -44,52 +34,41 @@ class ConvocatoriaNuevo extends Component {
         this.handleDescripcion = this.handleDescripcion.bind(this);
         this.handleFIni = this.handleFIni.bind(this);
         this.handleFFin = this.handleFFin.bind(this);
-        this.handleCodigoCurso = this.handleCodigoCurso.bind(this);
+        this.handleSeccion = this.handleSeccion.bind(this);
 
     }
 
     componentDidMount() {
-        this.allCursos();
+        this.allSecciones();
     }
 
-    allCursos() {
-        API.get('general/listaCurso')
+
+    allSecciones (){
+        API.get('/general/listaSeccionesDep')
             .then(response => {
-                this.setState({ cursos: response.data.curso })
+                let aux=response.data.secciones;
+                console.log('secciones:',aux);
+                this.setState({
+                    secciones: response.data.secciones
+                });
+                if(currentRole()!==Role.JEFE_DEPARTAMENTO){
+                    this.setState({
+                        seccion:aux[0].nombre
+                    });
+                }
             })
     }
 
-    gradosAcademicosChanged = (newGradoAcademico) => {
-        this.setState({
-            gradosAcademicos: newGradoAcademico
-        });
-    }
 
-    docenciaChanged = (newDocencia) => {
-        this.setState({
-            docencia: newDocencia
-        });
-    }
 
-    experienciaProfesionalChanged = (newexperProfe) => {
-        this.setState({
-            experienciaProfesional: newexperProfe
-        });
-    }
-
-    investigacionProfesionalChanged = (newinvestigacion) => {
-        this.setState({
-            investigacion: newinvestigacion
-        });
-    }
 
     handleNombre(event) {
         this.setState({nombre: event.target.value});
     }
 
-    handleCodigoCurso(obj) {
-        let codCurso = obj.codigo;
-        this.setState({ codigoCurso: codCurso })
+    handleSeccion(obj) {
+        let seccion = obj.nombre;
+        this.setState({ seccion: seccion })
     }
 
     handleDescripcion(event) {
@@ -130,45 +109,15 @@ class ConvocatoriaNuevo extends Component {
     }
 
     performPostRequest = ()=> {
-        console.log('postrequest:')
-        let gradAcadRegistrar=[];
-        let docenciaRegistrar=[];
-        let expProfRegistrar=[];
-        let investigacionRegistrar=[];
+        console.log('nombre:',this.state.nombre)
+        console.log('seccion:',this.state.seccion)
 
-        this.state.gradosAcademicos.forEach(function(entry) {
-            let elemento  = {descripcion: entry, peso:10};
-            gradAcadRegistrar= [...gradAcadRegistrar, elemento];
-        });
-
-        this.state.docencia.forEach(function(entry) {
-            let elemento  = {descripcion: entry, peso:10};
-            docenciaRegistrar= [...docenciaRegistrar, elemento];
-        });
-
-        this.state.experienciaProfesional.forEach(function(entry) {
-            let elemento  = {descripcion: entry, peso:10};
-            expProfRegistrar= [...expProfRegistrar, elemento];
-        });
-
-        this.state.investigacion.forEach(function(entry) {
-            let elemento  = {descripcion: entry, peso:10};
-            investigacionRegistrar= [...investigacionRegistrar, elemento];
-        });
-        //console.log('gradAcadRegistrar:',gradAcadRegistrar);
-        //console.log('docenciaRegistrar:',docenciaRegistrar);
-        //console.log('expProfRegistrar:',expProfRegistrar);
-        //console.log('investigacionRegistrar:',investigacionRegistrar);
         if( this.validator.allValid() && this.validDates(this.state.fecha_fin,this.state.fecha_inicio)){
             API.post('convocatoria/convocatoria/registrar', {
                 nombre : this.state.nombre,
-                codigo_curso : this.state.codigoCurso,
+                seccion : this.state.seccion,
                 fecha_inicio : this.armarFecha(this.state.fecha_inicio._d),
-                fecha_fin : this.armarFecha(this.state.fecha_fin._d),
-                grados_academicos:gradAcadRegistrar,
-                docencia:docenciaRegistrar,
-                experiencia_profesional:expProfRegistrar,
-                investigacion:investigacionRegistrar,
+                fecha_fin : this.armarFecha(this.state.fecha_fin._d)
             })
                 .then(response => {
                     alert("Convocatoria registrada");
@@ -178,7 +127,7 @@ class ConvocatoriaNuevo extends Component {
                     alert("Error: No se pudo registrar la investigación");
                 })
         }else {
-            if ( this.state.fecha_fin !== null && this.state.fecha_fin !== null ){
+            if ( this.state.fecha_inicio !== null && this.state.fecha_fin !== null ){
                 if (!this.validDates(this.state.fecha_fin,this.state.fecha_inicio)){
                     alert("La fecha de fin es menor a la fecha de inicio!");
                 }
@@ -189,189 +138,9 @@ class ConvocatoriaNuevo extends Component {
         }
     }
 
-    performNext = ()=> {
-        if(this.state.paso==1) {
-            if (this.validator.allValid() && this.validDates(this.state.fecha_fin,this.state.fecha_inicio)) {
-            //if (1) {
-                this.setState({
-                    paso: 2,
-                    btnAnterior:true,
-                    btnFinalizar:true
-                });
-            } else {
-                if ( this.state.fecha_fin !== null && this.state.fecha_fin !== null ){
-                    if (!this.validDates(this.state.fecha_fin,this.state.fecha_inicio)){
-                        alert("La fecha de fin es menor a la fecha de inicio!");
-                    }
-                }
-                this.validator.showMessages();
-                // rerender to show messages for the first time
-                this.forceUpdate();
-            }
 
-        }else if(this.state.paso==2){
-            //if (this.validator2.allValid()) {
-            if (1) {
-                console.log('gradosAcademicos:',this.state.gradosAcademicos);
-                console.log('docencia:',this.state.docencia);
-                console.log('experienciaProfesional:',this.state.experienciaProfesional);
-                console.log('investigacion:',this.state.investigacion);
-                this.performPostRequest()
-            } else {
-            }
-        }
-    }
-
-    performBack = ()=> {
-        if(this.state.paso==2) {
-            if(this.state.paso==2) {
-                this.setState({
-                    paso: 1,
-                    btnAnterior:false,
-                    btnFinalizar:false
-                });
-            }
-        }
-    }
-
-
+    
     render() {
-
-        let btnSiguiente;
-        if (this.state.btnFinalizar) {
-            btnSiguiente = <button className="btn btn-primary" onClick={this.performNext}> Finalizar </button>
-        } else {
-            btnSiguiente = <button className="btn btn-primary" onClick={this.performNext}> Siguiente </button>
-        }
-
-        let btnAnterior;
-        if (this.state.btnAnterior) {
-            btnAnterior = <button className="btn btn-primary" onClick={this.performBack}> Anterior </button>
-        } else {
-            btnAnterior=<label></label>
-        }
-
-        let cuerpo;
-        if (this.state.paso == 1) {
-            cuerpo = <div className="panel-body">
-                <h4> Datos generales </h4>
-                <div className="form-group">
-                    <div className="col-md-offset-0 col-md-7">
-                        <hr/>
-                        <div className="form-group">
-                            <label> Nombre </label>
-                            <input type="text" className="form-control" value={this.state.nombre} onChange={this.handleNombre}></input>
-                            {this.validator.message('nombre', this.state.nombre, 'required', false, {required: 'Este campo es obligatorio'})}
-                        </div>
-                        <div className="form-group">
-                            <label> Código curso </label>
-                            <Select
-                                value={ this.state.codigoCurso }
-                                onChange={ this.handleCodigoCurso }
-                                valueKey={ "codigo" }
-                                labelKey={ "codigo" }
-                                options={ this.state.cursos }
-                                clearable={ false }
-                            />
-                            {this.validator.message('codigoCurso', this.state.codigoCurso, 'required', false, {required: 'Este campo es obligatorio'})}
-                        </div>
-                        <div className="form-group">
-                            <label> Descripción </label>
-                            <textarea type="text" className="form-control" value={this.state.descripcion} onChange={this.handleDescripcion}></textarea>
-                            {this.validator.message('descripcion', this.state.descripcion, 'required', false, {required: 'Este campo es obligatorio'})}
-                        </div>
-                        <div className="form-group">
-                            Fecha Inicio:
-                            <DatePicker
-                                dateFormat="DD/MM/YYYY"
-                                selected={this.state.fecha_inicio}
-                                onChange={this.handleFIni}
-                            />
-                            {this.validator.message('fecha_inicio', this.state.fecha_inicio, 'required', false, {required: 'Este campo es obligatorio'})}
-                        </div>
-                        <div className="form-group">
-                            Fecha Fin:
-                            <DatePicker
-                                dateFormat="DD/MM/YYYY"
-                                selected={this.state.fecha_fin}
-                                onChange={this.handleFFin}
-                            />
-                            {this.validator.message('fechaFin', this.state.fecha_fin, 'required', false, {required: 'Este campo es obligatorio'})}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }else if(this.state.paso == 2){
-            cuerpo =
-                <div className="panel-body">
-                    <h4> Documentos</h4>
-                    <div className="form-group">
-                        <div className="col-md-offset-0 col-md-6">
-                            <hr/>
-                            <div className="form-group">
-                                <h5> Grados Academicos </h5>
-                                <div className="col-md-offset-1">
-                                <CheckboxGroup
-                                    checkboxDepth={2} // This is needed to optimize the checkbox group
-                                    name="gradosAcademicos"
-                                    value={this.state.gradosAcademicos}
-                                    onChange={this.gradosAcademicosChanged}>
-                                    <label><Checkbox value="Titulo Profesional"/> Título Profesional</label>
-                                    <br/>
-                                    <label><Checkbox value="Maestria"/> Maestría</label>
-                                    <br/>
-                                    <label><Checkbox value="Doctorado"/> Doctorado</label>
-                                    <br/>
-                                    <label><Checkbox value="Diplomatura"/> Diplomado</label>
-                                </CheckboxGroup>
-                                </div>
-
-                            </div>
-                            <div className="form-group">
-                                <h5> Docencia </h5>
-                                <div className="col-md-offset-1">
-                                <CheckboxGroup
-                                    checkboxDepth={2} // This is needed to optimize the checkbox group
-                                    name="docencia"
-                                    value={this.state.docencia}
-                                    onChange={this.docenciaChanged}>
-                                    <label><Checkbox value="Cargos a su curso"/> Cargos a su curso</label>
-                                    <br/>
-                                    <label><Checkbox value="Asesoria de Tesis"/> Asesoria de Tesis</label>
-                                    <br/>
-                                    <label><Checkbox value="Premios a la Docencia"/> Premios a la Docencia</label>
-                                </CheckboxGroup>
-                                </div>
-                            </div>
-                            <div className="form-group">
-                                <h5> Experiencia Profesional </h5>
-                                <div className="col-md-offset-1">
-                                <CheckboxGroup
-                                    checkboxDepth={2} // This is needed to optimize the checkbox group
-                                    name="Solicitar Experiencia Profesional"
-                                    value={this.state.experienciaProfesional}
-                                    onChange={this.experienciaProfesionalChanged}>
-                                    <label><Checkbox value="Solicitar Experiencia Profesional"/> Solicitar Experiencia Profesional</label>
-                                </CheckboxGroup>
-                                </div>
-                            </div>
-                            <div className="form-group">
-                                <h5> Investigacion </h5>
-                                <div className="col-md-offset-1">
-                                <CheckboxGroup
-                                    checkboxDepth={2} // This is needed to optimize the checkbox group
-                                    name="Solicitar Investigacion"
-                                    value={this.state.investigacion}
-                                    onChange={this.investigacionProfesionalChanged}>
-                                    <label><Checkbox value="Solicitar Investigacion"/> Solicitar Investigacion</label>
-                                </CheckboxGroup>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-        }
 
         return (
             <BaseContainer>
@@ -382,11 +151,53 @@ class ConvocatoriaNuevo extends Component {
                             <p className="h2 m-b-sm"> Nueva Convocatoria </p>
                         </header>
                     </div>
-                    {cuerpo}
+                    <div className="panel-body">
+                        <h4> Datos generales </h4>
+                        <div className="form-group">
+                            <div className="col-md-offset-0 col-md-7">
+                                <hr/>
+                                <div className="form-group">
+                                    <label> Nombre </label>
+                                    <input type="text" className="form-control" value={this.state.nombre} onChange={this.handleNombre}></input>
+                                    {this.validator.message('nombre', this.state.nombre, 'required', false, {required: 'Este campo es obligatorio'})}
+                                </div>
+                                {currentRole()=== Role.JEFE_DEPARTAMENTO || currentRole()=== Role.ASISTENTE_DEPARTAMENTO?<div className="form-group">
+                                        <label> Seccion </label>
+                                        <Select
+                                            value={ this.state.seccion }
+                                            onChange={ this.handleSeccion }
+                                            valueKey={ "nombre" }
+                                            labelKey={ "nombre" }
+                                            options={ this.state.secciones }
+                                            clearable={ false }
+                                        />
+                                        {this.validator.message('codigoCurso', this.state.codigoCurso, 'required', false, {required: 'Este campo es obligatorio'})}
+                                    </div>
+                                    :null
+                                }
+                                <div className="form-group">
+                                    Fecha Inicio:
+                                    <DatePicker
+                                        dateFormat="DD/MM/YYYY"
+                                        selected={this.state.fecha_inicio}
+                                        onChange={this.handleFIni}
+                                    />
+                                    {this.validator.message('fecha_inicio', this.state.fecha_inicio, 'required', false, {required: 'Este campo es obligatorio'})}
+                                </div>
+                                <div className="form-group">
+                                    Fecha Fin:
+                                    <DatePicker
+                                        dateFormat="DD/MM/YYYY"
+                                        selected={this.state.fecha_fin}
+                                        onChange={this.handleFFin}
+                                    />
+                                    {this.validator.message('fechaFin', this.state.fecha_fin, 'required', false, {required: 'Este campo es obligatorio'})}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div className="panel-footer text-right">
-                        {btnAnterior}
-                        <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
-                        {btnSiguiente}
+                        <button className="btn btn-primary" onClick={this.performPostRequest}> Finalizar </button>
                     </div>
                 </div>
             </BaseContainer>

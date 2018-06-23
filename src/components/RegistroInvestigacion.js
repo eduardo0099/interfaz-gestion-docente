@@ -11,7 +11,6 @@ import API from "../api";
 
 class RegistroInvestigación extends Component{
 
-
     constructor(props){
         super(props);
         this.validator = new SimpleReactValidator();
@@ -21,7 +20,8 @@ class RegistroInvestigación extends Component{
             resumen: '',
             fecha_inicio: null,
             fecha_fin: null,
-            archivo:null
+            file:null,
+            idArchivo:'',
         };
         this.handleTitulo = this.handleTitulo.bind(this);
         this.handleAutor = this.handleAutor.bind(this);
@@ -84,11 +84,11 @@ class RegistroInvestigación extends Component{
                 resumen: this.state.resumen,
                 fecha_inicio: this.armarFecha(this.state.fecha_inicio._d),
                 fecha_fin: this.armarFecha(this.state.fecha_fin._d),
-                archivo:null
+                archivo:this.state.idArchivo,
             })
                 .then(response => {
                     alert("Investigación registrada");
-                    this.props.history.goBack();
+                    //this.props.history.goBack();
                 })
                 .catch(error => {
                     alert("Error: No se pudo registrar la investigación");
@@ -103,6 +103,21 @@ class RegistroInvestigación extends Component{
             // rerender to show messages for the first time
             this.forceUpdate();
         }
+    }
+
+    uploadFile = (e) => {
+        let file = e.target.files[0];
+        let formData = new FormData();
+        formData.append('file', file);
+        API.post('docente/investigacion/registrarArchivo',
+            formData,
+            {
+                headers: {'Content-Type': 'multipart/form-data'}
+            }
+        ).then(response =>{
+            this.setState({idArchivo :response.data.id})
+        }).catch(response =>  {
+        });
     }
 
     render(){
@@ -150,6 +165,12 @@ class RegistroInvestigación extends Component{
                                 onChange={this.handleFFin}
                             />
                             {this.validator.message('fechaFin', this.state.fecha_fin, 'required', false, {required: 'Este campo es obligatorio'})}
+                        </div>
+                        <div className="form-group">
+                            <label> Adjuntar Archivo </label>
+                            <td className="v-middle">
+                                <input type="file" id="files" ref="files" onChange={this.uploadFile}/>
+                            </td>
                         </div>
                     </div>
                     <div className="panel-footer text-right">

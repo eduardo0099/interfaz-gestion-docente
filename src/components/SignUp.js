@@ -1,6 +1,5 @@
-
-import React, { Component } from 'react';
-import {Checkbox,Radio,FormGroup,FormControl,ControlLabel,Button} from 'react-bootstrap';
+import React, {Component} from 'react';
+import {Button, Checkbox, ControlLabel, FormControl, FormGroup} from 'react-bootstrap';
 import BaseContainer from './BaseContainer';
 import axios from 'axios';
 import API from '../api';
@@ -36,9 +35,9 @@ class SignUp extends Component {
 			this.state.password!="" &&
 			this.state.id_tipo_usuario!=0 &&
 			this.state.id_departamento!=0){
-			if(this.state.id_tipo_usuario==2 || this.state.id_tipo_usuario==4){
+			if(this.state.id_tipo_usuario==2 || this.state.id_tipo_usuario==5){
 				if(this.state.id_seccion!=0){
-					axios.post('http://200.16.7.151:8080/auth/register',{
+					axios.post('http://200.16.7.151:80/auth/register',{
 						nombres: this.state.nombres,
 						apellido_materno: this.state.apellido_materno,
 						apellido_paterno: this.state.apellido_paterno,

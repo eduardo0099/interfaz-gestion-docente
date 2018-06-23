@@ -17,37 +17,40 @@ class PreferenciaCursos extends Component {
 			cursosElec: [],
 			cursosPref: [],
 			codigoProfe: 0,
-			nombreProfe: ""
+			nombreProfe: "",
+			existe: 'false'
 		};
 		this.handleProfCode = this.handleProfCode.bind(this);
 	}
 
 	handleProfCode(event) {
-		this.setState({codigoProfe: event.target.value});
-		/*
-		//Servicio donde se envia el código del profesor
-		axios.post('http://200.16.7.151:8080/asignacionHorarios/enviarCodigoProfe', {
-			codigoProfe: this.state.codigoProfe,
-		})
+		if(event.target.value.length == 8){
+			this.setState({codigoProfe: event.target.value});
+			//Servicio que recoge el nombre del profesor
+			let urlN = "/asignacionHorarios/verificaCodigoDocente?codigo=" + event.target.value.toString() + "";
+			//console.log(urlN.toString());
+			API.get(urlN)
 			.then(response => {
-			})
-			.catch(error => {
-			})
-		//Servicio que recoge el nombre del profesor
-		axios.get('http://demo4106552.mockable.io/asignacionHorarios/nombreProfeReferenciado')
-			.then(response => {
-				this.setState({nombreProfe: response.data.nombreProfe});
-			})
-			.catch(error => {
-			})
-		//Evaluador
-		if(this.state.nombreProfe == "ERROR"){
-			alert("Error: el código proporcionado no corresponde a ningún profesor de la sección.")
+					//console.log('e',response.data);
+					this.setState({nombreProfe: response.data.nombre, existe: response.data.exists});
+					let selector = document.querySelectorAll('[type=checkbox]');
+					for(let i=0; i<selector.length; i++){
+						selector[i].disabled = false;
+					}
+				})
+				.catch(error => {
+					alert("Error: el código proporcionado no corresponde a ningún profesor de la sección.");
+					this.setState({nombreProfe: "", existe: false});
+				})
 		}
 		else{
-			document.getElementsByName("codigoProfe")[0].value=this.state.nombreProfe;
+			this.setState({nombreProfe: "", existe: false});
+			document.querySelectorAll('[type=checkbox]').forEach((x) => x.checked=false);
+			let selector = document.querySelectorAll('[type=checkbox]');
+			for(let i=0; i<selector.length; i++){
+				selector[i].disabled = true;
+			}
 		}
-		*/
 	}
 
 
@@ -58,6 +61,17 @@ class PreferenciaCursos extends Component {
 			}
 		}
 		return -1;
+	}
+
+	numberOnly(evt) {
+	  var theEvent = evt || window.event;
+	  var key = theEvent.keyCode || theEvent.which;
+	  key = String.fromCharCode( key );
+	  var regex = /[0-9]|\./;
+	  if( !regex.test(key) ) {
+	    theEvent.returnValue = false;
+	    if(theEvent.preventDefault) theEvent.preventDefault();
+	  }
 	}
 
 	handleChange(curso, e){
@@ -158,22 +172,32 @@ class PreferenciaCursos extends Component {
 					<div>
 						<div className="panel-heading">
 							<header className="page-header m-b-md text-center">
-                                    <p className="h2 m-b-lg"> PREFERENCIAS DE CURSOS </p>
+                                    <p className="h2 m-b-lg"> PREFERENCIA DE DICTADO </p>
                             </header>
+						</div>
+						<div className="panel-body">
+							¡Bienvenido al Formulario de Preferencia de Dictado!<br></br><br></br>
+							Aquí podrá seleccionar los cursos que desea dictar en los próximos dos semestres académicos.
+							Para empezar, digite su código PUCP en el recuadro de abajo. Su nombre aparecerá automáticamente
+							a la derecha, si el código fue escrito correctamente.
 						</div>
 						<div className="panel-body">
 							<div className="row form-group">
 								<div class="col-md-1">Código:</div>
 								<div class="col-md-2">
-									<input type="text" class="form-control" name="codigoProfe" onChange={this.handleProfCode}></input>
+									<input type="text" class="form-control" name="codigoProfe" maxlength="8" onKeyPress={this.numberOnly.bind(this)} onChange={this.handleProfCode}></input>
 								</div>
 								<div class="col-md-2">Apellidos y nombres:</div>
 								<div class="col-md-6">
-									<input type="text" class="form-control" size="80" name="nombreProfe" disabled></input>
+									<label type="text" class="form-control" size="80" name="nombreCompProfe" disabled>{this.state.nombreProfe.toUpperCase()} </label>
 								</div>
 							</div>
-							<div> 
-							<hr/>
+						</div>
+						<hr/>
+						<div className="panel-body">
+							<div>
+							Ahora seleccione las casillas correspondientes a los cursos y a los ciclos que desea dictar.<br></br>
+							Recuerde que puede seleccionar uno o ambos ciclos.
 							<h4> Cursos obligatorios </h4>
 							<table className="table table-striped m-t-md">
 								<thead>
@@ -192,10 +216,10 @@ class PreferenciaCursos extends Component {
 												<small className="block text-muted"> {curso.codigo} </small>
 											</td>
 											<td className="v-middle text-center">
-												<input type="checkbox" name={curso.codigo} onChange={this.handleChange.bind(this, curso)} value="2018-1"></input>
+												<input type="checkbox" name={curso.codigo} onChange={this.handleChange.bind(this, curso)} value="2018-1" disabled></input>
 											</td>
 											<td className="v-middle text-center">
-												<input type="checkbox" name={curso.codigo} onChange={this.handleChange.bind(this, curso)} value="2018-2"></input>
+												<input type="checkbox" name={curso.codigo} onChange={this.handleChange.bind(this, curso)} value="2018-2" disabled></input>
 											</td>
 										</tr>
 									);
@@ -223,10 +247,10 @@ class PreferenciaCursos extends Component {
 												<small className="block text-muted"> {curso.codigo} </small>
 											</td>
 											<td className="v-middle text-center">
-												<input type="checkbox" name={curso.codigo} onChange={this.handleChange.bind(this, curso)} value="2018-1"></input>
+												<input type="checkbox" name={curso.codigo} onChange={this.handleChange.bind(this, curso)} value="2018-1" disabled></input>
 											</td>
 											<td className="v-middle text-center">
-												<input type="checkbox" name={curso.codigo} onChange={this.handleChange.bind(this, curso)} value="2018-2"></input>
+												<input type="checkbox" name={curso.codigo} onChange={this.handleChange.bind(this, curso)} value="2018-2" disabled></input>
 											</td>
 										</tr>
 									);

@@ -3,8 +3,11 @@ import {Route, Link,Redirect} from 'react-router-dom';
 import BaseContainer from "../BaseContainer";
 import ConvocatoriaNuevo from "./ConvocatoriasNuevo";
 import ConvocatoriasListaPostulantes from "./ConvocatoriasListaPostulantes";
+import ConvocatoriaDetalle from "./ConvocatoriaDetalle"
 import API from '../../api.js';
 import ConfirmationModal from "../ConfirmationModal";
+import {Role,currentRole} from '../../auth.js'
+import axios from 'axios';
 
 class ConvocatoriasLista extends Component {
 
@@ -13,9 +16,10 @@ class ConvocatoriasLista extends Component {
         this.state = {
             convocatorias: [],
             auth: false,
-            verAuth:false
+            verAuth:false,
         }
     }
+
     componentWillMount() {
         if (localStorage.getItem('jwt') == null) {
             window.location.href = "/";
@@ -27,23 +31,25 @@ class ConvocatoriasLista extends Component {
                 },
                 */
                 params: {
-                    ruta: "/home"
+                    ruta: "/convocatorias"
                 }
             }).then(resp => {
-                console.log("resp", resp.data);
-                this.setState({ auth: resp.data.permiso,verAuth:true });
+                console.log("resp convocatoria",typeof resp.data.permiso,resp.data.permiso);
+                this.setState({ auth: resp.data.permiso, verAuth:true });
             }).catch(err => {
                 console.log("err", err);
             })
         }
     }
-    componentWillMount() {
+    
+    componentDidMount() {
         this.search();
     }
 
     search() {
         API.get('convocatoria/convocatoria/lista')
             .then(response => {
+                console.log(response);
                 this.setState({convocatorias: response.data.convocatorias})
             })
     }
@@ -51,15 +57,17 @@ class ConvocatoriasLista extends Component {
     labelEstado(estado) {
         switch (estado) {
             case 'Creada':
-                return <span className="label label-default"> Creado </span>;
+                return <span className="label label-default"> Creada </span>;
+            case 'Aprobada':
+                return <span className="label label-default"> Aprobada </span>;
             case 'Abierta':
                 return <span className="label label-success"> Abierta </span>;
             case 'Cerrada':
-                return <span className="label label-danger"> Cerrado </span>;
+                return <span className="label label-danger"> Cerrada </span>;
             case 'Cancelada':
-                return <span className="label label-danger"> Cancelado </span>;
+                return <span className="label label-danger"> Cancelada </span>;
             case 'Finalizada':
-                return <span className="label label-success"> Finalizado </span>;
+                return <span className="label label-success"> Finalizada </span>;
             default:
                 return <span></span>;
         }
@@ -68,19 +76,21 @@ class ConvocatoriasLista extends Component {
 
 
     render() {
-        if(!this.state.auth && this.state.verAuth){
+        /*if(!this.state.auth && this.state.verAuth){
             return(<Redirect to="/home"/>);
         }else if (!this.state.verAuth){
             return(<div/>);
-        }
+        }*/
         return (
             <div>
                 <Route exact path={`${this.props.match.path}`} render={() =>
                     <BaseContainer>
                         <div className="panel wrapper-md col-lg-offset-1 col-lg-10 col-md-12 col-sm-12">
                             <div className="panel-heading">
-                                <Link className="btn btn-sm btn-primary pull-right m-t-md"
-                                      to={"/convocatorias/nuevo"}> Nueva Convocatoria</Link>
+                                {currentRole()=== Role.JEFE_DEPARTAMENTO ?<span></span>
+                                    :<Link className="btn btn-sm btn-primary pull-right m-t-md"
+                                           to={"/convocatorias/registro/nuevo"}> Nueva Convocatoria</Link>
+                                    }
                                 <h2> Convocatorias </h2>
                             </div>
                             <div className="panel-body">
@@ -89,8 +99,8 @@ class ConvocatoriasLista extends Component {
                                     <tr>
                                         <th className="v-middle col-md-1 text-center">Código</th>
                                         <th className="v-middle col-md-4">Nombre</th>
-                                        <th className="v-middle col-md-3">Curso</th>
-                                        <th className="v-middle col-md-3"></th>
+                                        <th className="v-middle col-md-2">Fecha Registro</th>
+                                        <th className="v-middle col-md-4"></th>
                                         <th className="v-middle col-md-1 text-center">Estado</th>
                                     </tr>
                                     </thead>
@@ -100,22 +110,25 @@ class ConvocatoriasLista extends Component {
                                             <tr key={item.id}>
                                                 <td className="v-middle text-center">
                                                     <span className="block text-primary"> {item.codigo} </span>
-                                                    <small className="block text-muted"> {item.fechaRegistro} </small>
                                                 </td>
                                                 <td className="v-middle">
-                                                    <span> {item.nombre} </span>
+                                                    <Link to={"/convocatorias/" + item.id +"/detalle" }>
+                                                        <span> {item.nombre} </span>
+                                                    </Link>
+                                                    <small className="block text-muted"> {item.nombre_seccion} </small>
                                                 </td>
                                                 <td className="v-middle">
-                                                    <span className="block text-primary"> {item.curso.nombre} </span>
-                                                    <small className="block text-muted"> {item.curso.codigo} </small>
+                                                    <span className="block text-primary"> {item.fecha_registro} </span>
                                                 </td>
                                                 <td className="v-middle text-center">
-                                                    <Link to={"/convocatorias/" + item.id}>
-
+                                                    {(item.estado === 'Creada' || item.estado === 'Aprobada')?
+                                                        <span></span>
+                                                        :
+                                                        <Link to={"/convocatorias/" + item.id}>
                                                             <span className="badge"> {item.cantidadPostulantes} </span>
-                                                            <span
-                                                                className="block small text-muted m-t-xs"> postulantes </span>
-                                                    </Link>
+                                                            <span className="block small text-muted m-t-xs"> postulantes </span>
+                                                        </Link>
+                                                    }
                                                 </td>
                                                 <td className="v-middle text-center">
                                                     {this.labelEstado(item.estado)}
@@ -130,7 +143,8 @@ class ConvocatoriasLista extends Component {
                     </BaseContainer>
                 }/>
 
-                <Route path="/convocatorias/nuevo" component={ConvocatoriaNuevo}/>
+                <Route path="/convocatorias/registro/nuevo" component={ConvocatoriaNuevo}/>
+                <Route path="/convocatorias/:id_convocatoria/detalle" component={ConvocatoriaDetalle}/>
                 <Route path="/convocatorias/:id_convocatoria" component={ConvocatoriasListaPostulantes}/>
 
             </div>

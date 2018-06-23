@@ -7,6 +7,7 @@ import BaseContainer from "../BaseContainer";
 import ConvocatoriaNuevo from "../convocatorias/ConvocatoriasNuevo";
 import AyudaEconomicaNuevo from "./AyudaEconomicaNuevo";
 import API from "../../api";
+import {Role, currentRole} from "../../auth";
 import ConfirmationModal from "../ConfirmationModal";
 
 class AyudaEconomicaAprobar extends React.Component {
@@ -16,7 +17,7 @@ class AyudaEconomicaAprobar extends React.Component {
         this.confirmationAceptar = React.createRef();
         this.confirmationRechazar = React.createRef();
         this.state = {
-
+            estado_test : '',
             solicitudEconomica: {
                 id: 2,
                 codigo: 'AYU001',
@@ -41,7 +42,25 @@ class AyudaEconomicaAprobar extends React.Component {
 
     componentWillMount() {
         this.findSolicitud();
+        this.findEstado();
     }
+
+    findEstado(){
+        API.get('ayudasEconomicas/ayudasEconomicas/estado', {
+            params: {
+                id:  this.props.match.params.idAyudaEconomica
+            }
+        }).then(response => {
+            console.log("response:",response);
+            this.setState({
+                estado_test:response.data.descripcion
+            });
+        }).catch(err =>{
+            alert("Ha ocurrido un error obteniendo el estado de la solicitud, intentelo luego",err);
+            console.log(err);
+        })
+    }
+
     findSolicitud(){
         API.get('ayudasEconomicas/ayudasEconomicas/devuelveJustificacion', {
             params: {
@@ -49,6 +68,7 @@ class AyudaEconomicaAprobar extends React.Component {
             }
         }).then(response => {
             const ae = response.data.ayudaEconomica;
+            console.log("ae:",ae);
             this.setState({
                 solicitudEconomica: {
                     id: ae.id,
@@ -66,6 +86,9 @@ class AyudaEconomicaAprobar extends React.Component {
                     comentarios_adicionales: ae.comentarios_adicionales,
                 }
             });
+        }).catch(err =>{
+            alert("Ha ocurrido un error obteniendo datos de la solicitud, intentelo luego",err);
+            console.log(err);
         })
     }
 
@@ -85,6 +108,10 @@ class AyudaEconomicaAprobar extends React.Component {
         }).then(response => {
             this.confirmationAceptar.current.close();
             this.props.history.goBack();
+            window.location.reload();
+        }).catch(err =>{
+            alert("Ha ocurrido un error aprobando solicitud, intentelo luego",err);
+            console.log(err);
         })
     }
 
@@ -97,89 +124,113 @@ class AyudaEconomicaAprobar extends React.Component {
         }).then(response => {
             this.confirmationRechazar.current.close();
             this.props.history.goBack();
+            window.location.reload();
         }).catch(err =>{
+            alert("Ha ocurrido un error rechazando solicitud, intentelo luego",err);
             console.log(err);
         })
     }
 
     render() {
-        return (
-            <div>
-                <Route exact path={`${this.props.match.path}`} render={() =>
-                    <BaseContainer>
-                        <ConfirmationModal ref={this.confirmationAceptar} message={"Seguro que desea aceptar la ayuda economica?"} okaction = { this.aprobarSolicitud.bind(this) }/>
-                        <ConfirmationModal ref={this.confirmationRechazar} message={"Serguro que desea rechazar la ayuda economica?"} okaction={ this.rechazarSolicitud.bind(this) }/>
-                        <div className="panel col-lg-offset-2 col-lg-8 col-md-12 col-sm-12">
-                            <div className="panel-heading">
-                                <header className="page-header">
-                                    <a className="btn btn-default pull-right"
-                                       onClick={this.props.history.goBack}> Volver </a>
-                                    <p className="h2 m-b-sm"> Solicitud
-                                        Economica {this.state.solicitudEconomica.codigo} </p>
-                                </header>
-                            </div>
-                            <div className="panel-body">
-                                <h5> Informacion General del docente</h5>
-                                <hr/>
-                                <div className="row form-group">
-                                    <div className="col-md-4">
-                                        <label> Codigo </label>
-                                        <span className="form-control"> {this.state.solicitudEconomica.codigo} </span>
+        if(currentRole() === Role.JEFE_DEPARTAMENTO){
+            return (
+                <div>
+                    <Route exact path={`${this.props.match.path}`} render={() =>
+                        <BaseContainer>
+                            <ConfirmationModal ref={this.confirmationAceptar} message={"Seguro que desea aceptar la ayuda economica?"} okaction = { this.aprobarSolicitud.bind(this) }/>
+                            <ConfirmationModal ref={this.confirmationRechazar} message={"Seguro que desea rechazar la ayuda economica?"} okaction={ this.rechazarSolicitud.bind(this) }/>
+                            <div className="panel col-lg-offset-2 col-lg-8 col-md-12 col-sm-12">
+                                <div className="panel-heading">
+                                    <header className="page-header">
+                                        <a className="btn btn-default pull-right"
+                                           onClick={this.props.history.goBack}> Volver </a>
+                                        <p className="h2 m-b-sm"> Solicitud
+                                            Economica {this.state.solicitudEconomica.codigo} </p>
+                                    </header>
+                                </div>
+                                <div className="panel-body">
+                                    <h5> Informacion General del docente</h5>
+                                    <hr/>
+                                    <div className="row form-group">
+                                        <div className="col-md-4">
+                                            <label> Codigo </label>
+                                            <span className="form-control"> {this.state.solicitudEconomica.codigo} </span>
+                                        </div>
+                                        <div className="col-md-4">
+                                            <label> Profesor Solicitante </label>
+                                            <span className="form-control"> {this.state.solicitudEconomica.nombreDocente} </span>
+                                        </div>
+                                        <div className="col-md-4">
+                                            <label> Correo PUCP </label>
+                                            <span className="form-control"> {this.state.solicitudEconomica.correo_pucp} </span>
+                                        </div>
+                                        <div className="col-md-4">
+                                            <label> Seccion </label>
+                                            <span className="form-control"> {this.state.solicitudEconomica.seccion} </span>
+                                        </div>
                                     </div>
-                                    <div className="col-md-4">
-                                        <label> Profesor Solicitante </label>
-                                        <span className="form-control"> {this.state.solicitudEconomica.nombreDocente} </span>
-                                    </div>
-                                    <div className="col-md-4">
-                                        <label> Correo PUCP </label>
-                                        <span className="form-control"> {this.state.solicitudEconomica.correo_pucp} </span>
-                                    </div>
-                                    <div className="col-md-4">
-                                        <label> Seccion </label>
-                                        <span className="form-control"> {this.state.solicitudEconomica.seccion} </span>
+                                    <h5> Detalle de la Solicitud </h5>
+                                    <hr/>
+                                    <div className="row form-group">
+                                        <div className="col-md-4">
+                                            <label> Motivo </label>
+                                            <span className="form-control"> {this.state.solicitudEconomica.motivo} </span>
+                                        </div>
+                                        <div className="col-md-4">
+                                            <label> Monto </label>
+                                            <span className="form-control"> {this.state.solicitudEconomica.monto_otorgado} </span>
+                                        </div>
+                                        <div className="col-md-4">
+                                            <label> Fecha Registro de Solicitud </label>
+                                            <span className="form-control"> {this.state.solicitudEconomica.fecha_solicitud} </span>
+                                        </div>
+                                        <div className="col-md-4">
+                                            <label> Fecha Inicio </label>
+                                            <span className="form-control"> {this.state.solicitudEconomica.fecha_inicio} </span>
+                                        </div>
+                                        <div className="col-md-4">
+                                            <label> Fecha Fin </label>
+                                            <span className="form-control"> {this.state.solicitudEconomica.fecha_fin} </span>
+                                        </div>
+                                        <div className="col-md-4">
+                                            <label> Comentarios Adicionales </label>
+                                            <spam className="form-control"> {this.state.solicitudEconomica.comentarios_adicionales} </spam>
+                                        </div>
                                     </div>
                                 </div>
-                                <h5> Detalle de la Solicitud </h5>
-                                <hr/>
-                                <div className="row form-group">
-                                    <div className="col-md-4">
-                                        <label> Motivo </label>
-                                        <span className="form-control"> {this.state.solicitudEconomica.motivo} </span>
+
+                                {this.state.estado_test == "Pendiente" ?
+                                    <div className="panel-footer">
+                                        <div className="text-center">
+                                            <button className="btn btn-danger m-r-sm btn-lg"
+                                                    onClick={this.openConfirmationRechazar.bind(this)}> Rechazar
+                                            </button>
+                                            <button className="btn btn-success btn-lg"
+                                                    onClick={this.openConfirmationAceptar.bind(this)}> Aprobar
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div className="col-md-4">
-                                        <label> Monto </label>
-                                        <span className="form-control"> {this.state.solicitudEconomica.monto_otorgado} </span>
-                                    </div>
-                                    <div className="col-md-4">
-                                        <label> Fecha Registro de Solicitud </label>
-                                        <span className="form-control"> {this.state.solicitudEconomica.fecha_solicitud} </span>
-                                    </div>
-                                    <div className="col-md-4">
-                                        <label> Fecha Inicio </label>
-                                        <span className="form-control"> {this.state.solicitudEconomica.fecha_inicio} </span>
-                                    </div>
-                                    <div className="col-md-4">
-                                        <label> Fecha Fin </label>
-                                        <span className="form-control"> {this.state.solicitudEconomica.fecha_fin} </span>
-                                    </div>
-                                    <div className="col-md-4">
-                                        <label> Comentarios Adicionales </label>
-                                        <spam className="form-control"> {this.state.solicitudEconomica.comentarios_adicionales} </spam>
-                                    </div>
-                                </div>
+                                    :
+                                    null
+                                }
+
                             </div>
-                            <div className="panel-footer">
-                                <div className="text-center">
-                                    <button className="btn btn-danger m-r-sm btn-lg" onClick={this.openConfirmationRechazar.bind(this)}> Rechazar </button>
-                                    <button className="btn btn-success btn-lg" onClick={this.openConfirmationAceptar.bind(this)}> Aprobar </button>
-                                </div>
-                            </div>
-                        </div>
-                    </BaseContainer>
-                }/>
-                <Route path={`${this.props.match.path}/nuevo`} component={AyudaEconomicaNuevo}/>
-            </div>
-        );
+                        </BaseContainer>
+                    }/>
+                    <Route path={`${this.props.match.path}/nuevo`} component={AyudaEconomicaNuevo}/>
+                </div>
+            );
+        }else{
+            return(
+                <div>
+                    <label>
+                        Lo sentimos. Al parecer la dirección está mal escrita o no tiene permiso para entrar en esta página. Por favor, contacte con los administradores del sistema.
+                    </label>
+                    <br></br>   
+                    <a className="btn btn-default pull-right"onClick={this.props.history.goBack}> Volver </a>
+                </div>
+            );
+        }
     }
 }
 
