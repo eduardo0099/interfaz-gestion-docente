@@ -92,18 +92,25 @@ class DashboardGraficos extends React.Component {
             activeIndex: 0,
             activeIndexDTP: 0,
             dataDocentesTipoDepartamento: [],
+            dataDocentesTipoDepartamentoVacia:false,
 
             activeIndexATD: 0,
             dataActividadesTipoDepartamento: [],
+            dataActividadesTipoDepartamentoVacio:false,
 
             activeIndexAEED: 0,
             dataApoyoEconomicoEstadoDepartamento: [],
+            dataApoyoEconomicoEstadoDepartamentoVacio:false,
 
             activeIndexCED: 0,
             dataConvocatoriaEstadoDepartamento: [],
+            dataConvocatoriaEstadoDepartamentoVacio:false,
 
             investigacionesAnho:[],
+            investigacionesAnhoVacio:false,
+
             apoyoEconomicoAnho:[],
+            apoyoEconomicoAnhoVacio:false,
         }
 
         this.onPieEnter = this.onPieEnter.bind(this);
@@ -175,6 +182,18 @@ class DashboardGraficos extends React.Component {
             .then(response => {
                 console.log('response:',response.data);
                 this.setState({ apoyoEconomicoAnho: response.data });
+
+                let vacio=true;
+
+                response.data.forEach(function(entry) {
+                    if(entry.apoyo!=0){
+                        vacio=false
+                    }
+                });
+
+                this.setState({ apoyoEconomicoAnhoVacio: vacio });
+
+
             }).catch(error => {
             console.log(`Error al obtener datos `, error);
         });
@@ -185,6 +204,15 @@ class DashboardGraficos extends React.Component {
             .then(response => {
                 console.log('response:',response.data);
                 this.setState({ investigacionesAnho: response.data });
+                let vacio=true;
+
+                response.data.forEach(function(entry) {
+                    if(entry.cantidad!=0){
+                        vacio=false
+                    }
+                });
+
+                this.setState({ investigacionesAnhoVacio: vacio });
             }).catch(error => {
             console.log(`Error al obtener datos `, error);
         });
@@ -197,6 +225,15 @@ class DashboardGraficos extends React.Component {
             .then(response => {
                 //console.log('response:',response);
                 this.setState({ dataDocentesTipoDepartamento: response.data });
+                let vacio=true;
+
+                response.data.forEach(function(entry) {
+                    if(entry.value!=0){
+                        vacio=false
+                    }
+                });
+
+                this.setState({ dataDocentesTipoDepartamentoVacio: vacio });
             }).catch(error => {
             console.log(`Error al obtener datos `, error);
         });
@@ -207,6 +244,15 @@ class DashboardGraficos extends React.Component {
             .then(response => {
                 //console.log('response:',response);
                 this.setState({ dataActividadesTipoDepartamento: response.data });
+                let vacio=true;
+
+                response.data.forEach(function(entry) {
+                    if(entry.value!=0){
+                        vacio=false
+                    }
+                });
+
+                this.setState({ dataActividadesTipoDepartamentoVacio: vacio });
             }).catch(error => {
             console.log(`Error al obtener datos `, error);
         });
@@ -217,6 +263,15 @@ class DashboardGraficos extends React.Component {
             .then(response => {
                 //console.log('response:',response);
                 this.setState({ dataApoyoEconomicoEstadoDepartamento: response.data });
+                let vacio=true;
+
+                response.data.forEach(function(entry) {
+                    if(entry.value!=0){
+                        vacio=false
+                    }
+                });
+
+                this.setState({ dataApoyoEconomicoEstadoDepartamentoVacio: vacio });
             }).catch(error => {
             console.log(`Error al obtener datos `, error);
         });
@@ -227,6 +282,15 @@ class DashboardGraficos extends React.Component {
             .then(response => {
                 console.log('response:',response);
                 this.setState({ dataConvocatoriaEstadoDepartamento: response.data });
+                let vacio=true;
+
+                response.data.forEach(function(entry) {
+                    if(entry.value!=0){
+                        vacio=false
+                    }
+                });
+
+                this.setState({ dataConvocatoriaEstadoDepartamentoVacio: vacio });
             }).catch(error => {
             console.log(`Error al obtener datos `, error);
         });
@@ -242,6 +306,15 @@ class DashboardGraficos extends React.Component {
             .then(response => {
                 console.log('response:',response.data);
                 this.setState({ apoyoEconomicoAnho: response.data });
+                let vacio=true;
+
+                response.data.forEach(function(entry) {
+                    if(entry.apoyo!=0){
+                        vacio=false
+                    }
+                });
+
+                this.setState({ apoyoEconomicoAnhoVacio: vacio });
             }).catch(error => {
             console.log(`Error al obtener datos `, error);
         });
@@ -257,6 +330,15 @@ class DashboardGraficos extends React.Component {
             .then(response => {
                 console.log('response:',response.data);
                 this.setState({ investigacionesAnho: response.data });
+                let vacio=true;
+
+                response.data.forEach(function(entry) {
+                    if(entry.cantidad!=0){
+                        vacio=false
+                    }
+                });
+
+                this.setState({ investigacionesAnhoVacio: vacio });
             }).catch(error => {
             console.log(`Error al obtener datos `, error);
         });
@@ -272,6 +354,15 @@ class DashboardGraficos extends React.Component {
             .then(response => {
                 //console.log('response:',response);
                 this.setState({ dataDocentesTipoDepartamento: response.data });
+                let vacio=true;
+
+                response.data.forEach(function(entry) {
+                    if(entry.value!=0){
+                        vacio=false
+                    }
+                });
+
+                this.setState({ dataDocentesTipoDepartamentoVacio: vacio });
             }).catch(error => {
             console.log(`Error al obtener datos `, error);
         });
@@ -286,6 +377,15 @@ class DashboardGraficos extends React.Component {
             .then(response => {
                 //console.log('response:',response);
                 this.setState({ dataActividadesTipoDepartamento: response.data });
+                let vacio=true;
+
+                response.data.forEach(function(entry) {
+                    if(entry.value!=0){
+                        vacio=false
+                    }
+                });
+
+                this.setState({ dataActividadesTipoDepartamentoVacio: vacio });
             }).catch(error => {
             console.log(`Error al obtener datos `, error);
         });
@@ -300,6 +400,15 @@ class DashboardGraficos extends React.Component {
             .then(response => {
                 //console.log('response:',response);
                 this.setState({ dataApoyoEconomicoEstadoDepartamento: response.data });
+                let vacio=true;
+
+                response.data.forEach(function(entry) {
+                    if(entry.value!=0){
+                        vacio=false
+                    }
+                });
+
+                this.setState({ dataApoyoEconomicoEstadoDepartamentoVacio: vacio });
             }).catch(error => {
             console.log(`Error al obtener datos `, error);
         });
@@ -315,6 +424,15 @@ class DashboardGraficos extends React.Component {
                 //console.log('response:',response);
 
                 this.setState({ dataConvocatoriaEstadoDepartamento: response.data });
+                let vacio=true;
+
+                response.data.forEach(function(entry) {
+                    if(entry.value!=0){
+                        vacio=false
+                    }
+                });
+
+                this.setState({ dataConvocatoriaEstadoDepartamentoVacio: vacio });
             }).catch(error => {
             console.log(`Error al obtener datos `, error);
         });
@@ -325,6 +443,7 @@ class DashboardGraficos extends React.Component {
 
         return (
             <div>
+                {!this.state.investigacionesAnhoVacio ?
                 <div className="card-row">
                     <div className="card-graph text-center">
                       <h5 className="block m-b-n"> Cantidad de Investigaciones </h5>
@@ -343,10 +462,13 @@ class DashboardGraficos extends React.Component {
                             </div>
                         </ResponsiveContainer>
                     </div>
-
                 </div>
+                    : null
+                }
+
 
                 <div className="card-row">
+                    {!this.state.dataConvocatoriaEstadoDepartamentoVacio ?
                     <div className="card-graph text-center">
                         <h5 className="block m-b-n"> Convocatorias </h5>
                       <ResponsiveContainer height={300}>
@@ -355,8 +477,6 @@ class DashboardGraficos extends React.Component {
                                     activeIndex={this.state.activeIndexCED}
                                     activeShape={renderActiveShape}
                                     data={this.state.dataConvocatoriaEstadoDepartamento}
-                                    cx={160}
-                                    cy={160}
                                     innerRadius={60}
                                     outerRadius={80}
                                     fill="#8884d8"
@@ -369,6 +489,10 @@ class DashboardGraficos extends React.Component {
                             </PieChart>
                         </ResponsiveContainer>
                     </div>
+                        : null
+                    }
+
+                    {!this.state.dataDocentesTipoDepartamentoVacio ?
                     <div className="card-graph text-center  ">
                       <h5 className="block m-b-n"> Docentes </h5>
                         <ResponsiveContainer height={350}>
@@ -377,8 +501,6 @@ class DashboardGraficos extends React.Component {
                                     activeIndex={this.state.activeIndexDTP}
                                     activeShape={renderActiveShape}
                                     data={this.state.dataDocentesTipoDepartamento}
-                                    cx={160}
-                                    cy={160}
                                     innerRadius={60}
                                     outerRadius={80}
                                     fill="#8884d8"
@@ -391,9 +513,13 @@ class DashboardGraficos extends React.Component {
                             </PieChart>
                         </ResponsiveContainer>
                     </div>
+                    : null
+                    }
                 </div>
 
+
                 <div className="card-row">
+                    {!this.state.dataApoyoEconomicoEstadoDepartamentoVacio ?
                   <div className="card-graph text-center">
                     <h5 className="block m-b-n"> Estado de Ayudas Economicas </h5>
 
@@ -403,8 +529,6 @@ class DashboardGraficos extends React.Component {
                                     activeIndex={this.state.activeIndexAEED}
                                     activeShape={renderActiveShape}
                                     data={this.state.dataApoyoEconomicoEstadoDepartamento}
-                                    cx={160}
-                                    cy={160}
                                     innerRadius={60}
                                     outerRadius={80}
                                     fill="#8884d8"
@@ -417,6 +541,9 @@ class DashboardGraficos extends React.Component {
                             </PieChart>
                         </ResponsiveContainer>
                     </div>
+                        : null
+                    }
+                    {!this.state.dataActividadesTipoDepartamentoVacio ?
                   <div className="card-graph text-center">
                     <h5 className="block m-b-n"> Actividades por Tipo </h5>
 
@@ -426,8 +553,6 @@ class DashboardGraficos extends React.Component {
                                     activeIndex={this.state.activeIndexATD}
                                     activeShape={renderActiveShape}
                                     data={this.state.dataActividadesTipoDepartamento}
-                                    cx={160}
-                                    cy={160}
                                     innerRadius={60}
                                     outerRadius={80}
                                     fill="#8884d8"
@@ -440,29 +565,33 @@ class DashboardGraficos extends React.Component {
                             </PieChart>
                         </ResponsiveContainer>
                     </div>
+                        : null
+                    }
 
                 </div>
+                {!this.state.apoyoEconomicoAnhoVacio ?
+                    <div className="card-row">
+                        <div className="card-graph text-center">
+                            <h5 className="block m-b-n"> Monto de Ayudas Economicas </h5>
 
-                <div className="card-row">
-                  <div className="card-graph text-center">
-                    <h5 className="block m-b-n"> Monto de Ayudas Economicas </h5>
+                            <ResponsiveContainer height={350}>
+                                <div>
+                                    <LineChart width={700} height={300} data={this.state.apoyoEconomicoAnho}
+                                               margin={{top: 50, right: 5, left: 20, bottom: 5}}>
+                                        <XAxis dataKey="mes"/>
+                                        <YAxis/>
+                                        <CartesianGrid strokeDasharray="3 3"/>
+                                        <Tooltip/>
+                                        <Legend/>
+                                        <Line type="monotone" dataKey="apoyo" stroke="#8884d8" activeDot={{r: 8}}/>
+                                    </LineChart>
+                                </div>
+                            </ResponsiveContainer>
+                        </div>
 
-                      <ResponsiveContainer height={350}>
-                            <div>
-                                <LineChart width={700} height={300} data={this.state.apoyoEconomicoAnho}
-                                           margin={{top: 50, right: 5, left: 20, bottom: 5}}>
-                                    <XAxis dataKey="mes"/>
-                                    <YAxis/>
-                                    <CartesianGrid strokeDasharray="3 3"/>
-                                    <Tooltip/>
-                                    <Legend />
-                                    <Line type="monotone" dataKey="apoyo" stroke="#8884d8" activeDot={{r: 8}}/>
-                                </LineChart>
-                            </div>
-                        </ResponsiveContainer>
                     </div>
-
-                </div>
+                    : null
+                }
             </div>
 
         )
