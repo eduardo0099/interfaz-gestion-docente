@@ -15,10 +15,7 @@ class Detalle_DescargaHoras extends React.Component{
                 hDescarga: "",
                 motivo: ""
             }],
-            listaSemana:[{semana:1,horas:null},{semana:2,horas:0},{semana:3,horas:0},{semana:4,horas:0},
-                {semana:5,horas:0},{semana:6,horas:0},{semana:7,horas:0},{semana:8,horas:0},{semana:9,horas:0},
-                {semana:10,horas:0},{semana:11,horas:0},{semana:12,horas:0},{semana:13,horas:0},{semana:14,horas:0},
-                {semana:15,horas:0},{semana:16,horas:0}],
+            listaSemana:[],
         }
     }
 
@@ -30,15 +27,11 @@ class Detalle_DescargaHoras extends React.Component{
         let lista=[];
         for(let  i=1;i<=16;i++) {
             let obj = {};
-            obj.semana = i;
-            let horas=0;
-            for (let j = 0;  j < this.state.semana.length; j++) {
-                if (this.state.semana[j].numero == i ) {
-                    horas=this.state.semana[j].hDescarga;
-                    console.log("Horas encontrada");
-                }
-            }
-            obj.horas=horas;
+            obj.semana = "Semana" + " "+ i;
+            if(this.state.semana[0].numero == i)
+                obj.horas = this.state.semana[0].hDescarga;
+            else
+                obj.horas = 0;
             lista.push(obj);
         }
         this.setState({
