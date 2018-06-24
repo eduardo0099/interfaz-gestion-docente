@@ -234,6 +234,8 @@ class DescargaHoras extends React.Component {
                                             <a className="btn btn-primary"
                                                href={`${this.props.match.url}/RegistroNuevaDescarga`}
                                                role="button">Nuevo</a>
+                                            <br></br>
+                                            <br></br>
                                         </div>
                                     }
                                 </div>

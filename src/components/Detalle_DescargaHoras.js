@@ -9,15 +9,19 @@ class Detalle_DescargaHoras extends React.Component{
 
     constructor(props){
         super(props);
+        this.handleOnModal= this.handleOnModal.bind(this);
+        this.handleCloseModal= this.handleCloseModal.bind(this);
         this.state= {
             semana: [],
             listaSemana:[],
+            showModal:false,
         }
     }
 
     componentWillMount(){
         this.crearListaSemana();
     }
+
 
     crearListaSemana(){
         let lista=[];
@@ -37,7 +41,17 @@ class Detalle_DescargaHoras extends React.Component{
         })
     }
 
+    handleOnModal(){
+        this.setState({
+            showModal:true
+        })
+    }
 
+    handleCloseModal(){
+        this.setState({
+            showModal:false
+        })
+    }
     render(){
         console.log('Renderizando tabla');
         console.log(JSON.stringify(this.props, null, 2));
@@ -86,6 +100,7 @@ class Detalle_DescargaHoras extends React.Component{
                                         columns={columnas}/>
                                 </Col>
                             </div>
+
                         </div>
                     </div>
                 </BaseContainer>
