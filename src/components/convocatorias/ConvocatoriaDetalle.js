@@ -37,7 +37,8 @@ class ConvocatoriaDetalle extends Component{
             peso_grado_doctorado: 80,
             peso_grado_maestria: 70,
             peso_grado_titulo: 60,
-            peso_investigacion: 10
+            peso_investigacion: 10,
+            estado:""
         }
 
     }
@@ -93,9 +94,9 @@ class ConvocatoriaDetalle extends Component{
     }
 
     render(){
-        let estado=this.state.descripcion;
+        let estado=this.state.estado;
         let requisitos;
-        if(this.state.descripcion==="Abierta"){
+        if(this.state.estado==="Abierta"){
             let asesoria=null;
             let asesoriaPeso=null;
 
@@ -271,7 +272,7 @@ class ConvocatoriaDetalle extends Component{
                                     <span className="form-control">{this.state.fecha_fin}</span>
                                     <br></br>
                                     <label>Estado:</label>
-                                    <span className="form-control">{this.state.descripcion}</span>
+                                    <span className="form-control">{this.state.estado}</span>
                                     <br></br>
                                     {requisitos}
                                 </fieldset>

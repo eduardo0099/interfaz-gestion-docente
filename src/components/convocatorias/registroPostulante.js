@@ -906,7 +906,7 @@ class registroPostulante extends Component {
                 fecha_obtencion:this.armarFecha(this.state.titulo.fechaTitulo._d),
                 titulo_tesis:this.state.titulo.tituloTesis,
                 url_tesis:this.state.titulo.urlTesis,
-                archivo_tesis: null,
+                archivo_tesis: this.state.idArchivo,
                 grado_academico: "Título",
                 premio:null};
 
@@ -935,7 +935,7 @@ class registroPostulante extends Component {
                 fecha_obtencion:this.armarFecha(this.state.maestria.fechaTitulo._d),
                 titulo_tesis:this.state.maestria.tituloTesis,
                 url_tesis:this.state.maestria.urlTesis,
-                archivo_tesis: null,
+                archivo_tesis: this.state.idArchivo,
                 grado_academico: "Maestría",
                 premio:null};
 
@@ -964,7 +964,7 @@ class registroPostulante extends Component {
                 fecha_obtencion:this.armarFecha(this.state.doctorado.fechaTitulo._d),
                 titulo_tesis:this.state.doctorado.tituloTesis,
                 url_tesis:this.state.doctorado.urlTesis,
-                archivo_tesis: null,
+                archivo_tesis: this.state.idArchivo,
                 grado_academico: "Doctorado",
                 premio:null};
 
@@ -993,7 +993,7 @@ class registroPostulante extends Component {
                 fecha_obtencion:this.armarFecha(this.state.diplomado.fechaTitulo._d),
                 titulo_tesis:this.state.diplomado.tituloTesis,
                 url_tesis:this.state.diplomado.urlTesis,
-                archivo_tesis: null,
+                archivo_tesis: this.state.idArchivo,
                 grado_academico: "Diplomatura",
                 premio:null};
 
@@ -1011,7 +1011,7 @@ class registroPostulante extends Component {
 
     agregarPremio = ()=> {
         if (this.premiosValidator.allValid()) {
-            var premio  = {id: this.state.numPremios+1,archivo_premio:null, url_premio: this.state.premioUrl,descripcion:this.state.premioDescripcion};
+            var premio  = {id: this.state.numPremios+1,archivo_premio:this.state.idArchivo, url_premio: this.state.premioUrl,descripcion:this.state.premioDescripcion};
             this.setState({
                 premios: [...this.state.premios, premio],
                 numPremios:this.state.numPremios+1
@@ -1041,7 +1041,7 @@ class registroPostulante extends Component {
 
     agregarCargo = ()=> {
         if (this.cargosValidator.allValid()) {
-            var cargo  = {id: this.state.numCargos+1, nombre: this.state.cargoNombre, fecha_inicio: this.armarFecha(this.state.cargoFIni._d),fecha_fin:this.armarFecha(this.state.cargoFFin._d),institucion:this.state.cargoInstitucion,archivo_cargo:null};
+            var cargo  = {id: this.state.numCargos+1, nombre: this.state.cargoNombre, fecha_inicio: this.armarFecha(this.state.cargoFIni._d),fecha_fin:this.armarFecha(this.state.cargoFFin._d),institucion:this.state.cargoInstitucion,archivo_cargo:this.state.idArchivo};
             this.setState({
                 cargos: [...this.state.cargos, cargo],
                 numCargos:this.state.numCargos+1
@@ -1056,7 +1056,7 @@ class registroPostulante extends Component {
 
     agregarInvestigacion = ()=> {
         if (this.invValidator.allValid()) {
-            var investigacion  = {id: this.state.numInvestigaciones+1, titulo: this.state.tituloInv, resumen: this.state.resumenInv,fecha:this.armarFecha(this.state.fechaInv._d),archivo_investigacion:null};
+            var investigacion  = {id: this.state.numInvestigaciones+1, titulo: this.state.tituloInv, resumen: this.state.resumenInv,fecha:this.armarFecha(this.state.fechaInv._d),archivo_investigacion:this.state.idArchivo};
             this.setState({
                 investigaciones: [...this.state.investigaciones, investigacion],
                 numInvestigaciones:this.state.numInvestigaciones+1
@@ -1071,7 +1071,7 @@ class registroPostulante extends Component {
 
     agregarExpLaboral = ()=> {
         if (this.expValidator.allValid()) {
-            var experienciaNueva  = {id: this.state.numExp+1, institucion: this.state.expInstitucion, descripcion: this.state.expDescripcion,fecha_inicio:this.armarFecha(this.state.expFIni._d),fecha_fin:this.armarFecha(this.state.expFFin._d),archivo_experiencia:null};
+            var experienciaNueva  = {id: this.state.numExp+1, institucion: this.state.expInstitucion, descripcion: this.state.expDescripcion,fecha_inicio:this.armarFecha(this.state.expFIni._d),fecha_fin:this.armarFecha(this.state.expFFin._d),archivo_experiencia:this.state.idArchivo};
             this.setState({
                 experiencia: [...this.state.experiencia, experienciaNueva],
                 numExp:this.state.numExp+1
