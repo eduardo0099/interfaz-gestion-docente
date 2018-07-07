@@ -211,7 +211,8 @@ class ListaProfesores extends Component {
                           <Col sm={4}>
                             <FormControl type="text" placeholder="Buscar Nombre de Profesor"
                                        value={this.state.profeText}
-                                       onChange={this.busquedaNombreProfesor.bind(this)}/>
+                                       onChange={this.busquedaNombreProfesor.bind(this)}
+                            />
                           </Col>
 
                           <Col sm={4}>

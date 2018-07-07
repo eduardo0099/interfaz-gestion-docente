@@ -81,6 +81,7 @@ export class Cursos extends React.Component {
         let ciclo = obj.descripcion;
         this.setState({ cicloSeleccionado: ciclo ,tipoSeleccionado: "pregrado"});
         this.findCursos(ciclo);
+        console.log(ciclo);
     };
 
     findCursosXTipo(ciclo){
